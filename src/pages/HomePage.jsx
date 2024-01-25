@@ -3,15 +3,39 @@ import {Input} from "../components/ui/input.tsx";
 import {Label} from "../components/ui/label.tsx";
 import {Separator} from "../components/ui/separator.tsx";
 import { MdSearch } from "react-icons/md";
+import { FaChevronDown } from "react-icons/fa6";
+import {useEffect, useState} from "react";
+import {Card, CardContent, CardHeader} from "../components/ui/card.tsx";
+import { GiRocketThruster } from "react-icons/gi";
 
 
 const HomePage = () => {
+    const [isVisible, setIsVisible] = useState(true);
+
+    const checkScroll = () => {
+        if (window.scrollY > 0) {
+            setIsVisible(false);
+        }
+        else {
+            setIsVisible(true);
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener('scroll', checkScroll);
+
+        return () => {
+            window.removeEventListener('scroll', checkScroll);
+        };
+    }, []);
+
+
     return (
         <div className="bg-white">
             <header className="absolute inset-x-0 top-0 z-50">
                 <nav className="flex items-center justify-between mx-10 my-5">
-                    <div >
-                        Logo
+                    <div>
+                        <GiRocketThruster  className="cursor-pointer w-12 h-12 hover:fill-primary"/>
                     </div>
                     <div>
                         <Button  size="lg">
@@ -20,10 +44,10 @@ const HomePage = () => {
                     </div>
                 </nav>
             </header>
-            <div className="relative isolate z-[1]">
+            <div className="relative isolate z-1">
                 {/*Background Start*/}
                 <div
-                    className="absolute inset-x-0 -top-40 transform-gpu overflow-hidden blur-3xl"
+                    className="absolute inset-x-0 -top-72 transform-gpu overflow-hidden blur-3xl"
                     aria-hidden="true"
                 >
                     <div
@@ -43,14 +67,17 @@ const HomePage = () => {
                 </div>
             </div>
             {/*Background End*/}
-                <div className="flex flex-col items-center mt-28 gap-y-4 relative z-10">
+                <div className="flex flex-col items-center mt-64 gap-y-4 relative z-10">
                     <span className="text-2xl font-light text-center">
                         Rocket Realtor
                     </span>
                     <span className="text-6xl font-bold text-center">
                         Real Estate Investment Analysis
                     </span>
-                    <div className="flex flex-row gap-x-2 mt-10 bg-white shadow-2xl pt-2 pb-4 px-8 pr-4 rounded-full">
+                    <p className="text-gray-500">
+                        Enter some information below and get started!
+                    </p>
+                    <div className="flex flex-row gap-x-2 bg-white shadow-2xl pt-2 pb-4 px-8 pr-4 rounded-full">
                         <div className="grid w-full max-w-sm items-center">
                             <Label htmlFor="email">City</Label>
                             <Input type="text" id="city" placeholder="Enter City" />
@@ -66,11 +93,27 @@ const HomePage = () => {
                             </Button>
                         </div>
                     </div>
+
+                    <Card hidden>
+                        <CardHeader>
+                            Test
+                        </CardHeader>
+
+                        <CardContent>
+                            Text
+                        </CardContent>
+                    </Card>
                 </div>
 
-                <div className="flex justify-center">
+
+            {/*Scroll Indicator*/}
+            {isVisible && (
+                <div className="animate-bounce text-lg fixed inset-x-0 bottom-14 flex flex-col justify-center items-center text-gray-700">
                     Scroll
+                    <FaChevronDown />
                 </div>
+                )}
+
         </div>
     )
 }
