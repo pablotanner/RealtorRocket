@@ -10,12 +10,12 @@ module.exports = {
   prefix: "",
   theme: {
     fontWeight: {
-      thin: "100",
-      light: "300",
-      normal: "400",
-      semiBold: "500",
-      bold: "700",
-      extraBold: "900",
+      "100": "100",
+      "300": "300",
+      "400": "400",
+      "500": "500",
+      "700": "700",
+      "900": "900",
     },
     fontFamily: {
       // Set roboto as the default sans-serif font.
@@ -39,6 +39,7 @@ module.exports = {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
         },
+        "primary-dark": "hsl(var(--primary-dark))",
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
