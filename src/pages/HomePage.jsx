@@ -94,32 +94,32 @@ const HomePage = () => {
                         </div>
                     </div>
 
-                    <Card className="bg-gradient-to-r from-purple-300 to-cyan-100 w-[80%] border-0 mt-36 rounded-2xl">
+                    <Card className="bg-gradient-to-r from-purple-300 to-cyan-100 sm:w-[90%] w-[100%] border-0 mt-36 rounded-2xl">
                         <CardContent className="columns-3 py-2 px-3">
-                            <Card>
+                            <Card >
                                 <CardHeader className="font-light">
                                     HOW IT WORKS
                                     <h4 className="text-2xl font-bold text-gray-700">Analysis</h4>
                                 </CardHeader>
-                                <CardContent className="text-gray-600">
+                                <CardContent className="text-gray-600  text-xs md:text-lg">
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam lectus ipsum, tincidunt eget ornare quis, commodo gravida odio. Nullam sit amet nulla sit amet velit placerat porttitor tempor at nisl. Suspendisse potenti. Phasellus luctus odio eget est ornare, at lobortis metus cursus. Praesent commodo commodo arcu, vel varius sem tincidunt at. Aenean luctus velit a suscipit efficitur. Duis sed tincidunt enim, ac scelerisque mauris. Quisque at interdum turpis. Curabitur suscipit consequat nisi eget hendrerit. Praesent eget lectus efficitur, suscipit elit eget, blandit eros. Mauris in neque in est auctor pellentesque. Sed at eros eget massa sagittis sollicitudin quis in velit. Nulla consectetur ultricies ornare.
                                 </CardContent>
                             </Card>
-                            <Card>
+                            <Card >
                                 <CardHeader className="font-light">
                                     BENEFITS
                                     <h4 className="text-2xl font-bold text-gray-700">Insights</h4>
                                 </CardHeader>
-                                <CardContent className="text-gray-600">
+                                <CardContent className="text-gray-600 text-xs md:text-lg">
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam lectus ipsum, tincidunt eget ornare quis, commodo gravida odio. Nullam sit amet nulla sit amet velit placerat porttitor tempor at nisl. Suspendisse potenti. Phasellus luctus odio eget est ornare, at lobortis metus cursus. Praesent commodo commodo arcu, vel varius sem tincidunt at. Aenean luctus velit a suscipit efficitur. Duis sed tincidunt enim, ac scelerisque mauris. Quisque at interdum turpis. Curabitur suscipit consequat nisi eget hendrerit. Praesent eget lectus efficitur, suscipit elit eget, blandit eros. Mauris in neque in est auctor pellentesque. Sed at eros eget massa sagittis sollicitudin quis in velit. Nulla consectetur ultricies ornare.
                                 </CardContent>
                             </Card>
-                            <Card>
+                            <Card >
                                 <CardHeader className="font-light">
                                     OUR PLANS
                                     <h4 className="text-2xl font-bold text-gray-700">Pricing</h4>
                                 </CardHeader>
-                                <CardContent className="text-gray-600">
+                                <CardContent className="text-gray-600 text-xs md:text-lg">
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam lectus ipsum, tincidunt eget ornare quis, commodo gravida odio. Nullam sit amet nulla sit amet velit placerat porttitor tempor at nisl. Suspendisse potenti. Phasellus luctus odio eget est ornare, at lobortis metus cursus. Praesent commodo commodo arcu, vel varius sem tincidunt at. Aenean luctus velit a suscipit efficitur. Duis sed tincidunt enim, ac scelerisque mauris. Quisque at interdum turpis. Curabitur suscipit consequat nisi eget hendrerit. Praesent eget lectus efficitur, suscipit elit eget, blandit eros. Mauris in neque in est auctor pellentesque. Sed at eros eget massa sagittis sollicitudin quis in velit. Nulla consectetur ultricies ornare.
                                 </CardContent>
                             </Card>
