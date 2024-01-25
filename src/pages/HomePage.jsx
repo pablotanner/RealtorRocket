@@ -1,4 +1,4 @@
-import {Button} from "../components/ui/button.tsx";
+in import {Button} from "../components/ui/button.tsx";
 
 import { FaChevronDown } from "react-icons/fa6";
 import {useEffect, useState} from "react";
@@ -67,7 +67,7 @@ const HomePage = () => {
                    Helping Realtors <br/> Everywhere
                </h1>
 
-               <div className="col-span-1 flex flex-wrap gap-20">
+               <div className="col-span-2 gap-20">
                    <span className="h-fit flex flex-col">
                        <span className="text-3xl">2k+</span>
                        <span className="text-primary">Registered Users</span>
