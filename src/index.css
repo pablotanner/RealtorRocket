@@ -47,6 +47,10 @@ body {
 
     --primary-dark: 225 89% 47%;
 
+    --primary-darker: 212 100% 17%;
+
+    --primary-darkest: 219 100% 10%;
+
     --primary-light: 202 93% 49%;
 
     --off-black: #1e1e1e;
