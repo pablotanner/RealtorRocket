@@ -1,6 +1,5 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: ["class"],
   content: [
     './pages/**/*.{js,jsx,vue,ts,tsx}',
     './components/**/*.{js,jsx,vue,ts,tsx}',
@@ -11,15 +10,18 @@ module.exports = {
   theme: {
     fontWeight: {
       "100": "100",
+      "200": "200",
       "300": "300",
       "400": "400",
       "500": "500",
+      "600": "600",
       "700": "700",
+      "800": "800",
       "900": "900",
     },
     fontFamily: {
       // Set roboto as the default sans-serif font.
-      sans: ["Roboto", "sans-serif"],
+      sans: ["Outfit Variable", "sans-serif"],
     },
     container: {
       center: true,
@@ -33,6 +35,7 @@ module.exports = {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
+        "background-blue": "#f6f8ff",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
@@ -40,6 +43,7 @@ module.exports = {
           foreground: "hsl(var(--primary-foreground))",
         },
         "primary-dark": "hsl(var(--primary-dark))",
+        "primary-light": "hsl(var(--primary-light))",
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
