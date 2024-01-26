@@ -69,7 +69,7 @@ const HomePage = () => {
                 </div>
 
                 <div className="">
-                    <img src="/public/real-estate.png" alt="real-estate" className="select-none w-full h-full object-cover object-center pointer-events-none"/>
+                    <img src="https://i.imgur.com/Dulg4XF.png" alt="real-estate" className="select-none w-full h-full object-cover object-center pointer-events-none"/>
                 </div>
             </div>
         </div>
@@ -110,7 +110,7 @@ const HomePage = () => {
             </div>
             <div className="mt-4 flex flex-col lg:flex-row gap-6 lg:gap-6 relative justify-center">
                 <img
-                    src='/public/mock-dashboard-placeholder.jpg'
+                    src='https://i.imgur.com/DnAuR42.jpeg'
                     className=" h-full w-full object-cover object-center rounded-xl max-w-[800px]"
                 />
                 <Card className="shadow-2xl  max-w-[800px] max-h-[600px] overflow-ellipsis overflow-auto">
