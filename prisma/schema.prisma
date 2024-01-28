@@ -1,0 +1,364 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Define the UserRole enum to distinguish between realtors and renters.
+enum UserRole {
+  REALTOR
+  DEMO
+  RENTER
+}
+
+// Define the AccountStatus enum to track the online status of a user.
+enum AccountStatus {
+  INACTIVE
+  ONLINE
+  OFFLINE
+}
+
+// Define the RealEstateType enum to distinguish between different types of real estate.
+enum RealEstateType {
+  SINGLE_FAMILY_HOME
+  MULTI_FAMILY_HOME
+  CONDO
+  APARTMENT
+  TOWNHOUSE
+  LUXURY
+  OFFICE
+  RETAIL
+  INDUSTRIAL
+  LAND
+  FARM
+}
+
+// Define the ListingStatus enum to track the status of a real estate listing.
+enum ListingStatus {
+  ACTIVE
+  INACTIVE
+  RENTED
+  NOT_RENTED
+  RESERVED
+  SOLD
+  PENDING
+  UNKNOWN
+}
+
+// Define the CurrencyCode enum to track the currency code of a user.
+enum CurrencyCode {
+  USD
+  CAD
+  EUR
+  GBP
+  AUD
+  NZD
+  JPY
+  CNY
+  INR
+  RUB
+  BRL
+  CHF
+  KRW
+  MXN
+  SGD
+  TRY
+  NGN
+  PHP
+  SEK
+  ARS
+  NOK
+  DKK
+  ILS
+  CLP
+  COP
+  ZAR
+  HKD
+  TWD
+  PLN
+  THB
+  IDR
+  HUF
+  CZK
+  AED
+  SAR
+  MYR
+  RON
+  PEN
+  KWD
+  QAR
+  CRC
+  DOP
+  HRK
+  HNL
+  ISK
+  PKR
+  EGP
+  XCD
+  MAD
+  OMR
+  BOB
+  LKR
+  BGN
+  BHD
+  VND
+  UAH
+  IQD
+  JOD
+  BDT
+  KES
+  UYU
+  AZN
+  LBP
+  DZD
+  UZS
+  TND
+  GHS
+  BWP
+  TZS
+  BYN
+  KZT
+  RSD
+  TTD
+  UGX
+  AOA
+  COPPER
+  XAU
+  XAG
+  XPD
+  XPT
+  XDR
+  XOF
+  XPF
+  XAF
+  XFU
+  XBA
+  XBB
+  XBC
+  XBD
+  XTS
+  XXX
+  ZMW
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  tokens    Token[]
+
+  // profile
+  email        String        @db.Citext
+  firstName    String?       @map("first_name")
+  lastName     String?       @map("last_name")
+  name         String?       @default(dbgenerated())
+  dob          DateTime?     @db.Date
+  currencyCode CurrencyCode? @map("currency_code")
+
+  // credentials
+  password String @map("password")
+  salt     String @map("salt")
+
+  // plaid data
+  plaidLinkToken String? @map("plaid_link_token") // temporary token stored to maintain state across browsers
+
+  // Additional info
+  title      String?
+  location   Location?     @relation(fields: [locationId], references: [id])
+  locationId Int?          @map("location_id")
+  picture    Image?
+  pictureId  Int?          @map("picture_id")
+  phone      String?
+  website    String?
+  company    String?
+  bio        String?
+  status     AccountStatus @default(OFFLINE)
+  role       UserRole?     @default(REALTOR)
+
+  // Define a one-to-many relationship between User and Realtor.
+  Realtor Realtor?
+  Renter  Renter?
+
+  @@map("user")
+}
+
+model Realtor {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Define a one-to-one relationship between Realtor and User.
+  User             User               @relation(fields: [userId], references: [id])
+  userId           Int                @unique @map("user_id")
+  RealEstateObject RealEstateObject[]
+  Rental           Rental[]
+}
+
+model Renter {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Define a one-to-one relationship between Renter and User.
+  User   User @relation(fields: [userId], references: [id])
+  userId Int  @unique @map("user_id")
+
+  Rental Rental[]
+}
+
+model Token {
+  id         Int       @id @default(autoincrement())
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  type       TokenType
+  emailToken String?   @unique @map("email_token") // Only used for short lived email tokens
+  valid      Boolean   @default(true)
+  expiration DateTime
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+}
+
+enum TokenType {
+  API
+  EMAIL
+  PASSWORD_RESET
+  EMAIL_CONFIRMATION
+  EMAIL_CHANGE
+}
+
+// Define the RealEstate model to represent real estate properties.
+model RealEstateObject {
+  id            Int           @id @default(autoincrement())
+  listingStatus ListingStatus @default(ACTIVE) @map("listing_status")
+  createdAt     DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Listing details
+  title          String?
+  description    String?
+  price          Float?
+  images         Image[]
+  numOfRooms     Int?                    @map("num_of_rooms")
+  bedrooms       Int?
+  bathrooms      Int?
+  squareFeet     Float?                  @map("square_feet")
+  location       Location?               @relation(fields: [locationId], references: [id])
+  amenities      AmenitiesOnRealEstate[]
+  locationId     Int?
+  realEstateType RealEstateType?         @map("real_estate_type")
+
+  // Listing settings (show price, show address, etc.)
+  preferences PreferencesOnRealEstate[]
+
+  realtor   Realtor @relation(fields: [realtorId], references: [id])
+  realtorId Int     @map("realtor_id")
+
+  Rental Rental[]
+
+  @@map("real_estate_object")
+}
+
+model Location {
+  id               Int                @id @default(autoincrement())
+  street           String?
+  city             String?
+  state            String?
+  zipCode          String?            @map("zip_code")
+  country          String?
+  RealEstateObject RealEstateObject[]
+  User             User[]
+
+  @@map("location")
+}
+
+model Amenity {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  description String?
+  icon        String?
+
+  realEstateObjects AmenitiesOnRealEstate[]
+
+  @@map("amenity")
+}
+
+model AmenitiesOnRealEstate {
+  amenity   Amenity @relation(fields: [amenityId], references: [id])
+  amenityId Int     @map("amenity_id")
+
+  realEstateObject   RealEstateObject @relation(fields: [realEstateObjectId], references: [id])
+  realEstateObjectId Int              @map("real_estate_object_id")
+
+  assignedAt DateTime @default(now())
+  assignedBy String
+
+  @@id([amenityId, realEstateObjectId])
+}
+
+model Preference {
+  id      Int      @id @default(autoincrement())
+  name    String   @unique
+  enabled Boolean?
+
+  realEstateObjects PreferencesOnRealEstate[]
+
+  @@map("preference")
+}
+
+model PreferencesOnRealEstate {
+  preference   Preference @relation(fields: [preferenceId], references: [id])
+  preferenceId Int        @map("preference_id")
+
+  realEstateObject   RealEstateObject @relation(fields: [realEstateObjectId], references: [id])
+  realEstateObjectId Int              @map("real_estate_object_id")
+
+  assignedAt DateTime @default(now())
+  assignedBy String
+
+  @@id([preferenceId, realEstateObjectId])
+}
+
+model Rental {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  startDate   DateTime? @map("start_date")
+  endDate     DateTime  @map("end_date")
+  rentalPrice Float?    @map("rental_price")
+  leaseLength Int?      @map("lease_length")
+  leaseTerms  String?   @map("lease_terms")
+
+  renter   Renter @relation(fields: [renterId], references: [id])
+  renterId Int    @map("renter_id")
+
+  realEstateObject   RealEstateObject @relation(fields: [realEstateObjectId], references: [id])
+  realEstateObjectId Int              @map("real_estate_object_id")
+
+  realtor   Realtor @relation(fields: [realtorId], references: [id])
+  realtorId Int     @map("realtor_id")
+
+  @@map("rental")
+}
+
+model Image {
+  id        Int      @id @default(autoincrement())
+  imageUrl  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Define a many-to-one relationship between Image and RealEstate.
+  RealEstateObject   RealEstateObject? @relation(fields: [realEstateObjectId], references: [id])
+  realEstateObjectId Int?
+
+  // Define a many-to-one relationship between Image and User.
+  User   User? @relation(fields: [userId], references: [id])
+  userId Int?  @unique @map("user_id")
+}
