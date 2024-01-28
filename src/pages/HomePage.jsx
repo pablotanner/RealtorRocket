@@ -6,10 +6,13 @@ import {Card, CardContent, CardHeader} from "../components/ui/card.tsx";
 import { GiRocketThruster } from "react-icons/gi";
 import {IoPlayCircleOutline} from "react-icons/io5";
 import {toast} from "react-toastify";
+import {useUsersQuery} from "../services/api/authApi.js";
 
 
 const HomePage = () => {
     const [isVisible, setIsVisible] = useState(true);
+
+    const {data, isError, isLoading} = useUsersQuery();
 
     const checkScroll = () => {
         if (window.scrollY > 0) {

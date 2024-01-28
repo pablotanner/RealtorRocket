@@ -9,19 +9,12 @@ const baseUrl = import.meta.env.VITE_API_URL;
 
 const baseQuery = fetchBaseQuery({
     baseUrl: baseUrl,
-    prepareHeaders: (headers, {getState}) => {
-        console.log(getState());
-        const token = getState().auth.userToken;
-        if (token) {
-            headers.set('authorization', `Bearer ${token}`);
-        }
-        return headers;
-    },
 })
 
 const customFetchBase = async (args, api, extraOptions) => {
     await mutex.waitForUnlock();
     let result = await baseQuery(args, api, extraOptions);
+    console.log("RESULT", result);
     if (result.error && result.error.status === 401) {
         if(!mutex.isLocked()){
             const release = await mutex.acquire();

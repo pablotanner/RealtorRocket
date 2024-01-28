@@ -1,43 +1,43 @@
-import {createApi} from "@reduxjs/toolkit/query";
-
+import {createApi} from "@reduxjs/toolkit/query/react";
 import customFetchBase from "./customFetchBase.js";
-
 
 export const authApi = createApi({
     reducerPath: 'authApi',
     baseQuery: customFetchBase,
-    endpoints: (builder) => ({
-        login: builder.mutation({
+    endpoints: (build) => ({
+        login: build.mutation({
             query: (credentials) => ({
                 url: '/login',
                 method: 'POST',
                 body: credentials,
             }),
-
-            //transformResponse: (response, meta, arg) => response.data,
-
-            //transformErrorResponse: (response, meta, arg) => response.status,
-
         }),
-        register: builder.mutation({
+        register: build.mutation({
             query: (credentials) => ({
                 url: '/signup',
                 method: 'POST',
                 body: credentials,
             }),
         }),
-        refresh: builder.mutation({
+        refresh: build.mutation({
             query: () => ({
                 url: '/refresh',
                 method: 'POST',
             }),
         }),
-        logout: builder.mutation({
+        logout: build.mutation({
             query: () => ({
                 url: '/logout',
                 method: 'POST',
             }),
         }),
+        users: build.query({
+            query: () => ({
+                url: '/users',
+                method: 'GET',
+
+            }),
+        })
     }),
 })
 
@@ -46,4 +46,5 @@ export const {
     useRegisterMutation,
     useRefreshMutation,
     useLogoutMutation,
-} = authApi
+    useUsersQuery,
+} = authApi;

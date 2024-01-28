@@ -6,11 +6,13 @@ import AuthVerify from "./services/auth/AuthVerify.js";
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import LoginCard from "./components/auth/LoginCard.js";
+import {Provider} from "react-redux";
 
+import {store} from "./services/store/store.js";
 
 function App() {
     return (
-        <>
+        <Provider store={store}>
             <Router>
                 <AuthVerify/>
                 <ToastContainer/>
@@ -21,7 +23,7 @@ function App() {
                     <Route path="*" element={<NotFoundPage/>} />
                 </Routes>
             </Router>
-        </>
+        </Provider>
     )
 }
 
