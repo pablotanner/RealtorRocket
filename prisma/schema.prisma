@@ -154,12 +154,13 @@ model User {
   tokens    Token[]
 
   // profile
-  email        String        @db.Citext
+  email        String        @unique
   firstName    String?       @map("first_name")
   lastName     String?       @map("last_name")
   name         String?       @default(dbgenerated())
-  dob          DateTime?     @db.Date
+  dob          DateTime?
   currencyCode CurrencyCode? @map("currency_code")
+  documents    Document[]
 
   // credentials
   password String @map("password")
@@ -181,6 +182,10 @@ model User {
   status     AccountStatus @default(OFFLINE)
   role       UserRole?     @default(REALTOR)
 
+  // Define a one-to-many relationship between User and Message.
+  sentMessages     Message[] @relation("sender")
+  receivedMessages Message[] @relation("receiver")
+
   // Define a one-to-many relationship between User and Realtor.
   Realtor Realtor?
   Renter  Renter?
@@ -198,6 +203,8 @@ model Realtor {
   userId           Int                @unique @map("user_id")
   RealEstateObject RealEstateObject[]
   Rental           Rental[]
+
+  @@map("realtor")
 }
 
 model Renter {
@@ -205,11 +212,20 @@ model Renter {
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
+  // Renter information, visible to Realtors
+  civilStatus String? @map("civil_status")
+  occupation  String?
+  income      Float?
+  creditScore Int?    @map("credit_score")
+
   // Define a one-to-one relationship between Renter and User.
   User   User @relation(fields: [userId], references: [id])
   userId Int  @unique @map("user_id")
 
-  Rental Rental[]
+  Rental             Rental[]
+  MaintenanceRequest MaintenanceRequest[]
+
+  @@map("renter")
 }
 
 model Token {
@@ -223,6 +239,8 @@ model Token {
 
   user   User @relation(fields: [userId], references: [id])
   userId Int
+
+  @@map("token")
 }
 
 enum TokenType {
@@ -249,13 +267,18 @@ model RealEstateObject {
   bedrooms       Int?
   bathrooms      Int?
   squareFeet     Float?                  @map("square_feet")
+  lotSize        Float?                  @map("lot_size")
+  yearBuilt      Int?                    @map("year_built")
+  garages        Int?
+  stories        Int?
   location       Location?               @relation(fields: [locationId], references: [id])
   amenities      AmenitiesOnRealEstate[]
   locationId     Int?
   realEstateType RealEstateType?         @map("real_estate_type")
 
-  // Listing settings (show price, show address, etc.)
+  // Only visible for Realtors/Poster
   preferences PreferencesOnRealEstate[]
+  documents   Document[]
 
   realtor   Realtor @relation(fields: [realtorId], references: [id])
   realtorId Int     @map("realtor_id")
@@ -278,9 +301,17 @@ model Location {
   @@map("location")
 }
 
+enum AmenityType {
+  BOOLEAN
+  NUMBER
+  STRING
+}
+
 model Amenity {
-  id          Int     @id @default(autoincrement())
-  name        String  @unique
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  value       String?      @default("true")
+  type        AmenityType? @default(BOOLEAN)
   description String?
   icon        String?
 
@@ -336,14 +367,21 @@ model Rental {
   leaseLength Int?      @map("lease_length")
   leaseTerms  String?   @map("lease_terms")
 
+  totalRentDue    Float?    @map("total_rent_due")
+  rentPaid        Float?    @map("rent_paid")
+  lastPaymentDate DateTime? @map("last_payment_date")
+
+  documents Document[]
+
   renter   Renter @relation(fields: [renterId], references: [id])
   renterId Int    @map("renter_id")
 
   realEstateObject   RealEstateObject @relation(fields: [realEstateObjectId], references: [id])
   realEstateObjectId Int              @map("real_estate_object_id")
 
-  realtor   Realtor @relation(fields: [realtorId], references: [id])
-  realtorId Int     @map("realtor_id")
+  realtor            Realtor              @relation(fields: [realtorId], references: [id])
+  realtorId          Int                  @map("realtor_id")
+  MaintenanceRequest MaintenanceRequest[]
 
   @@map("rental")
 }
@@ -352,7 +390,6 @@ model Image {
   id        Int      @id @default(autoincrement())
   imageUrl  String
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 
   // Define a many-to-one relationship between Image and RealEstate.
   RealEstateObject   RealEstateObject? @relation(fields: [realEstateObjectId], references: [id])
@@ -361,4 +398,74 @@ model Image {
   // Define a many-to-one relationship between Image and User.
   User   User? @relation(fields: [userId], references: [id])
   userId Int?  @unique @map("user_id")
+}
+
+model Document {
+  id           Int          @id @default(autoincrement())
+  documentType DocumentType @map("document_type")
+  filePath     String       @map("file_path")
+  createdAt    DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int  @map("user_id")
+
+  realEstateObject   RealEstateObject? @relation(fields: [realEstateObjectId], references: [id])
+  realEstateObjectId Int?              @map("real_estate_object_id")
+
+  rental   Rental? @relation(fields: [rentalId], references: [id])
+  rentalId Int?    @map("rental_id")
+
+  @@map("document")
+}
+
+model Message {
+  id         Int      @id @default(autoincrement())
+  content    String   @map("content")
+  subject    String   @map("subject")
+  timestamp  DateTime @default(now()) @map("time_stamp") @db.Timestamptz(6)
+  senderId   Int
+  receiverId Int
+  sender     User     @relation("sender", fields: [senderId], references: [id])
+  receiver   User     @relation("receiver", fields: [receiverId], references: [id])
+
+  @@map("message")
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum MaintenanceStatus {
+  OPEN
+  IN_PROGRESS
+  CLOSED
+}
+
+model MaintenanceRequest {
+  id         Int      @id @default(autoincrement())
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  resolvedAt DateTime @map("resolved_at") @db.Timestamptz(6)
+
+  title       String?
+  description String?
+  status      MaintenanceStatus?
+  priority    Priority?
+
+  rental   Rental @relation(fields: [rentalId], references: [id])
+  rentalId Int    @map("rental_id")
+
+  reporter   Renter @relation(fields: [reporterId], references: [id])
+  reporterId Int    @map("reporter_id")
+
+  @@map("maintenance_request")
+}
+
+enum DocumentType {
+  LEASE
+  APPLICATION
+  OTHER
+  INVOICE
+  REPORT
 }
