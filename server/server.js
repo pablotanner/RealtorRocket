@@ -1,27 +1,42 @@
 import express from 'express';
 import cors from 'cors';
-import { PrismaClient } from '@prisma/client';
+import prisma from './prisma.js';
+import * as authController from "./controllers/authController.js";
 
-const prisma = new PrismaClient();
 const app = express();
-
+const router = express.Router();
 app.use(cors());
+app.use(express.json());
+app.use(router);
 
 app.get('/', (req, res) => {
     res.send('Hello World!');
 })
 
-app.get('/users', async (req, res) => {
-    const users = await prisma.user.findMany();
-    res.json(users);
+router.post('/signup', authController.signup);
+
+router.post('/login', authController.login);
+
+
+try {
+    app.get('/users', async (req, res) => {
+        const users = await prisma.user.findMany();
+        res.json(users);
+    })
+} catch (error) {
+    console.log(error);
+}
+
+app.use((err, req, res, next) => {
+    console.log(err.stack);
+    res.status(500).send('Something broke!');
 })
 
 
 // eslint-disable-next-line no-undef
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log('App listening on port 3000!');
-
+    console.log('App listening on port ' + PORT);
 })
 
 

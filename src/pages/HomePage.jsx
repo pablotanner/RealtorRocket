@@ -5,6 +5,7 @@ import {useEffect, useState} from "react";
 import {Card, CardContent, CardHeader} from "../components/ui/card.tsx";
 import { GiRocketThruster } from "react-icons/gi";
 import {IoPlayCircleOutline} from "react-icons/io5";
+import {toast} from "react-toastify";
 
 
 const HomePage = () => {
@@ -62,7 +63,7 @@ const HomePage = () => {
                         <Button variant="gradient" size="lg">
                             Get Started
                         </Button>
-                        <Button variant="outline-primary" size="lg">
+                        <Button variant="outline-primary" size="lg" onClick={() => toast.info("Click Demo")}>
                             View Demo <IoPlayCircleOutline className="ml-1 w-4 h-4"/>
                         </Button>
                     </div>
