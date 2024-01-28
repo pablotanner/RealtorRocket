@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useGlobalStateStore} from './GlobalState.ts';
+import {useDispatch, useSelector} from "react-redux";
+import {setToken} from "./authSlice.js";
 
 const parseJwt = (token) => {
     try {
@@ -13,8 +14,20 @@ const parseJwt = (token) => {
 
 const AuthVerify = () => {
     const location = useLocation();
-    const state = useGlobalStateStore((state) => state);
+    const state = useSelector((state) => state.authSlice);
+    const dispatch = useDispatch();
+    const localState = localStorage.getItem('tokens');
 
+    if (localState && !state.tokenDetails.accessToken) {
+        const { accessToken, refreshToken } = JSON.parse(localState);
+        dispatch(setToken({ accessToken, refreshToken }));
+    }
+    else if (!localState && state.tokenDetails.accessToken) {
+        localStorage.setItem('tokens', JSON.stringify(state.tokenDetails));
+    }
+
+    /*
+    // Check for user in local storage
     useEffect(() => {
         if (state.user) return;
         const userJson = localStorage.getItem('user');
@@ -25,6 +38,8 @@ const AuthVerify = () => {
             }
         }
     }, [state]);
+
+     */
 
     // Check token expiration
     useEffect(() => {

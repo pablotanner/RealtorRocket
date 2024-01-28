@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import prisma from './prisma.js';
 import * as authController from "./controllers/authController.js";
+import {authenticateToken} from "./controllers/authController.js";
 
 const app = express();
 const router = express.Router();
@@ -17,9 +18,13 @@ router.post('/signup', authController.signup);
 
 router.post('/login', authController.login);
 
+router.post('/refresh', authController.refresh);
+
+
+
 
 try {
-    app.get('/users', async (req, res) => {
+    app.get('/users', authenticateToken, async (req, res) => {
         const users = await prisma.user.findMany();
         res.json(users);
     })

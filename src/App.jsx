@@ -9,6 +9,7 @@ import LoginCard from "./components/auth/LoginCard.js";
 import {Provider} from "react-redux";
 
 import {store} from "./services/store/store.js";
+import {SignUp} from "./components/auth/SignUp.js";
 
 function App() {
     return (
@@ -19,6 +20,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<HomePage/>} />
                     <Route path="/login" element={<LoginCard/>} />
+                    <Route path="/signup" element={<SignUp/>}/>
                     <Route path="/analysis" element={<AnalysisPage />} />
                     <Route path="*" element={<NotFoundPage/>} />
                 </Routes>

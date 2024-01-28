@@ -1,24 +1,34 @@
 import {fetchBaseQuery} from "@reduxjs/toolkit/query";
-import authSlice from "../auth/authSlice.js";
+import {logout} from "../auth/authSlice.js";
 import { Mutex } from 'async-mutex';
 
 const mutex = new Mutex();
+
+
 
 // eslint-disable-next-line no-undef
 const baseUrl = import.meta.env.VITE_API_URL;
 
 const baseQuery = fetchBaseQuery({
     baseUrl: baseUrl,
+
+    prepareHeaders: (headers, {getState}) => {
+        console.log(getState().authSlice)
+        const token = getState().authSlice?.tokenDetails?.accessToken;
+        if (token) {
+            console.log("toemeeneees")
+            headers.set('Authorization', `Bearer ${token}`);
+        }
+        return headers;
+    }
 })
 
 const customFetchBase = async (args, api, extraOptions) => {
     await mutex.waitForUnlock();
     let result = await baseQuery(args, api, extraOptions);
-    console.log("RESULT", result);
     if (result.error && result.error.status === 401) {
         if(!mutex.isLocked()){
             const release = await mutex.acquire();
-
             try {
                 const refreshResult = await baseQuery(
                     '/refresh',
@@ -31,8 +41,8 @@ const customFetchBase = async (args, api, extraOptions) => {
                     result = await baseQuery(args, api, extraOptions);
                 }
                 else {
-                    api.dispatch(authSlice.actions.logout());
-                    window.location.href = '/login';
+                    api.dispatch(logout());
+                    //window.location.href = '/login';
                     // Add toastify notification here
                 }
             }

@@ -91,3 +91,25 @@ export async function refresh(req, res) {
 }
 
 
+export function authenticateToken(req, res, next) {
+    // Gather the jwt access token from the request header
+    const authHeader = req.headers['authorization'];
+
+    console.log(authHeader)
+    // eslint-disable-next-line no-undef
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) {
+        return res.status(401).json({ error: "Access token is required" });
+    }
+
+    try {
+        // eslint-disable-next-line no-undef
+        const payload = jwt.verify(token, process.env.SECRET_KEY);
+        req.user = payload;
+        next();
+    } catch (error) {
+        return res.status(403).json({ error: "Invalid token" });
+    }
+}
+

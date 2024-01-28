@@ -1,5 +1,6 @@
 import {createApi} from "@reduxjs/toolkit/query/react";
 import customFetchBase from "./customFetchBase.js";
+import {setToken} from "../auth/authSlice.js";
 
 
 export const authApi = createApi({
@@ -12,6 +13,12 @@ export const authApi = createApi({
                 method: 'POST',
                 body: credentials,
             }),
+            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                const { data } = await queryFulfilled;
+                dispatch(setToken({ accessToken: data.accessToken, refreshToken: data.refreshToken }));
+                localStorage.setItem('tokens', JSON.stringify({ accessToken: data.accessToken, refreshToken: data.refreshToken }));
+            }
+
         }),
         register: build.mutation({
             query: (credentials) => ({
@@ -19,6 +26,12 @@ export const authApi = createApi({
                 method: 'POST',
                 body: credentials,
             }),
+            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                const { data } = await queryFulfilled;
+                dispatch(setToken({ accessToken: data.accessToken, refreshToken: data.refreshToken }));
+                localStorage.setItem('tokens', JSON.stringify({ accessToken: data.accessToken, refreshToken: data.refreshToken }));
+            }
+
         }),
         refresh: build.mutation({
             query: () => ({
@@ -36,7 +49,6 @@ export const authApi = createApi({
             query: () => ({
                 url: '/users',
                 method: 'GET',
-
             }),
         })
     }),
