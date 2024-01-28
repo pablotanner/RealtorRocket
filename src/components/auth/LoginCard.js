@@ -1,6 +1,7 @@
 import {useEffect} from "react";
 import {toast} from "react-toastify";
 import {useLoginMutation} from "../../services/api/authApi.js";
+import {Button} from "../ui/button.tsx";
 
 
 const LoginCard = () => {
@@ -19,25 +20,25 @@ const LoginCard = () => {
 
 
     return (
-        <div className="card">
+        <div className="">
             <div className="card-body">
                 <form onSubmit={(e) => {
                     e.preventDefault();
                     const data = new FormData(e.target);
                     login({
-                        username: data.get('username'),
+                        email: data.get('email'),
                         password: data.get('password'),
                     })
                 }}>
                     <div className="mb-3">
-                        <label htmlFor="username" className="form-label">Username</label>
-                        <input type="text" className="form-control" id="username" name="username" required/>
+                        <label htmlFor="email" className="form-label">E-Mail</label>
+                        <input type="text" className="bg-red-400" id="email" name="email" required/>
                     </div>
                     <div className="mb-3">
                         <label htmlFor="password" className="form-label">Password</label>
-                        <input type="text" className="form-control" id="password" name="password" required/>
+                        <input type="text" className="bg-red-400" id="password" name="password" required/>
                     </div>
-                    <button type="submit" className="btn btn-primary">Login</button>
+                    <Button type="submit" variant="gradient">Login</Button>
                 </form>
             </div>
         </div>
