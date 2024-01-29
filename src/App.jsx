@@ -1,5 +1,5 @@
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
-import AnalysisPage from "./pages/AnalysisPage.jsx";
+import AnalysisPage from "./pages/Dashboard/AnalysisPage.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";
 import AuthVerify from "./services/auth/AuthVerify.js";
@@ -10,7 +10,7 @@ import {Provider} from "react-redux";
 
 import {store} from "./services/store/store.js";
 import {SignUpCard} from "./components/auth/SignUpCard.tsx";
-import Dashboard from "./pages/Dashboard.js";
+import DashboardHome from "./pages/Dashboard/DashboardHome.js";
 
 function App() {
     return (
@@ -26,7 +26,7 @@ function App() {
                     <Route path="/signup" element={<SignUpCard/>}/>
                     <Route path="/analysis" element={<AnalysisPage />} />
                     <Route path="*" element={<NotFoundPage/>} />
-                    <Route path="/dashboard" element={<Dashboard/>}/>
+                    <Route path="/dashboard" element={<DashboardHome/>}/>
                 </Routes>
             </Router>
         </Provider>
