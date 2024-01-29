@@ -1,8 +1,6 @@
 import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import {useDispatch, useSelector} from "react-redux";
-import {setToken} from "./authSlice.js";
+import {logoutUser} from "./authActions.js";
 
 const parseJwt = (token) => {
     try {
@@ -13,34 +11,38 @@ const parseJwt = (token) => {
 };
 
 const AuthVerify = () => {
-    const location = useLocation();
     const state = useSelector((state) => state.authSlice);
+    const accessToken = state.accessToken;
     const dispatch = useDispatch();
-    const localState = localStorage.getItem('tokens');
+    const refreshToken = localStorage.getItem("refreshToken")
 
-    if (localState && !state.tokenDetails.accessToken) {
-        const { accessToken, refreshToken } = JSON.parse(localState);
-        dispatch(setToken({ accessToken, refreshToken }));
-    }
-    else if (!localState && state.tokenDetails.accessToken) {
-        localStorage.setItem('tokens', JSON.stringify(state.tokenDetails));
-    }
+    console.log("A",accessToken, "R",refreshToken)
 
-    /*
-    // Check for user in local storage
     useEffect(() => {
-        if (state.user) return;
-        const userJson = localStorage.getItem('user');
-        if (userJson) {
-            const user = JSON.parse(userJson);
-            if (user?.accessToken && user?.username && user?.role) {
-                state.signIn(user);
+        if (accessToken && refreshToken) {
+            const decodedAccess = parseJwt(accessToken);
+            const decodedRefresh = parseJwt(refreshToken);
+
+            //console.log(decodedAccess, decodedRefresh)
+
+            if (decodedAccess && decodedAccess.exp * 1000 < Date.now()) {
+                console.log('Access token expired');
+                logoutUser(state);
+            }
+
+            if (decodedRefresh && decodedRefresh.exp * 1000 < Date.now()) {
+                console.log('Refresh token expired');
+                logoutUser(state);
             }
         }
-    }, [state]);
+        else if (window.location.pathname.includes('/dashboard')) {
+            console.log(accessToken, refreshToken, "no tokens")
+            logoutUser(state);
+        }
+    }, [accessToken, refreshToken, dispatch]);
 
-     */
 
+    /*
     // Check token expiration
     useEffect(() => {
         const userJson = localStorage.getItem('user');
@@ -54,9 +56,10 @@ const AuthVerify = () => {
                 state.signOut();
             }
         }
-    }, [location, state]);
+    }, [location, state])
+     */
 
-    return <span style={{ position: 'absolute' }}></span>;
+    return null;
 };
 
 export default AuthVerify;

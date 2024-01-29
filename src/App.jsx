@@ -9,7 +9,8 @@ import LoginCard from "./components/auth/LoginCard.js";
 import {Provider} from "react-redux";
 
 import {store} from "./services/store/store.js";
-import {SignUp} from "./components/auth/SignUp.js";
+import {SignUpCard} from "./components/auth/SignUpCard.tsx";
+import Dashboard from "./pages/Dashboard.js";
 
 function App() {
     return (
@@ -20,9 +21,10 @@ function App() {
                 <Routes>
                     <Route path="/" element={<HomePage/>} />
                     <Route path="/login" element={<LoginCard/>} />
-                    <Route path="/signup" element={<SignUp/>}/>
+                    <Route path="/signup" element={<SignUpCard/>}/>
                     <Route path="/analysis" element={<AnalysisPage />} />
                     <Route path="*" element={<NotFoundPage/>} />
+                    <Route path="/dashboard" element={<Dashboard/>}/>
                 </Routes>
             </Router>
         </Provider>

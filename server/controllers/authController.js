@@ -23,9 +23,13 @@ export async function signup(req, res) {
         });
         res.status(201).json({message: 'User created successfully', user: newUser});
     }
-
     catch (error) {
-        res.status(500).json({message: 'Something went wrong'});
+        if (error.code === 'P2002') {
+            res.status(409).json({message: 'User with that email already exists'});
+        }
+        else {
+            res.status(500).json({message: 'Something went wrong'});
+        }
     }
 }
 
@@ -40,7 +44,7 @@ export async function login(req, res) {
         });
 
         if (!user || !await bcrypt.compare(password, user.password)) {
-            return res.status(401).json({ error: "Invalid email or password" });
+            return res.status(401).json({ message: "Invalid email or password" });
         }
 
         // eslint-disable-next-line no-undef
@@ -51,7 +55,7 @@ export async function login(req, res) {
 
         res.status(200).json({ message: "Login successful", accessToken: accessToken, refreshToken: refreshToken });
     } catch (error) {
-        res.status(500).json({ error: "Error logging in" });
+        res.status(500).json({ message: "Error logging in" });
     }
 }
 
@@ -59,7 +63,7 @@ export async function refresh(req, res) {
     const { refreshToken } = req.body;
 
     if (!refreshToken) {
-        return res.status(403).json({ error: "Refresh token is required" });
+        return res.status(403).json({ message: "Refresh token is required" });
     }
 
     try {
@@ -75,7 +79,7 @@ export async function refresh(req, res) {
         });
 
         if (!user) {
-            return res.status(401).json({ error: "Invalid user" });
+            return res.status(401).json({ message: "Invalid user" });
         }
 
         // Generate new access token and refresh token
@@ -86,7 +90,7 @@ export async function refresh(req, res) {
 
         res.status(200).json({ message: "Refresh successful", accessToken: newAccessToken, refreshToken: newRefreshToken });
     } catch (error) {
-        res.status(500).json({ error: "Error refreshing token" });
+        res.status(500).json({ message: "Error refreshing token" });
     }
 }
 
@@ -100,7 +104,7 @@ export function authenticateToken(req, res, next) {
     const token = authHeader && authHeader.split(' ')[1];
 
     if (!token) {
-        return res.status(401).json({ error: "Access token is required" });
+        return res.status(401).json({ message: "Access token is required" });
     }
 
     try {
@@ -109,7 +113,7 @@ export function authenticateToken(req, res, next) {
         req.user = payload;
         next();
     } catch (error) {
-        return res.status(403).json({ error: "Invalid token" });
+        return res.status(403).json({ message: "Invalid token" });
     }
 }
 

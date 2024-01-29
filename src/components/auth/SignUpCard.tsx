@@ -1,0 +1,163 @@
+import {useEffect} from "react";
+import {toast} from "react-toastify";
+import {useRegisterMutation} from "../../services/api/authApi.js";
+
+import {Card, CardContent, CardHeader} from "../ui/card.tsx";
+import {AiFillRocket} from "react-icons/ai";
+import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "../ui/form.tsx";
+
+
+import {z} from "zod";
+import {useForm} from "react-hook-form";
+import {Input} from "../ui/input.tsx";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {Button} from "../ui/button.tsx";
+
+export const SignUpCard = () => {
+
+    const [register, {data, isError, isLoading, error, isSuccess }] = useRegisterMutation();
+
+
+    const signUpFormSchema = z.object({
+        email: z.string().email( {message: 'Please enter a valid email address'}),
+        password: z.string().min(8, {message: 'Password must be at least 8 characters long'}),
+        first_name: z.string(),
+        last_name: z.string(),
+    }).superRefine(({ password }, checkPassComplexity) => {
+        const containsUppercase = (ch: string) => /[A-Z]/.test(ch);
+        const containsLowercase = (ch: string) => /[a-z]/.test(ch);
+        const containsSpecialChar = (ch: string) =>
+            /[`!@#$%^&*()_\-+=\[\]{};':"\\|,.<>\/?~ ]/.test(ch);
+        let countOfUpperCase = 0,
+            countOfLowerCase = 0,
+            countOfNumbers = 0,
+            countOfSpecialChar = 0;
+        for (let i = 0; i < password.length; i++) {
+            const ch = password.charAt(i);
+            if (!isNaN(+ch)) countOfNumbers++;
+            else if (containsUppercase(ch)) countOfUpperCase++;
+            else if (containsLowercase(ch)) countOfLowerCase++;
+            else if (containsSpecialChar(ch)) countOfSpecialChar++;
+        }
+        if (
+            countOfLowerCase < 1 ||
+            countOfUpperCase < 1 ||
+            //countOfSpecialChar < 1 ||
+            countOfNumbers < 1
+        ) {
+            checkPassComplexity.addIssue({
+                code: "custom",
+                path: ["password"],
+                //message: "Password does not meet complexity requirements",
+                message: "Please use at least one uppercase, one lowercase letter and one number",
+            });
+        }
+    });
+
+    const form = useForm({
+        resolver: zodResolver(signUpFormSchema),
+        defaultValues: {
+            email: '',
+            first_name: '',
+            last_name: '',
+            password: '',
+        }
+    })
+
+    function onSubmit(data) {
+        register(data)
+    }
+
+    useEffect(() => {
+        if (isSuccess) {
+            toast.info('Success')
+            window.location.href = '/dashboard'
+        }
+        else if (isError) {
+            toast.error(error?.data?.message)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[isLoading])
+
+
+    return (
+        <div className="flex justify-center items-center min-h-screen bg-white rounded-xl shadow-inner">
+            <Card className="bg-white border-input shadow-2xl text-off-black flex w-fit flex-col p-5">
+                <CardHeader className="flex justify-center items-center py-10">
+                    <AiFillRocket className="w-12 h-12"/>
+                    <h1 className="text-3xl">Welcome!</h1>
+                    <p>
+                        Please enter your details to sign up.
+                    </p>
+                </CardHeader>
+                <CardContent className="w-[275px] md:w-[350px]">
+                    <Form {...form} >
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-3 w-[100%] ">
+                            <FormField
+                                control={form.control}
+                                name="email"
+                                render={({field}) => (
+                                    <FormItem >
+                                        <FormLabel>E-Mail</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="john@doe.com" {...field} />
+                                        </FormControl>
+                                        <FormDescription hidden>Enter your email address</FormDescription>
+                                        <FormMessage/>
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="first_name"
+                                render={({field}) => (
+                                    <FormItem >
+                                        <FormLabel>First Name</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="John" {...field} />
+                                        </FormControl>
+                                        <FormDescription hidden>Enter your email address</FormDescription>
+                                        <FormMessage/>
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="last_name"
+                                render={({field}) => (
+                                    <FormItem >
+                                        <FormLabel>Family Name</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Doe" {...field} />
+                                        </FormControl>
+                                        <FormDescription hidden>Enter your email address</FormDescription>
+                                        <FormMessage/>
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="password"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>Password</FormLabel>
+                                        <FormControl>
+                                            <Input {...field} />
+                                        </FormControl>
+                                        <FormDescription hidden>Enter your password</FormDescription>
+                                        <FormMessage/>
+                                    </FormItem>
+                                )}
+                            />
+                            <Button type="submit" variant="dark" isLoading={isLoading}>
+                                Sign Up
+                            </Button>
+                        </form>
+                    </Form>
+                </CardContent>
+
+            </Card>
+        </div>
+    )
+
+}

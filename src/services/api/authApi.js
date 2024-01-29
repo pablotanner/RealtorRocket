@@ -1,6 +1,6 @@
 import {createApi} from "@reduxjs/toolkit/query/react";
 import customFetchBase from "./customFetchBase.js";
-import {setToken} from "../auth/authSlice.js";
+import {setAccessToken} from "../auth/authSlice.js";
 
 
 export const authApi = createApi({
@@ -15,8 +15,11 @@ export const authApi = createApi({
             }),
             async onQueryStarted(arg, { dispatch, queryFulfilled }) {
                 const { data } = await queryFulfilled;
-                dispatch(setToken({ accessToken: data.accessToken, refreshToken: data.refreshToken }));
-                localStorage.setItem('tokens', JSON.stringify({ accessToken: data.accessToken, refreshToken: data.refreshToken }));
+                if (data.accessToken) {
+                    dispatch(setAccessToken(data.accessToken));
+                    localStorage.setItem('refreshToken', data.refreshToken)
+                }
+                return data;
             }
 
         }),
@@ -26,11 +29,13 @@ export const authApi = createApi({
                 method: 'POST',
                 body: credentials,
             }),
+            /*
             async onQueryStarted(arg, { dispatch, queryFulfilled }) {
                 const { data } = await queryFulfilled;
-                dispatch(setToken({ accessToken: data.accessToken, refreshToken: data.refreshToken }));
-                localStorage.setItem('tokens', JSON.stringify({ accessToken: data.accessToken, refreshToken: data.refreshToken }));
+                dispatch(setAccessToken(data.accessToken));
+                localStorage.setItem('refreshToken', data.refreshToken)
             }
+             */
 
         }),
         refresh: build.mutation({
@@ -58,6 +63,7 @@ export const {
     useLoginMutation,
     useRegisterMutation,
     useRefreshMutation,
+    useLazyRefreshQuery,
     useLogoutMutation,
     useUsersQuery,
 } = authApi;
