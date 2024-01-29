@@ -9,7 +9,7 @@ dotenv.config();
 
 
 export async function signup(req, res) {
-    const {email, password} = req.body;
+    const {email, password, first_name, last_name} = req.body;
     try {
         const salt = await bcrypt.genSalt(12);
         const hashedPassword = await bcrypt.hash(password, salt);
@@ -18,6 +18,8 @@ export async function signup(req, res) {
             data: {
                 email: email,
                 password: hashedPassword,
+                firstName: first_name,
+                lastName: last_name,
                 salt: salt,
             },
         });
@@ -99,7 +101,6 @@ export function authenticateToken(req, res, next) {
     // Gather the jwt access token from the request header
     const authHeader = req.headers['authorization'];
 
-    console.log(authHeader)
     // eslint-disable-next-line no-undef
     const token = authHeader && authHeader.split(' ')[1];
 

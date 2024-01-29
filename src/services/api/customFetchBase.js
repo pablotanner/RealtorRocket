@@ -1,7 +1,8 @@
 import {fetchBaseQuery} from "@reduxjs/toolkit/query";
-import {logout} from "../auth/authSlice.js";
 import { Mutex } from 'async-mutex';
 import {logoutUser} from "../auth/authActions.js";
+import authSlice, {setAccessToken} from "../auth/authSlice.js";
+import {toast} from "react-toastify";
 
 const mutex = new Mutex();
 
@@ -14,12 +15,8 @@ const baseQuery = fetchBaseQuery({
     baseUrl: baseUrl,
     prepareHeaders: (headers, {getState}) => {
         const accessToken = getState().authSlice?.accessToken;
-        const refreshToken = localStorage.getItem('refreshToken');
         if (accessToken) {
             headers.set('Authorization', `Bearer ${accessToken}`);
-        }
-        else if (refreshToken) {
-            headers.set('Authorization', `Bearer ${refreshToken}`);
         }
         return headers;
     },
@@ -33,18 +30,14 @@ const customFetchBase = async (args, api, extraOptions) => {
         if(!mutex.isLocked()){
             const release = await mutex.acquire();
             try {
-
-                // Try to refresh the token
-                   const refreshResult = await api.endpoints.refresh.initiate({}, {
-                        signal: extraOptions?.signal,
-                        meta: {
-                            arg: {},
-                            requestId: extraOptions?.requestId,
-                            requestStatus: 'pending',
-                        },
-                    });
+                const refreshResult = await baseQuery({url: '/refresh', method: "POST", body: {
+                    refreshToken: localStorage.getItem('refreshToken'),}}, api, extraOptions);
 
                 if (refreshResult.data) {
+                    const { accessToken, refreshToken } = refreshResult.data;
+                    localStorage.setItem('refreshToken', refreshToken);
+                    api.dispatch(setAccessToken(accessToken));
+
                     // Retry the initial request
                     result = await baseQuery(args, api, extraOptions);
                 }

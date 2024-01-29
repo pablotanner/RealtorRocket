@@ -16,8 +16,6 @@ const AuthVerify = () => {
     const dispatch = useDispatch();
     const refreshToken = localStorage.getItem("refreshToken")
 
-    console.log("A",accessToken, "R",refreshToken)
-
     useEffect(() => {
         if (accessToken && refreshToken) {
             const decodedAccess = parseJwt(accessToken);
@@ -34,10 +32,6 @@ const AuthVerify = () => {
                 console.log('Refresh token expired');
                 logoutUser(state);
             }
-        }
-        else if (window.location.pathname.includes('/dashboard')) {
-            console.log(accessToken, refreshToken, "no tokens")
-            logoutUser(state);
         }
     }, [accessToken, refreshToken, dispatch]);
 

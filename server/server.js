@@ -3,6 +3,7 @@ import cors from 'cors';
 import prisma from './prisma.js';
 import * as authController from "./controllers/authController.js";
 import {authenticateToken} from "./controllers/authController.js";
+import * as userController from "./controllers/userController.js";
 
 const app = express();
 const router = express.Router();
@@ -21,6 +22,7 @@ router.post('/login', authController.login);
 router.post('/refresh', authController.refresh);
 
 
+router.get('/user', authenticateToken, userController.getUser)
 
 
 try {

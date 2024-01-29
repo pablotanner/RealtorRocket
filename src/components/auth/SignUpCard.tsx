@@ -12,10 +12,11 @@ import {useForm} from "react-hook-form";
 import {Input} from "../ui/input.tsx";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Button} from "../ui/button.tsx";
+import {useNavigate} from "react-router-dom";
 
 export const SignUpCard = () => {
-
-    const [register, {data, isError, isLoading, error, isSuccess }] = useRegisterMutation();
+    const navigate = useNavigate();
+    const [register, {isError, isLoading, error, isSuccess }] = useRegisterMutation();
 
 
     const signUpFormSchema = z.object({
@@ -37,6 +38,7 @@ export const SignUpCard = () => {
             if (!isNaN(+ch)) countOfNumbers++;
             else if (containsUppercase(ch)) countOfUpperCase++;
             else if (containsLowercase(ch)) countOfLowerCase++;
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             else if (containsSpecialChar(ch)) countOfSpecialChar++;
         }
         if (
@@ -149,6 +151,10 @@ export const SignUpCard = () => {
                                     </FormItem>
                                 )}
                             />
+                            <Button variant="link" onClick={() => navigate("/login")}>
+                                Already have an account? Log in
+                            </Button>
+
                             <Button type="submit" variant="dark" isLoading={isLoading}>
                                 Sign Up
                             </Button>

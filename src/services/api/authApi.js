@@ -38,12 +38,6 @@ export const authApi = createApi({
              */
 
         }),
-        refresh: build.mutation({
-            query: () => ({
-                url: '/refresh',
-                method: 'POST',
-            }),
-        }),
         logout: build.mutation({
             query: () => ({
                 url: '/logout',

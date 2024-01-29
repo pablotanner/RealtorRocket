@@ -18,7 +18,7 @@ const LoginCard = () => {
 
     const navigate = useNavigate();
 
-    const [login, {data, isError, isLoading, error, isSuccess }] = useLoginMutation();
+    const [login, {isError, isLoading, error, isSuccess }] = useLoginMutation();
 
 
     const loginFormSchema = z.object({
@@ -88,11 +88,15 @@ const LoginCard = () => {
                                         </FormItem>
                                     )}
                                 />
+                                <Button variant="link" onClick={() => navigate("/signup")}>
+                                    Don't have an account? Sign up
+                                </Button>
                                 <Button type="submit" variant="dark" isLoading={isLoading}>
                                     Login
                                 </Button>
                             </form>
                         </Form>
+
                     </CardContent>
 
             </Card>
