@@ -65,7 +65,7 @@ const HomePage = () => {
                         <Button variant="gradient" size="lg" onClick={() => navigate("/signup")}>
                             Get Started
                         </Button>
-                        <Button variant="outline-primary" size="lg" onClick={() => toast.info("Click Demo")}>
+                        <Button variant="outline-primary" size="lg" onClick={() => toast.info("Not Available Yet")}>
                             View Demo <IoPlayCircleOutline className="ml-1 w-4 h-4"/>
                         </Button>
                     </div>

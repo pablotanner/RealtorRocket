@@ -20,7 +20,14 @@ export default function NavBar({children}) {
 
     const {data, error, isLoading, isError} = useGetUserQuery()
 
-    if (isLoading) return <div>Loading...</div>
+
+    if (isLoading) {
+        return (
+            <div className="flex items-center justify-center h-screen w-screen">
+                <div className="rounded-md h-12 w-12 border-4 border-t-4 border-blue-500 animate-spin"></div>
+            </div>
+        )
+    }
 
     if (isError) return <div>Something went wrong {error?.message}</div>
 

@@ -17,7 +17,9 @@ function App() {
         <Provider store={store}>
             <Router>
                 <AuthVerify/>
-                <ToastContainer/>
+                <ToastContainer
+
+                />
                 <Routes>
                     <Route path="/" element={<HomePage/>} />
                     <Route path="/login" element={<LoginCard/>} />

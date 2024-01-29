@@ -71,6 +71,16 @@ body {
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
+
+
+    /*React Toastify*/
+
+    --toastify-color-success: #2ecc71;
+    --toastify-color-error: #e74c3c;
+    --toastify-color-info: #3498db;
+
+    --toastify-font-family: 'Roboto', sans-serif;
+    
   }
 
 }
