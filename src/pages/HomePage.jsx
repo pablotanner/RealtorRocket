@@ -6,10 +6,12 @@ import {Card, CardContent, CardHeader} from "../components/ui/card.tsx";
 import { GiRocketThruster } from "react-icons/gi";
 import {IoPlayCircleOutline} from "react-icons/io5";
 import {toast} from "react-toastify";
+import {useNavigate} from "react-router-dom";
 
 
 const HomePage = () => {
     const [isVisible, setIsVisible] = useState(true);
+    const navigate = useNavigate();
 
     const checkScroll = () => {
         if (window.scrollY > 0) {
@@ -41,7 +43,7 @@ const HomePage = () => {
                         </span>
                     </div>
                     <div>
-                        <Button  size="lg" variant="gradient">
+                        <Button  size="lg" variant="gradient" onClick={() => navigate("/signup")}>
                             Get Started
                         </Button>
                     </div>
@@ -60,7 +62,7 @@ const HomePage = () => {
                         Where Data Meets Real Estate Expertise
                     </p>
                     <div className="flex justify-evenly md:justify-normal gap-x-2 md:gap-x-6 max-w-fit">
-                        <Button variant="gradient" size="lg">
+                        <Button variant="gradient" size="lg" onClick={() => navigate("/signup")}>
                             Get Started
                         </Button>
                         <Button variant="outline-primary" size="lg" onClick={() => toast.info("Click Demo")}>
