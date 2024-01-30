@@ -22,10 +22,11 @@ export const userApi = createApi({
                 method: 'PATCH',
                 body,
             }),
-
-
-            // Use the new user object from response
-            invalidatesTags: ['User'],
+            // API returns back the updated user, so we can use that to update the cache
+            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                const { data } = await queryFulfilled;
+                dispatch(setUser(data.data));
+            },
         }),
     })
 })
