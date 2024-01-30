@@ -58,7 +58,7 @@ const LoginCard = () => {
                     <h1 className="text-3xl">Welcome Back!</h1>
                 </CardHeader>
                     <CardContent className="w-[275px] md:w-[350px]">
-                        <Form {...form} >
+                        <Form {...form}>
                             <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-y-3 w-[100%] ">
                                 <FormField
                                     control={form.control}
@@ -81,14 +81,14 @@ const LoginCard = () => {
                                         <FormItem>
                                             <FormLabel>Password</FormLabel>
                                             <FormControl>
-                                                <Input {...field} />
+                                                <Input type="password" {...field} />
                                             </FormControl>
                                             <FormDescription hidden>Enter your password</FormDescription>
                                             <FormMessage/>
                                         </FormItem>
                                     )}
                                 />
-                                <Button variant="link" onClick={() => navigate("/signup")}>
+                                <Button variant="link" type="button" onClick={() => navigate("/signup")}>
                                     Don't have an account? Sign up
                                 </Button>
                                 <Button type="submit" variant="dark" isLoading={isLoading}>

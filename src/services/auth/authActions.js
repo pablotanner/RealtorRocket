@@ -3,5 +3,9 @@ import {logout} from "./authSlice.js";
 export function logoutUser() {
     logout();
     localStorage.removeItem('refreshToken')
-    window.location.href = '/login';
+
+    // If user not already on login page, redirect to login page
+    if (window.location.pathname !== '/login') {
+        window.location.href = '/login';
+    }
 }

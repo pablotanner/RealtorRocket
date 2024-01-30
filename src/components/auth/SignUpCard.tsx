@@ -22,8 +22,8 @@ export const SignUpCard = () => {
     const signUpFormSchema = z.object({
         email: z.string().email( {message: 'Please enter a valid email address'}),
         password: z.string().min(8, {message: 'Password must be at least 8 characters long'}),
-        first_name: z.string(),
-        last_name: z.string(),
+        first_name: z.string().min(1, {message: 'Please enter your first name'}),
+        last_name: z.string().min(1, {message: 'Please enter your last name'}),
     }).superRefine(({ password }, checkPassComplexity) => {
         const containsUppercase = (ch: string) => /[A-Z]/.test(ch);
         const containsLowercase = (ch: string) => /[a-z]/.test(ch);
@@ -144,14 +144,14 @@ export const SignUpCard = () => {
                                     <FormItem>
                                         <FormLabel>Password</FormLabel>
                                         <FormControl>
-                                            <Input {...field} />
+                                            <Input type="password" {...field} />
                                         </FormControl>
                                         <FormDescription hidden>Enter your password</FormDescription>
                                         <FormMessage/>
                                     </FormItem>
                                 )}
                             />
-                            <Button variant="link" onClick={() => navigate("/login")}>
+                            <Button variant="link"  type="button" onClick={() => navigate("/login")}>
                                 Already have an account? Log in
                             </Button>
 
