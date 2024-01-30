@@ -20,6 +20,8 @@ const buttonVariants = cva(
           ghost: "hover:bg-accent hover:text-accent-foreground",
           gradient: "bg-gradient-to-r from-primary to-primary-dark hover:from-primary/80 hover:to-primary-dark/80 text-white",
           link: "text-primary underline-offset-4 hover:underline",
+          "nav-button": "text-off-black bg-inherit justify-start hover:bg-off-black hover:text-white font-400",
+          "nav-button-active": "text-white bg-off-black justify-start font-400",
       },
       size: {
         default: "h-10 rounded-md px-5 py-2",

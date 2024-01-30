@@ -12,6 +12,7 @@ export default function NavBar({children}) {
     const {data, error, isLoading, isError} = useGetUserQuery()
 
 
+
     if (isLoading) {
         return (
             <div className="flex items-center justify-center h-screen w-screen">

@@ -10,9 +10,10 @@ export const userApi = createApi({
             query: () => ({
                 url: '/user',
                 method: 'GET',
-            })
+            }),
         })
     })
 })
+
 
 export const {useGetUserQuery} = userApi;
