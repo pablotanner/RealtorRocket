@@ -8,7 +8,7 @@ const Header = ({title}) => {
     const userProfile = useSelector(state => state.authSlice.userInfo)
 
     return (
-        <div className="pb-4 border-b-gray-200 border-b-2   p-8">
+        <div className="pb-4 border-b-gray-200 border-b-2 p-8">
         <div className="flex flex-row mb-4 justify-between items-center gap-x-2">
             <Select>
                 <SelectTrigger className="w-[180px] bg-white">
