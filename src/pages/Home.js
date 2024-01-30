@@ -31,7 +31,6 @@ const Home = () => {
 
     return (
         <div >
-            <NavBar>
                 <Table>
                     <TableCaption >Current Users</TableCaption>
                     <TableHeader>
@@ -51,8 +50,6 @@ const Home = () => {
                         ))}
                     </TableBody>
                 </Table>
-            </NavBar>
-
         </div>
     );
 }
