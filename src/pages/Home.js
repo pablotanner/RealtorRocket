@@ -1,4 +1,4 @@
-import {useUsersQuery} from "../../services/api/authApi.js";
+import {useUsersQuery} from "../services/api/authApi.js";
 
 import {
     Table,
@@ -8,10 +8,10 @@ import {
     TableFooter,
     TableHead,
     TableHeader,
-    TableRow} from "../../components/ui/table.tsx";
-import NavBar from "../../components/NavBar.jsx";
+    TableRow} from "../components/ui/table.tsx";
+import NavBar from "../components/NavBar.jsx";
 
-const DashboardHome = () => {
+const Home = () => {
 
     const {data, isError, error, isLoading} = useUsersQuery();
 
@@ -57,4 +57,4 @@ const DashboardHome = () => {
     );
 }
 
-export default DashboardHome;
+export default Home;

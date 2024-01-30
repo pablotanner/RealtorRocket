@@ -41,7 +41,7 @@ const LoginCard = () => {
     useEffect(() => {
         if (isSuccess) {
             toast.info('Logged in successfully')
-            navigate('/dashboard')
+            navigate('/')
         }
         else if (isError) {
             toast.error(error?.data?.message)
