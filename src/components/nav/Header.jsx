@@ -68,7 +68,7 @@ const Header = () => {
                             <UserRoundIcon className="mr-2 h-4 w-4"/>
                             Profile
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => navigate("/account?settings")}>
+                        <DropdownMenuItem onClick={() => navigate("/settings")}>
                             <SettingsIcon className="mr-2 h-4 w-4"/>
                             Settings
                         </DropdownMenuItem>

@@ -1,6 +1,5 @@
 import customFetchBase from "./customFetchBase.js";
 import {createApi} from "@reduxjs/toolkit/query/react";
-import {authApi} from "./authApi.js";
 import {setUser} from "../auth/authSlice.js";
 
 

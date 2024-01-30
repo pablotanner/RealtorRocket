@@ -5,15 +5,22 @@ import {
     TabsTrigger,
 } from "../components/ui/tabs.tsx"
 import EditProfile from "../components/profile/EditProfile.js";
+import {useLocation, useNavigate} from "react-router-dom";
 
 
 const Account = () => {
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const selectedTab = location.pathname === '/account' ? 'profile' : 'settings';
+
+
     return (
         <div >
-            <Tabs defaultValue="profile" className="max-w-[400px]">
+            <Tabs value={selectedTab} className="max-w-[400px]">
                 <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="profile">Profile</TabsTrigger>
-                    <TabsTrigger value="settings">Settings</TabsTrigger>
+                    <TabsTrigger value="profile" onClick={() => navigate("/account")}>Profile</TabsTrigger>
+                    <TabsTrigger value="settings" onClick={() => navigate("/settings")}>Settings</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="profile" className="w-full md:w-[30rem]">

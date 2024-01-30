@@ -36,7 +36,8 @@ const AppContent = () => {
             <Routes>
                 <Route path="/" element={<Home/>} />
                 <Route path="*" element={<NotFound/>} />
-                <Route path="/account" element={<Account/>} />
+                <Route path="/account"  element={<Account/>} />
+                <Route path="/settings"  element={<Account/>} />
             </Routes>
                 </Navbar>)}
             {!showNavbar && (
