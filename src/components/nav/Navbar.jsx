@@ -5,7 +5,7 @@ import {BiSolidRocket} from "react-icons/bi";
 import {useGetUserQuery} from "../../services/api/userApi.js";
 import Header from "./Header.jsx";
 import {BellIcon, BuildingIcon, CircleDollarSignIcon, HomeIcon, LogOutIcon} from "lucide-react";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {setUser} from "../../services/auth/authSlice.js";
 import {logoutUser} from "../../services/auth/authActions.js";
 
@@ -40,20 +40,20 @@ const items = [
 const Navbar = ({children}) => {
     const location = useLocation();
 
-
     const currentPage = items.find(item => item.url === location.pathname)?.title || "";
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const isLoggedIn = useSelector(state => state.authSlice.accessToken);
 
     const isMobile = window.innerWidth < 768;
 
-    const {data, isLoading} = useGetUserQuery()
+    const {data, isLoading} = useGetUserQuery();
 
     if (data?.data) {
         dispatch(setUser(data?.data))
     }
 
-    if (isLoading) {
+    if (isLoading || !isLoggedIn) {
         return (
             <div className="flex items-center justify-center h-screen w-screen">
                 <div className="rounded-md h-12 w-12 border-4 border-t-4 border-blue-500 animate-spin"></div>
