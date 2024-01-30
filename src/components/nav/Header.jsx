@@ -4,12 +4,12 @@ import {useSelector} from "react-redux";
 import {toast} from "react-toastify";
 import {MenuIcon} from "lucide-react";
 
-const Header = ({title}) => {
+const Header = () => {
     const userProfile = useSelector(state => state.authSlice.userInfo)
 
     return (
-        <div className="border-b-gray-200 border-b-2 py-8 bg-white">
-        <div className="flex flex-row mb-4 justify-between items-center gap-x-2">
+        <div className="border-b-gray-200 border-b-2 ">
+        <div className="flex flex-row mb-4 justify-between items-center gap-x-2 p-2 md:p-5 bg-white rounded-lg">
             <Select>
                 <SelectTrigger className="w-[180px] bg-white">
                     <SelectValue placeholder="All Properties"/>
@@ -52,9 +52,6 @@ const Header = ({title}) => {
             <MenuIcon className="hidden items-center w-6 h-6 cursor-pointer" onClick={() => toast.info("Open Menu")}/>
 
         </div>
-            <h className="text-xl md:text-3xl font-500">
-                {title}
-            </h>
         </div>
     )
 }

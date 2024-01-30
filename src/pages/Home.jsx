@@ -29,7 +29,7 @@ const Home = () => {
     }
 
     return (
-        <div className="bg-blue-100 rounded-md">
+        <div>
                 <Table>
                     <TableCaption >Current Users</TableCaption>
                     <TableHeader>

@@ -50,6 +50,7 @@ module.exports = {
         "primary-text-light": "#8c92af",
         "primary-text-dark": "#6c7391",
         "background-gray": "#F6F6F6",
+        "background-gray-darker": "#F4F4F4",
         "primary-darker": "hsl(var(--primary-darker))",
         "primary-darkest": "hsl(var(--primary-darkest))",
         secondary: {
