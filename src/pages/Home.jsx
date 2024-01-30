@@ -22,11 +22,6 @@ const Home = () => {
         return <div>Error: {error?.message}</div>
     }
 
-    function censorEmail(email) {
-        const [name, domain] = email.split('@');
-        const censoredName = name.slice(0, 1) + '*'.repeat(name.length - 1);
-        return censoredName + '@' + domain;
-    }
 
     return (
         <div>
@@ -34,7 +29,7 @@ const Home = () => {
                     <TableCaption >Current Users</TableCaption>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>E-Mail </TableHead>
+                            <TableHead>User ID </TableHead>
                             <TableHead>Password (Encrypted)</TableHead>
                             <TableHead>Role</TableHead>
                         </TableRow>
@@ -42,7 +37,7 @@ const Home = () => {
                     <TableBody>
                         {data.map((user) => (
                             <TableRow key={user.id}>
-                                <TableCell>{censorEmail(user.email)}</TableCell>
+                                <TableCell>{user.id}</TableCell>
                                 <TableHead>{user.password}</TableHead>
                                 <TableCell>{user.role}</TableCell>
                             </TableRow>
