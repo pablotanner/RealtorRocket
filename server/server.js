@@ -24,6 +24,8 @@ router.post('/refresh', authController.refresh);
 
 router.get('/user', authenticateToken, userController.getUser)
 
+router.patch('/user', authenticateToken, userController.updateUser)
+
 
 try {
     app.get('/users', authenticateToken, async (req, res) => {

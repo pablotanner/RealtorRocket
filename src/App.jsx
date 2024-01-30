@@ -11,6 +11,7 @@ import {SignUpCard} from "./components/auth/SignUpCard.tsx";
 import Home from "./pages/Home.jsx";
 import Navbar from "./components/nav/Navbar.jsx";
 import {TooltipProvider} from "./components/ui/tooltip.tsx";
+import Account from "./pages/Account.jsx";
 
 
 function App() {
@@ -35,6 +36,7 @@ const AppContent = () => {
             <Routes>
                 <Route path="/" element={<Home/>} />
                 <Route path="*" element={<NotFound/>} />
+                <Route path="/account" element={<Account/>} />
             </Routes>
                 </Navbar>)}
             {!showNavbar && (
