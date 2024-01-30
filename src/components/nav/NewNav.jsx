@@ -103,7 +103,7 @@ const NewNav = ({children}) => {
             </div>
             <div className="w-full">
                 <Header title={currentPage}/>
-                <div className="p-4">
+                <div className="py-4 px-8">
                     {children}
                 </div>
             </div>
