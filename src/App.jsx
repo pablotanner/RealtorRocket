@@ -8,7 +8,7 @@ import {Provider} from "react-redux";
 
 import {store} from "./services/store/store.js";
 import {SignUpCard} from "./components/auth/SignUpCard.tsx";
-import Home from "./pages/Home.js";
+import Home from "./pages/Home.jsx";
 import Navbar from "./components/nav/Navbar.jsx";
 import {TooltipProvider} from "./components/ui/tooltip.tsx";
 

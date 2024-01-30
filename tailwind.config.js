@@ -47,7 +47,9 @@ module.exports = {
         },
         "off-black": "var(--off-black)",
         "primary-dark": "hsl(var(--primary-dark))",
-        "primary-light": "hsl(var(--primary-light))",
+        "primary-text-light": "#8c92af",
+        "primary-text-dark": "#6c7391",
+        "background-gray": "#F6F6F6",
         "primary-darker": "hsl(var(--primary-darker))",
         "primary-darkest": "hsl(var(--primary-darkest))",
         secondary: {

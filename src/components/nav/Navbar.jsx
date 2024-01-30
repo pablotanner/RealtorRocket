@@ -67,7 +67,7 @@ const Navbar = ({children}) => {
     return (<div className="flex">
             <div
                 data-collapsed={isMobile}
-                className="min-h-screen flex flex-col justify-between z-50 border-r-2 border-gray-200 w-16 md:w-48"
+                className="min-h-screen flex flex-col justify-between z-50 border-r-2 border-gray-200 w-14 sm:w-16 md:w-48 shadow-xl"
             >
                 <div>
                 <h className="font-700 flex flex-row justify-center md:justify-start items-center gap-x-1 py-4 md:pl-2 md:mr-2 text-lg whitespace-nowrap ">
@@ -75,22 +75,27 @@ const Navbar = ({children}) => {
                     <p className="hidden md:flex">Realtor Rocket</p>
                 </h>
                     <nav
-                        className="hidden md:flex flex-col gap-1 mt-5 ">
-                        {/* eslint-disable-next-line react/prop-types */}
-                        {items.map((item, index) => (<Tooltip key={index}>
-                                <TooltipTrigger className="flex w-44 items-center">
-                                    <Button variant={getNavButtonVariant(item.url)} className="w-full justify-start mx-2 flex gap-2" key={index}
-                                            onClick={() => navigate(item.url)}>
-                                        {item.icon}
-                                        {item.title}
-                                    </Button>
-                                </TooltipTrigger>
-                                <TooltipContent side="right" className="flex gap-5">
-                                    <h className="font-500">{item.title}</h>
-                                    {item.label}
-                                </TooltipContent>
-                            </Tooltip>)
-                        )}
+                        className="hidden md:flex flex-col mt-5">
+                        <p className="text-primary-text-light mx-2 uppercase">
+                            Real Estate
+                        </p>
+                        <div className="flex flex-col gap-2">
+                            {items.map((item, index) => (<Tooltip key={index}>
+                                    <TooltipTrigger className="flex items-center">
+                                        <Button variant={getNavButtonVariant(item.url)} className="w-full justify-start mx-2 flex gap-2" key={index}
+                                                onClick={() => navigate(item.url)}>
+                                            {item.icon}
+                                            {item.title}
+                                        </Button>
+                                    </TooltipTrigger>
+                                    <TooltipContent side="right" className="flex gap-5">
+                                        <h className="font-500">{item.title}</h>
+                                        {item.label}
+                                    </TooltipContent>
+                                </Tooltip>)
+                            )}
+                        </div>
+
                     </nav>
 
                     <nav className="md:hidden flex flex-col justify-center items-center">
@@ -113,7 +118,7 @@ const Navbar = ({children}) => {
                     </span>
                 </Button>
             </div>
-            <div className="w-full px-5 xl:pr-20 overflow-auto">
+            <div className="w-full px-5 pb-5 xl:pr-20 overflow-auto flex flex-col gap-y-2 bg-background-gray">
                 <Header title={currentPage}/>
                 {children}
             </div>
