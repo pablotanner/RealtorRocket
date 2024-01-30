@@ -44,15 +44,15 @@ const Header = ({title}) => {
                         {(userProfile?.firstName?.[0] + userProfile?.lastName?.[0]) || "?"}
                     </AvatarFallback>
                 </Avatar>
-                <h className=" items-center ml-2 font-500 whitespace-nowrap">
+                <h className="hidden xs:flex items-center ml-2 font-500 whitespace-nowrap">
                     {userProfile?.firstName} {userProfile?.lastName}
                 </h>
             </div>
 
-            <MenuIcon className="hidden  items-center w-6 h-6 cursor-pointer" onClick={() => toast.info("Open Menu")}/>
+            <MenuIcon className="hidden items-center w-6 h-6 cursor-pointer" onClick={() => toast.info("Open Menu")}/>
 
         </div>
-            <h className="text-3xl font-500">
+            <h className="text-xl md:text-3xl font-500">
                 {title}
             </h>
         </div>

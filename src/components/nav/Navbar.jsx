@@ -67,7 +67,7 @@ const Navbar = ({children}) => {
     return (<div className="flex">
             <div
                 data-collapsed={isMobile}
-                className="min-h-screen flex flex-col justify-between z-50 border-r-2 border-gray-200 w-20 md:w-56"
+                className="min-h-screen flex flex-col justify-between z-50 border-r-2 border-gray-200 w-16 md:w-48"
             >
                 <div>
                 <h className="font-700 flex flex-row justify-center md:justify-start items-center gap-x-1 py-4 md:pl-2 md:mr-2 text-lg whitespace-nowrap ">
@@ -104,16 +104,16 @@ const Navbar = ({children}) => {
 
                     </nav>
                 </div>
-                <Button variant="destructive" className="m-5" onClick={() => logoutUser()}>
+                <Button variant="destructive" className="m-2 md:m-5" onClick={() => logoutUser()}>
                     <span className="hidden md:flex">
                         Logout
                     </span>
-                    <span className="md:hidden">
+                    <span className="md:hidden justify-center">
                         <LogOutIcon/>
                     </span>
                 </Button>
             </div>
-            <div className="w-full px-5 xl:pr-20">
+            <div className="w-full px-5 xl:pr-20 overflow-auto">
                 <Header title={currentPage}/>
                 {children}
             </div>
