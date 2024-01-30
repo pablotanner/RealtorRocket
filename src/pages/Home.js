@@ -9,7 +9,6 @@ import {
     TableHead,
     TableHeader,
     TableRow} from "../components/ui/table.tsx";
-import NavBar from "../components/NavBar.jsx";
 
 const Home = () => {
 
@@ -30,7 +29,7 @@ const Home = () => {
     }
 
     return (
-        <div >
+        <div>
                 <Table>
                     <TableCaption >Current Users</TableCaption>
                     <TableHeader>

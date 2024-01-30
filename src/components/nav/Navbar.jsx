@@ -37,7 +37,7 @@ const items = [
 ]
 
 // eslint-disable-next-line react/prop-types
-const NewNav = ({children}) => {
+const Navbar = ({children}) => {
     const location = useLocation();
 
 
@@ -113,13 +113,11 @@ const NewNav = ({children}) => {
                     </span>
                 </Button>
             </div>
-            <div className="w-full">
+            <div className="w-full px-5 xl:pr-20">
                 <Header title={currentPage}/>
-                <div className="py-4 px-8">
-                    {children}
-                </div>
+                {children}
             </div>
         </div>)
 }
 
-export default NewNav;
+export default Navbar;

@@ -9,7 +9,7 @@ import {Provider} from "react-redux";
 import {store} from "./services/store/store.js";
 import {SignUpCard} from "./components/auth/SignUpCard.tsx";
 import Home from "./pages/Home.js";
-import NewNav from "./components/nav/NewNav.jsx";
+import Navbar from "./components/nav/Navbar.jsx";
 import {TooltipProvider} from "./components/ui/tooltip.tsx";
 
 
@@ -31,12 +31,12 @@ const AppContent = () => {
     return (
         <TooltipProvider>
             <ToastContainer/>
-            {showNavbar && (<NewNav>
+            {showNavbar && (<Navbar>
             <Routes>
                 <Route path="/" element={<Home/>} />
                 <Route path="*" element={<NotFound/>} />
             </Routes>
-                </NewNav>)}
+                </Navbar>)}
             {!showNavbar && (
                 <Routes>
                     <Route path="/login" element={<LoginCard/>} />
