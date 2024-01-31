@@ -1,8 +1,3 @@
-# React + Vite
+Real Estate Portfolio Management Software built using Vite+React (frontend), Express.js, Prisma and PostgreSQL (backend). 
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Features will include Real Estate Management, tenant management (notifications/messaging, review tenant applications, ... ), various Real estate analysis tools, maintenance report  handling (creation by tenants, review by realtor/landlord), also calendar to keep track of events such as maintenance deadline or contract dates.
