@@ -40,6 +40,7 @@ router.post('/currency', authenticateToken, miscController.setCurrency)
 router.get('/properties', authenticateToken, realEstateController.getProperties)
 router.post('/properties', authenticateToken, realEstateController.createProperty)
 router.get('/properties/:id', authenticateToken, realEstateController.getProperty)
+router.delete('/properties/:id', authenticateToken, realEstateController.deleteProperty)
 
 try {
     app.get('/users', authenticateToken, async (req, res) => {

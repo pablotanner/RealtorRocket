@@ -33,6 +33,13 @@ export const propertyApi = createApi({
             }),
             //providesTags: ['Properties'],
         }),
+        deleteProperty: build.mutation({
+            query: (id) => ({
+                url: '/properties/' + id,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ['Properties'],
+        }),
     })
 })
 
@@ -40,5 +47,6 @@ export const {
     useGetPropertiesQuery,
     useCreatePropertyMutation,
     useGetPropertyQuery,
+    useDeletePropertyMutation,
     usePrefetch: usePropertyPrefetch,
 } = propertyApi;

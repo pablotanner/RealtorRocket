@@ -265,10 +265,11 @@ const Properties = (props) => {
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                                 <Button
                                     type="submit"
+                                    variant="gradient"
                                     className="bg-red-600 hover:bg-red-400"
                                    // close modal
                                     >
-                                    Create
+                                    Add
                                 </Button>
                             </AlertDialogFooter>
                         </form>

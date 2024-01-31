@@ -59,3 +59,28 @@ export async function getProperty(req, res) {
     }
 }
 
+export async function deleteProperty(req, res) {
+    try {
+        const property = await prisma.realEstateObject.findUnique({
+            where: {
+                id: parseInt(req.params.id),
+            },
+        });
+
+        if (!property) {
+            return res.status(404).json({ message: "Property not found" });
+        }
+
+        await prisma.realEstateObject.delete({
+            where: {
+                id: parseInt(req.params.id),
+            },
+        });
+
+        res.status(200).json({ message: "Property deleted" });
+    }
+    catch (error) {
+        res.status(500).json({ message: "Error deleting property" });
+    }
+}
+
