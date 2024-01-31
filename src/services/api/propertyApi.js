@@ -40,4 +40,5 @@ export const {
     useGetPropertiesQuery,
     useCreatePropertyMutation,
     useGetPropertyQuery,
+    usePrefetch: usePropertyPrefetch,
 } = propertyApi;

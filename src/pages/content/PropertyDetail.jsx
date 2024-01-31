@@ -1,24 +1,18 @@
-import {useGetPropertyQuery} from "../services/api/propertyApi.js";
+import {useGetPropertyQuery} from "../../services/api/propertyApi.js";
 import {useLocation} from "react-router-dom";
-import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from "../components/ui/table.tsx";
+import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from "../../components/ui/table.tsx";
 
 
-const PropertyDetail = () => {
+const PropertyDetail = (props) => {
+
+
     const location = useLocation();
 
-    const id = location.pathname.split("/")[2];
 
-    const {data, error, isError, isLoading} = useGetPropertyQuery(id);
+    const {data} = props;
 
+    console.log(data)
 
-    if (isLoading) {
-        return <div>Loading...</div>
-    }
-    else if(isError) {
-        return <div>ERROR {error.message} </div>
-    }
-
-    
     return (
         <div>
             <h className="text-xl font-600">

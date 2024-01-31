@@ -2,7 +2,6 @@ import prisma from '../prisma.js';
 
 export async function getProperties(req, res) {
     try {
-
         // Get this user's properties
         const properties = await prisma.realEstateObject.findMany({
             where: {
@@ -16,7 +15,6 @@ export async function getProperties(req, res) {
         res.status(200).json({data: properties });
     }
     catch (error) {
-        console.log(error)
         res.status(500).json({ message: "Error getting properties" });
     }
 }

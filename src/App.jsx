@@ -8,12 +8,10 @@ import {Provider} from "react-redux";
 
 import {store} from "./services/store/store.js";
 import {SignUpCard} from "./components/auth/SignUpCard.tsx";
-import Home from "./pages/Home.jsx";
 import Navbar from "./components/nav/Navbar.jsx";
 import {TooltipProvider} from "./components/ui/tooltip.tsx";
 import Account from "./pages/Account.jsx";
-import Properties from "./pages/Properties.jsx";
-import PropertyDetail from "./pages/PropertyDetail.jsx";
+import {HomePage, PropertiesPage, PropertyDetailPage} from "./pages/WrappedPages.js";
 
 
 function App() {
@@ -36,12 +34,12 @@ const AppContent = () => {
             <ToastContainer/>
             {showNavbar && (<Navbar>
             <Routes>
-                <Route path="/" element={<Home/>} />
+                <Route path="/" element={<HomePage/>} />
                 <Route path="*" element={<NotFound/>} />
                 <Route path="/account"  element={<Account/>} />
                 <Route path="/settings"  element={<Account/>} />
-                <Route path="/properties/:id" element={<PropertyDetail/>} />
-                <Route path="/properties" element={<Properties/>} />
+                <Route path="/properties/:id" element={<PropertyDetailPage/>} />
+                <Route path="/properties" element={<PropertiesPage/>} />
             </Routes>
                 </Navbar>)}
             {!showNavbar && (

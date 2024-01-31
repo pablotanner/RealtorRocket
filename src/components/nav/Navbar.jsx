@@ -2,7 +2,7 @@ import {Tooltip, TooltipContent, TooltipTrigger} from "../ui/tooltip.tsx";
 import {Button} from "../ui/button.tsx";
 import {useLocation, useNavigate} from "react-router-dom";
 import {BiSolidRocket} from "react-icons/bi";
-import {useGetUserQuery} from "../../services/api/userApi.js";
+import {usePrefetch} from "../../services/api/userApi.js";
 import Header from "./Header.jsx";
 import {
     BellIcon,
@@ -13,8 +13,8 @@ import {
     HomeIcon,
     UserIcon
 } from "lucide-react";
-import {useDispatch, useSelector} from "react-redux";
-import {setUser} from "../../services/auth/authSlice.js";
+import { useSelector} from "react-redux";
+import {usePropertyPrefetch} from "../../services/api/propertyApi.js";
 
 const items = [
     {
@@ -71,30 +71,33 @@ const items = [
 // eslint-disable-next-line react/prop-types
 const Navbar = ({children}) => {
     const location = useLocation();
-
-    const currentPage = items.find(item => item.url === location.pathname)?.title || "";
     const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const isLoggedIn = useSelector(state => state.authSlice.accessToken);
+    const currentPage = items.find(item => item.url === location.pathname)?.title || "";
+    const authSlice = useSelector(state => state.authSlice);
+    const properties = useSelector(state => state.userSlice.selectedProperty);
+
+
+    // use prefetch on user, properties API
+    const prefetchProperties = usePropertyPrefetch("getProperties")
+    const prefetchUser = usePrefetch("getUser")
+
+    prefetchUser();
+    prefetchProperties();
 
 
     function getNavItems(section) {
         return items.filter(item => item.section === section);
     }
 
-    const {data, isLoading} = useGetUserQuery();
-
-    if (data?.data) {
-        dispatch(setUser(data?.data))
-    }
-
-    if (isLoading || !isLoggedIn) {
+    // If user is not logged in, but we are still waiting for the API (/user) to respond, show a loading spinner
+    if (!authSlice.accessToken || !authSlice.userInfo) {
         return (
             <div className="flex items-center justify-center h-screen w-screen">
                 <div className="rounded-md h-12 w-12 border-4 border-t-4 border-blue-500 animate-spin"></div>
             </div>
         )
     }
+    // Different nav button variant depending on if the current page is active or not
     function getNavButtonVariant(url) {
         if (url === "/") {
             return location.pathname === url ? "nav-button-active" : "nav-button";
@@ -126,7 +129,7 @@ const Navbar = ({children}) => {
                                             {item.title}
                                         </Button>
                                     </TooltipTrigger>
-                                    <TooltipContent side="right" className="flex gap-5">
+                                    <TooltipContent  side="right" className="flex gap-5">
                                         <h className="font-500">{item.title}</h>
                                         {item.label}
                                     </TooltipContent>

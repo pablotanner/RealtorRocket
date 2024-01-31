@@ -15,6 +15,7 @@ import {
 } from "../ui/dropdown-menu.tsx";
 import {logoutUser} from "../../services/auth/authActions.js";
 import {useNavigate} from "react-router-dom";
+import PropertySelection from "./PropertySelection.js";
 
 const Header = () => {
     const userProfile = useSelector(state => state.authSlice.userInfo)
@@ -23,31 +24,7 @@ const Header = () => {
     return (
         <div className="border-b-gray-100 border-b-2">
         <div className="flex flex-row mb-1 md:mb-3  justify-between items-center gap-x-2 p-2 md:p-4 bg-white rounded-lg">
-            <Select>
-                <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="All Properties"/>
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectGroup>
-                        <SelectLabel className="font-600">Your Properties</SelectLabel>
-                        <SelectItem value="All">
-                            All Properties
-                        </SelectItem>
-                        <SelectItem value="Property 1">
-                            Property 1
-                            <span className="ml-2 text-xs bg-green-500 text-white w-5 h-5 rounded-lg p-1">
-                                Rented
-                            </span>
-                        </SelectItem>
-                        <SelectItem value="Property 2">
-                            Property 2
-                            <span className="ml-2 text-xs bg-red-500 text-white w-5 h-5 rounded-lg p-1">
-                                Inactive
-                            </span>
-                        </SelectItem>
-                    </SelectGroup>
-                </SelectContent>
-            </Select>
+            <PropertySelection/>
 
 
             <DropdownMenu>

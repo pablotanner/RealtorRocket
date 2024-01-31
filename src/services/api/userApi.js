@@ -15,6 +15,11 @@ export const userApi = createApi({
                 method: 'GET',
             }),
             providesTags: ['User'],
+            // Set the user in the store
+            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                const { data } = await queryFulfilled;
+                dispatch(setUser(data.data));
+            },
         }),
         updateUser: build.mutation({
             query: (body) => ({
@@ -45,5 +50,6 @@ export const userApi = createApi({
 
 export const {useGetUserQuery,
     useUpdateUserMutation,
-    useDeleteUserMutation
+    useDeleteUserMutation,
+    usePrefetch,
 } = userApi;

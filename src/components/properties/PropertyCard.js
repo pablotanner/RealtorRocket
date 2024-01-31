@@ -8,7 +8,7 @@ const PropertyCard = ({ property, children }) => {
 
     if (children || !property) {
         return (
-            <Card className="min-w-fit shadow-md w-[200px]" >
+            <Card className="min-w-fit shadow-md w-[250px]" >
                 {children}
             </Card>
         )
@@ -18,12 +18,12 @@ const PropertyCard = ({ property, children }) => {
 
 
     return (
-        <Card className="min-w-fit shadow-md w-[200px]">
+        <Card className="min-w-fit shadow-md w-[250px]">
             <CardContent className="p-2 pt-6 items-center justify-center flex">
                 <img
                     src={image || "https://img.onmanorama.com/content/dam/mm/en/lifestyle/decor/images/2023/6/1/house-middleclass.jpg"}
                     alt={title || "?"}
-                    className="w-24 h-24 md:w-32 md:h-32 lg:w-64 lg:h-64 object-cover rounded-full hover:opacity-75 transition-opacity duration-150 ease-in-out cursor-pointer"
+                    className="w-44 h-44 md:w-44 md:h-44 lg:w-64 lg:h-64 object-cover rounded-full hover:opacity-75 transition-opacity duration-150 ease-in-out cursor-pointer"
                     onClick={() => navigate(`/properties/${id}`)}
                 />
             </CardContent>

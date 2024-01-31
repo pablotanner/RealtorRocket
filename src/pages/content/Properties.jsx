@@ -1,6 +1,6 @@
-import {useCreatePropertyMutation, useGetPropertiesQuery} from "../services/api/propertyApi.js";
-import PropertyCard from "../components/properties/PropertyCard.js";
-import {CardContent, CardFooter} from "../components/ui/card.tsx";
+import {useCreatePropertyMutation} from "../../services/api/propertyApi.js";
+import PropertyCard from "../../components/properties/PropertyCard.js";
+import {CardContent, CardFooter} from "../../components/ui/card.tsx";
 import {
     AlertDialog,
     AlertDialogCancel,
@@ -8,11 +8,11 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogTrigger
-} from "../components/ui/alert-dialog.tsx";
-import {Button} from "../components/ui/button.tsx";
-import {Input} from "../components/ui/input.tsx";
-import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "../components/ui/form.tsx";
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../components/ui/select.tsx";
+} from "../../components/ui/alert-dialog.tsx";
+import {Button} from "../../components/ui/button.tsx";
+import {Input} from "../../components/ui/input.tsx";
+import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "../../components/ui/form.tsx";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../../components/ui/select.tsx";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {z} from "zod";
@@ -20,10 +20,10 @@ import {useEffect} from "react";
 import {toast} from "react-toastify";
 import {useNavigate} from "react-router-dom";
 
-const Properties = () => {
-    const navigate = useNavigate();
+const Properties = (props) => {
+    const {data} = props;
 
-    const {data, isLoading, isError} = useGetPropertiesQuery();
+    const navigate = useNavigate();
 
     const [createProperty, {data: createdProperty, isLoading: isCreating, isError: isCreateError, error: createError, isSuccess: isCreateSuccess}] = useCreatePropertyMutation();
 
@@ -134,10 +134,6 @@ const Properties = () => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isCreating])
-
-    if (isLoading) {
-        return <div>Loading...</div>
-    }
 
     return (
         <div className="flex gap-4 max-w-full flex-wrap mt-4">
