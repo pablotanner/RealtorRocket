@@ -12,38 +12,10 @@ import {
 
 const Home = () => {
 
-    const {data, isError, error, isLoading} = useUsersQuery();
-
-
-    if (isLoading) {
-        return <div>Loading...</div>
-    }
-    if (isError) {
-        return <div>Error: {error?.message}</div>
-    }
-
 
     return (
         <div>
-                <Table>
-                    <TableCaption >Current Users</TableCaption>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>User ID </TableHead>
-                            <TableHead>Password (Encrypted)</TableHead>
-                            <TableHead>Role</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {data.map((user) => (
-                            <TableRow key={user.id}>
-                                <TableCell>{user.id}</TableCell>
-                                <TableHead>{user.password}</TableHead>
-                                <TableCell>{user.role}</TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+              TODO, visit <b>PROPERTIES</b> page or click <b>USER ICON ON TOP RIGHT</b>
         </div>
     );
 }

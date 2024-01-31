@@ -159,7 +159,7 @@ model User {
   lastName     String?       @map("last_name")
   name         String?       @default(dbgenerated())
   dob          DateTime?
-  currencyCode CurrencyCode? @map("currency_code")
+  currencyCode CurrencyCode? @default(USD) @map("currency_code")
   documents    Document[]
 
   // credentials
@@ -174,7 +174,6 @@ model User {
   location   Location?     @relation(fields: [locationId], references: [id])
   locationId Int?          @map("location_id")
   picture    Image?
-  pictureId  Int?          @map("picture_id")
   phone      String?
   website    String?
   company    String?
@@ -186,7 +185,7 @@ model User {
   sentMessages     Message[] @relation("sender")
   receivedMessages Message[] @relation("receiver")
 
-  // Define a one-to-many relationship between User and Realtor.
+  // Define a one-to-one relationship between User and Realtor.
   Realtor Realtor?
   Renter  Renter?
 
@@ -253,10 +252,10 @@ enum TokenType {
 
 // Define the RealEstate model to represent real estate properties.
 model RealEstateObject {
-  id            Int           @id @default(autoincrement())
-  listingStatus ListingStatus @default(ACTIVE) @map("listing_status")
-  createdAt     DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt     DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id            Int            @id @default(autoincrement())
+  listingStatus ListingStatus? @default(ACTIVE) @map("listing_status")
+  createdAt     DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   // Listing details
   title          String?
@@ -362,7 +361,7 @@ model Rental {
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   startDate   DateTime? @map("start_date")
-  endDate     DateTime  @map("end_date")
+  endDate     DateTime? @map("end_date")
   rentalPrice Float?    @map("rental_price")
   leaseLength Int?      @map("lease_length")
   leaseTerms  String?   @map("lease_terms")

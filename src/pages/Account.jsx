@@ -6,6 +6,7 @@ import {
 } from "../components/ui/tabs.tsx"
 import EditProfile from "../components/profile/EditProfile.js";
 import {useLocation, useNavigate} from "react-router-dom";
+import EditSettings from "../components/profile/EditSettings.js";
 
 
 const Account = () => {
@@ -33,7 +34,7 @@ const Account = () => {
                     <h1 className="text-xl md:text-3xl font-500">Settings</h1>
                     <p className="text-sm sm:text-md">Manage your Account Settings</p>
                     <div className="w-[100%] relative h-[1px] bg-background-gray-darker my-2"/>
-                    TODO
+                    <EditSettings/>
                 </TabsContent>
             </Tabs>
         </div>

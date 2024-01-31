@@ -96,7 +96,11 @@ const Navbar = ({children}) => {
         )
     }
     function getNavButtonVariant(url) {
-        return location.pathname === url ? "nav-button-active" : "nav-button";
+        if (url === "/") {
+            return location.pathname === url ? "nav-button-active" : "nav-button";
+        }
+
+        return location.pathname.includes(url) ? "nav-button-active" : "nav-button";
     }
 
     return (<div className={"flex "}>

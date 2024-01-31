@@ -1,8 +1,8 @@
 
 const NotFound = () => {
     return (
-        <div>
-            Not Found
+        <div className="text-xl">
+            Not Found / Coming Soon
         </div>
     )
 }

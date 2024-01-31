@@ -8,7 +8,7 @@ dotenv.config();
 
 
 
-export async function signup(req, res) {
+export async function createRealtor(req, res) {
     const {email, password, first_name, last_name} = req.body;
     try {
         const salt = await bcrypt.genSalt(12);
@@ -21,8 +21,18 @@ export async function signup(req, res) {
                 firstName: first_name,
                 lastName: last_name,
                 salt: salt,
+                name: first_name + ' ' + last_name,
+                Realtor: {
+                    create: {
+                        RealEstateObject: {},
+                        Rental: {}
+                    }
+                },
+                role: 'REALTOR',
             },
         });
+
+
         res.status(201).json({message: 'User created successfully', user: newUser});
     }
     catch (error) {
@@ -30,6 +40,7 @@ export async function signup(req, res) {
             res.status(409).json({message: 'User with that email already exists'});
         }
         else {
+            console.log(error)
             res.status(500).json({message: 'Something went wrong'});
         }
     }

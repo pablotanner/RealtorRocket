@@ -50,3 +50,29 @@ export async function updateUser(req, res) {
         res.status(500).json({ message: "Error updating user" });
     }
 }
+
+export async function deleteUser(req, res) {
+    // Find user using the id from the JWT
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                id: req.user.userId,
+            },
+        });
+
+        if (!user) {
+            return res.status(401).json({ message: "Invalid user" });
+        }
+
+        await prisma.user.delete({
+            where: {
+                id: req.user.userId,
+            },
+        });
+
+        res.status(200).json({ message: "User deleted" });
+    }
+    catch (error) {
+        res.status(500).json({ message: "Error deleting user" });
+    }
+}
