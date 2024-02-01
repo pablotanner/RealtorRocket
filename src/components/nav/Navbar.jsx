@@ -111,7 +111,7 @@ const Navbar = ({children}) => {
                 className={"min-h-screen flex flex-col justify-between z-50 border-r-2 border-gray-100 w-16 md:w-56 bg-white rounded-lg "}
             >
                 <div>
-                <h className="font-700 flex flex-row justify-center md:justify-start items-center gap-x-1 py-4 md:pl-2 md:mr-2 text-lg whitespace-nowrap">
+                <h className="text-primary-dark font-700 flex flex-row justify-center md:justify-start items-center gap-x-1 py-4 md:pl-2 md:mr-2 text-lg whitespace-nowrap">
                     <BiSolidRocket className="w-6 h-6 flex justify-center"/>
                     <p className="hidden md:flex">Realtor Rocket</p>
                 </h>
@@ -180,15 +180,13 @@ const Navbar = ({children}) => {
                 */}
 
             </div>
-            <div className={"w-full overflow-auto pr-2 ml-2 md:ml-5 xl:pr-14 flex flex-col gap-y-1"}>
+            <div className={"w-full overflow-x-auto pr-2 ml-2 md:ml-5 xl:pr-14 flex flex-col gap-y-1"}>
                 <Header/>
                 <div className="p-4 bg-white rounded-lg">
-                    <h className="text-xl md:text-3xl font-500">
+                    <div className="text-xl md:text-3xl font-500 h-fit mb-6">
                         {currentPage}
-                    </h>
-                    <div className="h-full">
-                        {children}
                     </div>
+                        {children}
 
                 </div>
 

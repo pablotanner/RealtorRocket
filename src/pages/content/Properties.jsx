@@ -136,7 +136,7 @@ const Properties = (props) => {
     }, [isCreating])
 
     return (
-        <div className="flex gap-4 max-w-full flex-wrap mt-4">
+        <div className="flex gap-4 max-w-full flex-wrap">
             {data?.data.map((property) => (<PropertyCard key={property.id} property={property} />))}
             <PropertyCard>
                 <CardContent className="p-2 pt-6 items-center justify-center flex">
