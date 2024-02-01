@@ -1,6 +1,6 @@
 import {Card, CardContent, CardFooter} from "../ui/card.tsx";
 import {useNavigate} from "react-router-dom";
-
+import PropertyStatus from "./PropertyStatus.js";
 
 const PropertyCard = ({ property, children }) => {
     const navigate = useNavigate();
@@ -8,18 +8,18 @@ const PropertyCard = ({ property, children }) => {
 
     if (children || !property) {
         return (
-            <Card className="min-w-fit shadow-md w-[250px]" >
+            <Card className="min-w-fit shadow-md basis-[250px]" >
                 {children}
             </Card>
         )
     }
 
-    const { title, description, image, price, currency, location, type, bedrooms, bathrooms, area, yearBuilt, realtor, id } = property;
+    const { title, description, image, price, currency, location, type, listingStatus, bedrooms, bathrooms, area, yearBuilt, realtor, id } = property;
 
 
     return (
-        <Card className="min-w-fit shadow-md w-[250px]">
-            <CardContent className="p-2 pt-6 items-center justify-center flex">
+        <Card className="min-w-fit shadow-md basis-[250px]">
+            <CardContent className="p-2 pt-6 items-center justify-center flex min-w-fit">
                 <img
                     src={image || "https://img.onmanorama.com/content/dam/mm/en/lifestyle/decor/images/2023/6/1/house-middleclass.jpg"}
                     alt={title || "?"}
@@ -31,8 +31,9 @@ const PropertyCard = ({ property, children }) => {
                 <h className="font-600 text-off-black text-xl">
                     {title || "?"}
                 </h>
-                <p className="hidden md:flex font-400 text-md">
+                <p className="md:flex font-400 text-md">
                     {description || "?"}
+                    <PropertyStatus status={listingStatus} className="ml-2" />
                 </p>
             </CardFooter>
         </Card>

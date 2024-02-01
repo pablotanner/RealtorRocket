@@ -187,9 +187,7 @@ const Navbar = ({children}) => {
                         {currentPage}
                     </div>
                         {children}
-
                 </div>
-
             </div>
         </div>)
 }

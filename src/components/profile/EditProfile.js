@@ -8,15 +8,22 @@ import {Button} from "../ui/button.tsx";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../ui/select.tsx";
 import {Textarea} from "../ui/textarea.tsx";
 import {useUpdateUserMutation} from "../../services/api/userApi.js";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {toast} from "react-toastify";
+import ProfileCard from "./ProfileCard.js";
 
 const titles = ['-','Mr', 'Mrs', 'Ms', 'Dr', 'Prof'];
 
 const EditProfile = () => {
     const userData = useSelector(state => state.authSlice.userInfo);
 
-    const [updateUser, {isLoading, isError, error, isSuccess}] = useUpdateUserMutation();
+    // Add a loading state to prevent the form from rendering before the user data is fetched
+    const [isLoading, setIsLoading] = useState(!userData);
+
+
+    const [updateUser, {isLoading: isUpdating, isError, error, isSuccess}] = useUpdateUserMutation();
+
+    const [formValues, setFormValues] = useState(userData);
 
 
     const profileFormSchema = z.object({
@@ -45,6 +52,22 @@ const EditProfile = () => {
     })
 
     useEffect(() => {
+        // When userData updates and is not undefined, set loading to false
+        if (userData) {
+            setIsLoading(false);
+            profileForm.reset({
+                firstName: userData.firstName,
+                lastName: userData.lastName,
+                title: userData.title,
+                website: userData.website,
+                bio: userData.bio,
+                dob: userData.dob,
+                company: userData.company,
+            });
+        }
+    }, [userData, profileForm]);
+
+    useEffect(() => {
         if (isSuccess) {
             toast.info('Profile updated successfully')
         }
@@ -52,15 +75,27 @@ const EditProfile = () => {
             toast.error(error?.data?.message)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[isLoading])
+    },[isUpdating])
+
+
+    useEffect(() => {
+        setFormValues(profileForm.getValues())
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[profileForm.getValues()])
 
 
     const onSubmit = (zodValues) => {
         updateUser(zodValues)
     }
 
+    if (isLoading) {
+        <div>
+            Loading...
+        </div>
+    }
+
     return (
-        <div className="mt-2 w-[100%]">
+        <div className="mt-2 flex flex-col md:flex-row gap-6">
             <Form {...profileForm}>
                 <form onSubmit={profileForm.handleSubmit(onSubmit)} className="flex flex-col gap-y-3 w-[100%] ">
                     <FormField
@@ -169,11 +204,12 @@ const EditProfile = () => {
                         )}
                     />
 
-                    <Button type="submit" variant="dark" isLoading={isLoading}>
+                    <Button type="submit" variant="dark" isLoading={isUpdating}>
                         Update
                     </Button>
                 </form>
             </Form>
+            <ProfileCard user={formValues} />
         </div>
     )
 }

@@ -1,11 +1,11 @@
-import {Card, CardHeader, CardTitle,CardContent,CardFooter,CardDescription} from "../../components/ui/card.tsx";
+import {Card, CardHeader, CardTitle,CardContent,CardDescription} from "../../components/ui/card.tsx";
 import InfoCard from "../../components/home/InfoCard.js";
 import {useGetPropertiesQuery} from "../../services/api/propertyApi.js";
 
 const Home = () => {
 
     const {data: properties} = useGetPropertiesQuery();
-    
+
 
     return (
         <div className="gap-8 flex flex-col">
@@ -20,8 +20,8 @@ const Home = () => {
                   <div className="text-2xl font-500 mb-2">
                       Your Properties
                   </div>
-                  <div className="flex flex-row w-full gap-8">
-                      <Card className="w-full">
+                  <div className="flex flex-col md:flex-row w-full gap-8">
+                      <Card className="w-full min-w-fit">
                             <CardHeader>
                                 <CardTitle>
                                     Most Expensive
@@ -44,7 +44,7 @@ const Home = () => {
                                 </CardDescription>
                             </CardContent>
                       </Card>
-                      <Card className="w-full">
+                      <Card className="w-full min-w-fit">
                           <CardHeader>
                               <CardTitle>
                                   Most Recent

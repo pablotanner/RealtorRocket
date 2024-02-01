@@ -91,7 +91,7 @@ const EditSettings = () => {
                         )}
                     />
 
-                    <Button type="submit" variant="dark" isLoading={isLoading}>
+                    <Button type="submit" variant="dark" className="min-w-[200px] w-[20%]" isLoading={isLoading}>
                         Save
                     </Button>
                 </form>

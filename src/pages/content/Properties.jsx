@@ -91,14 +91,25 @@ const Properties = (props) => {
         "FARM"
     ]
 
+    const listingStatusTypes = [
+        "ACTIVE",
+        "INACTIVE",
+        "RENTED",
+        "SOLD",
+        "PENDING",
+        "OFFER",
+        "MAINTENANCE"
+        ]
+
     const propertyFormSchema = z.object({
-        title: z.string().min(1),
-        description: z.string().min(1),
-        price: z.string().min(1),
-        numOfRooms: z.string().min(1),
-        yearBuilt: z.string().min(1),
+        title: z.string().min(1, " "),
+        description: z.string().min(1, " "),
+        price: z.string().min(1, " "),
+        numOfRooms: z.string().min(1, " "),
+        yearBuilt: z.string().min(1," "),
         realEstateType: z.string(),
-        squareFeet: z.string().min(1)
+        squareFeet: z.string().min(1," "),
+        listingStatus: z.string().min(1, " ")
     })
     const propertyForm = useForm({
         resolver: zodResolver(propertyFormSchema),
@@ -110,6 +121,7 @@ const Properties = (props) => {
             yearBuilt: "",
             realEstateType: "",
             squareFeet: "",
+            listingStatus: "ACTIVE"
         },
 
     })
@@ -148,7 +160,7 @@ const Properties = (props) => {
                                 className="border-2 border-gray-100 bg-white w-24 h-24 md:w-32 md:h-32 lg:w-64 lg:h-64 object-cover rounded-full hover:opacity-75 transition-opacity duration-150 ease-in-out cursor-pointer"
                             />
                         </AlertDialogTrigger>
-                        <AlertDialogContent>
+                        <AlertDialogContent className="overflow-auto">
                             <Form {...propertyForm}>
                                 <form onSubmit={propertyForm.handleSubmit(onSubmit)} className="flex flex-col gap-y-3 w-[100%] ">
                             <AlertDialogHeader>
@@ -156,7 +168,9 @@ const Properties = (props) => {
                                 <AlertDialogDescription>
                                     Temporary way to add new property
                                 </AlertDialogDescription>
+                            </AlertDialogHeader>
 
+                                    <div className="h-full">
                                         <FormField
                                             control={propertyForm.control}
                                             name="title"
@@ -183,28 +197,54 @@ const Properties = (props) => {
                                                 </FormItem>
                                             )}
                                         />
-                                        <FormField
-                                            control={propertyForm.control}
-                                            name="realEstateType"
-                                            render={({field}) => (
-                                                <FormItem className="min-w-fit w-[20%]">
-                                                    <FormLabel>Real Estate Type</FormLabel>
-                                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                                        <FormControl>
-                                                            <SelectTrigger>
-                                                                <SelectValue />
-                                                            </SelectTrigger>
-                                                        </FormControl>
-                                                        <SelectContent>
-                                                            {realEstateTypes.map((item, index) => (
-                                                                <SelectItem key={index} value={item}>{item}</SelectItem>
-                                                            ))}
-                                                        </SelectContent>
-                                                    </Select>
-                                                    <FormMessage/>
-                                                </FormItem>
-                                            )}
-                                        />
+                                        <div className="flex flex-row gap-8">
+                                            <FormField
+                                                control={propertyForm.control}
+                                                name="realEstateType"
+                                                render={({field}) => (
+                                                    <FormItem className="min-w-fit w-[20%]">
+                                                        <FormLabel>Real Estate Type</FormLabel>
+                                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                            <FormControl>
+                                                                <SelectTrigger>
+                                                                    <SelectValue />
+                                                                </SelectTrigger>
+                                                            </FormControl>
+                                                            <SelectContent>
+                                                                {realEstateTypes.map((item, index) => (
+                                                                    <SelectItem key={index} value={item}>{item}</SelectItem>
+                                                                ))}
+                                                            </SelectContent>
+                                                        </Select>
+                                                        <FormMessage/>
+                                                    </FormItem>
+                                                )}
+                                            />
+
+                                            <FormField
+                                                control={propertyForm.control}
+                                                name="listingStatus"
+                                                render={({field}) => (
+                                                    <FormItem className="min-w-fit w-[20%]">
+                                                        <FormLabel>Listing Status</FormLabel>
+                                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                            <FormControl>
+                                                                <SelectTrigger>
+                                                                    <SelectValue />
+                                                                </SelectTrigger>
+                                                            </FormControl>
+                                                            <SelectContent>
+                                                                {listingStatusTypes.map((item, index) => (
+                                                                    <SelectItem key={index} value={item}>{item}</SelectItem>
+                                                                ))}
+                                                            </SelectContent>
+                                                        </Select>
+                                                        <FormMessage/>
+                                                    </FormItem>
+                                                )}
+                                            />
+                                        </div>
+
                                         <FormField
                                             control={propertyForm.control}
                                             name="price"
@@ -217,7 +257,7 @@ const Properties = (props) => {
                                                     <FormMessage/>
                                                 </FormItem>
                                             )}
-                                            />
+                                        />
                                         <FormField
                                             control={propertyForm.control}
                                             name="numOfRooms"
@@ -230,7 +270,7 @@ const Properties = (props) => {
                                                     <FormMessage/>
                                                 </FormItem>
                                             )}
-                                            />
+                                        />
 
                                         <FormField
                                             control={propertyForm.control}
@@ -244,7 +284,7 @@ const Properties = (props) => {
                                                     <FormMessage/>
                                                 </FormItem>
                                             )}
-                                            />
+                                        />
                                         <FormField
                                             control={propertyForm.control}
                                             name="squareFeet"
@@ -257,16 +297,16 @@ const Properties = (props) => {
                                                     <FormMessage/>
                                                 </FormItem>
                                             )}
-                                            />
+                                        />
+                                    </div>
 
-
-                            </AlertDialogHeader>
                             <AlertDialogFooter>
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                                 <Button
                                     type="submit"
                                     variant="gradient"
                                     className="bg-red-600 hover:bg-red-400"
+                                    isLoading={isCreating}
                                    // close modal
                                     >
                                     Add
