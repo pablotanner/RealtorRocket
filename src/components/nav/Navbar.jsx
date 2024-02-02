@@ -5,7 +5,7 @@ import {BiSolidRocket} from "react-icons/bi";
 import {usePrefetch} from "../../services/api/userApi.js";
 import Header from "./Header.jsx";
 import {
-    BellIcon,
+    BellIcon, Building2,
     BuildingIcon,
     CalendarIcon,
     CircleDollarSignIcon,
@@ -28,6 +28,13 @@ const items = [
         title: 'Properties',
         url: '/properties',
         label: 'Your Properties',
+        icon: <Building2/>,
+        section: "MENU"
+    },
+    {
+        title: 'Rentals',
+        url: '/rentals',
+        label: 'Your Rental Properties',
         icon: <BuildingIcon/>,
         section: "MENU"
     },

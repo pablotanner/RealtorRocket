@@ -31,7 +31,7 @@ const PropertySelection = () => {
     return (
         <Select onValueChange={(value) => dispatch(selectProperty(value))}>
             <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="All Properties"/>
+                <SelectValue placeholder="Property"/>
             </SelectTrigger>
             <SelectContent>
                 <SelectGroup>

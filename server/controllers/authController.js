@@ -22,11 +22,8 @@ export async function createRealtor(req, res) {
                 lastName: last_name,
                 salt: salt,
                 name: first_name + ' ' + last_name,
-                Realtor: {
-                    create: {
-                        RealEstateObject: {},
-                        Rental: {}
-                    }
+                realtor: {
+                    create: {}
                 },
                 role: 'REALTOR',
             },

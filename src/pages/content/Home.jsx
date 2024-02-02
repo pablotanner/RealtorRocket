@@ -7,10 +7,20 @@ const Home = () => {
     const {data: properties} = useGetPropertiesQuery();
 
 
+    let unitCount = 0;
+
+
+    properties?.data?.forEach((property) => {
+        unitCount += property.units.length
+        }
+    )
+
+
     return (
         <div className="gap-8 flex flex-col">
               <div className="flex flex-row gap-4 flex-wrap">
-                  <InfoCard title="Total Properties" number={properties?.data?.length || "?"} link="/properties"/>
+                  <InfoCard title="Total Properties" number={properties?.data?.length} link="/properties"/>
+                  <InfoCard title="Total Rental Units" number={unitCount} link="/rentals"/>
                   <InfoCard title="Total Tenants" number="0" link="/tenants"/>
                   <InfoCard title="Total Reports" number="0" link="/maintenance"/>
               </div>

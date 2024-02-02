@@ -33,7 +33,6 @@ const PropertyCard = ({ property, children }) => {
                 </h>
                 <p className="md:flex font-400 text-md">
                     {description || "?"}
-                    <PropertyStatus status={listingStatus} className="ml-2" />
                 </p>
             </CardFooter>
         </Card>

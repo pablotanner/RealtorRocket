@@ -2,7 +2,7 @@ import prisma from '../prisma.js';
 
 export async function createDocument(req, res) {
     try {
-        const {documentType, documentName, documentUrl, realEstateObjectId, rentalId} = req.body;
+        const {documentType, documentName, documentUrl, realEstateObjectId, leaseId} = req.body;
 
         const userId = req.user.userId;
 
@@ -23,10 +23,10 @@ export async function createDocument(req, res) {
                     }
                 }
             }),
-            ...(rentalId && {
-                rental: {
+            ...(leaseId && {
+                lease: {
                     connect: {
-                        id: rentalId,
+                        id: leaseId,
                     }
                 }
             })

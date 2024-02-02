@@ -8,6 +8,9 @@ export async function getProperties(req, res) {
                 realtor: {
                     userId: req.user.userId
                 }
+            },
+            include: {
+                units: true
             }
         });
 
@@ -22,6 +25,21 @@ export async function getProperties(req, res) {
 export async function createProperty(req, res) {
     try {
 
+        // For each empty data, change it to null
+        for (let key in req.body) {
+            if (req.body[key] === "") {
+                req.body[key] = null;
+            }
+        }
+
+        for (let unit of req.body.units) {
+            for (let key in unit) {
+                if (unit[key] === "") {
+                    unit[key] = null;
+                }
+            }
+        }
+
             const newProperty = await prisma.realEstateObject.create({
                 data: {
                     ...req.body,
@@ -29,6 +47,9 @@ export async function createProperty(req, res) {
                         connect: {
                             userId: req.user.userId
                         }
+                    },
+                    units: {
+                        create: req.body.units
                     }
                 },
             });
@@ -36,6 +57,7 @@ export async function createProperty(req, res) {
             res.status(200).json({data: newProperty });
         }
         catch (error) {
+        console.log(error)
             res.status(500).json({ message: "Error creating property" });
         }
 }

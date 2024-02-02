@@ -19,7 +19,7 @@ export const propertyApi = createApi({
                 method: 'POST',
                 body,
             }),
-            // API returns back the updated user, so we can use that to update the cache
+            // Invalidate the cache when a new property is created
             async onQueryStarted(arg, { queryFulfilled }) {
                 const { data } = await queryFulfilled;
                 console.log(data);

@@ -5,6 +5,7 @@ import Home from "./content/Home.jsx";
 import PropertyDetail from "./content/PropertyDetail.jsx";
 import {useParams} from "react-router-dom";
 import Tenants from "./content/Tenants.jsx";
+import Rentals from "./content/Rentals.jsx";
 
 
 export const PropertiesPage = () => {
@@ -38,6 +39,14 @@ export const TenantsPage = () => {
     return (
         <PageWrapper>
             <Tenants/>
+        </PageWrapper>
+    )
+}
+
+export const RentalsPage = () => {
+    return (
+        <PageWrapper query={useGetPropertiesQuery}>
+            <Rentals/>
         </PageWrapper>
     )
 }
