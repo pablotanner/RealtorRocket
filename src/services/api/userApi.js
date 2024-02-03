@@ -2,6 +2,7 @@ import customFetchBase from "./customFetchBase.js";
 import {createApi} from "@reduxjs/toolkit/query/react";
 import {setUser} from "../auth/authSlice.js";
 import {logoutUser} from "../auth/authActions.js";
+import {toast} from "../../components/ui/use-toast.tsx";
 
 
 export const userApi = createApi({
@@ -29,10 +30,24 @@ export const userApi = createApi({
             }),
             // API returns back the updated user, so we can use that to update the cache
             async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-                const { data } = await queryFulfilled;
-                dispatch(setUser(data.data));
-            },
+                queryFulfilled
+                    .then((data) => {
+                        dispatch(setUser(data?.data?.data));
+                        toast({
+                            title: "Success",
+                            description: "Profile updated successfully",
+                        });
+                    })
+                    .catch((error) => {
+                        toast({
+                            title: "Uh oh! Something went wrong.",
+                            description: "There was a problem with your request.",
+                            variant: "destructive",
+                        });
+                    });
+            }
         }),
+
         deleteUser: build.mutation({
             query: () => ({
                 url: '/user',

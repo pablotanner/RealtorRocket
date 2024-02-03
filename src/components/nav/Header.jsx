@@ -1,7 +1,5 @@
-import {Select, SelectTrigger, SelectValue, SelectContent, SelectLabel, SelectGroup, SelectItem} from "../ui/select.tsx";
 import {Avatar, AvatarFallback, AvatarImage} from "../ui/avatar.tsx";
 import {useSelector} from "react-redux";
-import {toast} from "react-toastify";
 import {LogOutIcon, MenuIcon, SettingsIcon, UserRoundIcon} from "lucide-react";
 
 
@@ -25,7 +23,6 @@ const Header = () => {
         <div className="border-b-gray-100 border-b-2">
         <div className="flex flex-row mb-1 md:mb-3  justify-between items-center gap-x-2 p-2 md:p-4 bg-white rounded-lg">
             <PropertySelection/>
-
 
             <DropdownMenu>
                 <DropdownMenuTrigger className="flex flex-row items-center cursor-pointer bg-white hover:bg-gray-50 p-1 px-2 rounded-full">
@@ -60,7 +57,7 @@ const Header = () => {
                 </DropdownMenuContent>
             </DropdownMenu>
 
-            <MenuIcon className="hidden items-center w-6 h-6 cursor-pointer" onClick={() => toast.info("Open Menu")}/>
+            <MenuIcon className="hidden items-center w-6 h-6 cursor-pointer" />
 
         </div>
         </div>

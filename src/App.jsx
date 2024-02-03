@@ -1,8 +1,6 @@
 import {BrowserRouter as Router, Routes, Route, useLocation} from "react-router-dom";
 import NotFound from "./pages/NotFound.jsx";
 import AuthVerify from "./services/auth/AuthVerify.js";
-import {ToastContainer} from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
 import LoginCard from "./components/auth/LoginCard.js";
 import {Provider} from "react-redux";
 
@@ -31,7 +29,6 @@ const AppContent = () => {
 
     return (
         <TooltipProvider>
-            <ToastContainer/>
             {showNavbar && (<Navbar>
             <Routes>
                 <Route path="/" element={<HomePage/>} />

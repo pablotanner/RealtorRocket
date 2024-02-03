@@ -9,7 +9,6 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../
 import {Textarea} from "../ui/textarea.tsx";
 import {useUpdateUserMutation} from "../../services/api/userApi.js";
 import {useEffect, useState} from "react";
-import {toast} from "react-toastify";
 import ProfileCard from "./ProfileCard.js";
 
 const titles = ['-','Mr', 'Mrs', 'Ms', 'Dr', 'Prof'];
@@ -21,7 +20,7 @@ const EditProfile = () => {
     const [isLoading, setIsLoading] = useState(!userData);
 
 
-    const [updateUser, {isLoading: isUpdating, isError, error, isSuccess}] = useUpdateUserMutation();
+    const [updateUser, {isLoading: isUpdating}] = useUpdateUserMutation();
 
     const [formValues, setFormValues] = useState(userData);
 
@@ -67,15 +66,6 @@ const EditProfile = () => {
         }
     }, [userData, profileForm]);
 
-    useEffect(() => {
-        if (isSuccess) {
-            toast.info('Profile updated successfully')
-        }
-        else if (isError) {
-            toast.error(error?.data?.message)
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[isUpdating])
 
 
     useEffect(() => {

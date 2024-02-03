@@ -1,5 +1,6 @@
 import {createApi} from "@reduxjs/toolkit/query/react";
 import customFetchBase from "./customFetchBase.js";
+import {toast} from "../../components/ui/use-toast.tsx";
 
 export const propertyApi = createApi({
     reducerPath: 'propertyApi',
@@ -15,14 +16,26 @@ export const propertyApi = createApi({
         }),
         createProperty: build.mutation({
             query: (body) => ({
-                url: '/properties',
+                url: '/properties2',
                 method: 'POST',
                 body,
             }),
-            // Invalidate the cache when a new property is created
-            async onQueryStarted(arg, { queryFulfilled }) {
-                const { data } = await queryFulfilled;
-                console.log(data);
+            // API returns back the updated user, so we can use that to update the cache
+            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                queryFulfilled
+                    .then((data) => {
+                        toast({
+                            title: "Success",
+                            description: "Profile updated successfully",
+                        });
+                    })
+                    .catch((error) => {
+                        toast({
+                            title: "Uh oh! Something went wrong.",
+                            description: "There was a problem with your request.",
+                            variant: "destructive",
+                        });
+                    })
             },
             invalidatesTags: ['Properties'],
         }),
