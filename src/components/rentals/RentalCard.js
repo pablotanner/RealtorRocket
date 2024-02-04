@@ -8,7 +8,7 @@ const RentalCard = ({unit, isSingleUnit}) => {
 
 
     return (
-        <Card className="bg-gray-100 flex items-center basis-[300px] shadow-lg">
+        <Card className="bg-gray-100 flex flex-grow items-center basis-[300px] flex-shrink shadow-lg">
             <CardContent className="p-4 w-[100%] flex flex-col">
                 {<div className="p-4 border-gray-200 border-2 rounded-md flex flex-col">
                     <Label className="text-sm font-600 text-off-black">

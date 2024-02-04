@@ -4,6 +4,8 @@ import CreateProperty from "../../components/properties/propertyCreation/CreateP
 import PropertyStatus from "../../components/properties/PropertyStatus.js";
 import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
+import {Button} from "../../components/ui/button.tsx";
+import {PlusIcon} from "lucide-react";
 
 
 const Rentals = (props) => {
@@ -18,7 +20,12 @@ const Rentals = (props) => {
     if (selectedPropertyId !== "All") units = data?.data?.filter((unit) => unit.realEstateObjectId === selectedPropertyId)
 
 
-console.log(units)
+    if (!units || units.length === 0)  return (
+        <div className="flex flex-col gap-4">
+            You don't have any rental properties yet. You can create one by adding a new property using the button below.
+            <CreateProperty trigger={<Button variant="gradient" className="w-fit"><PlusIcon className="w-4 h-4 mr-4"/> Create Property</Button>} />
+        </div>
+    )
 
     return (
         <>

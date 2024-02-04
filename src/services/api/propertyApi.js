@@ -5,7 +5,7 @@ import {toast} from "../../components/ui/use-toast.tsx";
 export const propertyApi = createApi({
     reducerPath: 'propertyApi',
     baseQuery: customFetchBase,
-    tagTypes: ['Properties'],
+    tagTypes: ['Properties', 'Units'],
     endpoints: (build) => ({
         getProperties: build.query({
             query: () => ({
@@ -37,7 +37,7 @@ export const propertyApi = createApi({
                         });
                     })
             },
-            invalidatesTags: ['Properties'],
+            invalidatesTags: ['Properties','Units'],
         }),
         getProperty: build.query({
             query: (id) => ({
@@ -68,7 +68,7 @@ export const propertyApi = createApi({
                         });
                     })
             },
-            invalidatesTags: ['Properties'],
+            invalidatesTags: ['Properties','Units'],
         }),
     })
 })

@@ -1,7 +1,8 @@
 import {createApi} from "@reduxjs/toolkit/query/react";
 import customFetchBase from "./customFetchBase.js";
+import {propertyApi} from "./propertyApi.js";
 
-export const unitApi = createApi({
+export const unitApi = propertyApi.injectEndpoints({
     reducerPath: 'unitApi',
     baseQuery: customFetchBase,
     tagTypes: ['Units'],

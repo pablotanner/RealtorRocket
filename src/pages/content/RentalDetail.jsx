@@ -17,18 +17,21 @@ const RentalDetail = (props) => {
 
     return (
         <div className="min-w-fit flex flex-row flex-wrap gap-x-6 gap-y-8">
-            <div className="flex flex-row flex-wrap justify-start w-[100%] gap-x-8 gap-y-4">
+            <div className="flex flex-row flex-wrap justify-start w-[100%] gap-x-8 gap-y-8">
                 <DetailedPropertyCard property={data?.data?.realEstateObject}/>
 
-                <RentalCard unit={data?.data} isSingleUnit={data?.data?.realEstateObject?.units.length === 1}/>
+                <div className="flex flex-wrap flex-grow flex-row gap-x-6 gap-y-8">
+                    <RentalCard unit={data?.data} isSingleUnit={data?.data?.realEstateObject?.units.length === 1}/>
 
-                <TenantCard/>
+                    <TenantCard/>
+                </div>
+
             </div>
 
 
-            <div className="flex flex-col w-[100%]">
-                <div className="flex flex-row gap-7 border-2 h-fit border-gray-200 rounded-xl w-fit">
-                    <div className="flex flex-col gap-1 border-gray-200 border-r-2 p-4">
+            <div className="flex flex-wrap flex-row w-[100%] gap-8 items-center">
+                <div className="hidden xs:flex flex-row gap-7 border-2 h-fit border-gray-200 rounded-xl w-fit">
+                    <div className="flex flex-col gap-1 border-gray-200 p-4">
                         <Label className="font-500 text-gray-500 text-md">
                             Bedroom
                         </Label>
@@ -38,7 +41,7 @@ const RentalDetail = (props) => {
                         </div>
                     </div>
 
-                    <div className="flex flex-col gap-1 pl-0 p-4 border-r-2 ">
+                    <div className="flex flex-col gap-1 p-4 border-l-2  ">
                         <Label className="font-500 text-gray-500 text-md">
                             Bathroom
                         </Label>
@@ -48,7 +51,7 @@ const RentalDetail = (props) => {
                         </div>
                     </div>
 
-                    <div className="flex flex-col gap-1 pl-0 p-4 border-r-2 ">
+                    <div className="flex flex-col gap-1 p-4 border-l-2">
                         <Label className="font-500 text-gray-500 text-md">
                             Unit Size
                         </Label>
@@ -58,7 +61,7 @@ const RentalDetail = (props) => {
                         </div>
                     </div>
 
-                    <div className="flex flex-col gap-1 pl-0 p-4 border-r-2 ">
+                    <div className="hidden sm:flex flex-col gap-1 p-4 border-l-2">
                         <Label className="font-500 text-gray-500 text-md">
                             Garages
                         </Label>
@@ -68,7 +71,7 @@ const RentalDetail = (props) => {
                         </div>
                     </div>
 
-                    <div className="flex flex-col gap-1 pl-0 p-4 pr-6">
+                    <div className="hidden md:flex flex-col gap-1 p-4 pr-6 border-l-2">
                         <Label className="font-500 text-gray-500 text-md">
                             Floors
                         </Label>
@@ -79,8 +82,7 @@ const RentalDetail = (props) => {
                     </div>
                 </div>
 
-
-                <div className="mt-4 bg-gray-100 p-4 rounded-lg shadow-lg" >
+                <div className="bg-gray-100 p-4 rounded-lg shadow-lg max-w-full flex-grow border-gray-200 border-2" >
                     <Label className="text-2xl font-500">
                         Lease History
                     </Label>
@@ -88,6 +90,7 @@ const RentalDetail = (props) => {
                         No lease history available
                     </p>
                 </div>
+
             </div>
 
 
