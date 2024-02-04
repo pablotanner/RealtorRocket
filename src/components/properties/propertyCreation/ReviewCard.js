@@ -10,13 +10,13 @@ const ReviewCard = ({propertyData, unitData, rentalType}) => {
             </div>
             <div className="flex flex-col gap-1">
                 <div className="font-400 text-md">
-                    {propertyData.title}
+                    {propertyData.title || "No Title"}
                 </div>
                 <div className="text-gray-700 text-sm">
-                    {propertyData.description}
+                    {propertyData.description || "No Description"}
                 </div>
                 <div className="text-primary text-sm">
-                    {propertyData.realEstateType}
+                    {propertyData.realEstateType || "No Property Type"}
                 </div>
             </div>
         </div>

@@ -7,7 +7,16 @@ import {Input} from "../../ui/input.tsx";
 import {Button} from "../../ui/button.tsx";
 import MultiStep from "../../ui/multi-step.js";
 import {useEffect, useState} from "react";
-import {ArrowLeft, ArrowRight, MinusCircle, PackagePlus, PlusCircle, SquareIcon, SquareStack} from "lucide-react";
+import {
+    ArrowLeft,
+    ArrowRight,
+    HelpCircle,
+    MinusCircle,
+    PackagePlus,
+    PlusCircle,
+    SquareIcon,
+    SquareStack
+} from "lucide-react";
 import {z} from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
@@ -19,6 +28,7 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../
 import {useCreatePropertyMutation} from "../../../services/api/propertyApi.js";
 import {useNavigate} from "react-router-dom";
 import ReviewCard from "./ReviewCard.js";
+import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "../../ui/tooltip.tsx";
 
 
 const realEstateTypes = {
@@ -119,6 +129,8 @@ const CreateProperty = (props) => {
     const addTrigger = (trigger) => {
         setTriggers([...triggers, trigger]);
     };
+
+    console.log(propertyForm.formState.errors)
 
 
     async function onSubmit(data) {
@@ -350,7 +362,23 @@ const CreateProperty = (props) => {
                                 <div className="text-xl font-600">
                                     Rental Configuration
                                 </div>
-                                How do you plan to rent out your property?
+                                <div className="flex flex-row items-center">
+                                    How do you plan to rent out your property?
+
+                                    <TooltipProvider>
+                                        <Tooltip>
+                                            <TooltipTrigger asChild>
+                                                <HelpCircle className="ml-2 w-6 h-6 text-primary-dark cursor-pointer hover:text-primary-dark/70" />
+                                            </TooltipTrigger>
+                                            <TooltipContent className="max-w-[400px]">
+                                                <p>
+                                                    This is only relevant for the creation of the property, you can add more units and change the rental configuration later.
+                                                </p>
+                                            </TooltipContent>
+                                        </Tooltip>
+                                    </TooltipProvider>
+                                </div>
+
 
 
                                 <div className="flex flex-row gap-2">
