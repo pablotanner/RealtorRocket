@@ -1,8 +1,7 @@
 import {fetchBaseQuery} from "@reduxjs/toolkit/query";
 import { Mutex } from 'async-mutex';
 import {logoutUser} from "../auth/authActions.js";
-import authSlice, {setAccessToken} from "../auth/authSlice.js";
-import {toast} from "react-toastify";
+import {setAccessToken} from "../auth/authSlice.js";
 
 const mutex = new Mutex();
 

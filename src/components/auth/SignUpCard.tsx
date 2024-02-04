@@ -1,5 +1,4 @@
 import {useEffect} from "react";
-import {toast} from "react-toastify";
 import {useRegisterMutation} from "../../services/api/authApi.js";
 
 import {Card, CardContent, CardHeader} from "../ui/card.tsx";
@@ -16,7 +15,7 @@ import {useNavigate} from "react-router-dom";
 
 export const SignUpCard = () => {
     const navigate = useNavigate();
-    const [register, {isError, isLoading, error, isSuccess }] = useRegisterMutation();
+    const [register, {isLoading, isSuccess }] = useRegisterMutation();
 
 
     const signUpFormSchema = z.object({
@@ -72,11 +71,7 @@ export const SignUpCard = () => {
 
     useEffect(() => {
         if (isSuccess) {
-            toast.info('Success')
-            window.location.href = '/dashboard'
-        }
-        else if (isError) {
-            toast.error(error?.data?.message)
+            navigate("/login")
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[isLoading])

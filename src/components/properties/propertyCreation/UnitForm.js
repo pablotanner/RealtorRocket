@@ -1,24 +1,23 @@
 import {z} from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useForm} from "react-hook-form";
-import {TabsContent} from "../../ui/tabs.tsx";
-import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "../../ui/form.tsx";
+import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "../../ui/form.tsx";
 import {Accordion, AccordionContent, AccordionItem, AccordionTrigger} from "../../ui/accordion.tsx";
 import {Input} from "../../ui/input.tsx";
 import {useEffect} from "react";
 
 
-const UnitForm = ({unit, setUnit, setTrigger }) => {
+const UnitForm = ({unit, setUnit, setTrigger, rentalType }) => {
 
     const unitSchema = z.object({
         unitNumber: z.string(),
-        floor: z.string(),
-        unitSize: z.string(),
-        numOfFloors: z.string(),
-        numOfRooms: z.string(),
-        numOfBedrooms: z.string(),
-        numOfBathrooms: z.string(),
-        garages: z.string(),
+        floor: z.coerce.number().or(z.null()),
+        unitSize: z.coerce.number().or(z.null()),
+        numOfFloors: z.coerce.number().or(z.null()),
+        numOfRooms: z.coerce.number().or(z.null()),
+        numOfBedrooms: z.coerce.number().or(z.null()),
+        numOfBathrooms: z.coerce.number().or(z.null()),
+        garages: z.coerce.number().or(z.null()),
     })
 
     const unitForm = useForm({
@@ -46,9 +45,9 @@ const UnitForm = ({unit, setUnit, setTrigger }) => {
 
     return (
                     <Form {...unitForm}>
-                        <form onSubmit={unitForm.handleSubmit(onSubmit)} className="flex flex-col gap-y-3 w-[100%]">
-                            <Accordion defaultValue="location">
-                                <AccordionItem value="location">
+                        <form onSubmit={unitForm.handleSubmit(onSubmit)} className="flex flex-col gap-y-4 w-[100%]">
+                            <Accordion defaultValue={rentalType === "whole" ? "details" : "location"}>
+                                <AccordionItem value="location" hidden={rentalType==="whole"}>
                                     <AccordionTrigger> Unit Location </AccordionTrigger>
                                     <AccordionContent className="flex flex-row gap-x-4">
                                         <FormField
@@ -81,14 +80,16 @@ const UnitForm = ({unit, setUnit, setTrigger }) => {
                                 </AccordionItem>
 
                                 <AccordionItem value={"details"}>
-                                    <AccordionTrigger> Unit Details </AccordionTrigger>
-                                    <AccordionContent>
+                                    <AccordionTrigger> {rentalType === "whole" ? "Property Details" : "Unit Details"} </AccordionTrigger>
+                                    <AccordionContent className="flex flex-col gap-y-4">
                                         <FormField
                                             control={unitForm.control}
                                             name="unitSize"
                                             render={({field}) => (
                                                 <FormItem >
-                                                    <FormLabel>Unit Size (in square metres)</FormLabel>
+                                                    <FormLabel>
+                                                        Square Footage (in m<sup>2</sup>)
+                                                    </FormLabel>
                                                     <FormControl>
                                                         <Input placeholder="200" {...field} />
                                                     </FormControl>
@@ -107,6 +108,9 @@ const UnitForm = ({unit, setUnit, setTrigger }) => {
                                                         <Input placeholder="1" {...field} />
                                                     </FormControl>
                                                     <FormMessage/>
+                                                    <FormDescription>
+                                                        If the property is a multi-story building, please specify the floor number of the unit.
+                                                    </FormDescription>
                                                 </FormItem>
                                             )}
                                         />
@@ -130,7 +134,7 @@ const UnitForm = ({unit, setUnit, setTrigger }) => {
 
                                 <AccordionItem value={"rooms"}>
                                     <AccordionTrigger> Rooms </AccordionTrigger>
-                                    <AccordionContent>
+                                    <AccordionContent className="flex flex-col gap-y-4">
                                         <FormField
                                             control={unitForm.control}
                                             name="numOfRooms"

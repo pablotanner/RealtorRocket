@@ -7,7 +7,7 @@ import {Input} from "../../ui/input.tsx";
 import {Button} from "../../ui/button.tsx";
 import MultiStep from "../../ui/multi-step.js";
 import {useEffect, useState} from "react";
-import {ArrowLeft, ArrowRight, MinusCircle, PackagePlus, PlusCircle} from "lucide-react";
+import {ArrowLeft, ArrowRight, MinusCircle, PackagePlus, PlusCircle, SquareIcon, SquareStack} from "lucide-react";
 import {z} from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
@@ -17,7 +17,6 @@ import {Tabs, TabsContent, TabsList, TabsTrigger} from "../../ui/tabs.tsx";
 import UnitForm from "./UnitForm.js";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../../ui/select.tsx";
 import {useCreatePropertyMutation} from "../../../services/api/propertyApi.js";
-import {toast} from "react-toastify";
 import {useNavigate} from "react-router-dom";
 
 
@@ -39,31 +38,34 @@ const realEstateTypes = {
 const CreateProperty = (props) => {
     const navigate = useNavigate();
 
-    const [createProperty, {data: createdProperty, error, isLoading, isSuccess, isError}] = useCreatePropertyMutation();
+    const [createProperty, {data: createdProperty, isLoading, isSuccess}] = useCreatePropertyMutation();
 
     const [page, setPage] = useState(0);
 
+    const [rentalConfig, setRentalConfig] = useState(null);
+
+
     const [unitFormData, setUnitFormData] = useState([{
-        unitNumber: '',
-        floor: '',
-        unitSize: '',
-        numOfFloors: '',
-        numOfRooms: '',
-        numOfBedrooms: '',
-        numOfBathrooms: '',
-        garages: '',
+        unitNumber: null,
+        floor: null,
+        unitSize: null,
+        numOfFloors: null,
+        numOfRooms: null,
+        numOfBedrooms: null,
+        numOfBathrooms: null,
+        garages: null,
     }])
 
     function addUnitForm() {
         setUnitFormData([...unitFormData, {
-            unitNumber: '',
-            floor: '',
-            unitSize: '',
-            numOfFloors: '',
-            numOfRooms: '',
-            numOfBedrooms: '',
-            numOfBathrooms: '',
-            garages: '',
+            unitNumber: null,
+            floor: null,
+            unitSize: null,
+            numOfFloors: null,
+            numOfRooms: null,
+            numOfBedrooms: null,
+            numOfBathrooms: null,
+            garages: null,
         }])
     }
 
@@ -75,37 +77,40 @@ const CreateProperty = (props) => {
     }
 
     function onPageNumberClick(page) {
+        if (page > 1 && !rentalConfig) return;
         setPage(page);
     }
 
     const propertySchema = z.object({
-        title: z.string().min(1, "Please enter a title for the property"),
-        description: z.string().min(1, "Please enter a description for the property"),
-        lotSize: z.string(),
-        yearBuilt: z.string(),
-        realEstateType: z.string(),
-        marketPrice: z.string(),
-        street: z.string(),
-        city: z.string(),
-        state: z.string(),
-        zip: z.string(),
-        country: z.string(),
+        title: z.string({errorMap: () => ({message: 'Please enter a title for the property'})}),
+        description: z.string({errorMap: () => ({message: 'Please enter a title for the property'})}),
+        lotSize: z.coerce.number().or(z.null()),
+        yearBuilt: z.coerce.number().or(z.null()),
+        realEstateType: z.enum(Object.keys(realEstateTypes), {
+            errorMap: () => ({ message: 'Please select a Real Estate Type' })
+        }),
+        marketPrice: z.coerce.number().or(z.null()),
+        street: z.string().or(z.null()),
+        city: z.string().or(z.null()),
+        state: z.string().or(z.null()),
+        zip: z.string().or(z.null()),
+        country: z.string().or(z.null()),
     })
 
     const propertyForm = useForm({
         resolver: zodResolver(propertySchema),
         defaultValues: {
-            title: '',
-            description: '',
-            lotSize: '',
-            yearBuilt: '',
-            realEstateType: '',
-            marketPrice: '',
-            street: '',
-            city: '',
-            state: '',
-            zip: '',
-            country: '',
+            title: null,
+            description: null,
+            lotSize: null,
+            yearBuilt: null,
+            realEstateType: null,
+            marketPrice: null,
+            street: null,
+            city: null,
+            state: null,
+            zip: null,
+            country: null,
         }
     })
 
@@ -117,12 +122,6 @@ const CreateProperty = (props) => {
 
 
     async function onSubmit(data) {
-        //const results = await Promise.all(triggers.map(trigger => trigger()));
-        //const allValid = results.every(result => result);
-        if (data.lotSize)         data.lotSize = parseInt(data.lotSize)
-        if (data.yearBuilt)       data.yearBuilt = parseInt(data.yearBuilt)
-        if (data.marketPrice)  data.marketPrice = parseInt(data.marketPrice)
-
         for (let i = 0; i < unitFormData.length; i++) {
             const unit = unitFormData[i];
             if (unit.floor) unit.floor = parseInt(unit.floor);
@@ -140,11 +139,7 @@ const CreateProperty = (props) => {
 
     useEffect(() => {
         if (isSuccess) {
-            toast.info('Property created successfully')
             navigate(`/properties/${createdProperty?.data?.id}`)
-        }
-        else if (isError) {
-            toast.error(error?.data?.message)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isLoading])
@@ -156,14 +151,15 @@ const CreateProperty = (props) => {
             <DialogTrigger asChild>
                 {props.trigger}
             </DialogTrigger>
-            <DialogContent className="">
+            <DialogContent>
                 <Form {...propertyForm}>
-                    <form onSubmit={propertyForm.handleSubmit(onSubmit)}>
-                        <MultiStep page={page} onPageNumberClick={onPageNumberClick} className="mt-8">
+                    <form onSubmit={propertyForm.handleSubmit(onSubmit)} className="mt-4">
+                        <MultiStep page={page} onPageNumberClick={onPageNumberClick}>
                             <div className="flex flex-col">
-                                <div className="text-xl font-600">
+                                <div className="text-xl font-600 mb-4">
                                     Property Information
                                 </div>
+                                Please provide some basic information about the property, you can add more details later.
                                     <Accordion type="single" collapsible defaultValue="general" >
                                         <AccordionItem value={"general"}>
                                             <AccordionTrigger>
@@ -198,40 +194,45 @@ const CreateProperty = (props) => {
                                                     )}
                                                 />
 
+                                                <FormField
+                                                    control={propertyForm.control}
+                                                    name="realEstateType"
+                                                    render={({field}) => (
+                                                        <FormItem className="min-w-fit w-[20%]">
+                                                            <FormLabel>Real Estate Type (*)</FormLabel>
+                                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                                <FormControl>
+                                                                    <SelectTrigger>
+                                                                        <SelectValue />
+                                                                    </SelectTrigger>
+                                                                </FormControl>
+                                                                <SelectContent>
+                                                                    {Object.entries(realEstateTypes).map(([key, value]) => (
+                                                                        <SelectItem key={key} value={key}>
+                                                                            {value}
+                                                                        </SelectItem>
+                                                                    ))}
+                                                                </SelectContent>
+                                                            </Select>
+                                                            <FormMessage/>
+                                                        </FormItem>
+                                                    )}
+                                                />
+
 
                                                 <div className="flex flex-col md:flex-row gap-4">
                                                     <FormField
                                                         control={propertyForm.control}
-                                                        name="realEstateType"
-                                                        render={({field}) => (
-                                                            <FormItem className="min-w-fit w-[20%]">
-                                                                <FormLabel>Real Estate Type</FormLabel>
-                                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                                                    <FormControl>
-                                                                        <SelectTrigger>
-                                                                            <SelectValue />
-                                                                        </SelectTrigger>
-                                                                    </FormControl>
-                                                                    <SelectContent>
-                                                                        {Object.entries(realEstateTypes).map(([key, value]) => (
-                                                                            <SelectItem key={key} value={key}>
-                                                                                {value}
-                                                                            </SelectItem>
-                                                                        ))}
-                                                                    </SelectContent>
-                                                                </Select>
-                                                                <FormMessage/>
-                                                            </FormItem>
-                                                        )}
-                                                    />
-                                                    <FormField
-                                                        control={propertyForm.control}
                                                         name="marketPrice"
                                                         render={({field}) => (
-                                                            <FormItem >
+                                                            <FormItem>
                                                                 <FormLabel>Market Price</FormLabel>
                                                                 <FormControl>
-                                                                    <Input placeholder="200000" {...field} />
+                                                                    <Input
+                                                                        placeholder="200000"
+                                                                        {...field}
+                                                                        type={"number"}
+                                                                    />
                                                                 </FormControl>
                                                                 <FormMessage/>
                                                             </FormItem>
@@ -242,8 +243,8 @@ const CreateProperty = (props) => {
                                                         control={propertyForm.control}
                                                         name="lotSize"
                                                         render={({field}) => (
-                                                            <FormItem >
-                                                                <FormLabel>Lot Size (in square metres)</FormLabel>
+                                                            <FormItem>
+                                                                <FormLabel>Land Size (in m<sup>2</sup>)</FormLabel>
                                                                 <FormControl>
                                                                     <Input placeholder="200" {...field} />
                                                                 </FormControl>
@@ -342,14 +343,72 @@ const CreateProperty = (props) => {
                                     </Button>
                                 </div>
                             </div>
-                            <div className="flex flex-col">
+
+                            <div className="flex flex-col gap-y-4">
                                 <div className="text-xl font-600">
-                                    Unit Information
+                                    Rental Configuration
                                 </div>
-                                Please add at least one unit to the property.
+                                How do you plan to rent out your property?
+
+
+                                <div className="flex flex-row gap-2">
+                                    <div
+                                        data-active={rentalConfig === "whole"}
+                                        className="w-[100%] h-[200p] rounded-lg border-gray-100 border-2 shadow-md p-4 flex items-center justify-center cursor-pointer data-[active=true]:bg-primary-dark data-[active=true]:text-white data-[active=true]:border-primary-dark"
+                                        onClick={() => setRentalConfig("whole")}
+                                    >
+                                        <div className="text-2xl font-600 flex flex-col gap-4">
+                                            <SquareIcon className="w-8 h-8" />
+                                            Entire Property
+                                            <p className="text-sm  font-300">
+                                                Rent out the entire property to a single tenant
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        data-active={rentalConfig === "individual"}
+                                        className="w-[100%] h-[200p] rounded-lg border-gray-100 border-2 shadow-md p-4 flex items-center justify-center cursor-pointer data-[active=true]:bg-primary-dark data-[active=true]:text-white data-[active=true]:border-primary-dark"
+                                        onClick={() => setRentalConfig("individual")}
+                                    >
+                                        <div className="text-2xl font-600 flex flex-col gap-4">
+                                            <SquareStack className="w-8 h-8" />
+                                            Individual Units
+                                            <p className="text-sm font-300">
+                                                Rent out individual units to multiple tenants
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div className="flex justify-between mt-4">
+                                    <Button variant="outline" onClick={() => setPage(0)}>
+                                        <ArrowLeft className="mr-2 w-4 h-4" />
+                                        Back
+                                    </Button>
+                                    <Button variant="gradient" onClick={() => setPage(2)} disabled={!rentalConfig}>
+                                        Next
+                                        <ArrowRight className="ml-2 w-4 h-4" />
+                                    </Button>
+                                </div>
+                            </div>
+
+
+                            <div
+                                className="flex flex-col gap-y-2"
+                                data-blocked={!rentalConfig}
+                            >
+                                <div className="text-xl font-600">
+                                    {rentalConfig === "whole" ? "Property" : "Unit"} Specifications
+                                </div>
+
+                                {rentalConfig === "whole" ? "Please fill out some information about the Rental Property." : "Please add at least one unit to the property."
+                                }
+
+
                                 <div>
-                                    <Tabs defaultValue={"0"}>
-                                        <TabsList >
+                                    <Tabs defaultValue={"0"} hidden={rentalConfig === "whole"}>
+                                        <TabsList>
                                             {unitFormData.map((unit, index) => (
                                                 <TabsTrigger value={index.toString()} key={"trigger-" +index}>
                                                     Unit {index + 1}
@@ -362,7 +421,7 @@ const CreateProperty = (props) => {
 
                                         {unitFormData.map((unit, index) => (
                                             <TabsContent value={index.toString()} key={"content-"+ index}>
-                                                <UnitForm setTrigger={addTrigger} unit={unit} setUnit={(data) => {
+                                                <UnitForm setTrigger={addTrigger} rentalType={rentalConfig} unit={unit} setUnit={(data) => {
                                                     const newUnitFormData = [...unitFormData];
                                                     newUnitFormData[index] = data;
                                                     setUnitFormData(newUnitFormData);
@@ -371,19 +430,27 @@ const CreateProperty = (props) => {
                                         ))}
                                     </Tabs>
 
+                                    {rentalConfig === "whole" && <UnitForm setTrigger={addTrigger} rentalType={rentalConfig} unit={unitFormData[0]} setUnit={(data) => {
+                                        setUnitFormData([data]);
+                                    }}/>}
+
                                 </div>
                                 <div className="flex justify-between mt-4">
-                                    <Button variant="outline" onClick={() => setPage(0)}>
+                                    <Button variant="outline" onClick={() => setPage(1)}>
                                         <ArrowLeft className="mr-2 w-4 h-4" />
                                         Back
                                     </Button>
-                                    <Button variant="gradient" onClick={() => setPage(2)}>
+                                    <Button variant="gradient" onClick={() => setPage(3)}>
                                         Next
                                         <ArrowRight className="ml-2 w-4 h-4" />
                                     </Button>
                                 </div>
                             </div>
-                            <div className="flex flex-col">
+
+
+                            <div className="flex flex-col"
+                                 data-blocked={!rentalConfig}
+                            >
                                 <div className="text-xl font-600">
                                     Review
                                 </div>
@@ -405,11 +472,11 @@ const CreateProperty = (props) => {
                                 </div>
 
                                 <div className="flex justify-between mt-4">
-                                    <Button variant="outline" onClick={() => setPage(1)}>
+                                    <Button variant="outline" onClick={() => setPage(2)}>
                                         <ArrowLeft className="mr-2 w-4 h-4" />
                                         Back
                                     </Button>
-                                    <Button variant="gradient" onClick={() => setPage(2)} type="submit" isLoading={isLoading} >
+                                    <Button variant="gradient" onClick={() => setPage(3)} type="submit" isLoading={isLoading} >
                                         Create
                                         <PackagePlus className="ml-2 w-4 h-4" />
                                     </Button>

@@ -6,8 +6,6 @@ import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useSelector} from "react-redux";
 import {useDeleteUserMutation, useUpdateUserMutation} from "../../services/api/userApi.js";
-import {useEffect} from "react";
-import {toast} from "react-toastify";
 import {
     AlertDialog, AlertDialogAction, AlertDialogCancel,
     AlertDialogContent, AlertDialogDescription,
@@ -37,17 +35,6 @@ const EditSettings = () => {
     const settingsFormSchema = z.object({
         currencyCode: z.string().or(z.null()).or(z.undefined()),
     })
-
-    useEffect(() => {
-        if (isSuccess) {
-            toast.info('Settings updated successfully')
-        }
-        else if (isError) {
-            toast.error(error?.data?.message)
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[isLoading])
-
 
     const settingsForm = useForm({
         resolver: zodResolver(settingsFormSchema),

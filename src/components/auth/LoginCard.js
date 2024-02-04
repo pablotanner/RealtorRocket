@@ -1,5 +1,4 @@
 import {useEffect} from "react";
-import {toast} from "react-toastify";
 import {useLoginMutation} from "../../services/api/authApi.js";
 
 import {Card, CardContent, CardHeader} from "../ui/card.tsx";
@@ -40,11 +39,7 @@ const LoginCard = () => {
 
     useEffect(() => {
         if (isSuccess) {
-            toast.info('Logged in successfully')
             navigate('/')
-        }
-        else if (isError) {
-            toast.error(error?.data?.message)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[isLoading])

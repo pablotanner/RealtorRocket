@@ -16,7 +16,7 @@ export const propertyApi = createApi({
         }),
         createProperty: build.mutation({
             query: (body) => ({
-                url: '/properties2',
+                url: '/properties',
                 method: 'POST',
                 body,
             }),
@@ -26,7 +26,7 @@ export const propertyApi = createApi({
                     .then((data) => {
                         toast({
                             title: "Success",
-                            description: "Profile updated successfully",
+                            description: "Property created successfully",
                         });
                     })
                     .catch((error) => {
