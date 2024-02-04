@@ -42,6 +42,9 @@ router.post('/properties', authenticateToken, realEstateController.createPropert
 router.get('/properties/:id', authenticateToken, realEstateController.getProperty)
 router.delete('/properties/:id', authenticateToken, realEstateController.deleteProperty)
 
+router.get('/units', authenticateToken, realEstateController.getUnits)
+router.get('/units/:id', authenticateToken, realEstateController.getUnit)
+
 try {
     app.get('/users', authenticateToken, async (req, res) => {
         const users = await prisma.user.findMany();

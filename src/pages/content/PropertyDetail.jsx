@@ -13,26 +13,6 @@ const PropertyDetail = (props) => {
 
     const [deleteProperty, {isLoading: isDeleting}] = useDeletePropertyMutation();
 
-
-    return (
-        <div className="flex flex-wrap gap-4">
-            <DetailedPropertyCard property={data?.data} />
-            <Button variant="destructive" isLoading={isDeleting} onClick={() => deleteProperty(id).then(()=> navigate('/properties')) }>
-                Delete
-            </Button>
-            <div className="bg-white p-4 border-2 border-gray-200 shadow-xl w-[400px] h-[400px]">
-                Rental Units
-                <div>
-                    dasdsaads
-                </div>
-            </div>
-        </div>
-
-
-    )
-
-
-
     return (
         <div>
             <div className="flex flex-row justify-between">
@@ -40,26 +20,66 @@ const PropertyDetail = (props) => {
                     {data?.data?.title || "No Title"}
                 </h>
                 <Button variant="destructive" isLoading={isDeleting} onClick={() => deleteProperty(id).then(()=> navigate('/properties')) }>
-                    Delete
+                    Delete Property
                 </Button>
             </div>
+
+            The table below shows the data of the property from the database. <br/>
 
             <Table>
                 <TableCaption >Property Data from DB</TableCaption>
                 <TableHeader>
                     <TableRow>
-                        <TableHead key={0}>Key</TableHead>
+                        <TableHead key={0}>Title</TableHead>
                         <TableHead key={1}>Value</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {Object.keys(data.data).map((key) => {
-                        return (
-                            <TableRow key={key}>
-                                <TableCell>{key}</TableCell>
-                                <TableCell>{data.data[key]}</TableCell>
-                            </TableRow>
-                        )})}
+                    <TableRow>
+                        <TableCell key={0}>ID</TableCell>
+                        <TableCell key={1}>{data?.data?.id}</TableCell>
+                    </TableRow>
+
+                    <TableRow>
+                        <TableCell key={0}>Title</TableCell>
+                        <TableCell key={1}>{data?.data?.title}</TableCell>
+                    </TableRow>
+
+                    <TableRow>
+                        <TableCell key={0}>Description</TableCell>
+                        <TableCell key={1}>{data?.data?.description}</TableCell>
+                    </TableRow>
+
+                    <TableRow>
+                        <TableCell key={0}>Real Estate Type</TableCell>
+                        <TableCell key={1}>{data?.data?.realEstateType}</TableCell>
+                    </TableRow>
+
+                    <TableRow>
+                        <TableCell key={0}>Market Price</TableCell>
+                        <TableCell key={1}>{data?.data?.marketPrice || "-"}</TableCell>
+                    </TableRow>
+
+                    <TableRow>
+                        <TableCell key={0}>Lot Size </TableCell>
+                        <TableCell key={1}>{data?.data?.lotSize || "-"}</TableCell>
+                    </TableRow>
+
+                    <TableRow>
+                        <TableCell key={0}>Year Built</TableCell>
+                        <TableCell key={1}>{data?.data?.yearBuilt || "-"}</TableCell>
+                    </TableRow>
+
+                    <TableRow>
+                        <TableCell key={0}>Units</TableCell>
+                        <TableCell key={1}>
+                            {data?.data?.units?.map((unit, index) => (
+                                <div key={index}>
+                                    UNIT {unit.id}
+                                </div>
+                            ))}
+                        </TableCell>
+                    </TableRow>
                 </TableBody>
             </Table>
         </div>

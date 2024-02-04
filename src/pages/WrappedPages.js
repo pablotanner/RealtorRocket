@@ -6,6 +6,8 @@ import PropertyDetail from "./content/PropertyDetail.jsx";
 import {useParams} from "react-router-dom";
 import Tenants from "./content/Tenants.jsx";
 import Rentals from "./content/Rentals.jsx";
+import RentalDetail from "./content/RentalDetail.jsx";
+import {useGetUnitQuery, useGetUnitsQuery} from "../services/api/unitApi.js";
 
 
 export const PropertiesPage = () => {
@@ -45,8 +47,19 @@ export const TenantsPage = () => {
 
 export const RentalsPage = () => {
     return (
-        <PageWrapper query={useGetPropertiesQuery}>
+        <PageWrapper query={useGetUnitsQuery}>
             <Rentals/>
+        </PageWrapper>
+    )
+}
+
+export const RentalDetailPage = () => {
+    const {id} = useParams();
+
+    return (
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        <PageWrapper query={() => useGetUnitQuery(id)}>
+            <RentalDetail/>
         </PageWrapper>
     )
 }

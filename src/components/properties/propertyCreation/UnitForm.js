@@ -126,7 +126,7 @@ const UnitForm = ({unit, setUnit, setTrigger, rentalType }) => {
                                                 <FormItem >
                                                     <FormLabel>Number of Floors</FormLabel>
                                                     <FormControl>
-                                                        <Input type="number" placeholder="0" {...field} />
+                                                        <Input type="number" placeholder="1" {...field} />
                                                     </FormControl>
                                                     <FormMessage/>
                                                     <FormDescription>

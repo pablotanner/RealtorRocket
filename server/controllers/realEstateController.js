@@ -128,3 +128,56 @@ export async function deleteProperty(req, res) {
     }
 }
 
+// Get all units of user
+export async function getUnits(req, res) {
+    try {
+        const units = await prisma.unit.findMany({
+            where: {
+                realEstateObject: {
+                    realtor: {
+                        userId: req.user.userId
+                    }
+                }
+            },
+            include: {
+                realEstateObject: true,
+                images: true
+            }
+        });
+
+        res.status(200).json({data: units });
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json({ message: "Error getting units" });
+    }
+}
+
+export async function getUnit(req, res) {
+    try {
+        const unit = await prisma.unit.findUnique({
+            where: {
+                id: parseInt(req.params.id),
+            },
+            include: {
+                realEstateObject: {
+                    include: {
+                        images: true,
+                        units: true
+                    }
+                },
+                images: true
+            }
+        });
+
+        if (!unit) {
+            return res.status(404).json({ message: "Unit not found" });
+        }
+
+        res.status(200).json({data: unit });
+    }
+    catch (error) {
+        res.status(500).json({ message: "Error getting unit" });
+    }
+}
+

@@ -9,7 +9,14 @@ import {SignUpCard} from "./components/auth/SignUpCard.tsx";
 import Navbar from "./components/nav/Navbar.jsx";
 import {TooltipProvider} from "./components/ui/tooltip.tsx";
 import Account from "./pages/Account.jsx";
-import {HomePage, PropertiesPage, PropertyDetailPage, RentalsPage, TenantsPage} from "./pages/WrappedPages.js";
+import {
+    HomePage,
+    PropertiesPage,
+    PropertyDetailPage,
+    RentalDetailPage,
+    RentalsPage,
+    TenantsPage
+} from "./pages/WrappedPages.js";
 
 
 function App() {
@@ -39,6 +46,7 @@ const AppContent = () => {
                 <Route path="/properties" element={<PropertiesPage/>} />
                 <Route path="/tenants" element={<TenantsPage/>} />
                 <Route path="/rentals" element={<RentalsPage/>}/>
+                <Route path="/rentals/:id" element={<RentalDetailPage/>} />
             </Routes>
                 </Navbar>)}
             {!showNavbar && (

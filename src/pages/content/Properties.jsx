@@ -18,6 +18,10 @@ const Properties = (props) => {
 
     return (
         <>
+            <div className="text-lg mb-4">
+                These are your properties. You can add new properties by clicking the plus button below. <br/>
+                If you want to create a rental unit for an existing property, visit the Rentals page.
+            </div>
             <div className="flex gap-4 max-w-full flex-wrap">
                 {data?.data.map((property) => (<PropertyCard key={property.id} property={property} />))}
                 <PropertyCard>

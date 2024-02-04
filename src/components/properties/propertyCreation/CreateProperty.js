@@ -29,6 +29,7 @@ import {useCreatePropertyMutation} from "../../../services/api/propertyApi.js";
 import {useNavigate} from "react-router-dom";
 import ReviewCard from "./ReviewCard.js";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "../../ui/tooltip.tsx";
+import {zodInputStringPipe} from "../../../utils/inputHandlers.js";
 
 
 const realEstateTypes = {
@@ -94,12 +95,12 @@ const CreateProperty = (props) => {
     const propertySchema = z.object({
         title: z.string({errorMap: () => ({message: 'Please enter a title for the property'})}),
         description: z.string({errorMap: () => ({message: 'Please enter a title for the property'})}),
-        lotSize: z.coerce.number().or(z.null()),
-        yearBuilt: z.coerce.number().or(z.null()),
+        lotSize: zodInputStringPipe(z.number().positive('Number must be positive')).or(z.null()),
+        yearBuilt: zodInputStringPipe(z.number().positive('Number must be positive')).or(z.null()),
         realEstateType: z.enum(Object.keys(realEstateTypes), {
             errorMap: () => ({ message: 'Please select a Real Estate Type' })
         }),
-        marketPrice: z.coerce.number().or(z.null()),
+        marketPrice: zodInputStringPipe(z.number().positive('Number must be positive')).or(z.null()),
         street: z.string().or(z.null()),
         city: z.string().or(z.null()),
         state: z.string().or(z.null()),
@@ -149,6 +150,7 @@ const CreateProperty = (props) => {
         if (data.images) {
             data.images = [{imageUrl: data.images}]
         }
+
 
         createProperty({...data , units: unitFormData})
 

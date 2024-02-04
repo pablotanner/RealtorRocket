@@ -8,7 +8,7 @@ const PropertyCard = ({ property, children }) => {
 
     if (children || !property) {
         return (
-            <Card className="min-w-fit shadow-md basis-[250px]" >
+            <Card className="min-w-fit shadow-md basis-[300px] max-w-[300px] pb-10" >
                 {children}
             </Card>
         )
@@ -19,7 +19,7 @@ const PropertyCard = ({ property, children }) => {
 
 
     return (
-        <Card className="min-w-fit shadow-md basis-[250px]">
+        <Card className="min-w-fit shadow-md basis-[300px] max-w-[300px]">
             <CardContent className="p-2 pt-6 items-center justify-center flex min-w-fit">
                 <img
                     src={images[0]?.imageUrl}
@@ -28,11 +28,11 @@ const PropertyCard = ({ property, children }) => {
                     onClick={() => navigate(`/properties/${id}`)}
                 />
             </CardContent>
-            <CardFooter className="flex flex-col p-4 justify-start items-start">
+            <CardFooter className="flex flex-col p-4 justify-start items-start max-w-[300px]">
                 <h className="font-600 text-off-black text-xl">
                     {title || "?"}
                 </h>
-                <p className="md:flex font-400 text-md">
+                <p className="flex font-400 text-md ">
                     {description || "?"}
                 </p>
             </CardFooter>

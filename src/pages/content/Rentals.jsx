@@ -8,25 +8,17 @@ import {useNavigate} from "react-router-dom";
 
 const Rentals = (props) => {
     const {data} = props;
-
     const navigate = useNavigate()
 
     const selectedPropertyId = useSelector((state) => state.userSlice.selectedProperty)
 
-    let properties = data?.data || [];
 
-    if (selectedPropertyId !== "All") properties = data?.data?.filter((property) => property.id === selectedPropertyId)
+    let units = data?.data || [];
 
-    const units = []
-
-    properties.forEach((property) => {
-        const temp = property.units.map((unit) => {
-            return {...unit, property: property}
-        })
-        units.push(...temp)
-    })
+    if (selectedPropertyId !== "All") units = data?.data?.filter((unit) => unit.realEstateObjectId === selectedPropertyId)
 
 
+console.log(units)
 
     return (
         <>
@@ -42,22 +34,13 @@ const Rentals = (props) => {
             }
             <div className="flex gap-4 max-w-full flex-wrap">
                 {units.map((unit, index) => (
-                    <div key={index} className="w-[200px] h-[200px] shadow-xl p-4 hover:bg-gray-50 cursor-pointer" onClick={() => navigate("/properties/" + unit?.property?.id)}>
-                        <div className="flex flex-col">
+                    <div key={index} className="w-[200px] h-[200px] rounded-3xl shadow-xl p-4 hover:bg-gray-50 cursor-pointer" onClick={() => navigate("/rentals/" + unit?.id)}>
+                        <div className="flex flex-col gap-2">
                             <div className="font-600">
-                                Property: {unit.property?.title}
+                                Property: {unit.realEstateObject?.title}
                             </div>
                             <div>
                                 Unit ID: {unit.id}
-                            </div>
-                            <div>
-                                Rooms: {unit.numOfRooms || 'N/A'}
-                            </div>
-                            <div>
-                                Bathrooms: {unit.numOfBathrooms || 'N/A'}
-                            </div>
-                            <div>
-                                Bedrooms: {unit.numOfBedrooms || 'N/A'}
                             </div>
 
                             <PropertyStatus status={unit.status} className="w-fit" />

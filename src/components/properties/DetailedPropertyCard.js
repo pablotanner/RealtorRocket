@@ -1,35 +1,96 @@
 import { Card,
     CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,} from "../ui/card.tsx";
+ } from "../ui/card.tsx";
+import {moneyParser} from "../../utils/inputHandlers.js";
+import {useNavigate} from "react-router-dom";
 
 const DetailedPropertyCard = ({ property }) => {
+    const navigate = useNavigate();
+
+    const propertyUnits = () => {
+        if (property?.units?.length > 1) {
+            return "Multi-Unit";
+        }
+        else if (property?.units?.length === 1) {
+            return "Single-Unit";
+        }
+        else {
+            return "No Units";
+        }
+    }
+
+    // Depending on what is available, display key data
+    const displayedData = () => {
+        let data = [];
+
+        if (property?.yearBuilt) {
+            data.push("Built in " + property.yearBuilt);
+        }
+        if (property?.lotSize) {
+            data.push(property.lotSize + "Sq. m.");
+        }
+        if (property?.marketPrice) {
+            data.push(moneyParser(property.marketPrice));
+        }
+        if (property?.units?.length > 1 ) {
+            data.push(property.units.length + " Units");
+        }
+
+        return data.join(", ");
+    }
+
+    const getLocation = () => {
+        let location = []
+
+        if (property?.address) {
+            location.push(property.address);
+        }
+        if (property?.city) {
+            location.push(property.city);
+        }
+        if (property?.state) {
+            location.push(property.state);
+        }
+        if (property?.country) {
+            location.push(property.country);
+        }
+
+        return location.join(", ");
+    }
+
 
     return (
-        <Card className="w-fit shadow-xl">
-            <CardHeader>
-                <CardTitle>Property</CardTitle>
-                <CardDescription>{property.title}</CardDescription>
-            </CardHeader>
-            <CardContent>
+        <Card className="max-w-[500px] shadow-xl rounded-xl">
+            <CardContent className="px-0">
                 <img
                     src={property.images[0]?.imageUrl}
                     alt={property.title || "?"}
-                    className="w-44 h-44 md:w-44 md:h-44 lg:w-64 lg:h-64 object-cover rounded-full hover:opacity-75 transition-opacity duration-150 ease-in-out cursor-pointer"
+                    className="h-64 w-[100%] object-cover rounded-xl hover:opacity-75 transition-opacity duration-150 ease-in-out cursor-pointer"
+                    onClick={() => navigate(`/properties/${property.id}`)}
                 />
-                <CardDescription>{property.description}</CardDescription>
-                <CardDescription>{property.price}</CardDescription>
-                <CardDescription>{property.currency}</CardDescription>
-                <CardDescription>{property.location}</CardDescription>
-                <CardDescription>{property.type}</CardDescription>
-                <CardDescription>{property.listingStatus}</CardDescription>
-                <CardDescription>{property.bedrooms}</CardDescription>
-                <CardDescription>{property.bathrooms}</CardDescription>
-                <CardDescription>{property.area}</CardDescription>
-                <CardDescription>{property.yearBuilt}</CardDescription>
-                <CardDescription>{property.realtor}</CardDescription>
+
+                <div className="px-4 pt-3 flex flex-col gap-2">
+                    <div className="flex justify-between flex-row items-center gap-1 flex-wrap">
+                        <div className="text-2xl text-off-black font-500">
+                            {property.title}
+                        </div>
+                        <div className="text-gray-900 font-300">
+                            {property.realEstateType}
+                        </div>
+                    </div>
+
+                    <div className="text-lg text-gray-600 font-400">
+                        {propertyUnits()}
+                    </div>
+
+                    <div className="text-md text-gray-400 font-400">
+                        {displayedData()} <br/>
+                        {getLocation()}
+                    </div>
+
+
+                </div>
+
             </CardContent>
 
         </Card>
