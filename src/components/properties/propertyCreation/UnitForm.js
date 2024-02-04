@@ -49,7 +49,7 @@ const UnitForm = ({unit, setUnit, setTrigger, rentalType }) => {
                             <Accordion defaultValue={rentalType === "whole" ? "details" : "location"}>
                                 <AccordionItem value="location" hidden={rentalType==="whole"}>
                                     <AccordionTrigger> Unit Location </AccordionTrigger>
-                                    <AccordionContent className="flex flex-row gap-x-4">
+                                    <AccordionContent className="flex flex-col gap-4">
                                         <FormField
                                             control={unitForm.control}
                                             name="unitNumber"
@@ -70,9 +70,12 @@ const UnitForm = ({unit, setUnit, setTrigger, rentalType }) => {
                                                 <FormItem >
                                                     <FormLabel>Floor</FormLabel>
                                                     <FormControl>
-                                                        <Input placeholder="1" {...field} />
+                                                        <Input type="number" placeholder="0" {...field} />
                                                     </FormControl>
                                                     <FormMessage/>
+                                                    <FormDescription>
+                                                        If the property is a multi-story building, please specify the floor number where the unit is located.
+                                                    </FormDescription>
                                                 </FormItem>
                                             )}
                                         />
@@ -82,6 +85,24 @@ const UnitForm = ({unit, setUnit, setTrigger, rentalType }) => {
                                 <AccordionItem value={"details"}>
                                     <AccordionTrigger> {rentalType === "whole" ? "Property Details" : "Unit Details"} </AccordionTrigger>
                                     <AccordionContent className="flex flex-col gap-y-4">
+                                        {rentalType === "whole" && <FormField
+                                            control={unitForm.control}
+                                            name="floor"
+
+                                            render={({field}) => (
+                                                <FormItem >
+                                                    <FormLabel>Floor</FormLabel>
+                                                    <FormControl>
+                                                        <Input type="number" placeholder="0" {...field} />
+                                                    </FormControl>
+                                                    <FormMessage/>
+                                                    <FormDescription>
+                                                        If the property is a multi-story building, please specify the floor number where the unit is located.
+                                                    </FormDescription>
+                                                </FormItem>
+                                            )}
+                                        />}
+
                                         <FormField
                                             control={unitForm.control}
                                             name="unitSize"
@@ -91,7 +112,7 @@ const UnitForm = ({unit, setUnit, setTrigger, rentalType }) => {
                                                         Square Footage (in m<sup>2</sup>)
                                                     </FormLabel>
                                                     <FormControl>
-                                                        <Input placeholder="200" {...field} />
+                                                        <Input type="number" placeholder="200" {...field} />
                                                     </FormControl>
                                                     <FormMessage/>
                                                 </FormItem>
@@ -103,28 +124,14 @@ const UnitForm = ({unit, setUnit, setTrigger, rentalType }) => {
                                             name="numOfFloors"
                                             render={({field}) => (
                                                 <FormItem >
-                                                    <FormLabel>Floor Number</FormLabel>
+                                                    <FormLabel>Number of Floors</FormLabel>
                                                     <FormControl>
-                                                        <Input placeholder="1" {...field} />
+                                                        <Input type="number" placeholder="0" {...field} />
                                                     </FormControl>
                                                     <FormMessage/>
                                                     <FormDescription>
-                                                        If the property is a multi-story building, please specify the floor number of the unit.
+                                                        If the property has multiple floors, please specify the number of floors.
                                                     </FormDescription>
-                                                </FormItem>
-                                            )}
-                                        />
-
-                                        <FormField
-                                            control={unitForm.control}
-                                            name="garages"
-                                            render={({field}) => (
-                                                <FormItem >
-                                                    <FormLabel>Garage Spaces</FormLabel>
-                                                    <FormControl>
-                                                        <Input placeholder="2" {...field} />
-                                                    </FormControl>
-                                                    <FormMessage/>
                                                 </FormItem>
                                             )}
                                         />
@@ -142,7 +149,7 @@ const UnitForm = ({unit, setUnit, setTrigger, rentalType }) => {
                                                 <FormItem >
                                                     <FormLabel>Number of Rooms</FormLabel>
                                                     <FormControl>
-                                                        <Input placeholder="6" {...field} />
+                                                        <Input type="number" placeholder="6" {...field} />
                                                     </FormControl>
                                                     <FormMessage/>
                                                 </FormItem>
@@ -156,7 +163,7 @@ const UnitForm = ({unit, setUnit, setTrigger, rentalType }) => {
                                                 <FormItem >
                                                     <FormLabel>Number of Bedrooms</FormLabel>
                                                     <FormControl>
-                                                        <Input placeholder="3" {...field} />
+                                                        <Input type="number" placeholder="3" {...field} />
                                                     </FormControl>
                                                     <FormMessage/>
                                                 </FormItem>
@@ -170,7 +177,21 @@ const UnitForm = ({unit, setUnit, setTrigger, rentalType }) => {
                                                 <FormItem >
                                                     <FormLabel>Number of Bathrooms</FormLabel>
                                                     <FormControl>
-                                                        <Input placeholder="2" {...field} />
+                                                        <Input type="number" placeholder="2" {...field} />
+                                                    </FormControl>
+                                                    <FormMessage/>
+                                                </FormItem>
+                                            )}
+                                        />
+
+                                        <FormField
+                                            control={unitForm.control}
+                                            name="garages"
+                                            render={({field}) => (
+                                                <FormItem >
+                                                    <FormLabel>Garage Spaces</FormLabel>
+                                                    <FormControl>
+                                                        <Input type="number" placeholder="2" {...field} />
                                                     </FormControl>
                                                     <FormMessage/>
                                                 </FormItem>

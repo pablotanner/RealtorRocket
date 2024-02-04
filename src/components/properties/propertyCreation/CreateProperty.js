@@ -18,6 +18,7 @@ import UnitForm from "./UnitForm.js";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../../ui/select.tsx";
 import {useCreatePropertyMutation} from "../../../services/api/propertyApi.js";
 import {useNavigate} from "react-router-dom";
+import ReviewCard from "./ReviewCard.js";
 
 
 const realEstateTypes = {
@@ -43,7 +44,6 @@ const CreateProperty = (props) => {
     const [page, setPage] = useState(0);
 
     const [rentalConfig, setRentalConfig] = useState(null);
-
 
     const [unitFormData, setUnitFormData] = useState([{
         unitNumber: null,
@@ -246,7 +246,9 @@ const CreateProperty = (props) => {
                                                             <FormItem>
                                                                 <FormLabel>Land Size (in m<sup>2</sup>)</FormLabel>
                                                                 <FormControl>
-                                                                    <Input placeholder="200" {...field} />
+                                                                    <Input
+                                                                        type="number"
+                                                                        placeholder="200" {...field} />
                                                                 </FormControl>
                                                                 <FormMessage/>
                                                             </FormItem>
@@ -415,7 +417,7 @@ const CreateProperty = (props) => {
                                                 </TabsTrigger>
                                             ))}
                                             { unitFormData.length < 5 && <Button className="py-2" variant="outline" onClick={(event) => {event.preventDefault(); event.stopPropagation(); addUnitForm() }}><PlusCircle className="w-4 h-4"/> </Button>}
-                                            { unitFormData.length > 1 && <Button className="py-2" variant="outline" onClick={() => removeUnitForm()}><MinusCircle className="w-4 h-4"/> </Button>}
+                                            { unitFormData.length > 1 && <Button className="py-2" variant="outline" onClick={() => {event.preventDefault(); event.stopPropagation(); removeUnitForm() }}><MinusCircle className="w-4 h-4"/> </Button>}
 
                                         </TabsList>
 
@@ -454,15 +456,9 @@ const CreateProperty = (props) => {
                                 <div className="text-xl font-600">
                                     Review
                                 </div>
-                                <div>
-                                    You are about to create a property with the following details:
-                                    <div>
-                                        - {propertyForm.getValues().title || "No Title"}
-                                    </div>
-                                    <div>
-                                       - {unitFormData.length} Unit(s)
-                                    </div>
-                                </div>
+                                Please review the information you have entered and make sure everything is correct.
+
+                                <ReviewCard propertyData={propertyForm.getValues()} unitData={unitFormData} rentalType={rentalConfig} />
 
                                 {/*If form validation error occurs, tell them to go check it out */}
                                 <div hidden={Object.keys(propertyForm.formState.errors).length === 0}>

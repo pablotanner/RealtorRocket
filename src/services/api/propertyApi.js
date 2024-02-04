@@ -51,6 +51,23 @@ export const propertyApi = createApi({
                 url: '/properties/' + id,
                 method: 'DELETE',
             }),
+            // API returns back the updated user, so we can use that to update the cache
+            async onQueryStarted(arg, { queryFulfilled }) {
+                queryFulfilled
+                    .then(() => {
+                        toast({
+                            title: "Success",
+                            description: "Property deleted successfully",
+                        });
+                    })
+                    .catch(() => {
+                        toast({
+                            title: "Uh oh! Something went wrong.",
+                            description: "There was a problem with your request.",
+                            variant: "destructive",
+                        });
+                    })
+            },
             invalidatesTags: ['Properties'],
         }),
     })
