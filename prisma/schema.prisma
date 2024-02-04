@@ -172,7 +172,8 @@ model User {
 
   // Additional info
   title   String?
-  picture Image?
+  avatar  String?       @map("avatar") // profile picture
+  images  Image[]
   phone   String?
   website String?
   company String?
@@ -436,15 +437,15 @@ model Image {
 
   // Define a many-to-one relationship between Image and RealEstate.
   realEstateObject   RealEstateObject? @relation(fields: [realEstateObjectId], references: [id])
-  realEstateObjectId Int?
+  realEstateObjectId Int?              @map("real_estate_object_id")
 
   // Define a many-to-one relationship between Image and Unit.
   unit   Unit? @relation(fields: [unitId], references: [id])
   unitId Int?  @map("unit_id")
 
-  // Define a many-to-one relationship between Image and User.
-  user   User? @relation(fields: [userId], references: [id])
-  userId Int?  @unique @map("user_id")
+  // define relationship between uploading user and this image
+  user   User @relation(fields: [userId], references: [id])
+  userId Int  @map("user_id")
 }
 
 model Document {

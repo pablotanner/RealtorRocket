@@ -20,7 +20,7 @@ import {
 import {z} from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "../../ui/form.tsx";
+import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "../../ui/form.tsx";
 import {Accordion, AccordionContent, AccordionItem, AccordionTrigger} from "../../ui/accordion.tsx";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "../../ui/tabs.tsx";
 import UnitForm from "./UnitForm.js";
@@ -105,6 +105,7 @@ const CreateProperty = (props) => {
         state: z.string().or(z.null()),
         zip: z.string().or(z.null()),
         country: z.string().or(z.null()),
+        images: z.string().or(z.null()),
     })
 
     const propertyForm = useForm({
@@ -121,6 +122,7 @@ const CreateProperty = (props) => {
             state: null,
             zip: null,
             country: null,
+            images: null,
         }
     })
 
@@ -130,7 +132,6 @@ const CreateProperty = (props) => {
         setTriggers([...triggers, trigger]);
     };
 
-    console.log(propertyForm.formState.errors)
 
 
     async function onSubmit(data) {
@@ -143,6 +144,10 @@ const CreateProperty = (props) => {
             if (unit.numOfBedrooms) unit.numOfBedrooms = parseInt(unit.numOfBedrooms);
             if (unit.numOfBathrooms) unit.numOfBathrooms = parseInt(unit.numOfBathrooms);
             if (unit.garages) unit.garages = parseInt(unit.garages);
+        }
+
+        if (data.images) {
+            data.images = [{imageUrl: data.images}]
         }
 
         createProperty({...data , units: unitFormData})
@@ -267,9 +272,6 @@ const CreateProperty = (props) => {
                                                         )}
                                                     />
                                                 </div>
-
-
-
                                             </AccordionContent>
                                         </AccordionItem>
 
@@ -344,6 +346,29 @@ const CreateProperty = (props) => {
                                                                 <Input placeholder="USA" {...field} />
                                                             </FormControl>
                                                             <FormMessage/>
+                                                        </FormItem>
+                                                    )}
+                                                />
+                                            </AccordionContent>
+                                        </AccordionItem>
+                                        <AccordionItem value={"images"}>
+                                            <AccordionTrigger>
+                                                Image
+                                            </AccordionTrigger>
+                                            <AccordionContent className="flex flex-col gap-y-2">
+                                                <FormField
+                                                    control={propertyForm.control}
+                                                    name="images"
+                                                    render={({field}) => (
+                                                        <FormItem >
+                                                            <FormLabel>Image URL</FormLabel>
+                                                            <FormControl>
+                                                                <Input placeholder="https://example.com/image.jpg" {...field} />
+                                                            </FormControl>
+                                                            <FormMessage/>
+                                                            <FormDescription>
+                                                                If you don't have an image URL, you can provide one later.
+                                                            </FormDescription>
                                                         </FormItem>
                                                     )}
                                                 />

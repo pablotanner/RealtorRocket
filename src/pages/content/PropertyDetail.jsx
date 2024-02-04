@@ -2,6 +2,7 @@ import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Table
 import {Button} from "../../components/ui/button.tsx";
 import {useDeletePropertyMutation} from "../../services/api/propertyApi.js";
 import {useNavigate, useParams} from "react-router-dom";
+import DetailedPropertyCard from "../../components/properties/DetailedPropertyCard.js";
 
 
 const PropertyDetail = (props) => {
@@ -11,6 +12,26 @@ const PropertyDetail = (props) => {
     const navigate = useNavigate();
 
     const [deleteProperty, {isLoading: isDeleting}] = useDeletePropertyMutation();
+
+
+    return (
+        <div className="flex flex-wrap gap-4">
+            <DetailedPropertyCard property={data?.data} />
+            <Button variant="destructive" isLoading={isDeleting} onClick={() => deleteProperty(id).then(()=> navigate('/properties')) }>
+                Delete
+            </Button>
+            <div className="bg-white p-4 border-2 border-gray-200 shadow-xl w-[400px] h-[400px]">
+                Rental Units
+                <div>
+                    dasdsaads
+                </div>
+            </div>
+        </div>
+
+
+    )
+
+
 
     return (
         <div>

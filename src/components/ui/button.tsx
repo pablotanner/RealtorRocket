@@ -17,7 +17,7 @@ const buttonVariants = cva(
           "outline-dark": "border border-off-black border-2 text-off-black bg-transparent hover:bg-gray-100 hover:text-accent-foreground",
           "outline-primary": "border border-primary-dark border-2 text-off-black bg-transparent hover:bg-white/80 hover:text-accent-foreground",
           secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-          ghost: "hover:bg-accent hover:text-accent-foreground",
+          ghost: "text-off-black hover:bg-accent hover:text-accent-foreground",
           gradient: "bg-gradient-to-r from-primary to-primary-dark hover:from-primary/80 hover:to-primary-dark/80 text-white",
           link: "text-primary underline-offset-4 hover:underline",
           "nav-button": "text-muted-foreground bg-inherit justify-start hover:bg-[#EFEFEF] hover:text-[#000002] font-500",
@@ -25,6 +25,7 @@ const buttonVariants = cva(
       },
       size: {
         default: "h-10 rounded-md px-5 py-2",
+        ghost: "h-10 rounded-xl px-2 -ml-2 py-2",
         sm: "h-9 rounded-md px-4",
         md: "h-8 rounded-md px-4 text-sm",
         lg: "h-9 md:h-11 rounded-md px-3 md:px-8 text-xs md:text-lg",

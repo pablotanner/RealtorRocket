@@ -11,18 +11,19 @@ const Rentals = (props) => {
 
     const navigate = useNavigate()
 
-    const selectedProperty = useSelector((state) => state.userSlice.selectedProperty)
+    const selectedPropertyId = useSelector((state) => state.userSlice.selectedProperty)
 
+    let properties = data?.data || [];
+
+    if (selectedPropertyId !== "All") properties = data?.data?.filter((property) => property.id === selectedPropertyId)
 
     const units = []
 
-    data?.data?.map((property) => {
-        if (selectedProperty === "All" || property.id === selectedProperty) {
-            const temp = property.units.map((unit) => {
-                return {...unit, property: property}
-            })
-            units.push(...temp)
-        }
+    properties.forEach((property) => {
+        const temp = property.units.map((unit) => {
+            return {...unit, property: property}
+        })
+        units.push(...temp)
     })
 
 
@@ -30,6 +31,15 @@ const Rentals = (props) => {
     return (
         <>
             These are your rental properties, so the units of each property are displayed here. You can filter the units by property using the dropdown above.
+            <br />
+
+            {
+                selectedPropertyId !== "All" && (
+                    <div className="text-primary-dark">
+                        Only showing rental units for property with ID: {selectedPropertyId}
+                    </div>
+                )
+            }
             <div className="flex gap-4 max-w-full flex-wrap">
                 {units.map((unit, index) => (
                     <div key={index} className="w-[200px] h-[200px] shadow-xl p-4 hover:bg-gray-50 cursor-pointer" onClick={() => navigate("/properties/" + unit?.property?.id)}>

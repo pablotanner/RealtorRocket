@@ -65,3 +65,45 @@ export async function setCurrency(req, res) {
         res.status(500).json({ message: "Error setting currency" });
     }
 }
+
+
+export async function createImage(req, res) {
+    try {
+        const {imageUrl, realEstateObjectId, leaseId} = req.body;
+
+        const userId = req.user.userId;
+
+        let data = {
+            imageUrl: imageUrl,
+            user: {
+                connect: {
+                    id: userId,
+                }
+            },
+            // Conditionally add fields if they exist
+            ...(realEstateObjectId && {
+                realEstateObject: {
+                    connect: {
+                        id: realEstateObjectId,
+                    }
+                }
+            }),
+            ...(leaseId && {
+                lease: {
+                    connect: {
+                        id: leaseId,
+                    }
+                }
+            })
+        };
+
+        const newImage = await prisma.image.create({
+            data: data,
+        })
+
+        res.status(200).json({data: newImage });
+    }
+    catch (error) {
+        res.status(500).json({ message: "Error creating image" });
+    }
+}

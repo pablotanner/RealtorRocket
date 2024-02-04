@@ -2,6 +2,7 @@ import {useCreatePropertyMutation} from "../../services/api/propertyApi.js";
 import PropertyCard from "../../components/properties/PropertyCard.js";
 import {CardContent, CardFooter} from "../../components/ui/card.tsx";
 import CreateProperty from "../../components/properties/propertyCreation/CreateProperty.js";
+import PropertyTable from "../../components/properties/PropertyTable.tsx";
 
 const Properties = (props) => {
     const {data} = props;
@@ -30,6 +31,7 @@ const Properties = (props) => {
                     </CardFooter>
                 </PropertyCard>
             </div>
+            <PropertyTable properties={data?.data} />
         </>
 
     )

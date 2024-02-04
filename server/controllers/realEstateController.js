@@ -10,7 +10,8 @@ export async function getProperties(req, res) {
                 }
             },
             include: {
-                units: true
+                units: true,
+                images: true
             }
         });
 
@@ -40,6 +41,20 @@ export async function createProperty(req, res) {
             }
         }
 
+
+        // if there are no images, add a default image
+        if (!req.body.images || req.body.images.length === 0) {
+            req.body.images = [{
+                imageUrl: "https://img.onmanorama.com/content/dam/mm/en/lifestyle/decor/images/2023/6/1/house-middleclass.jpg",
+                userId: req.user.userId
+            }]
+        } else {
+            // if there are images, add the userId to each image
+            req.body.images = req.body.images.map(image => ({
+                ...image,
+                userId: req.user.userId
+            }));
+        }
             const newProperty = await prisma.realEstateObject.create({
                 data: {
                     ...req.body,
@@ -50,6 +65,9 @@ export async function createProperty(req, res) {
                     },
                     units: {
                         create: req.body.units
+                    },
+                    images: {
+                        ...(req.body.images ? {create: req.body.images} : {}),
                     }
                 },
             });
@@ -68,6 +86,10 @@ export async function getProperty(req, res) {
             where: {
                 id: parseInt(req.params.id),
             },
+            include: {
+                units: true,
+                images: true
+            }
         });
 
         if (!property) {
