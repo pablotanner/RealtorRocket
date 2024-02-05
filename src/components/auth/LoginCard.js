@@ -17,7 +17,7 @@ const LoginCard = () => {
 
     const navigate = useNavigate();
 
-    const [login, {isError, isLoading, error, isSuccess }] = useLoginMutation();
+    const [login, {isLoading}] = useLoginMutation();
 
 
     const loginFormSchema = z.object({
@@ -34,15 +34,12 @@ const LoginCard = () => {
     })
 
     function onSubmit(zodValues) {
-        login(zodValues)
+        login(zodValues).then((res) => {
+            if (res.data) {
+                navigate('/')
+            }
+        })
     }
-
-    useEffect(() => {
-        if (isSuccess) {
-            navigate('/')
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[isLoading])
 
 
     return (

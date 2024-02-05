@@ -1,5 +1,5 @@
 import {useEffect} from "react";
-import {useRegisterMutation} from "../../services/api/authApi.js";
+import {useLoginMutation, useRegisterMutation} from "../../services/api/authApi.js";
 
 import {Card, CardContent, CardHeader} from "../ui/card.tsx";
 import {AiFillRocket} from "react-icons/ai";
@@ -15,7 +15,9 @@ import {useNavigate} from "react-router-dom";
 
 export const SignUpCard = () => {
     const navigate = useNavigate();
-    const [register, {isLoading, isSuccess }] = useRegisterMutation();
+    const [register, {isLoading}] = useRegisterMutation();
+
+    const [login, {isLoading: loginIsLoading }] = useLoginMutation();
 
 
     const signUpFormSchema = z.object({
@@ -66,16 +68,22 @@ export const SignUpCard = () => {
     })
 
     function onSubmit(data) {
-        register(data)
+        register(data).then((res) => {
+            if (res.data) {
+                login({email: form.getValues('email'), password: form.getValues('password')}).then((res) => {
+                    if (res.data) {
+                        navigate("/")
+                    }
+                    else {
+                        console.log("Login Error: ", res.error)
+                    }
+                })
+            }
+            else {
+                console.log("Sign Up Error: ", res.error)
+            }
+        })
     }
-
-    useEffect(() => {
-        if (isSuccess) {
-            navigate("/login")
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[isLoading])
-
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-white rounded-xl shadow-inner">
@@ -150,7 +158,7 @@ export const SignUpCard = () => {
                                 Already have an account? Log in
                             </Button>
 
-                            <Button type="submit" variant="dark" isLoading={isLoading}>
+                            <Button type="submit" variant="dark" isLoading={isLoading || loginIsLoading}>
                                 Sign Up
                             </Button>
                         </form>
