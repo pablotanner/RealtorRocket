@@ -394,7 +394,7 @@ const CreateProperty = (props) => {
 
                                     <TooltipProvider>
                                         <Tooltip>
-                                            <TooltipTrigger asChild>
+                                            <TooltipTrigger asChild >
                                                 <HelpCircle className="ml-2 w-6 h-6 text-primary-dark cursor-pointer hover:text-primary-dark/70" />
                                             </TooltipTrigger>
                                             <TooltipContent className="max-w-[400px]">

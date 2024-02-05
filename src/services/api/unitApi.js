@@ -25,4 +25,4 @@ export const unitApi = propertyApi.injectEndpoints({
 })
 
 
-export const {useGetUnitsQuery, useGetUnitQuery} = unitApi;
+export const {useGetUnitsQuery, useGetUnitQuery, usePrefetch: usePrefetchUnits} = unitApi;
