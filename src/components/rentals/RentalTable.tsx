@@ -41,7 +41,7 @@ const SendToUnit = ({unit}) => {
     const navigate = useNavigate()
 
     return (
-        <div className="capitalize flex flex-row text-off-black font-600 bg-white w-fit p-2 rounded-full shadow-sm hover:bg-gray-50 cursor-pointer border-2 border-gray-100"
+        <div className="capitalize whitespace-nowrap flex  flex-row text-off-black font-600 bg-white w-fit p-2 rounded-full shadow-sm hover:bg-gray-50 cursor-pointer border-2 border-gray-100"
              onClick={() => navigate(`/rentals/${unit.id}`)}
 
         >
@@ -203,7 +203,7 @@ const columns: ColumnDef<Property>[] = [
             )
              */
             return (
-                <div className="bg-primary-dark items-center w-fit text-white p-2 flex flex-row rounded-2xl cursor-pointer hover:bg-primary-dark/70 transition-all ease-in">
+                <div className="bg-primary-dark whitespace-nowrap items-center w-fit text-white p-2 flex flex-row rounded-2xl cursor-pointer hover:bg-primary-dark/70 transition-all ease-in">
                     <LinkIcon className="w-4 h-4 mr-2"/> John D.
                 </div>
             )
