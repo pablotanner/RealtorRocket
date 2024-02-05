@@ -12,7 +12,7 @@ const Properties = (props) => {
 
     const ViewSelection = () => {
         return (
-            <div className="flex flex-row items-center justify-between gap-4 mb-4">
+            <div className="flex flex-wrap items-center justify-between flex-row gap-4 mb-4">
                 <div className="flex flex-row gap-1 bg-gray-100 w-fit p-[7px] rounded-xl">
                     <Button
                         data-active={view === "detailed"}
