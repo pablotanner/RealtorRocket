@@ -191,7 +191,7 @@ const Navbar = ({children}) => {
             </div>
             <div className={"w-full overflow-x-auto pr-2 ml-2 md:ml-5 xl:pr-14 flex flex-col gap-y-1"}>
                 <Header/>
-                <div className="p-4 bg-white rounded-lg">
+                <div className="p-4 bg-white rounded-lg w-fit">
                     <div className="text-xl md:text-3xl font-500 h-fit mb-6">
                         {currentPage}
                     </div>

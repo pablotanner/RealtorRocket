@@ -139,7 +139,7 @@ const DetailedPropertyTable = ({ properties }) => {
 
     const Header = () => {
         return (
-            <div style={{gridTemplateColumns: "1fr 1fr 1fr 1fr 50px" }} className="bg-white rounded-2xl border-gray-100 border-2 p-4 w-full grid grid-cols-5 gap-8 overflow-x-auto font-500 text-gray-800 h-fit">
+            <div style={{gridTemplateColumns: "minmax(250px,1fr) 1fr 1fr 1fr 50px" }} className="bg-white rounded-2xl border-gray-100 border-2 p-4 w-full grid grid-cols-5 gap-8 overflow-x-auto font-500 text-gray-800 h-fit">
                 <div className="flex flex-row gap-4 w-full items-center">
                     Property
                 </div>
@@ -161,7 +161,7 @@ const DetailedPropertyTable = ({ properties }) => {
 
     const PropertyRow = ({ property, key }) => {
         return (
-            <div key={key} style={{gridTemplateColumns: "1fr 1fr 1fr 1fr 50px" }} className="bg-white rounded-2xl border-gray-100 border-2 p-4 w-full grid grid-cols-5 gap-8 overflow-auto max-h-fit">
+            <div key={key} style={{gridTemplateColumns: "minmax(250px,1fr) 1fr 1fr 1fr 50px" }} className="bg-white rounded-2xl border-gray-100 border-2 p-4 w-full grid grid-cols-5 gap-8  ">
                 <div className="flex flex-row gap-4 w-full items-center">
                     <img src={property?.images[0].imageUrl} className="w-20 h-20 object-cover rounded-sm hover:opacity-75 cursor-pointer"
                          onClick={() => navigate(`/properties/${property?.id}`)} alt="Property Image"
@@ -182,7 +182,6 @@ const DetailedPropertyTable = ({ properties }) => {
                 </div>
 
                 <div className="flex flex-row gap-2 flex-wrap items-center">
-                    <div className="flex flex-row flex-wrap gap-2">
                         {property.units.map((unit, index) => {
                             let unitLabel = `Unit ${unit?.id}`
                             if (property?.units?.length === 1) {
@@ -196,8 +195,6 @@ const DetailedPropertyTable = ({ properties }) => {
                                 </div>
                             )
                         })}
-                    </div>
-
                 </div>
 
 
