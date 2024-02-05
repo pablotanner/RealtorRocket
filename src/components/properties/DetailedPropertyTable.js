@@ -161,7 +161,7 @@ const DetailedPropertyTable = ({ properties }) => {
 
     const PropertyRow = ({ property, key }) => {
         return (
-            <div key={key} style={{gridTemplateColumns: "minmax(250px, 1fr) 1fr 1fr 1fr 50px" }} className="bg-white rounded-2xl border-gray-100 border-2 p-4 w-full grid grid-cols-5 gap-8 overflow-auto max-h-fit">
+            <div key={key} style={{gridTemplateColumns: "minmax(250px, 1fr) 1fr 1fr 1fr 50px" }} className="bg-white rounded-2xl border-gray-100 border-2 p-4 w-full grid grid-cols-5 gap-8 overflow-auto">
                 <div className="flex flex-row gap-4 w-full items-center">
                     <img src={property?.images[0].imageUrl} className="w-20 h-20 object-cover rounded-sm hover:opacity-75 cursor-pointer"
                          onClick={() => navigate(`/properties/${property?.id}`)} alt="Property Image"
@@ -181,26 +181,29 @@ const DetailedPropertyTable = ({ properties }) => {
                     {getLocation(property)}
                 </div>
 
-                <div className="flex flex-row gap-2 flex-wrap h-[100%]  items-center">
-                    {property.units.map((unit, index) => {
-                        let unitLabel = `Unit ${unit?.id}`
-                        if (property?.units?.length === 1) {
-                            unitLabel = "Single Unit"
-                        }
-                        return (
-                            <div key={index} className="flex flex-col gap-2 bg-indigo-100 whitespace-nowrap font-400 text-white h-fit p-1 rounded-md hover:bg-indigo-200 cursor-pointer">
-                                <p className="text-gray-800">
-                                    {unitLabel}
-                                </p>
-                            </div>
-                        )
-                    })}
+                <div className="flex flex-row gap-2 flex-wrap items-center">
+                    <div>
+                        {property.units.map((unit, index) => {
+                            let unitLabel = `Unit ${unit?.id}`
+                            if (property?.units?.length === 1) {
+                                unitLabel = "Single Unit"
+                            }
+                            return (
+                                <div key={index} className="flex flex-col gap-2 bg-indigo-100 whitespace-nowrap font-400 text-white h-fit p-1 rounded-md hover:bg-indigo-200 cursor-pointer">
+                                    <p className="text-gray-800">
+                                        {unitLabel}
+                                    </p>
+                                </div>
+                            )
+                        })}
+                    </div>
+
                 </div>
 
 
                 {getOccupancy(property)}
 
-                <div className="self-start sticky flex items-center h-full ">
+                <div className="self-start sticky flex items-center ">
                     <OptionsMenu property={property}/>
                 </div>
 
