@@ -9,6 +9,9 @@ export async function getProperties(req, res) {
                     userId: req.user.userId
                 }
             },
+            orderBy: {
+                createdAt: "desc"
+            },
             include: {
                 units: true,
                 images: true

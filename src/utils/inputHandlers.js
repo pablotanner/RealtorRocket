@@ -30,6 +30,7 @@ export const numberToLiteral = (value) => {
     }
 
     const numberLiterals = [
+        'Zero',
         'One',
         'Two',
         'Three',
@@ -50,5 +51,3 @@ export const numberToLiteral = (value) => {
     }
     return numberLiterals[value];
 }
-
-console.log(numberToLiteral(2))

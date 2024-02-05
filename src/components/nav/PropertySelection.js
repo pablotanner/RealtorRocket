@@ -1,6 +1,6 @@
 import {Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue} from "../ui/select.tsx";
 import {useGetPropertiesQuery} from "../../services/api/propertyApi.js";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {selectProperty} from "../../services/store/userSlice.js";
 
 const PropertySelection = () => {
@@ -39,7 +39,7 @@ const PropertySelection = () => {
                     <SelectItem value="All" defaultChecked={true}>
                         All Properties
                     </SelectItem>
-                    {properties.map(property => {
+                    {properties?.map(property => {
                         return (
                             <SelectItem
                                 value={property.value}
