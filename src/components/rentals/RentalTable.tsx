@@ -171,6 +171,7 @@ const columns: ColumnDef<Property>[] = [
             title: "Property",
         },
         cell: ({ row }) => {
+            // @ts-expect-error - TS doesn't understand that we're using a custom accessor
             const property = row?.original?.realEstateObject;
             return (
             <div className="capitalize font-500">
@@ -183,6 +184,7 @@ const columns: ColumnDef<Property>[] = [
         accessorKey: "status",
         header: "Status",
         cell: ({ row }) => (
+            // @ts-expect-error - TS doesn't understand that we're using a custom accessor
             <div className="capitalize">{row.getValue("status").toLowerCase()}</div>
         ),
         meta: {
@@ -274,6 +276,7 @@ const RentalTable = ({ units  }) => {
                                             column.toggleVisibility(!!value)
                                         }
                                     >
+                                        {/*// @ts-expect-error - TS doesn't understand that we're using a custom accessor*/}
                                         {column.columnDef.meta?.title ?? column.id}
                                     </DropdownMenuCheckboxItem>
                                 )
