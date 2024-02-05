@@ -6,6 +6,7 @@ import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {Button} from "../../components/ui/button.tsx";
 import {PlusIcon} from "lucide-react";
+import RentalTable from "../../components/rentals/RentalTable.tsx";
 
 
 const Rentals = (props) => {
@@ -39,21 +40,9 @@ const Rentals = (props) => {
                     </div>
                 )
             }
-            <div className="flex gap-4 max-w-full flex-wrap">
-                {units.map((unit, index) => (
-                    <div key={index} className="w-[200px] h-[200px] rounded-3xl shadow-xl p-4 hover:bg-gray-50 cursor-pointer" onClick={() => navigate("/rentals/" + unit?.id)}>
-                        <div className="flex flex-col gap-2">
-                            <div className="font-600">
-                                Property: {unit.realEstateObject?.title}
-                            </div>
-                            <div>
-                                Unit ID: {unit.id}
-                            </div>
+            <div className="flex gap-4 flex-wrap">
+                <RentalTable units={units} />
 
-                            <PropertyStatus status={unit.status} className="w-fit" />
-                        </div>
-                    </div>
-                    ))}
 
             </div>
         </>

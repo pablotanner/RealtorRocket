@@ -12,6 +12,7 @@ import {
     DropdownMenuTrigger
 } from "../ui/dropdown-menu.tsx";
 import {useNavigate} from "react-router-dom";
+import {RealEstateType} from "../../utils/magicNumbers.js";
 
 
 const DetailedPropertyTable = ({ properties }) => {
@@ -171,7 +172,7 @@ const DetailedPropertyTable = ({ properties }) => {
                             {property?.title}
                         </h>
                         <p className="text-gray-500">
-                            {property.realEstateType}
+                            {RealEstateType[property.realEstateType]}
                         </p>
                     </div>
                 </div>

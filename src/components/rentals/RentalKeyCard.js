@@ -3,7 +3,7 @@ import {Label} from "../ui/label.tsx";
 import {moneyParser} from "../../utils/inputHandlers.js";
 
 
-const RentalCard = ({unit, isSingleUnit}) => {
+const RentalKeyCard = ({unit, isSingleUnit}) => {
 
 
 
@@ -46,11 +46,9 @@ const RentalCard = ({unit, isSingleUnit}) => {
                     </h3>
                 </div>
 
-                <p>{unit?.numOfRooms}</p>
-                <p>{unit?.numOfBathrooms}</p>
             </CardContent>
         </Card>
     )
 }
 
-export default RentalCard;
+export default RentalKeyCard;

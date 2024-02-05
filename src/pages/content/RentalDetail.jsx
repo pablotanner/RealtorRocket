@@ -1,6 +1,6 @@
 import {useNavigate, useParams} from "react-router-dom";
 import DetailedPropertyCard from "../../components/properties/DetailedPropertyCard.js";
-import RentalCard from "../../components/rentals/RentalCard.js";
+import RentalKeyCard from "../../components/rentals/RentalKeyCard.js";
 import {Label} from "../../components/ui/label.tsx";
 import {BathIcon, BedIcon, CarFront, LandPlot} from "lucide-react";
 import {numberToLiteral} from "../../utils/inputHandlers.js";
@@ -21,7 +21,7 @@ const RentalDetail = (props) => {
                 <DetailedPropertyCard property={data?.data?.realEstateObject}/>
 
                 <div className="flex flex-wrap flex-grow flex-row gap-x-6 gap-y-8">
-                    <RentalCard unit={data?.data} isSingleUnit={data?.data?.realEstateObject?.units.length === 1}/>
+                    <RentalKeyCard unit={data?.data} isSingleUnit={data?.data?.realEstateObject?.units.length === 1}/>
 
                     <TenantCard/>
                 </div>
@@ -87,7 +87,7 @@ const RentalDetail = (props) => {
                         Lease History
                     </Label>
                     <p className="text-gray-500 font-300">
-                        No lease history available
+                        No lease history available.
                     </p>
                 </div>
 

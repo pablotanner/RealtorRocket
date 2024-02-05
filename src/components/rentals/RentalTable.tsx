@@ -9,13 +9,12 @@ import {
 import {DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuCheckboxItem} from "../ui/dropdown-menu.tsx";
 import {Checkbox} from "../ui/checkbox.tsx";
 import {Button} from "../ui/button.tsx";
-import {ArrowUpDown, ChevronDown, MoreHorizontal} from "lucide-react";
+import {ArrowUpDown, ChevronDown, LinkIcon, MoreHorizontal} from "lucide-react";
 import {useState} from "react";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "../ui/table.tsx";
 import {Input} from "../ui/input.tsx";
 import {FaMagnifyingGlass} from "react-icons/fa6";
-import {RealEstateType} from "../../utils/magicNumbers.js"
-import {moneyParser} from "../../utils/inputHandlers.js";
+import {useNavigate} from "react-router-dom";
 
 class Lease {
     id: string;
@@ -32,9 +31,27 @@ class Unit {
     numOfBedrooms: number;
     rentalPrice: number;
     status: string;
+    realEstateObject: Property;
+    realEstateObjectId: string;
     amenities: Amenity[];
     leases: Lease[];
 }
+
+const SendToUnit = ({unit}) => {
+    const navigate = useNavigate()
+
+    return (
+        <div className="capitalize flex flex-row text-off-black font-600 bg-white w-fit p-2 rounded-full shadow-sm hover:bg-gray-50 cursor-pointer border-2 border-gray-100"
+             onClick={() => navigate(`/rentals/${unit.id}`)}
+
+        >
+            <LinkIcon className="w-4 h-4 mr-2" />
+            View Unit
+        </div>
+    )
+
+}
+
 
 class Amenity {
     id: string;
@@ -53,6 +70,42 @@ class Property {
     units: Unit[];
     amenities: Amenity[];
 }
+
+const RentalTableDropdown = ({unit}) => {
+    const navigate = useNavigate()
+
+    return (
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                    <span className="sr-only">Open menu</span>
+                    <MoreHorizontal className="h-4 w-4" />
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                <DropdownMenuItem
+                    onClick={() => navigator.clipboard.writeText(unit.id)}
+                >
+                    Copy ID
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                    onClick={() => navigate(`/properties/${unit.realEstateObjectId}`)}
+                >View Property</DropdownMenuItem>
+                <DropdownMenuItem
+                    // Switch to tenant id
+                    onClick={() => navigate(`/rentals/${unit.id}`)}
+                >
+                    View Rental
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
+    )
+
+}
+
+
 
 const columns: ColumnDef<Property>[] = [
     {
@@ -79,14 +132,29 @@ const columns: ColumnDef<Property>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: "realEstateType",
-        header: "Type of Real Estate",
+        id: "unit",
+        header: "Unit",
+        cell: ({ row })=> {
+            return (
+                <SendToUnit unit={row.original} />
+            )
+        },
+        enableSorting: false,
+        enableHiding: false,
+    },
+    {
+        accessorKey: "id",
+        id: "id",
+        header: "Unit ID",
         cell: ({ row }) => (
-            <div className="capitalize">{RealEstateType[row.getValue("realEstateType")]}</div>
+            <div className="capitalize">{row.getValue("id")}</div>
         ),
+        meta: {
+            title: "Unit ID",
+        },
     },
     {
-        accessorKey: "title",
+        accessorKey: "realEstateObject.id",
         header: ({ column }) => {
             return (
                 <Button
@@ -94,130 +162,69 @@ const columns: ColumnDef<Property>[] = [
                     size="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Title
+                    Property
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
             )
         },
-        cell: ({ row }) => <div className="lowercase">{row.getValue("title")}</div>,
-    },
-    {
-        accessorKey: "description",
-        header: "Description",
-        cell: ({ row }) => <div className="lowercase">{row.getValue("description")}</div>,
-    },
-    {
-        accessorKey: "marketPrice",
-        header: ({ column }) => {
+        meta: {
+            title: "Property",
+        },
+        cell: ({ row }) => {
+            const property = row?.original?.realEstateObject;
             return (
-                <Button
-                    variant="ghost"
-                    size="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Market Price
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            )
-        },
-        cell: ({ row }) => <div>{moneyParser(row.getValue("marketPrice"))}</div>,
-    },
-    {
-        accessorKey: "lotSize",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    size="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Lot Size
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            )
-        },
-        cell: ({ row }) => <div className="lowercase">{row.getValue("lotSize")} m<sup>2</sup></div>,
-    },
-    {
-        accessorKey: "yearBuilt",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    size="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Year Built
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            )
-        },
-        cell: ({ row }) => <div className="lowercase">{row.getValue("yearBuilt")}</div>,
-    },
-
-    /*{
-        accessorKey: "amenities",
-        header: "Amenities",
-        cell: ({ row }) => (
-            <div className="lowercase">
-                {row.getValue("amenities").map((amenity: Amenity) => amenity.name).join(", ")}
+            <div className="capitalize font-500">
+                {property?.title}
             </div>
-        ),
-    },
-
-     */
-    {
-        accessorKey: "units",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    size="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Units
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
             )
         },
-        // @ts-expect-error - TS doesn't understand that we're using a custom accessor
-        cell: ({ row }) => <div className="lowercase">{row.getValue("units").length} units</div>,
     },
+    {
+        accessorKey: "status",
+        header: "Status",
+        cell: ({ row }) => (
+            <div className="capitalize">{row.getValue("status").toLowerCase()}</div>
+        ),
+        meta: {
+            title: "Status",
+        },
+    },
+
+    {
+        accessorKey: "currentTenant",
+        header: "Current Tenant",
+        cell: ({ row }) => {
+            /*
+            const lease = row?.original?.leases[0];
+            return (
+                <div className="capitalize">{lease?.id}</div>
+            )
+             */
+            return (
+                <div className="bg-primary-dark items-center w-fit text-white p-2 flex flex-row rounded-2xl cursor-pointer hover:bg-primary-dark/70 transition-all ease-in">
+                    <LinkIcon className="w-4 h-4 mr-2"/> John D.
+                </div>
+            )
+        },
+        meta: {
+            title: "Current Tenant",
+        },
+    },
+
+
     {
         id: "actions",
         enableHiding: false,
         cell: ({ row }) => {
-            const property = row.original
+            const unit = row.original
 
-            return (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
-                            <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem
-                            onClick={() => navigator.clipboard.writeText(property.id)}
-                        >
-                            Copy ID
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                            //onClick={() => navigate(`/properties/${property.id}`)}
-                        >View Property</DropdownMenuItem>
-
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            )
+            return <RentalTableDropdown unit={unit} />
         },
     },
 ]
 
 // eslint-disable-next-line react/prop-types
-const PropertyTable = ({ properties  }) => {
+const RentalTable = ({ units  }) => {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
@@ -225,7 +232,7 @@ const PropertyTable = ({ properties  }) => {
     const [rowSelection, setRowSelection] = useState({})
 
     const table = useReactTable({
-        data: properties,
+        data: units,
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
@@ -244,7 +251,7 @@ const PropertyTable = ({ properties  }) => {
     })
 
     return (
-        <div className="mt-6 flex flex-col gap-y-2">
+        <div className="mt-6 flex flex-col gap-y-2 w-full">
             {/* Header */}
             <div className="flex flex-row justify-end gap-4">
                 <DropdownMenu>
@@ -267,7 +274,7 @@ const PropertyTable = ({ properties  }) => {
                                             column.toggleVisibility(!!value)
                                         }
                                     >
-                                        {column.id}
+                                        {column.columnDef.meta?.title ?? column.id}
                                     </DropdownMenuCheckboxItem>
                                 )
                             })}
@@ -276,10 +283,11 @@ const PropertyTable = ({ properties  }) => {
                 <div className="relative flex bg-gray-50 rounded-md items-center max-w-sm">
                     <FaMagnifyingGlass className="absolute top-3 left-3 h-4 w-4 text-gray-400" />
                     <Input
-                        placeholder="Search Property"
-                        value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+                        disabled
+                        placeholder="Search Unit"
+                        value={(table.getColumn("id")?.getFilterValue() as string) ?? ""}
                         onChange={(event) =>
-                            table.getColumn("title")?.setFilterValue(event.target.value)
+                            table.getColumn("id")?.setFilterValue(event.target.value)
                         }
                         className="pl-10 text-md bg-inherit"
                     />
@@ -340,4 +348,4 @@ const PropertyTable = ({ properties  }) => {
     )
 }
 
-export default PropertyTable;
+export default RentalTable;

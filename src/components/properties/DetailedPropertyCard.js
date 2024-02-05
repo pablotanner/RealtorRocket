@@ -29,7 +29,7 @@ const DetailedPropertyCard = ({ property }) => {
             data.push("Built in " + property.yearBuilt);
         }
         if (property?.lotSize) {
-            data.push(property.lotSize + "Sq. m.");
+            data.push(property.lotSize + " Sq. m.");
         }
         if (property?.marketPrice) {
             data.push(moneyParser(property.marketPrice));

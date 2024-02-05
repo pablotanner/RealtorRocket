@@ -12,8 +12,11 @@ const PageWrapper = (props) => {
 
     if (isLoading) {
         return (
-            <div className="flex items-center justify-center h-screen w-screen">
-                <div className="rounded-md h-12 w-12 border-4 border-t-4 border-blue-500 animate-spin"></div>
+            <div className='flex space-x-2 ml-4 mt-4  bg-white h-screen'>
+                <span className='sr-only'>Loading...</span>
+                <div className='h-2 w-2 bg-primary-dark rounded-full animate-bounce [animation-delay:-0.3s]'></div>
+                <div className='h-2 w-2 bg-primary-dark rounded-full animate-bounce [animation-delay:-0.15s]'></div>
+                <div className='h-2 w-2 bg-primary-dark rounded-full animate-bounce'></div>
             </div>
         )
     }

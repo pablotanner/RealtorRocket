@@ -40,8 +40,7 @@ const Properties = (props) => {
     return (
         <div>
             <div className="text-lg mb-4">
-                These are your properties. You can add new properties by clicking the plus button below. <br/>
-                If you want to create a rental unit for an existing property, visit the Rentals page.
+                These are your properties, for more information such as the units of each property, click on the property.
             </div>
 
             <ViewSelection />
