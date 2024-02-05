@@ -2,7 +2,6 @@ import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Table
 import {Button} from "../../components/ui/button.tsx";
 import {useDeletePropertyMutation} from "../../services/api/propertyApi.js";
 import {useNavigate, useParams} from "react-router-dom";
-import DetailedPropertyCard from "../../components/properties/DetailedPropertyCard.js";
 
 
 const PropertyDetail = (props) => {

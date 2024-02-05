@@ -7,7 +7,7 @@ const TenantCard = ({ tenant }) => {
 
 
     return (
-        <Card className="shadow-lg basis-[400px]">
+        <Card className="shadow-lg basis-[400px] flex-grow">
             <CardHeader className="flex flex-col items-center gap-2">
                 <CardTitle>
                     Current Tenant

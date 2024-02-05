@@ -62,7 +62,7 @@ const DetailedPropertyCard = ({ property }) => {
 
 
     return (
-        <Card className="max-w-[500px] shadow-xl rounded-xl">
+        <Card className="max-w-[500px] shadow-xl rounded-xl h-fit flex-shrink">
             <CardContent className="px-0">
                 <img
                     src={property.images[0]?.imageUrl}
@@ -75,7 +75,7 @@ const DetailedPropertyCard = ({ property }) => {
                         <div className="text-2xl text-off-black font-500">
                             {property.title}
                         </div>
-                        <div className="text-gray-900 font-300">
+                        <div className="text-gray-900 font-300 mt-1">
                             {property.realEstateType}
                         </div>
                     </div>
