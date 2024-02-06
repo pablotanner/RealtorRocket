@@ -12,6 +12,7 @@ import {Input} from "../ui/input.tsx";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Button} from "../ui/button.tsx";
 import {useNavigate} from "react-router-dom";
+import {KeyRound} from "lucide-react";
 
 const LoginCard = () => {
 
@@ -41,6 +42,19 @@ const LoginCard = () => {
         })
     }
 
+    const DemoAccountButton = () => {
+        return (
+            <Button variant="gradient"
+                    className="absolute top-5"
+                    type="button" onClick={
+                () => onSubmit({email: "demo@account.com", password: "Demo123456"})
+            }>
+                <KeyRound className="w-5 h-5 mr-2"/>
+                Use Demo Account
+            </Button>
+            )
+    }
+
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-white rounded-xl shadow-inner">
@@ -48,6 +62,7 @@ const LoginCard = () => {
                 <CardHeader className="flex justify-center items-center py-10">
                     <AiFillRocket className="w-12 h-12"/>
                     <h1 className="text-3xl">Welcome Back!</h1>
+                    <DemoAccountButton/>
                 </CardHeader>
                     <CardContent className="w-[275px] md:w-[350px]">
                         <Form {...form}>
