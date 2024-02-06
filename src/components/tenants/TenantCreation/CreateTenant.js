@@ -29,6 +29,7 @@ const CreateTenant = (props) => {
         }
     })
 
+
     // Current page / step in tenant creation modal
     const [page, setPage] = useState(0)
 
@@ -96,15 +97,37 @@ const CreateTenant = (props) => {
     }
 
     function confirmTenantCreation() {
+        const parsedLease = {
+            ...leaseData.lease,
+        }
+
+        if (parsedLease.startDate) {
+            parsedLease.startDate = new Date(parsedLease.startDate).toISOString()
+        }
+
+        if (parsedLease.endDate) {
+            parsedLease.endDate = new Date(parsedLease.endDate).toISOString()
+        }
+
+        if (parsedLease.rentalPrice) {
+            parsedLease.rentalPrice = parseFloat(parsedLease.rentalPrice)
+        }
+
+        if (parsedLease.leaseLength) {
+            parsedLease.leaseLength = parseInt(parsedLease.leaseLength)
+        }
+
+
         const body = {
             ...tenantData,
-            ...(leaseData.decision === "new" ? {lease: {...leaseData.lease}, unitId: selectedUnitId
-            } : null)
+            ...(leaseData.decision === "new" ? {lease: {...parsedLease}, unitId: selectedUnitId
+            } : null),
+            unitId: selectedUnitId
         }
 
         const leaseId = leaseData.decision === "existing" ? leaseData.leaseId : null
 
-        createTenant(body, leaseId).then((res) => {
+        createTenant({bodyData:body, leaseId}).then((res) => {
             if (res.data) {
                 setModalOpen(false)
             }
@@ -177,7 +200,7 @@ const CreateTenant = (props) => {
 
                     {page === 2 && (
                         <div>
-                            <AddToLease unitId={selectedUnitId} setLeaseData={setLeaseData}/>
+                            <AddToLease unitId={selectedUnitId} leaseData={leaseData} setLeaseData={setLeaseData}/>
 
                             <div className="w-full flex flex-row gap-4">
                                 <Button onClick={() => setPage(1)} variant="secondary" className="w-full">
@@ -195,8 +218,21 @@ const CreateTenant = (props) => {
                             <p className="text-lg font-500 text-primary-dark">
                                 Tenant: {tenantData?.firstName + " " + tenantData?.lastName}
                             </p>
-                            <p className="font-400">
-                                {leaseData.decision === "new" ? "Creating new Lease" : "Assigning to existing lease: " + leaseData.leaseId }
+                            <p className="font-400" hidden={leaseData.decision === "existing"}>
+                                Creating new lease:
+                                <p hidden={!leaseData.lease?.startDate}>
+                                    Start Date: {leaseData.lease?.startDate}
+                                </p>
+                                <p hidden={!leaseData.lease?.endDate}>
+                                    End Date: {leaseData.lease?.endDate}
+                                </p>
+                                <p hidden={!leaseData.lease?.rentalPrice}>
+                                    Rental Price: {leaseData.lease?.rentalPrice}
+                                </p>
+
+                            </p>
+                            <p className="font-400" hidden={leaseData.decision === "new"}>
+                                {"Assigning to existing lease: " + leaseData.leaseId }
                             </p>
                             <p className="font-400 text-lg text-primary">
                                 Unit: {selectedUnitId}

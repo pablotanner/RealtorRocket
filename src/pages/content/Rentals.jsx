@@ -13,6 +13,7 @@ const Rentals = (props) => {
     const {data} = props;
     const navigate = useNavigate()
 
+
     const selectedPropertyId = useSelector((state) => state.userSlice.selectedProperty)
 
 

@@ -29,7 +29,7 @@ import {useCreatePropertyMutation} from "../../../services/api/propertyApi.js";
 import {useNavigate} from "react-router-dom";
 import ReviewCard from "./ReviewCard.js";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "../../ui/tooltip.tsx";
-import {zodInputStringPipe} from "../../../utils/inputHandlers.js";
+import {zodInputStringPipe} from "../../../utils/formatters.js";
 
 
 const realEstateTypes = {

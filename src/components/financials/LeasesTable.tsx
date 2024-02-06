@@ -9,16 +9,30 @@ import {
 import {DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuCheckboxItem} from "../ui/dropdown-menu.tsx";
 import {Checkbox} from "../ui/checkbox.tsx";
 import {Button} from "../ui/button.tsx";
-import {ArrowUpDown, ChevronDown, MoreHorizontal} from "lucide-react";
+import {ArrowUpDown, ChevronDown, LinkIcon, MoreHorizontal} from "lucide-react";
 import {useState} from "react";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "../ui/table.tsx";
 import {Input} from "../ui/input.tsx";
 import {FaMagnifyingGlass} from "react-icons/fa6";
-import {RealEstateType} from "../../utils/magicNumbers.js"
-import {moneyParser} from "../../utils/formatters.js";
+import {useNavigate} from "react-router-dom";
+import {dateParser, moneyParser} from "../../utils/formatters.js";
+
+class Tenant {
+    id: string;
+    firstName: string;
+    lastName: string;
+}
 
 class Lease {
     id: string;
+    startDate: string;
+    endDate: string;
+    rentalPrice: number;
+    unit: Unit;
+    tenant: Tenant;
+    totalRentPaid: number;
+    totalRentDue: number;
+    lastPaymentDate: string;
 }
 
 class Unit {
@@ -32,29 +46,11 @@ class Unit {
     numOfBedrooms: number;
     rentalPrice: number;
     status: string;
-    amenities: Amenity[];
     leases: Lease[];
 }
 
-class Amenity {
-    id: string;
-    name: string;
-    description: string;
-}
 
-class Property {
-    id: string;
-    realEstateType: string;
-    title: string;
-    description: string;
-    marketPrice: number;
-    lotSize: number;
-    yearBuilt: number;
-    units: Unit[];
-    amenities: Amenity[];
-}
-
-const columns: ColumnDef<Property>[] = [
+const columns: ColumnDef<Lease>[] = [
     {
         id: "select",
         header: ({ table }) => (
@@ -79,145 +75,191 @@ const columns: ColumnDef<Property>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: "realEstateType",
-        header: "Type of Real Estate",
+        accessorKey: "leaseId",
+        id: "leaseId",
+        header: "Lease ID",
         cell: ({ row }) => (
-            <div className="capitalize">{RealEstateType[row.getValue("realEstateType")]}</div>
+            <div className="capitalize">{row?.original?.id}</div>
         ),
-    },
-    {
-        accessorKey: "title",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    size="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Title
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            )
+        meta: {
+            title: "Lease ID",
         },
-        cell: ({ row }) => <div className="lowercase">{row.getValue("title")}</div>,
     },
     {
-        accessorKey: "description",
-        header: "Description",
-        cell: ({ row }) => <div className="lowercase">{row.getValue("description")}</div>,
-    },
-    {
-        accessorKey: "marketPrice",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    size="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Market Price
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            )
-        },
-        cell: ({ row }) => <div>{moneyParser(row.getValue("marketPrice"))}</div>,
-    },
-    {
-        accessorKey: "lotSize",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    size="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Lot Size
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            )
-        },
-        cell: ({ row }) => <div className="lowercase">{row.getValue("lotSize")} m<sup>2</sup></div>,
-    },
-    {
-        accessorKey: "yearBuilt",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    size="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Year Built
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            )
-        },
-        cell: ({ row }) => <div className="lowercase">{row.getValue("yearBuilt")}</div>,
-    },
-
-    /*{
-        accessorKey: "amenities",
-        header: "Amenities",
-        cell: ({ row }) => (
-            <div className="lowercase">
-                {row.getValue("amenities").map((amenity: Amenity) => amenity.name).join(", ")}
-            </div>
-        ),
-    },
-
-     */
-    {
-        accessorKey: "units",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    size="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Units
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            )
-        },
-        // @ts-expect-error - TS doesn't understand that we're using a custom accessor
-        cell: ({ row }) => <div className="lowercase">{row.getValue("units").length} units</div>,
-    },
-    {
-        id: "actions",
-        enableHiding: false,
+        accessorKey: "tenant",
+        id: "tenant",
+        header: "Tenant",
         cell: ({ row }) => {
-            const property = row.original
+            if (row?.original?.tenant) {
+                return (
+                    <div className="capitalize">{row?.original?.tenant?.firstName} {row?.original?.tenant?.lastName}</div>
+                )
+            }
+            else {
+                return (
+                    <div className="capitalize text-red-500">No Tenant</div>
+                )
+            }
 
+        },
+        meta: {
+            title: "Tenant",
+        },
+    },
+    {
+        accessorKey: "startDate",
+        header: ({ column }) => {
             return (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
-                            <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem
-                            onClick={() => navigator.clipboard.writeText(property.id)}
-                        >
-                            Copy ID
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                            //onClick={() => navigate(`/properties/${property.id}`)}
-                        >View Property</DropdownMenuItem>
-
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <Button
+                    variant="ghost"
+                    size="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Start Date
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        },
+        meta: {
+            title: "Start Date",
+        },
+        cell: ({ row }) => {
+            return (
+                <div className="capitalize font-500">
+                    {dateParser(row?.original?.startDate)}
+                </div>
             )
         },
     },
+    {
+        accessorKey: "endDate",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    size="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    End Date
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        },
+        meta: {
+            title: "End Date",
+        },
+        cell: ({ row }) => {
+            return (
+                <div className="capitalize font-500">
+                    {dateParser(row?.original?.endDate)}
+                </div>
+            )
+        },
+    },
+    {
+        accessorKey: "rentalPrice",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    size="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Rental Price
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        },
+        meta: {
+            title: "Rental Price",
+        },
+        cell: ({ row }) => {
+            return (
+                <div className="capitalize font-500">
+                    {moneyParser(row?.original?.rentalPrice)}
+                </div>
+            )
+        },
+    },
+    {
+        accessorKey: "totalRentDue",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    size="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Total Rent Due
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        },
+        meta: {
+            title: "Total Rent Due",
+        },
+        cell: ({ row }) => {
+            return (
+                <div className="capitalize font-500">
+                    {moneyParser(row?.original?.totalRentDue)}
+                </div>
+            )
+        },
+    },
+    {
+        accessorKey: "totalRentPaid",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    size="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Total Rent Paid
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        },
+        meta: {
+            title: "Total Rent Paid",
+        },
+        cell: ({ row }) => {
+            return (
+                <div className="capitalize font-500">
+                    {moneyParser(row?.original?.totalRentPaid)}
+                </div>
+            )
+        },
+    },
+    {
+        accessorKey: "lastPaymentDate",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    size="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Last Payment Date
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        },
+        meta: {
+            title: "Last Payment Date",
+        },
+        cell: ({ row }) => {
+            return (
+                <div className="capitalize font-500">
+                    {row?.original?.lastPaymentDate}
+                </div>
+            )
+        },
+    },
+
 ]
 
-// eslint-disable-next-line react/prop-types
-const PropertyTable = ({ properties  }) => {
+const LeasesTable = ({ leases }) => {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
@@ -225,12 +267,11 @@ const PropertyTable = ({ properties  }) => {
     const [rowSelection, setRowSelection] = useState({})
 
     const table = useReactTable({
-        data: properties,
+        data: leases,
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
         getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         onColumnVisibilityChange: setColumnVisibility,
@@ -244,7 +285,7 @@ const PropertyTable = ({ properties  }) => {
     })
 
     return (
-        <div className="mt-6 flex flex-col gap-y-2">
+        <div className="mt-6 flex flex-col gap-y-2 w-full">
             {/* Header */}
             <div className="flex flex-row justify-end gap-4">
                 <DropdownMenu>
@@ -267,7 +308,8 @@ const PropertyTable = ({ properties  }) => {
                                             column.toggleVisibility(!!value)
                                         }
                                     >
-                                        {column.id}
+                                        {/*// @ts-expect-error - TS doesn't understand that we're using a custom accessor*/}
+                                        {column.columnDef.meta?.title ?? column.id}
                                     </DropdownMenuCheckboxItem>
                                 )
                             })}
@@ -276,10 +318,11 @@ const PropertyTable = ({ properties  }) => {
                 <div className="relative flex bg-gray-50 rounded-md items-center max-w-sm">
                     <FaMagnifyingGlass className="absolute top-3 left-3 h-4 w-4 text-gray-400" />
                     <Input
-                        placeholder="Search Property"
-                        value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+                        disabled
+                        placeholder="Search Lease"
+                        value={(table.getColumn("leaseId")?.getFilterValue() as string) ?? ""}
                         onChange={(event) =>
-                            table.getColumn("title")?.setFilterValue(event.target.value)
+                            table.getColumn("leaseId")?.setFilterValue(event.target.value)
                         }
                         className="pl-10 text-md bg-inherit"
                     />
@@ -340,4 +383,4 @@ const PropertyTable = ({ properties  }) => {
     )
 }
 
-export default PropertyTable;
+export default LeasesTable;

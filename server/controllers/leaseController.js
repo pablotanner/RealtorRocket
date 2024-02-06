@@ -25,7 +25,10 @@ export async function getLeases(req, res) {
             include: {
                 tenant: true,
                 unit: true
-            }
+            },
+            orderBy: {
+                createdAt: "desc"
+            },
         });
 
         res.status(200).json({data: leases });

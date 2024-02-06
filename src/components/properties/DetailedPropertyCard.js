@@ -1,7 +1,7 @@
 import { Card,
     CardContent,
  } from "../ui/card.tsx";
-import {moneyParser} from "../../utils/inputHandlers.js";
+import {moneyParser} from "../../utils/formatters.js";
 import {useNavigate} from "react-router-dom";
 import {LinkIcon} from "lucide-react";
 import {Button} from "../ui/button.tsx";

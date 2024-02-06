@@ -3,7 +3,7 @@ import DetailedPropertyCard from "../../components/properties/DetailedPropertyCa
 import RentalKeyCard from "../../components/rentals/RentalKeyCard.js";
 import {Label} from "../../components/ui/label.tsx";
 import {BathIcon, BedIcon, CarFront, LandPlot} from "lucide-react";
-import {numberToLiteral} from "../../utils/inputHandlers.js";
+import {numberToLiteral} from "../../utils/formatters.js";
 import {FaStairs} from "react-icons/fa6";
 import TenantCard from "../../components/rentals/TenantCard.js";
 

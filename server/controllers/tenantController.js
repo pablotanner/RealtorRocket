@@ -59,6 +59,9 @@ export async function getTenants(req, res) {
                     }
                 }
             },
+            orderBy: {
+                createdAt: "desc"
+            },
             include: {
                 leases: true
             }
@@ -95,5 +98,52 @@ export async function getTenant(req, res) {
     }
     catch (error) {
         res.status(500).json({ message: "Error getting tenant" });
+    }
+}
+
+export async function deleteTenant(req, res) {
+    try {
+        const tenant = await prisma.tenant.findUnique({
+            where: {
+                id: parseInt(req.params.id),
+            },
+            include: {
+                leases: true
+            }
+        });
+
+        if (!tenant) {
+            return res.status(404).json({ message: "Tenant not found" });
+        }
+
+        // Disconnect the tenant from each lease
+        for (const lease of tenant.leases) {
+            await prisma.lease.update({
+                where: {
+                    id: lease.id
+                },
+
+                data: {
+                    tenant: {
+                        disconnect: {
+                            id: tenant.id
+                        }
+                    }
+                }
+            });
+        }
+
+        // Delete the tenant
+        const deletedTenant = await prisma.tenant.delete({
+            where: {
+                id: tenant.id
+            }
+        });
+
+        res.status(200).json({data: deletedTenant });
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json({ message: "Error deleting tenant" });
     }
 }

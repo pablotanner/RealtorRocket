@@ -23,13 +23,13 @@ export const tenantApi = authApi.injectEndpoints({
             providesTags: (result, error, id) => [{ type: 'Tenants', id }],
         }),
         createTenant: build.mutation({
-            query: (body, leaseId) => {
+            query: ({bodyData, leaseId}) => {
                 const queryParams = leaseId ? "?leaseId=" + leaseId : "";
 
                 return {
                     url: `/tenants${queryParams}`,
                     method: 'POST',
-                    body,
+                    body: bodyData,
                 }
             },
             async onQueryStarted(arg, { queryFulfilled }) {
@@ -48,10 +48,33 @@ export const tenantApi = authApi.injectEndpoints({
                         });
                     })
             },
+            invalidatesTags: ['Tenants', 'Leases']
+        }),
+        deleteTenant: build.mutation({
+            query: (id) => ({
+                url: `/tenants/${id}`,
+                method: 'DELETE',
+            }),
+            async onQueryStarted(arg, { queryFulfilled }) {
+                queryFulfilled
+                    .then(() => {
+                        toast({
+                            title: "Success",
+                            description: "Tenant deleted successfully",
+                        });
+                    })
+                    .catch(() => {
+                        toast({
+                            title: "Uh oh! Something went wrong.",
+                            description: "There was a problem with your request, please try again.",
+                            variant: "destructive",
+                        });
+                    })
+            },
             invalidatesTags: ['Tenants']
-        })
+        }),
     })
 })
 
 
-export const {useGetTenantsQuery, useGetTenantQuery, useCreateTenantMutation} = tenantApi;
+export const {useGetTenantsQuery, useGetTenantQuery, useCreateTenantMutation, useDeleteTenantMutation} = tenantApi;

@@ -57,7 +57,7 @@ router.post('/leases', authenticateToken, leaseController.createLease)
 router.get('/tenants', authenticateToken, tenantController.getTenants)
 router.post('/tenants', authenticateToken, tenantController.createTenant)
 router.get('/tenants/:id', authenticateToken, tenantController.getTenant)
-
+router.delete('/tenants/:id', authenticateToken, tenantController.deleteTenant)
 
 try {
     app.get('/users', authenticateToken, async (req, res) => {

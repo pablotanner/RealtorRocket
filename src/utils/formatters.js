@@ -13,7 +13,7 @@ export const zodInputStringPipe = (zodPipe) =>
 
 
 export const moneyParser = (value) => {
-    if (value === null) {
+    if (value === null || value === undefined) {
         return 'N/A'
     }
     return value.toLocaleString('en-US', {
@@ -50,4 +50,12 @@ export const numberToLiteral = (value) => {
         return String(value)
     }
     return numberLiterals[value];
+}
+
+
+export const dateParser = (value) => {
+    if (value === null || value === undefined) {
+        return 'N/A'
+    }
+    return new Date(value).toLocaleDateString('en-US');
 }

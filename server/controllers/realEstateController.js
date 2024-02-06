@@ -142,10 +142,17 @@ export async function getUnits(req, res) {
                     }
                 }
             },
+            orderBy: {
+                createdAt: "desc"
+            },
             include: {
                 realEstateObject: true,
                 images: true,
-                leases: true
+                leases: {
+                    include: {
+                        tenant: true
+                    }
+                }
             }
         });
 

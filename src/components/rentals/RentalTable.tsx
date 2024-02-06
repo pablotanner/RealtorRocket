@@ -15,10 +15,21 @@ import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "../
 import {Input} from "../ui/input.tsx";
 import {FaMagnifyingGlass} from "react-icons/fa6";
 import {useNavigate} from "react-router-dom";
-import {moneyParser} from "../../utils/inputHandlers.js";
+import {moneyParser} from "../../utils/formatters.js";
 
 class Lease {
     id: string;
+    startDate: string;
+    endDate: string;
+    tenant: Tenant;
+}
+
+class Tenant {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
 }
 
 class Unit {
@@ -38,11 +49,12 @@ class Unit {
     leases: Lease[];
 }
 
+
 const SendToUnit = ({unit}) => {
     const navigate = useNavigate()
 
     return (
-        <div className="capitalize whitespace-nowrap flex  flex-row text-off-black font-600 bg-white w-fit p-2 rounded-full shadow-sm hover:bg-gray-50 cursor-pointer border-2 border-gray-100"
+        <div className="capitalize whitespace-nowrap flex  flex-row text-off-black font-600 bg-white w-fit p-2 py-1 rounded-full shadow-sm hover:bg-gray-50 cursor-pointer border-2 border-gray-100"
              onClick={() => navigate(`/rentals/${unit.id}`)}
 
         >
@@ -108,7 +120,7 @@ const RentalTableDropdown = ({unit}) => {
 
 
 
-const columns: ColumnDef<Property>[] = [
+const columns: ColumnDef<Unit>[] = [
     {
         id: "select",
         header: ({ table }) => (
@@ -172,7 +184,6 @@ const columns: ColumnDef<Property>[] = [
             title: "Property",
         },
         cell: ({ row }) => {
-            // @ts-expect-error - TS doesn't understand that we're using a custom accessor
             const property = row?.original?.realEstateObject;
             return (
             <div className="capitalize font-500">
@@ -203,10 +214,17 @@ const columns: ColumnDef<Property>[] = [
                 <div className="capitalize">{lease?.id}</div>
             )
              */
+
+            if (row?.original?.leases?.length > 0) {
+                // Tenant name
+                return (
+                    <div className="bg-primary-dark whitespace-nowrap items-center w-fit text-white p-2 flex flex-row rounded-2xl cursor-pointer hover:bg-primary-dark/70 transition-all ease-in">
+                        <LinkIcon className="w-4 h-4 mr-2"/> {row.original.leases[0]?.tenant?.firstName} {row.original.leases[0]?.tenant?.lastName}
+                    </div>
+                )
+            }
             return (
-                <div className="bg-primary-dark whitespace-nowrap items-center w-fit text-white p-2 flex flex-row rounded-2xl cursor-pointer hover:bg-primary-dark/70 transition-all ease-in">
-                    <LinkIcon className="w-4 h-4 mr-2"/> John D.
-                </div>
+                "No Tenant"
             )
         },
         meta: {
@@ -235,7 +253,6 @@ const columns: ColumnDef<Property>[] = [
         cell: ({ row }) => {
             return (
                 <div>
-                    {/*// @ts-expect-error - TS doesn't understand that we're using a custom accessor*/}
                     {moneyParser(row.original.rentalPrice)}
                 </div>
             )

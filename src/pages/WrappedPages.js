@@ -9,6 +9,8 @@ import Rentals from "./content/Rentals.jsx";
 import RentalDetail from "./content/RentalDetail.jsx";
 import {useGetUnitQuery, useGetUnitsQuery} from "../services/api/unitApi.js";
 import {useGetTenantsQuery} from "../services/api/tenantApi.js";
+import {useGetLeasesQuery} from "../services/api/leaseApi.js";
+import Financials from "./content/Financials.jsx";
 
 
 export const PropertiesPage = () => {
@@ -61,6 +63,14 @@ export const RentalDetailPage = () => {
         // eslint-disable-next-line react-hooks/rules-of-hooks
         <PageWrapper query={() => useGetUnitQuery(id)}>
             <RentalDetail/>
+        </PageWrapper>
+    )
+}
+
+export const FinancialsPage = () => {
+    return (
+        <PageWrapper query={useGetLeasesQuery}>
+            <Financials/>
         </PageWrapper>
     )
 }

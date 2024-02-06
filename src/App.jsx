@@ -10,7 +10,7 @@ import Navbar from "./components/nav/Navbar.jsx";
 import {TooltipProvider} from "./components/ui/tooltip.tsx";
 import Account from "./pages/Account.jsx";
 import {
-    HomePage,
+    HomePage, FinancialsPage,
     PropertiesPage,
     PropertyDetailPage,
     RentalDetailPage,
@@ -47,6 +47,7 @@ const AppContent = () => {
                 <Route path="/tenants" element={<TenantsPage/>} />
                 <Route path="/rentals" element={<RentalsPage/>}/>
                 <Route path="/rentals/:id" element={<RentalDetailPage/>} />
+                <Route path="/financials" element={<FinancialsPage/>} />
             </Routes>
                 </Navbar>)}
             {!showNavbar && (

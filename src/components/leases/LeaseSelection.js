@@ -3,9 +3,7 @@ import {Popover, PopoverContent, PopoverTrigger} from "../ui/popover.tsx";
 import {Button} from "../ui/button.tsx";
 import {Command,CommandEmpty, CommandGroup, CommandInput, CommandItem} from "../ui/command.tsx";
 import {Check, ChevronDown} from "lucide-react";
-import {useGetUnitsQuery} from "../../services/api/unitApi.js";
 import {cn} from "../../utils.ts";
-import {useGetLeasesQuery} from "../../services/api/leaseApi.js";
 
 
 const LeaseSelection = ({onSelect, selected, leases, isLoading}) => {
@@ -66,8 +64,8 @@ const LeaseSelection = ({onSelect, selected, leases, isLoading}) => {
                                 key={lease.id}
                                 value={lease.id}
                                 onSelect={(currentValue) => {
-                                    setLeaseId(currentValue === unitId ? null : currentValue)
-                                    onSelect(currentValue === unitId ? null : currentValue)
+                                    setLeaseId(currentValue === leaseId ? null : currentValue)
+                                    onSelect(currentValue === leaseId ? null : currentValue)
                                     setOpen(false)
                                 }}
                             >

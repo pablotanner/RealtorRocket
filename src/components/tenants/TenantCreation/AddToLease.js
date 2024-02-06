@@ -2,8 +2,9 @@ import {Button} from "../../ui/button.tsx";
 import {useState} from "react";
 import LeaseSelection from "../../leases/LeaseSelection.js";
 import {useGetLeasesQuery} from "../../../services/api/leaseApi.js";
+import LeaseForm from "../../leases/LeaseForm.js";
 
-const AddToLease = ({unitId, setLeaseData}) => {
+const AddToLease = ({unitId, setLeaseData, leaseData}) => {
     const [decision, setDecision] = useState("new");
     const [selectedLease, setSelectedLease] = useState(null);
 
@@ -23,7 +24,7 @@ const AddToLease = ({unitId, setLeaseData}) => {
                         setDecision("new")
                         setLeaseData({
                             decision: "new",
-                            leaseId: null,
+                            leaseId: selectedLease,
                             lease: {
                                 //unitId: parseInt(unitId),
                                 // Add more lease data here such as start/end dates etc.
@@ -46,27 +47,49 @@ const AddToLease = ({unitId, setLeaseData}) => {
 
             {decision === "new" && (
                 <div className="text-md">
-                    Lease Creation Form here (for now just creates empty lease)
+                    <LeaseForm onChange={(data) => {
+                        setLeaseData({
+                            decision: "new",
+                            leaseId: null,
+                            lease: data
+                        })
+                    }} lease={leaseData?.lease || null} />
                 </div>
                 )}
 
             {decision === "existing" && (
-                <div className="text-lg">
+                <div className="text-lg flex flex-col">
                     <LeaseSelection selected={selectedLease} onSelect={
                         (leaseId) => {
-                            setSelectedLease(leaseId)
-                            setLeaseData(
-                                {
-                                    decision: decision,
-                                    leaseId: leaseId,
-                                }
-                            )
+                            if (leaseId === selectedLease || leaseId === null) {
+                                setSelectedLease(null)
+                                setLeaseData(
+                                    {
+                                        decision: "new",
+                                        leaseId: null,
+                                    }
+                                )
+                            }
+                            else {
+                                setSelectedLease(leaseId)
+                                setLeaseData(
+                                    {
+                                        decision: decision,
+                                        leaseId: leaseId,
+                                    }
+                                )
+                            }
                         }
                     } leases={leases?.data} isLoading={isLoading} />
+
+                    {selectedLease && <p className="text-red-500 text-md">
+                        {leases?.data?.find((lease) => lease?.id === parseInt(selectedLease))?.tenantId
+                            ? "This lease already has a tenant assigned, if you decide to continue, the current tenant will be overwritten."
+                            : null
+                        }
+                    </p>}
                 </div>
                 )}
-
-            {selectedLease}
         </div>
     )
 
