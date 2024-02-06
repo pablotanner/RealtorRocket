@@ -1,10 +1,9 @@
 import customFetchBase from "./customFetchBase.js";
-import {propertyApi} from "./propertyApi.js";
+import {authApi} from "./authApi.js";
 
-export const unitApi = propertyApi.injectEndpoints({
+export const unitApi = authApi.injectEndpoints({
     reducerPath: 'unitApi',
     baseQuery: customFetchBase,
-    tagTypes: ['Units'],
     endpoints: (build) => ({
         getUnits: build.query({
             query: () => ({
@@ -24,4 +23,4 @@ export const unitApi = propertyApi.injectEndpoints({
 })
 
 
-export const {useGetUnitsQuery, useGetUnitQuery, usePrefetch: usePrefetchUnits} = unitApi;
+export const {useGetUnitsQuery, useGetUnitQuery} = unitApi;

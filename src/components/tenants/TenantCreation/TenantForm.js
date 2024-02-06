@@ -4,11 +4,11 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "../../ui/form.tsx";
 import {Input} from "../../ui/input.tsx";
 
-const TenantForm = ({onSubmit, children}) => {
+const TenantForm = ({onSubmit, tenantData, children}) => {
 
     const tenantFormSchema = z.object({
-        firstName: z.string({errorMap: () => ({message: 'Please enter a first name.'})}),
-        lastName: z.string({errorMap: () => ({message: 'Please enter a last name.'})}),
+        firstName: z.string({errorMap: () => ({message: 'Please enter a first name.'})}).min(1, "Please enter a first name."),
+        lastName: z.string({errorMap: () => ({message: 'Please enter a last name.'})}).min(1, "Please enter a last name."),
         email: z.string().or(z.null()),
         phone: z.string().or(z.null())
     })
@@ -16,16 +16,16 @@ const TenantForm = ({onSubmit, children}) => {
     const tenantForm = useForm({
         resolver: zodResolver(tenantFormSchema),
         defaultValues: {
-            firstName: null,
-            lastName: null,
-            email: null,
-            phone: null,
-        }
+            firstName: tenantData?.firstName || null,
+            lastName: tenantData?.lastName || null,
+            email: tenantData?.email || null,
+            phone: tenantData?.phone || null,
+        },
     })
 
     return (
         <Form {...tenantForm}>
-            <form onSubmit={tenantForm.handleSubmit(onSubmit)}>
+            <form onSubmit={tenantForm.handleSubmit(onSubmit)} >
                 <FormField
                     control={tenantForm.control}
                     name="firstName"

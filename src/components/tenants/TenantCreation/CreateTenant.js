@@ -18,7 +18,7 @@ import {useCreateTenantMutation} from "../../../services/api/tenantApi.js";
 const CreateTenant = (props) => {
     const [modalOpen, setModalOpen] = useState(false)
 
-    const [selectedUnit, setSelectedUnit] = useState(null);
+    const [selectedUnitId, setSelectedUnitId] = useState(null);
 
     const [leaseData, setLeaseData] = useState({
         decision: "new",
@@ -29,28 +29,36 @@ const CreateTenant = (props) => {
         }
     })
 
+    // Current page / step in tenant creation modal
     const [page, setPage] = useState(0)
 
-    const [tenantData, setTenantData] = useState({})
+    // Tenant data entered by user, so first name etc.
+    const [tenantData, setTenantData] = useState({
+        firstName: null,
+        lastName: null,
+        email: null,
+        phone: null,
+    })
 
+    // Units from API
     const {data: units} = useGetUnitsQuery()
 
-    const unit = units?.data?.find((unit) => unit.id === parseInt(selectedUnit))
+    const selectedUnit = units?.data?.find((unit) => unit.id === parseInt(selectedUnitId))
 
 
-    const [createTenant, {data, isLoading: isCreating}] = useCreateTenantMutation()
+    const [createTenant, {isLoading: isCreating}] = useCreateTenantMutation()
 
 
-    const getLastLeased = (unit) => {
-        if (unit?.leases.length > 0) {
-            if (unit?.leases[0]?.endDate) return unit?.leases[0]?.endDate; else return "Current Lease hasn't ended yet"
+    const getLastLeased = () => {
+        if (selectedUnit?.leases.length > 0) {
+            if (selectedUnit?.leases[0]?.endDate) return selectedUnit?.leases[0]?.endDate; else return "Current Lease hasn't ended yet"
         }
         return "Never"
     }
 
     const UnitStatus = () => {
-        if (unit?.leases?.length > 0) {
-            if (unit?.leases[0]?.endDate) {
+        if (selectedUnit?.leases?.length > 0) {
+            if (selectedUnit?.leases[0]?.endDate) {
                 return (<Badge variant="warning">Vacant</Badge>)
             }
             else {
@@ -82,7 +90,6 @@ const CreateTenant = (props) => {
         return null
     }
 
-
     function submitTenant(data) {
         setTenantData(data)
         setPage(2)
@@ -91,19 +98,17 @@ const CreateTenant = (props) => {
     function confirmTenantCreation() {
         const body = {
             ...tenantData,
-            ...(leaseData.decision === "new" ? {lease: {...leaseData.lease}, unitId: selectedUnit
+            ...(leaseData.decision === "new" ? {lease: {...leaseData.lease}, unitId: selectedUnitId
             } : null)
         }
 
         const leaseId = leaseData.decision === "existing" ? leaseData.leaseId : null
 
         createTenant(body, leaseId).then((res) => {
-            console.log(res)
             if (res.data) {
                 setModalOpen(false)
             }
         })
-
     }
 
 
@@ -124,19 +129,19 @@ const CreateTenant = (props) => {
 
                 <div className="flex flex-col gap-4">
                     {page === 0 && (<>
-                            <RentalSelection onSelect={setSelectedUnit} selected={selectedUnit}/>
+                            <RentalSelection onSelect={setSelectedUnitId} selected={selectedUnitId}/>
                             <div className="flex flex-col gap-4">
-                                <div className="bg-gray-50 border-2 border-gray-100 p-2 rounded-xl" hidden={!unit}>
-                                    <h3 className="text-lg font-400">Unit {unit?.id}</h3>
+                                <div className="bg-gray-50 border-2 border-gray-100 p-2 rounded-xl" hidden={!selectedUnit}>
+                                    <h3 className="text-lg font-400">Unit {selectedUnit?.id}</h3>
                                     <p className="text-sm text-gray-500">Belongs to
-                                        Property: {unit?.realEstateObject?.title}</p>
+                                        Property: {selectedUnit?.realEstateObject?.title}</p>
                                     <UnitStatus/>
                                     <p className="text-sm text-gray-500">Previous Lease Ended
-                                        on: {getLastLeased(unit)}
+                                        on: {getLastLeased(selectedUnit)}
                                     </p>
                                 </div>
 
-                                <p className="text-sm" hidden={unit}>
+                                <p className="text-sm" hidden={selectedUnit}>
                                     To continue, please select a unit to assign the tenant to.
                                 </p>
 
@@ -146,7 +151,7 @@ const CreateTenant = (props) => {
                                     </Button>
 
 
-                                    <Button onClick={() => setPage(1)} disabled={!unit} variant="gradient" className="w-full">
+                                    <Button onClick={() => setPage(1)} disabled={!selectedUnit} variant="gradient" className="w-full">
                                         Next
                                     </Button>
                                 </div>
@@ -156,7 +161,7 @@ const CreateTenant = (props) => {
 
 
                     {page === 1 && (
-                        <TenantForm onSubmit={(data) => {submitTenant(data)}}>
+                        <TenantForm tenantData={tenantData} onSubmit={(data) => {submitTenant(data)}}>
                             <div className="w-full flex flex-row gap-4">
                                 <Button onClick={() => setPage(0)} variant="secondary" className="w-full">
                                     Back
@@ -172,7 +177,7 @@ const CreateTenant = (props) => {
 
                     {page === 2 && (
                         <div>
-                            <AddToLease unitId={selectedUnit} setLeaseData={setLeaseData}/>
+                            <AddToLease unitId={selectedUnitId} setLeaseData={setLeaseData}/>
 
                             <div className="w-full flex flex-row gap-4">
                                 <Button onClick={() => setPage(1)} variant="secondary" className="w-full">
@@ -194,7 +199,7 @@ const CreateTenant = (props) => {
                                 {leaseData.decision === "new" ? "Creating new Lease" : "Assigning to existing lease: " + leaseData.leaseId }
                             </p>
                             <p className="font-400 text-lg text-primary">
-                                Unit: {selectedUnit}
+                                Unit: {selectedUnitId}
                             </p>
 
 

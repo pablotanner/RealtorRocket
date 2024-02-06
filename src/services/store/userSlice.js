@@ -2,9 +2,6 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
     selectedProperty: "All",
-    properties: [],
-    error: null,
-
 }
 
 const userSlice = createSlice({

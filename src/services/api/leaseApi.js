@@ -1,10 +1,9 @@
 import customFetchBase from "./customFetchBase.js";
-import {propertyApi} from "./propertyApi.js";
+import {authApi} from "./authApi.js";
 
-export const leaseApi = propertyApi.injectEndpoints({
+export const leaseApi = authApi.injectEndpoints({
     reducerPath: 'leaseApi',
     baseQuery: customFetchBase,
-    tagTypes: ['Leases'],
     endpoints: (build) => ({
         getLeases: build.query({
             query: (filters = {}) => {

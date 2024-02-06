@@ -1,14 +1,13 @@
 import customFetchBase from "./customFetchBase.js";
-import {createApi} from "@reduxjs/toolkit/query/react";
 import {setUser} from "../auth/authSlice.js";
 import {logoutUser} from "../auth/authActions.js";
 import {toast} from "../../components/ui/use-toast.tsx";
+import {authApi} from "./authApi.js";
 
 
-export const userApi = createApi({
+export const userApi = authApi.injectEndpoints({
     reducerPath: 'userApi',
     baseQuery: customFetchBase,
-    tagTypes: ['User'],
     endpoints: (build) => ({
         getUser: build.query({
             query: () => ({
@@ -66,5 +65,4 @@ export const userApi = createApi({
 export const {useGetUserQuery,
     useUpdateUserMutation,
     useDeleteUserMutation,
-    usePrefetch,
 } = userApi;

@@ -1,11 +1,10 @@
 import customFetchBase from "./customFetchBase.js";
-import {propertyApi} from "./propertyApi.js";
 import {toast} from "../../components/ui/use-toast.tsx";
+import {authApi} from "./authApi.js";
 
-export const tenantApi = propertyApi.injectEndpoints({
+export const tenantApi = authApi.injectEndpoints({
     reducerPath: 'tenantApi',
     baseQuery: customFetchBase,
-    tagTypes: ['Tenants'],
     endpoints: (build) => ({
         getTenants: build.query({
             query: () => {

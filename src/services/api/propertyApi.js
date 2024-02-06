@@ -1,11 +1,10 @@
-import {createApi} from "@reduxjs/toolkit/query/react";
 import customFetchBase from "./customFetchBase.js";
 import {toast} from "../../components/ui/use-toast.tsx";
+import {authApi} from "./authApi.js";
 
-export const propertyApi = createApi({
+export const propertyApi = authApi.injectEndpoints({
     reducerPath: 'propertyApi',
     baseQuery: customFetchBase,
-    tagTypes: ['Properties', 'Units'],
     endpoints: (build) => ({
         getProperties: build.query({
             query: () => ({
@@ -68,7 +67,7 @@ export const propertyApi = createApi({
                         });
                     })
             },
-            invalidatesTags: ['Properties','Units'],
+            invalidatesTags: ['Properties', 'Units'],
         }),
     })
 })
@@ -78,5 +77,4 @@ export const {
     useCreatePropertyMutation,
     useGetPropertyQuery,
     useDeletePropertyMutation,
-    usePrefetch: usePropertyPrefetch,
 } = propertyApi;

@@ -2,7 +2,6 @@ import {Tooltip, TooltipContent, TooltipTrigger} from "../ui/tooltip.tsx";
 import {Button} from "../ui/button.tsx";
 import {useLocation, useNavigate} from "react-router-dom";
 import {BiSolidRocket} from "react-icons/bi";
-import {usePrefetch} from "../../services/api/userApi.js";
 import Header from "./Header.jsx";
 import {
     BellIcon, Building2,
@@ -14,8 +13,7 @@ import {
     UserIcon
 } from "lucide-react";
 import { useSelector} from "react-redux";
-import {usePropertyPrefetch} from "../../services/api/propertyApi.js";
-
+import {usePrefetch} from "../../services/api/authApi.js"
 const items = [
     {
         title: 'Home',
@@ -81,15 +79,14 @@ const Navbar = ({children}) => {
     const navigate = useNavigate();
     const currentPage = items.find(item => item.url === location.pathname)?.title || "";
     const authSlice = useSelector(state => state.authSlice);
-    const properties = useSelector(state => state.userSlice.selectedProperty);
 
 
     // use prefetch on user, properties API
-    const prefetchProperties = usePropertyPrefetch("getProperties")
+    const prefetchProperties = usePrefetch("getProperties")
     const prefetchUser = usePrefetch("getUser")
-    const prefetchUnits = usePropertyPrefetch("getUnits")
-    const prefetchTenants = usePropertyPrefetch("getTenants")
-    const prefetchLeases = usePropertyPrefetch("getLeases")
+    const prefetchUnits = usePrefetch("getUnits")
+    const prefetchTenants = usePrefetch("getTenants")
+    const prefetchLeases = usePrefetch("getLeases")
 
     prefetchUser();
     prefetchProperties();

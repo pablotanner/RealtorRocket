@@ -12,16 +12,11 @@ import {leaseApi} from "../api/leaseApi.js";
 export const store = configureStore({
     reducer: {
         [authApi.reducerPath]: authApi.reducer,
-        [userApi.reducerPath]: userApi.reducer,
-        [propertyApi.reducerPath]: propertyApi.reducer,
-        [unitApi.reducerPath]: unitApi.reducer,
-        [tenantApi.reducerPath]: tenantApi.reducer,
-        [leaseApi.reducerPath]: leaseApi.reducer,
         authSlice: authSlice,
         userSlice: userSlice,
     },
     middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware({}).concat([authApi.middleware, userApi.middleware, propertyApi.middleware, unitApi.middleware, tenantApi.middleware, leaseApi.middleware])
+        getDefaultMiddleware({}).concat([authApi.middleware])
 
 })
 

@@ -65,6 +65,7 @@ export const authApi = createApi({
             }),
         })
     }),
+    tagTypes: ['User', 'Properties', 'Units', 'Tenants', 'Leases'],
 })
 
 export const {
@@ -74,4 +75,5 @@ export const {
     useLazyRefreshQuery,
     useLogoutMutation,
     useUsersQuery,
+    usePrefetch,
 } = authApi;
