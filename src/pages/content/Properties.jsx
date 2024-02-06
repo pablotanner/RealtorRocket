@@ -1,4 +1,4 @@
-import CreateProperty from "../../components/properties/propertyCreation/CreateProperty.js";
+import CreateProperty from "../../components/properties/PropertyCreation/CreateProperty.js";
 import PropertyTable from "../../components/properties/PropertyTable.tsx";
 import DetailedPropertyTable from "../../components/properties/DetailedPropertyTable.js";
 import {Button} from "../../components/ui/button.tsx";

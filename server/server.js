@@ -7,6 +7,8 @@ import * as userController from "./controllers/userController.js";
 import * as messageController from "./controllers/messageController.js";
 import * as miscController from "./controllers/miscController.js";
 import * as realEstateController from "./controllers/realEstateController.js";
+import * as leaseController from "./controllers/leaseController.js";
+import * as tenantController from "./controllers/tenantController.js";
 
 const app = express();
 const router = express.Router();
@@ -42,8 +44,20 @@ router.post('/properties', authenticateToken, realEstateController.createPropert
 router.get('/properties/:id', authenticateToken, realEstateController.getProperty)
 router.delete('/properties/:id', authenticateToken, realEstateController.deleteProperty)
 
+// Units / Rentals
 router.get('/units', authenticateToken, realEstateController.getUnits)
 router.get('/units/:id', authenticateToken, realEstateController.getUnit)
+
+// Leases
+router.get('/leases', authenticateToken, leaseController.getLeases)
+router.get('/leases/:id', authenticateToken, leaseController.getLease)
+router.post('/leases', authenticateToken, leaseController.createLease)
+
+// Tenants
+router.get('/tenants', authenticateToken, tenantController.getTenants)
+router.post('/tenants', authenticateToken, tenantController.createTenant)
+router.get('/tenants/:id', authenticateToken, tenantController.getTenant)
+
 
 try {
     app.get('/users', authenticateToken, async (req, res) => {

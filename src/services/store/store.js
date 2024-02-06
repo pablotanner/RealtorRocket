@@ -5,6 +5,8 @@ import {userApi} from "../api/userApi.js";
 import {propertyApi} from "../api/propertyApi.js";
 import userSlice from "./userSlice.js";
 import {unitApi} from "../api/unitApi.js";
+import {tenantApi} from "../api/tenantApi.js";
+import {leaseApi} from "../api/leaseApi.js";
 
 
 export const store = configureStore({
@@ -13,11 +15,13 @@ export const store = configureStore({
         [userApi.reducerPath]: userApi.reducer,
         [propertyApi.reducerPath]: propertyApi.reducer,
         [unitApi.reducerPath]: unitApi.reducer,
+        [tenantApi.reducerPath]: tenantApi.reducer,
+        [leaseApi.reducerPath]: leaseApi.reducer,
         authSlice: authSlice,
         userSlice: userSlice,
     },
     middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware({}).concat([authApi.middleware, userApi.middleware, propertyApi.middleware, unitApi.middleware])
+        getDefaultMiddleware({}).concat([authApi.middleware, userApi.middleware, propertyApi.middleware, unitApi.middleware, tenantApi.middleware, leaseApi.middleware])
 
 })
 

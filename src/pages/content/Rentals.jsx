@@ -1,6 +1,6 @@
 import PropertyCard from "../../components/properties/PropertyCard.js";
 import {CardContent, CardFooter} from "../../components/ui/card.tsx";
-import CreateProperty from "../../components/properties/propertyCreation/CreateProperty.js";
+import CreateProperty from "../../components/properties/PropertyCreation/CreateProperty.js";
 import PropertyStatus from "../../components/properties/PropertyStatus.js";
 import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";

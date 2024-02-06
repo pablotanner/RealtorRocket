@@ -15,6 +15,7 @@ import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "../
 import {Input} from "../ui/input.tsx";
 import {FaMagnifyingGlass} from "react-icons/fa6";
 import {useNavigate} from "react-router-dom";
+import {moneyParser} from "../../utils/inputHandlers.js";
 
 class Lease {
     id: string;
@@ -210,6 +211,37 @@ const columns: ColumnDef<Property>[] = [
         },
         meta: {
             title: "Current Tenant",
+        },
+    },
+
+    {
+        accessorKey: "leaseEndDate",
+        header: "Lease End Date",
+        cell: ({ row }) => {
+            return (
+                <div>
+                    12/12/2024
+                </div>
+            )
+        },
+        meta: {
+            title: "Lease End Date",
+        },
+    },
+
+    {
+        accessorKey: "monthlyRent",
+        header: "Monthly Rent",
+        cell: ({ row }) => {
+            return (
+                <div>
+                    {/*// @ts-expect-error - TS doesn't understand that we're using a custom accessor*/}
+                    {moneyParser(row.original.rentalPrice)}
+                </div>
+            )
+        },
+        meta: {
+            title: "Lease End Date",
         },
     },
 

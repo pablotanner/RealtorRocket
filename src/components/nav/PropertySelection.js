@@ -11,7 +11,7 @@ const PropertySelection = () => {
 
     if (isLoading || !isSuccess) {
         return (
-            <Select>
+            <Select defaultValue={"All"}>
                 <SelectTrigger className="w-[180px]" disabled>
                     <SelectValue placeholder="Loading..."/>
                 </SelectTrigger>
@@ -29,7 +29,7 @@ const PropertySelection = () => {
 
 
     return (
-        <Select onValueChange={(value) => dispatch(selectProperty(value))}>
+        <Select onValueChange={(value) => dispatch(selectProperty(value))} defaultValue="All" >
             <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Property"/>
             </SelectTrigger>

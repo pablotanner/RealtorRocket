@@ -13,10 +13,14 @@ import {
 } from "../ui/dropdown-menu.tsx";
 import {useNavigate} from "react-router-dom";
 import {RealEstateType} from "../../utils/magicNumbers.js";
+import {useDeletePropertyMutation} from "../../services/api/propertyApi.js";
 
 
 const DetailedPropertyTable = ({ properties }) => {
     const navigate = useNavigate()
+
+
+    const [deleteProperty, {isLoading: isDeletingProperty}] = useDeletePropertyMutation()
 
 
 
@@ -126,7 +130,9 @@ const DetailedPropertyTable = ({ properties }) => {
                     <DropdownMenuSeparator />
 
                     <DropdownMenuGroup>
-                        <DropdownMenuItem className="flex flex-row text-md gap-2 text-red-500" disabled>
+                        <DropdownMenuItem className="flex flex-row text-md gap-2 text-red-500"
+                                          onClick={() => deleteProperty(property?.id)}
+                        >
                             <Trash2 className="w-4 h-4"/>
                             Delete Property
                         </DropdownMenuItem>

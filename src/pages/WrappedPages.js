@@ -8,6 +8,7 @@ import Tenants from "./content/Tenants.jsx";
 import Rentals from "./content/Rentals.jsx";
 import RentalDetail from "./content/RentalDetail.jsx";
 import {useGetUnitQuery, useGetUnitsQuery} from "../services/api/unitApi.js";
+import {useGetTenantsQuery} from "../services/api/tenantApi.js";
 
 
 export const PropertiesPage = () => {
@@ -39,7 +40,7 @@ export const HomePage = () => {
 
 export const TenantsPage = () => {
     return (
-        <PageWrapper>
+        <PageWrapper query={useGetTenantsQuery}>
             <Tenants/>
         </PageWrapper>
     )
