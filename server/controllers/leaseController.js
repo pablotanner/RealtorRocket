@@ -11,10 +11,10 @@ export async function getLeases(req, res) {
         let query = {}
 
         if (unitId) {
-            query["unitId"] = unitId
+            query["unitId"] = parseInt(unitId)
         }
         if (tenantId) {
-            query["tenantId"] = tenantId
+            query["tenantId"] = parseInt(tenantId)
         }
 
         query["realtor"] = {userId: req.user.userId}
@@ -31,6 +31,7 @@ export async function getLeases(req, res) {
         res.status(200).json({data: leases });
     }
     catch (error) {
+        console.log(error)
         res.status(500).json({ message: "Error getting leases" });
     }
 }

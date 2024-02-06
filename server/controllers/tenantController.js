@@ -4,16 +4,27 @@ import prisma from '../prisma.js';
 // Creates a tenant, if provided link them to a lease, otherwise create new lease using lease data in body
 export async function createTenant(req, res) {
     const {leaseId} = req.query;
+    const tenantData = {...req.body};
+    // Remove Lease data from tenantdata
+    delete tenantData.lease;
+    delete tenantData.unitId;
+
+
 
     try {
         const newTenant = await prisma.tenant.create({
             data: {
-                ...req.body,
-                lease: {
+                ...tenantData,
+                leases: {
                     ...(leaseId ?
                             {connect: {id: parseInt(leaseId)}} :
                             {create: {
                                     ...req.body.lease,
+                                    unit: {
+                                        connect: {
+                                            id: parseInt(req.body.unitId)
+                                        }
+                                    },
                                     realtor: {
                                         connect: {
                                             userId: req.user.userId
@@ -31,6 +42,7 @@ export async function createTenant(req, res) {
         res.status(200).json({data: newTenant });
     }
     catch (error) {
+        console.log(error)
         res.status(500).json({ message: "Error creating tenant" });
     }
 }
@@ -41,7 +53,9 @@ export async function getTenants(req, res) {
             where: {
                 leases: {
                     some: {
-                        realtorId: req.user.userId
+                        realtor: {
+                            userId: req.user.userId
+                        }
                     }
                 }
             },
@@ -53,8 +67,6 @@ export async function getTenants(req, res) {
         res.status(200).json({data: tenants });
     }
     catch (error) {
-        console.log(error)
-
         res.status(500).json({ message: "Error getting tenants" });
     }
 }

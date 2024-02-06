@@ -144,7 +144,8 @@ export async function getUnits(req, res) {
             },
             include: {
                 realEstateObject: true,
-                images: true
+                images: true,
+                leases: true
             }
         });
 
@@ -169,7 +170,8 @@ export async function getUnit(req, res) {
                         units: true
                     }
                 },
-                images: true
+                images: true,
+                leases: true
             }
         });
 

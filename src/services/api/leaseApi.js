@@ -8,7 +8,7 @@ export const leaseApi = propertyApi.injectEndpoints({
     endpoints: (build) => ({
         getLeases: build.query({
             query: (filters = {}) => {
-                const queryParams = new URLSearchParams(filters);
+                const queryParams = new URLSearchParams();
 
                 if (filters.tenantId) queryParams.append('tenantId', filters.tenantId);
                 if (filters.unitId) queryParams.append('unitId', filters.unitId);

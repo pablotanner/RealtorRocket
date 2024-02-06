@@ -1,10 +1,8 @@
-import {useEffect} from "react";
 import {useLoginMutation, useRegisterMutation} from "../../services/api/authApi.js";
 
 import {Card, CardContent, CardHeader} from "../ui/card.tsx";
 import {AiFillRocket} from "react-icons/ai";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "../ui/form.tsx";
-
 
 import {z} from "zod";
 import {useForm} from "react-hook-form";
