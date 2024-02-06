@@ -1,4 +1,11 @@
-import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger} from "../../ui/dialog.tsx";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from "../../ui/dialog.tsx";
 import RentalSelection from "../../rentals/RentalSelection.js";
 import {useState} from "react";
 import {useGetUnitsQuery} from "../../../services/api/unitApi.js";
@@ -9,6 +16,8 @@ import AddToLease from "./AddToLease.js";
 import {useCreateTenantMutation} from "../../../services/api/tenantApi.js";
 
 const CreateTenant = (props) => {
+    const [modalOpen, setModalOpen] = useState(false)
+
     const [selectedUnit, setSelectedUnit] = useState(null);
 
     const [leaseData, setLeaseData] = useState({
@@ -88,15 +97,17 @@ const CreateTenant = (props) => {
 
         const leaseId = leaseData.decision === "existing" ? leaseData.leaseId : null
 
-        createTenant(body, leaseId).then(() => {
-            // reload page
-            window.location.reload()
+        createTenant(body, leaseId).then((res) => {
+            console.log(res)
+            if (res.data) {
+                setModalOpen(false)
+            }
         })
 
     }
 
 
-    return (<Dialog>
+    return (<Dialog open={modalOpen} onOpenChange={setModalOpen}>
             <DialogTrigger asChild>
                 {props.trigger}
             </DialogTrigger>
@@ -129,9 +140,17 @@ const CreateTenant = (props) => {
                                     To continue, please select a unit to assign the tenant to.
                                 </p>
 
-                                <Button onClick={() => setPage(1)} disabled={!unit} variant="gradient">
-                                    Next
-                                </Button>
+                                <div className="w-full flex flex-row gap-4">
+                                    <Button variant="secondary" className="w-full" onClick={() => setModalOpen(false)}>
+                                        Cancel
+                                    </Button>
+
+
+                                    <Button onClick={() => setPage(1)} disabled={!unit} variant="gradient" className="w-full">
+                                        Next
+                                    </Button>
+                                </div>
+
                             </div>
                         </>)}
 
@@ -183,15 +202,14 @@ const CreateTenant = (props) => {
                                 <Button onClick={() => setPage(2)} variant="secondary" className="w-full">
                                     Back
                                 </Button>
+
                                 <Button onClick={() => confirmTenantCreation()} type="submit" variant="gradient" className="w-full" isLoading={isCreating}>
                                     Create
                                 </Button>
                             </div>
                         </div>
                     )}
-
                 </div>
-
 
             </DialogContent>
         </Dialog>)

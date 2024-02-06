@@ -431,7 +431,7 @@ model Lease {
   tenant   Tenant? @relation(fields: [tenantId], references: [id])
   tenantId Int?    @map("tenant_id")
 
-  unit   Unit? @relation(fields: [unitId], references: [id])
+  unit   Unit? @relation(fields: [unitId], references: [id], onDelete: Cascade)
   unitId Int?  @map("unit_id")
 
   realtor   Realtor @relation(fields: [realtorId], references: [id])

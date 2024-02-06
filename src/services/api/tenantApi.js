@@ -1,5 +1,6 @@
 import customFetchBase from "./customFetchBase.js";
 import {propertyApi} from "./propertyApi.js";
+import {toast} from "../../components/ui/use-toast.tsx";
 
 export const tenantApi = propertyApi.injectEndpoints({
     reducerPath: 'tenantApi',
@@ -31,6 +32,22 @@ export const tenantApi = propertyApi.injectEndpoints({
                     method: 'POST',
                     body,
                 }
+            },
+            async onQueryStarted(arg, { queryFulfilled }) {
+                queryFulfilled
+                    .then(() => {
+                        toast({
+                            title: "Success",
+                            description: "Tenant created successfully",
+                        });
+                    })
+                    .catch(() => {
+                        toast({
+                            title: "Uh oh! Something went wrong.",
+                            description: "There was a problem with your request, please try again.",
+                            variant: "destructive",
+                        });
+                    })
             },
             invalidatesTags: ['Tenants']
         })
