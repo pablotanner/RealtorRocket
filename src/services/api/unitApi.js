@@ -19,7 +19,8 @@ export const unitApi = authApi.injectEndpoints({
             }),
             providesTags: ['Units'],
         }),
-    })
+    }),
+    overrideExisting: false,
 })
 
 

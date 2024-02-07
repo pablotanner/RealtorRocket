@@ -37,7 +37,8 @@ export const leaseApi = authApi.injectEndpoints({
             },
             invalidatesTags: ['Leases']
         })
-    })
+    }),
+    overrideExisting: false,
 })
 
 export const {useGetLeasesQuery, useGetLeaseQuery, useCreateLeaseMutation} = leaseApi;

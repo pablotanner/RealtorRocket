@@ -4,11 +4,9 @@ import { Card,
 import {moneyParser} from "../../utils/formatters.js";
 import {useNavigate} from "react-router-dom";
 import {LinkIcon} from "lucide-react";
-import {Button} from "../ui/button.tsx";
 
 const DetailedPropertyCard = ({ property }) => {
     const navigate = useNavigate();
-
     const propertyUnits = () => {
         if (property?.units?.length > 1) {
             return "Multi-Unit";

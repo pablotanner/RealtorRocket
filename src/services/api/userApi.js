@@ -58,7 +58,8 @@ export const userApi = authApi.injectEndpoints({
                 logoutUser();
             },
         }),
-    })
+    }),
+    overrideExisting: false,
 })
 
 

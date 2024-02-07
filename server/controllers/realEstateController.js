@@ -161,6 +161,9 @@ export async function getUnits(req, res) {
                 leases: {
                     include: {
                         tenant: true
+                    },
+                    orderBy: {
+                        createdAt: "desc"
                     }
                 }
             }
@@ -188,7 +191,14 @@ export async function getUnit(req, res) {
                     }
                 },
                 images: true,
-                leases: true
+                leases: {
+                    include: {
+                        tenant: true
+                    },
+                    orderBy: {
+                        createdAt: "desc"
+                    }
+                }
             }
         });
 

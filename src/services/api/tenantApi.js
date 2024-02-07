@@ -73,7 +73,8 @@ export const tenantApi = authApi.injectEndpoints({
             },
             invalidatesTags: ['Tenants']
         }),
-    })
+    }),
+    overrideExisting: false,
 })
 
 

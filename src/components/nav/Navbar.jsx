@@ -14,6 +14,12 @@ import {
 } from "lucide-react";
 import { useSelector} from "react-redux";
 import {usePrefetch} from "../../services/api/authApi.js"
+import {
+    selectAllLeases,
+    selectAllProperties,
+    selectAllTenants,
+    selectAllUnits
+} from "../../services/store/objectSlice.js";
 const items = [
     {
         title: 'Home',
@@ -79,6 +85,13 @@ const Navbar = ({children}) => {
     const navigate = useNavigate();
     const currentPage = items.find(item => item.url === location.pathname)?.title || "";
     const authSlice = useSelector(state => state.authSlice);
+
+    const properties = useSelector(selectAllProperties);
+    const units = useSelector(selectAllUnits)
+    const tenants = useSelector(selectAllTenants)
+    const leases = useSelector(selectAllLeases)
+
+    console.log(properties, units, tenants, leases)
 
 
     // use prefetch on user, properties API

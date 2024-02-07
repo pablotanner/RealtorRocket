@@ -71,7 +71,8 @@ export const propertyApi = authApi.injectEndpoints({
             },
             invalidatesTags: ['Properties', 'Units'],
         }),
-    })
+    }),
+    overrideExisting: false,
 })
 
 export const {

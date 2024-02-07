@@ -34,6 +34,7 @@ class Tenant {
 
 class Unit {
     id: string;
+    unitIdentifier: string;
     unitNumber: string;
     floor: number;
     unitSize: number;
@@ -122,29 +123,6 @@ const RentalTableDropdown = ({unit}) => {
 
 const columns: ColumnDef<Unit>[] = [
     {
-        id: "select",
-        header: ({ table }) => (
-            <Checkbox
-                // @ts-expect-error - TS doesn't understand that we're using a custom accessor
-                checked={
-                    table.getIsAllPageRowsSelected() ||
-                    (table.getIsSomePageRowsSelected() && "indeterminate")
-                }
-                onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                aria-label="Select all"
-            />
-        ),
-        cell: ({ row }) => (
-            <Checkbox
-                checked={row.getIsSelected()}
-                onCheckedChange={(value) => row.toggleSelected(!!value)}
-                aria-label="Select row"
-            />
-        ),
-        enableSorting: false,
-        enableHiding: false,
-    },
-    {
         id: "unit",
         header: "Unit",
         cell: ({ row })=> {
@@ -156,14 +134,14 @@ const columns: ColumnDef<Unit>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: "id",
-        id: "id",
-        header: "Unit ID",
+        accessorKey: "unitIdentifier",
+        id: "unitIdentifier",
+        header: "Unit Identifier",
         cell: ({ row }) => (
-            <div className="capitalize">{row.getValue("id")}</div>
+            <div className="capitalize">{row.getValue("unitIdentifier")}</div>
         ),
         meta: {
-            title: "Unit ID",
+            title: "Unit Identifier",
         },
     },
     {
@@ -215,7 +193,7 @@ const columns: ColumnDef<Unit>[] = [
             )
              */
 
-            if (row?.original?.leases?.length > 0) {
+            if (row?.original?.leases?.length > 0 && row?.original?.leases[0]?.tenant) {
                 // Tenant name
                 return (
                     <div className="bg-primary-dark whitespace-nowrap items-center w-fit text-white p-2 flex flex-row rounded-2xl cursor-pointer hover:bg-primary-dark/70 transition-all ease-in">
