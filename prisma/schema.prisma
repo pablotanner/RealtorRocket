@@ -369,6 +369,9 @@ model Unit {
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
+  // Identify the unit
+  unitIdentifier String? @map("unit_identifier")
+
   // Unit details (location)
   unitNumber String? @map("unit_number")
   floor      Int?

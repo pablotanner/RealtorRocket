@@ -58,65 +58,68 @@ const DetailedTenantsTable = ({ tenants }) => {
 
     const TenantRow = ({ tenant, key }) => {
         return (
-            <div key={key} className="flex flex-row gap-10 hover:bg-gray-100 rounded-xl p-1">
+            <>
+                <div key={key} className="flex flex-row gap-10 hover:bg-gray-100 rounded-xl p-1">
 
-                <div className="flex flex-row items-center gap-4 w-[15vw] min-w-[200px]">
-                    <Avatar>
-                        <AvatarFallback>{tenant?.firstName[0]?.toUpperCase()}{tenant?.lastName[0]?.toUpperCase()}</AvatarFallback>
-                    </Avatar>
-                    <div className="flex flex-col">
-                        <h className="font-500 text-md ">
-                            {tenant?.firstName + " " + tenant?.lastName}
-                        </h>
-                        <p className="font-300 text-gray-500 text-sm">
-                            {tenant?.email}
-                        </p>
-                    </div>
-                </div>
-
-
-                <div className="flex justify-center w-[15vw] min-w-[100px]">
-                    <div className="flex flex-col justify-center">
-                        <h className="font-500 text-md text-gray-800">
-                            {tenant?.leases?.length ? "Unit " + tenant?.leases[0]?.unitId : "No Lease"}
-                        </h>
-                        <p className="font-300 text-gray-500 text-sm w-[150px]">
-                            {tenant?.leases[0].endDate ? "Lease Ends on " + dateParser(tenant?.leases[0]?.endDate) : "No Lease End Date"}
-
-                        </p>
+                    <div className="flex flex-row items-center gap-4 w-[15vw] min-w-[200px]">
+                        <Avatar>
+                            <AvatarFallback>{tenant?.firstName[0]?.toUpperCase()}{tenant?.lastName[0]?.toUpperCase()}</AvatarFallback>
+                        </Avatar>
+                        <div className="flex flex-col">
+                            <h className="font-500 text-md ">
+                                {tenant?.firstName + " " + tenant?.lastName}
+                            </h>
+                            <p className="font-300 text-gray-500 text-sm">
+                                {tenant?.email}
+                            </p>
+                        </div>
                     </div>
 
+
+                    <div className="flex justify-center w-[15vw] min-w-[100px]">
+                        <div className="flex flex-col justify-center">
+                            <h className="font-500 text-md text-gray-800">
+                                {tenant?.leases?.length ? "Unit " + tenant?.leases[0]?.unitId : "No Lease"}
+                            </h>
+                            <p className="font-300 text-gray-500 text-sm w-[150px]">
+                                {tenant?.leases[0].endDate ? "Lease Ends on " + dateParser(tenant?.leases[0]?.endDate) : "No Lease End Date"}
+
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div className="flex justify-center w-fit">
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <button>
+                                        <Badge itemType="button" variant="purple" className="h-fit whitespace-nowrap" >
+                                            Verified Tenant
+                                        </Badge>
+                                    </button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p>
+                                        This tenant has created an account and verified their email address.
+                                    </p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                    </div>
+
+
+
+                    <div className="flex justify-end w-[15vw] items-center gap-5">
+                        <TenantOptions tenant={tenant}/>
+                        <Button variant="indigo" size="md">
+                            <Send className="mr-2 w-3 h-3"/>
+                            Contact
+                        </Button>
+                    </div>
                 </div>
+            </>
 
-                <div className="flex justify-center w-fit">
-                    <TooltipProvider>
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <button>
-                                    <Badge itemType="button" variant="purple" className="h-fit whitespace-nowrap" >
-                                        Verified Tenant
-                                    </Badge>
-                                </button>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                <p>
-                                    This tenant has created an account and verified their email address.
-                                </p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
-                </div>
-
-
-
-                <div className="flex justify-end w-[15vw] items-center gap-5">
-                    <TenantOptions tenant={tenant}/>
-                    <Button variant="indigo" size="md">
-                        <Send className="mr-2 w-3 h-3"/>
-                        Contact
-                    </Button>
-                </div>
-            </div>
         )
     }
 

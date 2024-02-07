@@ -23,9 +23,11 @@ export const propertyApi = authApi.injectEndpoints({
             async onQueryStarted(arg, { dispatch, queryFulfilled }) {
                 queryFulfilled
                     .then((data) => {
+                        const unitShortCodes = data.data?.data?.units?.map(unit => unit.unitIdentifier);
+
                         toast({
                             title: "Success",
-                            description: "Property created successfully",
+                            description: "Property created successfully, your units are: " + unitShortCodes.join(", "),
                         });
                     })
                     .catch((error) => {

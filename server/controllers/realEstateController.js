@@ -1,4 +1,6 @@
 import prisma from '../prisma.js';
+import {generateMultiUnitIdentifier, generateSingleUnitIdentifier} from "../util/generateUnitIdentifier.js";
+
 
 export async function getProperties(req, res) {
     try {
@@ -36,11 +38,16 @@ export async function createProperty(req, res) {
             }
         }
 
+        const propertyTitle = req.body.title;
+
+
+
         for (let unit of req.body.units) {
             for (let key in unit) {
                 if (unit[key] === "") {
                     unit[key] = null;
                 }
+                unit.unitIdentifier = req.body.units.length > 1 ? generateMultiUnitIdentifier(propertyTitle, unit.unitNumber) : generateSingleUnitIdentifier(propertyTitle);
             }
         }
 
@@ -73,6 +80,9 @@ export async function createProperty(req, res) {
                         ...(req.body.images ? {create: req.body.images} : {}),
                     }
                 },
+                include: {
+                    units: true,
+                }
             });
 
             res.status(200).json({data: newProperty });
