@@ -1,5 +1,5 @@
 import {createEntityAdapter, createSlice} from '@reduxjs/toolkit';
-import {authApi} from "../api/authApi.js";
+import {authApi} from "./authApi.js";
 
 console.log(authApi.endpoints)
 
@@ -30,7 +30,7 @@ const initialState = {
 
 const propertySlice = createSlice({
     name: 'property',
-    initialState: initialState.properties,
+    initialState: initialState,
     reducers: {
         propertyAdded: propertiesAdapter.addOne,
         propertiesAdded: propertiesAdapter.addMany,
@@ -59,7 +59,7 @@ const propertySlice = createSlice({
             .addMatcher(
                 authApi.endpoints.getProperties.matchFulfilled,
                 (state, action) => {
-                    propertiesAdapter.setAll(state, action.payload);
+                    propertiesAdapter.setAll(state, action.payload.data);
                 }
             )
     },
@@ -67,7 +67,7 @@ const propertySlice = createSlice({
 
 const unitSlice = createSlice({
     name: 'unit',
-    initialState: initialState.units,
+    initialState: initialState,
     reducers: {
         unitAdded: unitsAdapter.addOne,
         unitsAdded: unitsAdapter.addMany,
@@ -79,7 +79,7 @@ const unitSlice = createSlice({
             .addMatcher(
                 authApi.endpoints.getUnits.matchFulfilled,
                 (state, action) => {
-                    unitsAdapter.setAll(state, action.payload);
+                    unitsAdapter.setAll(state, action.payload.data);
                 }
             )
     },
@@ -87,7 +87,7 @@ const unitSlice = createSlice({
 
 const leaseSlice = createSlice({
     name: 'lease',
-    initialState: initialState.leases,
+    initialState: initialState,
     reducers: {
         leaseAdded: leasesAdapter.addOne,
         leasesAdded: leasesAdapter.addMany,
@@ -99,7 +99,7 @@ const leaseSlice = createSlice({
             .addMatcher(
                 authApi.endpoints.getLeases.matchFulfilled,
                 (state, action) => {
-                    leasesAdapter.setAll(state, action.payload);
+                    leasesAdapter.setAll(state, action.payload.data);
                 }
             )
     },
@@ -107,7 +107,7 @@ const leaseSlice = createSlice({
 
 const tenantSlice = createSlice({
     name: 'tenant',
-    initialState: initialState.tenants,
+    initialState: initialState,
     reducers: {
         tenantAdded: tenantsAdapter.addOne,
         tenantsAdded: tenantsAdapter.addMany,
@@ -119,10 +119,9 @@ const tenantSlice = createSlice({
             .addMatcher(
                 authApi.endpoints.getTenants.matchFulfilled,
                 (state, action) => {
-                    tenantsAdapter.setAll(state, action.payload);
+                    tenantsAdapter.setAll(state, action.payload.data);
                 }
             )
-        // Ensure you use authApi here, assuming it's the slice that ultimately includes getUnits
     },
 })
 

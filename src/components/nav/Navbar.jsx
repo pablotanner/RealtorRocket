@@ -19,7 +19,7 @@ import {
     selectAllProperties,
     selectAllTenants,
     selectAllUnits
-} from "../../services/store/objectSlice.js";
+} from "../../services/api/objectSlice.js";
 const items = [
     {
         title: 'Home',
@@ -87,11 +87,8 @@ const Navbar = ({children}) => {
     const authSlice = useSelector(state => state.authSlice);
 
     const properties = useSelector(selectAllProperties);
-    const units = useSelector(selectAllUnits)
-    const tenants = useSelector(selectAllTenants)
-    const leases = useSelector(selectAllLeases)
 
-    console.log(properties, units, tenants, leases)
+    console.log(properties)
 
 
     // use prefetch on user, properties API
