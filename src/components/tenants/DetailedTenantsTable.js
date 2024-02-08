@@ -59,9 +59,10 @@ const DetailedTenantsTable = ({ tenants }) => {
         }
 
     const TenantRow = ({ tenant, key }) => {
-        //const newestLease = tenant?.leases[0];
+        const newestLease = tenant?.leases[0];
 
-        //const mostRecentUnit = useSelector(state => selectUnitByLeaseId(state, newestLease?.id));
+        const mostRecentUnit = useSelector(state => selectUnitByLeaseId(state, newestLease?.id));
+
 
 
         return (
@@ -86,7 +87,7 @@ const DetailedTenantsTable = ({ tenants }) => {
                     <div className="flex justify-center w-[15vw] min-w-[100px]">
                         <div className="flex flex-col justify-center">
                             <h className="font-500 text-md text-gray-800">
-                                {tenant?.leases?.length ? "Unit " + tenant?.leases[0]?.unitId : "No Lease"}
+                                {tenant?.leases?.length ? mostRecentUnit?.unitIdentifier : "No Lease"}
                             </h>
                             <p className="font-300 text-gray-500 text-sm w-[150px]">
                                 {tenant?.leases[0].endDate ? "Lease Ends on " + dateParser(tenant?.leases[0]?.endDate) : "No Lease End Date"}

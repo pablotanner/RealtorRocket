@@ -1,8 +1,6 @@
 import {createEntityAdapter, createSlice} from '@reduxjs/toolkit';
 import {authApi} from "./authApi.js";
 
-console.log(authApi.endpoints)
-
 const propertiesAdapter = createEntityAdapter({
     selectId: (property) => property.id,
     sortComparer: (a, b) => a.createdAt.localeCompare(b.createdAt),
@@ -29,8 +27,8 @@ const initialState = {
 
 
 const propertySlice = createSlice({
-    name: 'property',
-    initialState: initialState,
+    name: 'properties',
+    initialState: initialState.properties,
     reducers: {
         propertyAdded: propertiesAdapter.addOne,
         propertiesAdded: propertiesAdapter.addMany,
@@ -66,8 +64,8 @@ const propertySlice = createSlice({
 })
 
 const unitSlice = createSlice({
-    name: 'unit',
-    initialState: initialState,
+    name: 'units',
+    initialState: initialState.units,
     reducers: {
         unitAdded: unitsAdapter.addOne,
         unitsAdded: unitsAdapter.addMany,
@@ -86,8 +84,8 @@ const unitSlice = createSlice({
 })
 
 const leaseSlice = createSlice({
-    name: 'lease',
-    initialState: initialState,
+    name: 'leases',
+    initialState: initialState.leases,
     reducers: {
         leaseAdded: leasesAdapter.addOne,
         leasesAdded: leasesAdapter.addMany,
@@ -106,8 +104,8 @@ const leaseSlice = createSlice({
 })
 
 const tenantSlice = createSlice({
-    name: 'tenant',
-    initialState: initialState,
+    name: 'tenants',
+    initialState: initialState.tenants,
     reducers: {
         tenantAdded: tenantsAdapter.addOne,
         tenantsAdded: tenantsAdapter.addMany,
@@ -259,13 +257,13 @@ export const selectLeaseByPropertyId = (state, propertyId) => {
 }
 
 export const selectUnitByLeaseId = (state, leaseId) => {
-    return selectUnitById(state, selectLeaseById(state, leaseId).unitId);
+    return selectUnitById(state, selectLeaseById(state, leaseId)?.unitId);
 }
 
 export const selectUnitByTenantId = (state, tenantId) => {
-    return selectUnitById(state, selectLeaseByTenantId(state, tenantId).unitId);
+    return selectUnitById(state, selectLeaseByTenantId(state, tenantId).id);
 }
 
 export const selectUnitByPropertyId = (state, propertyId) => {
-    return selectUnitById(state, selectLeaseByPropertyId(state, propertyId).unitId);
+    return selectUnitById(state, selectLeaseByPropertyId(state, propertyId).id);
 }

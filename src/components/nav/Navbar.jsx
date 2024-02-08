@@ -86,10 +86,6 @@ const Navbar = ({children}) => {
     const currentPage = items.find(item => item.url === location.pathname)?.title || "";
     const authSlice = useSelector(state => state.authSlice);
 
-    const properties = useSelector(selectAllProperties);
-
-    console.log(properties)
-
 
     // use prefetch on user, properties API
     const prefetchProperties = usePrefetch("getProperties")
@@ -103,7 +99,6 @@ const Navbar = ({children}) => {
     prefetchUnits();
     prefetchTenants();
     prefetchLeases();
-
 
     function getNavItems(section) {
         return items.filter(item => item.section === section);

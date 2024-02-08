@@ -1,10 +1,15 @@
 import {authApi} from "../api/authApi.js";
 import authSlice from "../auth/authSlice.js";
 import userSlice from "./userSlice.js";
+// The following imports are not used in this file, but are required for the store to work (injections need to be made before store setup)
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { unitApi } from "../api/unitApi.js";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { propertyApi } from "../api/propertyApi.js";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { leaseApi } from "../api/leaseApi.js";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { tenantApi } from "../api/tenantApi.js";
 
 import {leasesReducer, propertiesReducer, tenantsReducer, unitsReducer} from "../api/objectSlice.js";
@@ -17,10 +22,10 @@ export const store = configureStore({
         [authApi.reducerPath]: authApi.reducer,
         authSlice: authSlice,
         userSlice: userSlice,
-        property: propertiesReducer,
-        unit: unitsReducer,
-        lease: leasesReducer,
-        tenant: tenantsReducer,
+        properties: propertiesReducer,
+        units: unitsReducer,
+        leases: leasesReducer,
+        tenants: tenantsReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({}).concat([authApi.middleware])
