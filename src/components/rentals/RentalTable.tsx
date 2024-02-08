@@ -263,9 +263,9 @@ const RentalTable = ({ units  }) => {
                     <Input
                         disabled
                         placeholder="Search Unit"
-                        value={(table.getColumn("id")?.getFilterValue() as string) ?? ""}
+                        value={(table.getColumn("unitIdentifier")?.getFilterValue() as string) ?? ""}
                         onChange={(event) =>
-                            table.getColumn("id")?.setFilterValue(event.target.value)
+                            table.getColumn("unitIdentifier")?.setFilterValue(event.target.value)
                         }
                         className="pl-10 text-md bg-inherit"
                     />

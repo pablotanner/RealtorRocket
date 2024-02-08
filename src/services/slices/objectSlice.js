@@ -3,19 +3,19 @@ import {authApi} from "../api/authApi.js";
 
 const propertiesAdapter = createEntityAdapter({
     selectId: (property) => property.id,
-    sortComparer: (a, b) => a.createdAt.localeCompare(b.createdAt),
+    sortComparer: (a, b) => b.createdAt.localeCompare(a.createdAt),
 });
 const unitsAdapter = createEntityAdapter({
     selectId: (unit) => unit.id,
-    sortComparer: (a, b) => a.createdAt.localeCompare(b.createdAt),
+    sortComparer: (a, b) => b.createdAt.localeCompare(a.createdAt),
 });
 const leasesAdapter = createEntityAdapter({
     selectId: (lease) => lease.id,
-    sortComparer: (a, b) => a.createdAt.localeCompare(b.createdAt),
+    sortComparer: (a, b) => b.createdAt.localeCompare(a.createdAt),
 });
 const tenantsAdapter = createEntityAdapter({
     selectId: (tenant) => tenant.id,
-    sortComparer: (a, b) => a.createdAt.localeCompare(b.createdAt),
+    sortComparer: (a, b) => b.createdAt.localeCompare(a.createdAt),
 });
 
 const initialState = {
@@ -206,9 +206,14 @@ export const selectPropertiesByPropertyId = (state, propertyId) => {
 export const selectUnitsByPropertyId = (state, propertyId) => {
     if (!propertyId) return [];
     else if (String(propertyId).toLowerCase() === 'all') {
-        return selectAllUnits(state);
+        return selectAllUnits(state).map(unit => {
+            return {...unit, leases: selectLeasesByUnitId(state, unit.id) }
+        })
     }
-    return selectAllUnits(state).filter(unit => unit.realEstateObjectId === propertyId);
+    return selectAllUnits(state).filter(unit => unit.realEstateObjectId === propertyId).map(unit => {
+        return {...unit, leases: selectLeasesByUnitId(state, unit.id) }
+    })
+
 }
 
 export const selectLeasesByUnitId = (state, unitId) => {
