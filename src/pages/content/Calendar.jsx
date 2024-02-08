@@ -1,39 +1,30 @@
-import {Calendar as CalendarItem}  from '../../components/ui/calendar.tsx'
+import {Calendar as CalendarComponent}  from '../../components/ui/calendar.tsx'
 import {useState} from "react";
+import {addDays, nextSaturday, previousSunday} from "date-fns";
 
 const Calendar = () => {
-    // Get the current date
-    const now = new Date();
 
-    // Get the day of the week for the current date
-    const dayOfWeek = now.getDay();
 
-    // Calculate the start of the week (Sunday)
-    const startOfWeek = new Date(now);
-    startOfWeek.setDate(now.getDate() - dayOfWeek);
 
-    // Calculate the end of the week (next Sunday)
-    const endOfWeek = new Date(startOfWeek);
-    endOfWeek.setDate(startOfWeek.getDate() + 6);
+    const events = {
+        maintenance: [new Date(2024, 1, 6), new Date(2024, 1, 7)],
+        lease: [new Date(2024, 1, 6), new Date(2024, 1, 8)],
+        rent: [],
+        other: []
+    }
 
-    // Set the initial selected date state to the start and end of the current week
-    const [selectedDate, setSelectedDate] = useState([startOfWeek, endOfWeek]);
-    const handleWeekSelection = (dates) => {
-        const selected = new Date(dates.from);
 
-        // Get the day of the week for the selected date
-        const dayOfWeek = selected.getDay();
 
-        // Calculate the start of the week (Sunday)
-        const startOfWeek = new Date(selected);
-        startOfWeek.setDate(selected.getDate() - dayOfWeek);
+    const [dayRange, setDayRange] = useState({
+        from: previousSunday(new Date()),
+        to: nextSaturday(new Date())
+    });
 
-        // Calculate the end of the week (next Sunday)
-        const endOfWeek = new Date(startOfWeek);
-        endOfWeek.setDate(startOfWeek.getDate() + 6);
-
-        // Set the selected date state to the start and end of the week
-        setSelectedDate([startOfWeek, endOfWeek]);
+    const selectWeek = (day) => {
+        setDayRange({
+            from: previousSunday(day),
+            to: nextSaturday(day)
+        })
     }
 
     return (
@@ -42,10 +33,17 @@ const Calendar = () => {
                 <div className="text-xl">
                     Week <br/>
                     <p className="text-sm">
-                        {selectedDate[0].toLocaleDateString()} - {selectedDate[1].toLocaleDateString()}
+                        {dayRange.from.toLocaleDateString()} - {dayRange.to.toLocaleDateString()}
                     </p>
                 </div>
-                <CalendarItem mode="range" selected={selectedDate} onSelect={handleWeekSelection}/>
+                <CalendarComponent
+                    selected={dayRange}
+                    mode="range"
+                    today={null}
+                    onDayClick={selectWeek}
+                    fixedWeeks
+                    modifiers={{ ...events }}
+                />
 
                 <div className="text-xl">
                     Your Events and Appointments <br/>

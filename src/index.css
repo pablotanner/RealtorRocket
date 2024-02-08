@@ -77,3 +77,49 @@ body {
   }
 
 }
+
+.maintenance::after {
+  @apply block;
+  @apply w-1;
+  @apply h-1;
+  @apply bg-orange-500;
+  @apply m-1;
+  @apply mx-auto;
+  @apply rounded-full;
+  content: "";
+}
+
+.lease::after {
+  @apply block;
+  @apply w-1;
+  @apply h-1;
+  @apply bg-indigo-600;
+  @apply m-1;
+  @apply mx-auto;
+  @apply rounded-full;
+  content: "";
+}
+
+.rent::after {
+  @apply block;
+  @apply w-1;
+  @apply h-1;
+  @apply bg-emerald-500;
+  @apply m-1;
+  @apply mx-auto;
+  @apply rounded-full;
+  content: "";
+}
+
+.other::after {
+  @apply block;
+  @apply w-1;
+  @apply h-1;
+  @apply bg-gray-500;
+  @apply m-1;
+  @apply mx-auto;
+  @apply rounded-full;
+  content: "";
+}
+
+

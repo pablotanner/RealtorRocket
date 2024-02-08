@@ -16,11 +16,6 @@ function Calendar({
                   }: CalendarProps) {
 
 
-    const fromDate = props.selected[0].getDate();
-
-
-    const toDate = props.selected[1].getDate();
-
     return (
         <DayPicker
             showOutsideDays={showOutsideDays}
@@ -42,11 +37,10 @@ function Calendar({
                 head_cell:
                     "text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]",
                 row: "flex w-full mt-2",
-                cell: "h-9 w-9 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
+                cell: "h-9 w-9 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-full [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-full last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
                 day: cn(
                     buttonVariants({ variant: "ghost" }),
-                    "h-9 w-9 p-0 font-normal aria-selected:opacity-100  ",
-
+                    "h-9 w-9 p-0 font-normal aria-selected:opacity-100 rounded-full",
                 ),
                 day_range_end: "day-range-end",
                 day_selected:
@@ -63,6 +57,19 @@ function Calendar({
             components={{
                 IconLeft: ({ ...props }) => <ChevronLeft className="h-4 w-4" />,
                 IconRight: ({ ...props }) => <ChevronRight className="h-4 w-4" />,
+                DayContent: ({ date, ...props }) => {
+                    return (
+                        <div className="flex flex-col items-center justify-center h-full w-full">
+                            {date.getDate()}
+                            <div className="flex gap-[1px]">
+                                {props?.activeModifiers?.maintenance && <div className="w-1 h-1 bg-red-500 rounded-full"/>}
+                                {props?.activeModifiers?.rent && <div className="w-1 h-1 bg-green-500 rounded-full"/>}
+                                {props?.activeModifiers?.lease && <div className="w-1 h-1 bg-indigo-500 rounded-full"/>}
+                                {props?.activeModifiers?.other && <div className="w-1 h-1 bg-gray-500 rounded-full"/>}
+                            </div>
+                        </div>
+                    )
+                }
             }}
             {...props}
         />
