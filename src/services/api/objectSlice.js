@@ -188,7 +188,7 @@ export const {
 
 
 export const selectUnitsByPropertyId = (state, propertyId) => {
-    return selectAllUnits(state).filter(unit => unit.propertyId === propertyId);
+    return selectAllUnits(state).filter(unit => unit.realEstateObjectId === propertyId);
 }
 
 export const selectLeasesByUnitId = (state, unitId) => {
@@ -214,46 +214,53 @@ export const selectUnitsByTenantId = (state, tenantId) => {
 
 export const selectPropertyByUnitId = (state, unitId) => {
     const unit = selectUnitById(state, unitId );
-    return selectPropertyById(state, unit.propertyId);
+    return selectPropertyById(state, unit.realEstateObjectId);
 }
 
 export const selectPropertyByLeaseId = (state, leaseId) => {
     const lease = selectLeaseById(state, leaseId);
     const unit = selectUnitById(state, lease.unitId);
-    return selectPropertyById(state, unit.propertyId);
+    return selectPropertyById(state, unit?.realEstateObjectId);
 }
 
 export const selectPropertyByTenantId = (state, tenantId) => {
     const units = selectUnitsByTenantId(state, tenantId);
-    return selectPropertyById(state, units[0].propertyId);
+    if (!units || units.length === 0) return null;
+    return selectPropertyById(state, units[0]?.realEstateObjectId);
 }
 
 export const selectLeaseByTenantId = (state, tenantId) => {
-    return selectLeasesByTenantId(state, tenantId)[0];
+    const leases = selectLeasesByTenantId(state, tenantId);
+    if (!leases || leases.length === 0) return null;
+    return leases[0];
 }
 
 export const selectLeaseByUnitId = (state, unitId) => {
-    return selectLeasesByUnitId(state, unitId)[0];
+    const leases = selectLeasesByUnitId(state, unitId);
+    if (!leases || leases.length === 0) return null;
+    return leases[0];
 }
 
 export const selectTenantByLeaseId = (state, leaseId) => {
-    return selectTenantsByLeaseId(state, leaseId)[0];
+    const tenants = selectTenantsByLeaseId(state, leaseId);
+    if (!tenants || tenants.length === 0) return null;
+    return tenants[0];
 }
 
 export const selectTenantByUnitId = (state, unitId) => {
     const lease = selectLeaseByUnitId(state, unitId);
-    return selectTenantById(state, lease.tenantId);
+    return selectTenantById(state, lease?.tenantId);
 }
 
 export const selectTenantByPropertyId = (state, propertyId) => {
     const lease = selectLeaseByPropertyId(state, propertyId);
-    return selectTenantById(state, lease.tenantId);
+    return selectTenantById(state, lease?.tenantId);
 }
 
 
 export const selectLeaseByPropertyId = (state, propertyId) => {
     const unit = selectUnitsByPropertyId(state, propertyId)[0];
-    return selectLeaseByUnitId(state, unit.id);
+    return selectLeaseByUnitId(state, unit?.id);
 }
 
 export const selectUnitByLeaseId = (state, leaseId) => {
@@ -261,9 +268,9 @@ export const selectUnitByLeaseId = (state, leaseId) => {
 }
 
 export const selectUnitByTenantId = (state, tenantId) => {
-    return selectUnitById(state, selectLeaseByTenantId(state, tenantId).id);
+    return selectUnitById(state, selectLeaseByTenantId(state, tenantId)?.id);
 }
 
 export const selectUnitByPropertyId = (state, propertyId) => {
-    return selectUnitById(state, selectLeaseByPropertyId(state, propertyId).id);
+    return selectUnitById(state, selectLeaseByPropertyId(state, propertyId)?.id);
 }
