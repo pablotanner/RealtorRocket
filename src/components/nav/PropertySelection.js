@@ -43,22 +43,27 @@ const PropertySelection = () => {
                         <SelectValue/>
                     </SelectTrigger>
                 </HoverCardTrigger>
-                <HoverCardContent hidden={!property} className="flex flex-row gap-4 justify-start whitespace-nowrap w-fit">
-                        <div className="flex flex-col gap-2 text-sm items-start whitespace-break-spaces">
-                            <img
-                                src={property?.images[0]?.imageUrl}
-                                className="w-12 h-12 min-w-12 min-h-12 rounded-full object-cover"
-                            />
-                            {RealEstateType[property?.realEstateType]}
-                        </div>
-                        <div className="font-500 text-sm text-off-black">
-                            Added on {new Date(property?.createdAt).toLocaleDateString()} <br/>
-                            Units: {property?.units.length}
-                            <p className="text-gray-500 text-xs font-400 whitespace-break-spaces">
-                                {property?.description}
-                            </p>
-                        </div>
-                </HoverCardContent>
+                {
+                    property ? (
+                        <HoverCardContent className="flex flex-row gap-4 justify-start whitespace-nowrap w-fit">
+                            <div className="flex flex-col gap-2 text-sm items-start whitespace-break-spaces">
+                                <img
+                                    src={property?.images[0]?.imageUrl}
+                                    className="w-12 h-12 min-w-12 min-h-12 rounded-full object-cover"
+                                />
+                                Units: {property?.units.length}
+                            </div>
+                            <div className="font-500 text-sm text-off-black">
+                                Added on {new Date(property?.createdAt).toLocaleDateString()} <br/>
+                                {RealEstateType[property?.realEstateType]}
+                                <p className="text-gray-500 text-xs font-400 whitespace-break-spaces">
+                                    {property?.description}
+                                </p>
+                            </div>
+                        </HoverCardContent>
+                    ) : null
+                }
+
             </HoverCard>
 
 
