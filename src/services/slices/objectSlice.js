@@ -247,7 +247,7 @@ export const selectTenantsByPropertyId = (state, propertyId) => {
             tenants.push(selectTenantById(state, lease.tenantId));
         });
     });
-    return tenants;
+    return tenants.filter((tenant) => tenant !== undefined);
 }
 
 export const selectTenantsByLeaseId = (state, leaseId) => {
