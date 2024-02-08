@@ -14,12 +14,7 @@ import {
 } from "lucide-react";
 import { useSelector} from "react-redux";
 import {usePrefetch} from "../../services/api/authApi.js"
-import {
-    selectAllLeases,
-    selectAllProperties,
-    selectAllTenants,
-    selectAllUnits
-} from "../../services/slices/objectSlice.js";
+
 const items = [
     {
         title: 'Home',

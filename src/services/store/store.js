@@ -14,6 +14,7 @@ import { tenantApi } from "../api/tenantApi.js";
 
 import {leasesReducer, propertiesReducer, tenantsReducer, unitsReducer} from "../slices/objectSlice.js";
 import { configureStore } from '@reduxjs/toolkit/react'
+import {eventsReducer} from "../slices/eventSlice.js";
 
 
 
@@ -26,6 +27,7 @@ export const store = configureStore({
         units: unitsReducer,
         leases: leasesReducer,
         tenants: tenantsReducer,
+        events: eventsReducer
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({}).concat([authApi.middleware])
