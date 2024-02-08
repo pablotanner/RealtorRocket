@@ -4,22 +4,25 @@ import RentalKeyCard from "../../components/rentals/RentalKeyCard.js";
 import {Label} from "../../components/ui/label.tsx";
 import {BathIcon, BedIcon, CarFront, LandPlot} from "lucide-react";
 import {numberToLiteral} from "../../utils/formatters.js";
-import {FaStairs} from "react-icons/fa6";
 import TenantCard from "../../components/rentals/TenantCard.js";
+import {useSelector} from "react-redux";
+import {selectPropertyByUnitId} from "../../services/api/objectSlice.js";
 
 
 const RentalDetail = (props) => {
-
     const {data} = props;
 
     const { id } = useParams();
-    const navigate = useNavigate();
+
+   // const navigate = useNavigate();
+
+    const property = useSelector(state => selectPropertyByUnitId(state, id));
 
     return (
         <div className="min-w-fit flex flex-row flex-wrap gap-x-6 gap-y-8">
             <div className="flex flex-row flex-wrap justify-start w-[100%] gap-x-8 gap-y-8">
-                <DetailedPropertyCard property={data?.data?.realEstateObject}/>
-                <RentalKeyCard unit={data?.data} isSingleUnit={data?.data?.realEstateObject?.units.length === 1}/>
+                <DetailedPropertyCard property={property}/>
+                <RentalKeyCard unit={data?.data} isSingleUnit={property?.units?.length === 1}/>
 
                 <TenantCard/>
 
@@ -36,7 +39,7 @@ const RentalDetail = (props) => {
 
             </div>
 
-            <div className="flex flex-wrap flex-row w-[100%] gap-8 items-center w-fit">
+            <div className="flex flex-wrap flex-row  gap-8 items-center w-fit">
                 <div className="hidden xs:flex flex-row gap-7 border-2 h-fit border-gray-200 rounded-xl w-fit">
                     <div className="flex flex-col gap-1 border-gray-200 p-3">
                         <Label className="font-500 text-gray-500 text-md">

@@ -26,6 +26,14 @@ const initialState = {
 }
 
 
+/**
+ * The addMatchers are used to update the properties/units/tenant/leases whenever the API call for them goes through,
+ * the logic of when this happens is handled by the Tags in the API Slice.
+ * These states are used to store the data from the API calls and offer lookups for the data (e.g. from property to tenant),
+ * so that the API calls need to send less data.
+ */
+
+
 const propertySlice = createSlice({
     name: 'properties',
     initialState: initialState.properties,
@@ -188,22 +196,27 @@ export const {
 
 
 export const selectUnitsByPropertyId = (state, propertyId) => {
+    if (!propertyId) return [];
     return selectAllUnits(state).filter(unit => unit.realEstateObjectId === propertyId);
 }
 
 export const selectLeasesByUnitId = (state, unitId) => {
+    if (!unitId) return [];
     return selectAllLeases(state).filter(lease => lease.unitId === unitId);
 }
 
 export const selectTenantsByLeaseId = (state, leaseId) => {
+    if (!leaseId) return [];
     return selectAllTenants(state).filter(tenant => tenant.leaseId === leaseId);
 }
 
 export const selectLeasesByTenantId = (state, tenantId) => {
+    if (!tenantId) return [];
     return selectAllLeases(state).filter(lease => lease.tenantId === tenantId);
 }
 
 export const selectUnitsByTenantId = (state, tenantId) => {
+    if (!tenantId) return [];
     const leases = selectLeasesByTenantId(state, tenantId);
     const units = [];
     leases.forEach(lease => {
@@ -213,64 +226,76 @@ export const selectUnitsByTenantId = (state, tenantId) => {
 }
 
 export const selectPropertyByUnitId = (state, unitId) => {
+    if (!unitId) return null;
     const unit = selectUnitById(state, unitId );
     return selectPropertyById(state, unit.realEstateObjectId);
 }
 
 export const selectPropertyByLeaseId = (state, leaseId) => {
+    if (!leaseId) return null;
     const lease = selectLeaseById(state, leaseId);
     const unit = selectUnitById(state, lease.unitId);
     return selectPropertyById(state, unit?.realEstateObjectId);
 }
 
 export const selectPropertyByTenantId = (state, tenantId) => {
+    if (!tenantId) return null;
     const units = selectUnitsByTenantId(state, tenantId);
     if (!units || units.length === 0) return null;
     return selectPropertyById(state, units[0]?.realEstateObjectId);
 }
 
 export const selectLeaseByTenantId = (state, tenantId) => {
+    if (!tenantId) return null;
     const leases = selectLeasesByTenantId(state, tenantId);
     if (!leases || leases.length === 0) return null;
     return leases[0];
 }
 
 export const selectLeaseByUnitId = (state, unitId) => {
+    if (!unitId) return null;
     const leases = selectLeasesByUnitId(state, unitId);
     if (!leases || leases.length === 0) return null;
     return leases[0];
 }
 
 export const selectTenantByLeaseId = (state, leaseId) => {
+    if (!leaseId) return null;
     const tenants = selectTenantsByLeaseId(state, leaseId);
     if (!tenants || tenants.length === 0) return null;
     return tenants[0];
 }
 
 export const selectTenantByUnitId = (state, unitId) => {
+    if (!unitId) return null;
     const lease = selectLeaseByUnitId(state, unitId);
     return selectTenantById(state, lease?.tenantId);
 }
 
 export const selectTenantByPropertyId = (state, propertyId) => {
+    if (!propertyId) return null;
     const lease = selectLeaseByPropertyId(state, propertyId);
     return selectTenantById(state, lease?.tenantId);
 }
 
 
 export const selectLeaseByPropertyId = (state, propertyId) => {
+    if (!propertyId) return null;
     const unit = selectUnitsByPropertyId(state, propertyId)[0];
     return selectLeaseByUnitId(state, unit?.id);
 }
 
 export const selectUnitByLeaseId = (state, leaseId) => {
+    if (!leaseId) return null;
     return selectUnitById(state, selectLeaseById(state, leaseId)?.unitId);
 }
 
 export const selectUnitByTenantId = (state, tenantId) => {
+    if (!tenantId) return null;
     return selectUnitById(state, selectLeaseByTenantId(state, tenantId)?.id);
 }
 
 export const selectUnitByPropertyId = (state, propertyId) => {
+    if (!propertyId) return null;
     return selectUnitById(state, selectLeaseByPropertyId(state, propertyId)?.id);
 }
