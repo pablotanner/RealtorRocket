@@ -11,7 +11,7 @@ import {useGetUnitQuery, useGetUnitsQuery} from "../services/api/unitApi.js";
 import {useGetTenantsQuery} from "../services/api/tenantApi.js";
 import {useGetLeasesQuery} from "../services/api/leaseApi.js";
 import Financials from "./content/Financials.jsx";
-
+import Calendar from "./content/Calendar.jsx";
 
 export const PropertiesPage = () => {
     return (
@@ -71,6 +71,14 @@ export const FinancialsPage = () => {
     return (
         <PageWrapper query={useGetLeasesQuery}>
             <Financials/>
+        </PageWrapper>
+    )
+}
+
+export const CalendarPage = () => {
+    return (
+        <PageWrapper>
+            <Calendar/>
         </PageWrapper>
     )
 }
