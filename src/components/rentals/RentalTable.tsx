@@ -7,7 +7,6 @@ import {
     VisibilityState
 } from "@tanstack/react-table";
 import {DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuCheckboxItem} from "../ui/dropdown-menu.tsx";
-import {Checkbox} from "../ui/checkbox.tsx";
 import {Button} from "../ui/button.tsx";
 import {ArrowUpDown, ChevronDown, LinkIcon, MoreHorizontal} from "lucide-react";
 import {useState} from "react";
@@ -16,39 +15,7 @@ import {Input} from "../ui/input.tsx";
 import {FaMagnifyingGlass} from "react-icons/fa6";
 import {useNavigate} from "react-router-dom";
 import {moneyParser} from "../../utils/formatters.js";
-
-class Lease {
-    id: string;
-    startDate: string;
-    endDate: string;
-    tenant: Tenant;
-}
-
-class Tenant {
-    id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    phone: string;
-}
-
-class Unit {
-    id: string;
-    unitIdentifier: string;
-    unitNumber: string;
-    floor: number;
-    unitSize: number;
-    numOfFloors: number;
-    numOfRooms: number;
-    numOfBathrooms: number;
-    numOfBedrooms: number;
-    rentalPrice: number;
-    status: string;
-    realEstateObject: Property;
-    realEstateObjectId: string;
-    amenities: Amenity[];
-    leases: Lease[];
-}
+import {Unit} from "../../utils/classes.ts";
 
 
 const SendToUnit = ({unit}) => {
@@ -66,25 +33,6 @@ const SendToUnit = ({unit}) => {
 
 }
 
-
-class Amenity {
-    id: string;
-    name: string;
-    description: string;
-}
-
-class Property {
-    id: string;
-    realEstateType: string;
-    title: string;
-    description: string;
-    marketPrice: number;
-    lotSize: number;
-    yearBuilt: number;
-    units: Unit[];
-    amenities: Amenity[];
-}
-
 const RentalTableDropdown = ({unit}) => {
     const navigate = useNavigate()
 
@@ -99,7 +47,7 @@ const RentalTableDropdown = ({unit}) => {
             <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuItem
-                    onClick={() => navigator.clipboard.writeText(unit.id)}
+                    onClick={() => navigator.clipboard.writeText(String(unit.id))}
                 >
                     Copy ID
                 </DropdownMenuItem>

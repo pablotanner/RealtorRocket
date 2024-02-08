@@ -16,43 +16,8 @@ import {Input} from "../ui/input.tsx";
 import {FaMagnifyingGlass} from "react-icons/fa6";
 import {RealEstateType} from "../../utils/magicNumbers.js"
 import {moneyParser} from "../../utils/formatters.js";
+import {Property} from "../../utils/classes.ts";
 
-class Lease {
-    id: string;
-}
-
-class Unit {
-    id: string;
-    unitNumber: string;
-    floor: number;
-    unitSize: number;
-    numOfFloors: number;
-    numOfRooms: number;
-    numOfBathrooms: number;
-    numOfBedrooms: number;
-    rentalPrice: number;
-    status: string;
-    amenities: Amenity[];
-    leases: Lease[];
-}
-
-class Amenity {
-    id: string;
-    name: string;
-    description: string;
-}
-
-class Property {
-    id: string;
-    realEstateType: string;
-    title: string;
-    description: string;
-    marketPrice: number;
-    lotSize: number;
-    yearBuilt: number;
-    units: Unit[];
-    amenities: Amenity[];
-}
 
 const columns: ColumnDef<Property>[] = [
     {
@@ -200,7 +165,7 @@ const columns: ColumnDef<Property>[] = [
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem
-                            onClick={() => navigator.clipboard.writeText(property.id)}
+                            onClick={() => navigator.clipboard.writeText(String(property.id))}
                         >
                             Copy ID
                         </DropdownMenuItem>
