@@ -11,9 +11,6 @@ const userSlice = createSlice({
         selectProperty: (state, action) => {
             state.selectedProperty = action.payload
         },
-        propertiesByProperty: (state, action) => {
-
-        }
     },
 })
 

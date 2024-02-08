@@ -15,7 +15,7 @@ import {useNavigate} from "react-router-dom";
 import {useDeleteTenantMutation} from "../../services/api/tenantApi.js";
 import {dateParser} from "../../utils/formatters.js";
 import {useSelector} from "react-redux";
-import {selectUnitByLeaseId, selectUnitsByTenantId} from "../../services/api/objectSlice.js";
+import {selectUnitByLeaseId, selectUnitsByTenantId} from "../../services/slices/objectSlice.js";
 
 const DetailedTenantsTable = ({ tenants }) => {
 

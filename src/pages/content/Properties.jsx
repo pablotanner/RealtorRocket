@@ -3,7 +3,7 @@ import PropertyTable from "../../components/properties/PropertyTable.tsx";
 import DetailedPropertyTable from "../../components/properties/DetailedPropertyTable.js";
 import {Button} from "../../components/ui/button.tsx";
 import {useState} from "react";
-import {selectPropertiesByPropertyId} from "../../services/api/objectSlice.js";
+import {selectPropertiesByPropertyId} from "../../services/slices/objectSlice.js";
 import {useSelector} from "react-redux";
 
 const Properties = (props) => {

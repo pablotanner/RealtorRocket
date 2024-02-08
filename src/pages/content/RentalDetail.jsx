@@ -6,7 +6,7 @@ import {BathIcon, BedIcon, CarFront, LandPlot} from "lucide-react";
 import {numberToLiteral} from "../../utils/formatters.js";
 import TenantCard from "../../components/rentals/TenantCard.js";
 import {useSelector} from "react-redux";
-import {selectPropertyByUnitId} from "../../services/api/objectSlice.js";
+import {selectPropertyByUnitId} from "../../services/slices/objectSlice.js";
 
 
 const RentalDetail = (props) => {

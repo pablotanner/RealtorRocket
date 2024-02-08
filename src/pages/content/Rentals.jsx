@@ -7,6 +7,7 @@ import {useNavigate} from "react-router-dom";
 import {Button} from "../../components/ui/button.tsx";
 import {PlusIcon} from "lucide-react";
 import RentalTable from "../../components/rentals/RentalTable.tsx";
+import {selectUnitsByPropertyId} from "../../services/slices/objectSlice.js";
 
 
 const Rentals = (props) => {
@@ -17,9 +18,8 @@ const Rentals = (props) => {
     const selectedPropertyId = useSelector((state) => state.userSlice.selectedProperty)
 
 
-    let units = data?.data || [];
 
-    if (selectedPropertyId !== "All") units = data?.data?.filter((unit) => unit.realEstateObjectId === selectedPropertyId)
+    const units = useSelector(state => selectUnitsByPropertyId(state, selectedPropertyId))
 
 
     if (!units || units.length === 0)  return (
@@ -34,13 +34,6 @@ const Rentals = (props) => {
             These are your rental properties, so the units of each property are displayed here. You can filter the units by property using the dropdown above.
             <br />
 
-            {
-                selectedPropertyId !== "All" && (
-                    <div className="text-primary-dark">
-                        Only showing rental units for property with ID: {selectedPropertyId}
-                    </div>
-                )
-            }
             <div className="flex gap-4 flex-wrap">
                 <RentalTable units={units} />
 

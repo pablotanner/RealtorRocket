@@ -1,5 +1,5 @@
 import {createEntityAdapter, createSlice} from '@reduxjs/toolkit';
-import {authApi} from "./authApi.js";
+import {authApi} from "../api/authApi.js";
 
 const propertiesAdapter = createEntityAdapter({
     selectId: (property) => property.id,

@@ -8,7 +8,7 @@
 body {
   /*background-image: linear-gradient(to top left, #4a044e 10%, #2e1065 30%, #064e3b 90%);*/
   /*background-image: linear-gradient(to bottom right, #e6efff 20%, #e9f7ff 40%, #ffffff 90%);*/
-  background-color: #F4F4F4;
+  background-color: #F4F4F4; /*#FAFBFC*/
 }
 
 html,
@@ -25,7 +25,6 @@ body {
     --gradient-first: 187 92% 69%;
     --gradient-second: 207 92% 48%;
     --gradient-third: 225 89% 47%;
-    --background: #F4F4F4;
     --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;

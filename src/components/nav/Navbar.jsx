@@ -19,7 +19,7 @@ import {
     selectAllProperties,
     selectAllTenants,
     selectAllUnits
-} from "../../services/api/objectSlice.js";
+} from "../../services/slices/objectSlice.js";
 const items = [
     {
         title: 'Home',

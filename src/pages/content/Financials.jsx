@@ -1,6 +1,6 @@
 import LeasesTable from "../../components/financials/LeasesTable.tsx";
 import {useSelector} from "react-redux";
-import {selectLeasesByPropertyId} from "../../services/api/objectSlice.js";
+import {selectLeasesByPropertyId} from "../../services/slices/objectSlice.js";
 
 
 const Financials = (props) => {

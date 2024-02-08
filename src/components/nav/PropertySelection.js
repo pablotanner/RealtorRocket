@@ -1,10 +1,10 @@
 import {Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue} from "../ui/select.tsx";
 import {useGetPropertiesQuery} from "../../services/api/propertyApi.js";
 import {useDispatch, useSelector} from "react-redux";
-import {selectProperty} from "../../services/store/userSlice.js";
+import {selectProperty} from "../../services/slices/userSlice.js";
 import {getRealEstateIcon, RealEstateType} from "../../utils/magicNumbers.js";
 import {HoverCard, HoverCardContent, HoverCardTrigger} from "../ui/hover-card.tsx";
-import {selectPropertyById} from "../../services/api/objectSlice.js";
+import {selectPropertyById} from "../../services/slices/objectSlice.js";
 
 const PropertySelection = () => {
     const {data, isLoading, isSuccess} = useGetPropertiesQuery();

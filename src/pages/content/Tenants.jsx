@@ -2,7 +2,7 @@ import DetailedTenantsTable from "../../components/tenants/DetailedTenantsTable.
 import {Button} from "../../components/ui/button.tsx";
 import CreateTenant from "../../components/tenants/TenantCreation/CreateTenant.js";
 import {UserRoundPlus} from "lucide-react";
-import {selectTenantsByPropertyId} from "../../services/api/objectSlice.js";
+import {selectTenantsByPropertyId} from "../../services/slices/objectSlice.js";
 import {useSelector} from "react-redux";
 
 
