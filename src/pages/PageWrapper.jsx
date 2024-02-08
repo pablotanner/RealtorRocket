@@ -1,8 +1,10 @@
 import React from "react";
 import ErrorMessage from "../components/notifications/ErrorAlert.js";
+import {useSelector} from "react-redux";
 
 
 const PageWrapper = (props) => {
+    const propertySelection = useSelector((state) => state.userSlice.selectedProperty)
 
     if (!props?.query) { return props?.children || null}
 
@@ -25,7 +27,7 @@ const PageWrapper = (props) => {
             <>
                 {React.Children.map(props.children, child => {
                     if (React.isValidElement(child)) {
-                        return React.cloneElement(child, { data: data });
+                        return React.cloneElement(child, { data: data, propertySelection: propertySelection });
                     }
                     return child;
                 })}

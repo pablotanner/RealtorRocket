@@ -3,12 +3,16 @@ import PropertyTable from "../../components/properties/PropertyTable.tsx";
 import DetailedPropertyTable from "../../components/properties/DetailedPropertyTable.js";
 import {Button} from "../../components/ui/button.tsx";
 import {useState} from "react";
+import {selectPropertiesByPropertyId} from "../../services/api/objectSlice.js";
+import {useSelector} from "react-redux";
 
 const Properties = (props) => {
-    const {data} = props;
+    const {propertySelection} = props;
 
     const [view, setView] = useState("detailed") // ["detailed", "compact"]
 
+
+    const properties = useSelector(state => selectPropertiesByPropertyId(state, propertySelection));
 
     const ViewSelection = () => {
         return (
@@ -45,7 +49,7 @@ const Properties = (props) => {
 
             <ViewSelection />
 
-            {view === "detailed" ? <DetailedPropertyTable properties={data?.data} /> : <PropertyTable properties={data?.data} />}
+            {view === "detailed" ? <DetailedPropertyTable properties={properties} /> : <PropertyTable properties={properties} />}
 
 
         </div>

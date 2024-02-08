@@ -194,15 +194,55 @@ export const {
     selectIds: selectTenantIds,
 } = tenantsAdapter.getSelectors((state) => state.tenants);
 
+export const selectPropertiesByPropertyId = (state, propertyId) => {
+    if (!propertyId) return [];
+    else if (String(propertyId).toLowerCase() === 'all') {
+        return selectAllProperties(state);
+    }
+    return selectAllProperties(state).filter(property => property.id === propertyId);
+}
+
 
 export const selectUnitsByPropertyId = (state, propertyId) => {
     if (!propertyId) return [];
+    else if (String(propertyId).toLowerCase() === 'all') {
+        return selectAllUnits(state);
+    }
     return selectAllUnits(state).filter(unit => unit.realEstateObjectId === propertyId);
 }
 
 export const selectLeasesByUnitId = (state, unitId) => {
     if (!unitId) return [];
     return selectAllLeases(state).filter(lease => lease.unitId === unitId);
+}
+
+export const selectLeasesByPropertyId = (state, propertyId) => {
+    if (!propertyId) return [];
+    if (String(propertyId).toLowerCase() === 'all') {
+        return selectAllLeases(state);
+    }
+    const units = selectUnitsByPropertyId(state, propertyId);
+    const leases = [];
+    units.forEach(unit => {
+        leases.push(...selectLeasesByUnitId(state, unit.id));
+    });
+    return leases;
+}
+
+export const selectTenantsByPropertyId = (state, propertyId) => {
+    if (!propertyId) return [];
+    else if (String(propertyId).toLowerCase() === 'all') {
+        return selectAllTenants(state);
+    }
+    const units = selectUnitsByPropertyId(state, propertyId);
+    const tenants = [];
+    units.forEach(unit => {
+        const leases = selectLeasesByUnitId(state, unit.id);
+        leases.forEach(lease => {
+            tenants.push(selectTenantById(state, lease.tenantId));
+        });
+    });
+    return tenants;
 }
 
 export const selectTenantsByLeaseId = (state, leaseId) => {

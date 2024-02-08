@@ -2,11 +2,14 @@ import DetailedTenantsTable from "../../components/tenants/DetailedTenantsTable.
 import {Button} from "../../components/ui/button.tsx";
 import CreateTenant from "../../components/tenants/TenantCreation/CreateTenant.js";
 import {UserRoundPlus} from "lucide-react";
+import {selectTenantsByPropertyId} from "../../services/api/objectSlice.js";
+import {useSelector} from "react-redux";
 
 
 const Tenants = (props) => {
-    const {data} = props;
+    const {propertySelection} = props;
 
+    const tenants = useSelector(state => selectTenantsByPropertyId(state,propertySelection))
 
 
     return (
@@ -16,7 +19,7 @@ const Tenants = (props) => {
                 <CreateTenant trigger={<Button variant="gradient"><UserRoundPlus className="w-4 h-4 mr-3"/> Create Tenant</Button>} />
             </div>
 
-            <DetailedTenantsTable tenants={data.data} />
+            <DetailedTenantsTable tenants={tenants} />
         </div>
     )
 }
