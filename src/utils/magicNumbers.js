@@ -54,6 +54,8 @@ export const getRealEstateIcon = (type) => {
             return <FactoryIcon className={iconClass}/>;
         case RealEstateType.LAND:
             return <LandPlot className={iconClass}/>;
+        case RealEstateType.FARM:
+            return <Tractor className={iconClass}/>;
         default:
             return <BiQuestionMark className={iconClass}/>;
     }
