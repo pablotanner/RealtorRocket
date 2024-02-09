@@ -1,26 +1,20 @@
 import {Card, CardHeader, CardTitle,CardContent,CardDescription} from "../../components/ui/card.tsx";
 import InfoCard from "../../components/home/InfoCard.js";
 import {useGetPropertiesQuery} from "../../services/api/propertyApi.js";
+import {useGetUnitsQuery} from "../../services/api/unitApi.js";
 
 const Home = () => {
 
     const {data: properties} = useGetPropertiesQuery();
 
-
-    let unitCount = 0;
-
-
-    properties?.data?.forEach((property) => {
-        unitCount += property.units.length
-        }
-    )
+    const {data: units} = useGetUnitsQuery();
 
 
     return (
         <div className="gap-8 flex flex-col">
               <div className="flex flex-row gap-4 flex-wrap">
                   <InfoCard title="Total Properties" number={properties?.data?.length} link="/properties"/>
-                  <InfoCard title="Total Rental Units" number={unitCount} link="/rentals"/>
+                  <InfoCard title="Total Rental Units" number={units?.data?.length} link="/rentals"/>
                   <InfoCard title="Total Tenants" number="0" link="/tenants"/>
                   <InfoCard title="Total Reports" number="0" link="/maintenance"/>
               </div>

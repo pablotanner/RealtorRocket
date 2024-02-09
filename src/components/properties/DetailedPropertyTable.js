@@ -15,6 +15,7 @@ import {useNavigate} from "react-router-dom";
 import {RealEstateType} from "../../utils/magicNumbers.js";
 import {useDeletePropertyMutation} from "../../services/api/propertyApi.js";
 
+import {Image} from "../ui/Image.tsx"
 
 const DetailedPropertyTable = ({ properties }) => {
     const navigate = useNavigate()
@@ -170,7 +171,7 @@ const DetailedPropertyTable = ({ properties }) => {
         return (
             <div key={key} style={{gridTemplateColumns: "minmax(250px,30%) 1fr 1fr 1fr 50px" }} className="bg-white rounded-2xl border-gray-100 border-2 p-4 w-full grid grid-cols-5 gap-8 overflow-auto h-[150px] hover:bg-gray-50">
                 <div className="flex flex-row gap-4 w-full items-center">
-                    <img src={property?.images[0].imageUrl} className="w-20 h-20 object-cover rounded-sm hover:opacity-75 cursor-pointer"
+                    <Image src={property?.images[0].imageUrl} className="w-20 h-20 object-cover rounded-sm hover:opacity-75 cursor-pointer"
                          onClick={() => navigate(`/properties/${property?.id}`)} alt="Property Image"
                     />
                     <div className="flex flex-col justify-start overflow-hidden">

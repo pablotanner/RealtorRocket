@@ -1,6 +1,7 @@
 import {Card, CardContent, CardHeader, CardTitle} from "../ui/card.tsx";
 import {useNavigate} from "react-router-dom";
 import {ArrowRightIcon} from "lucide-react";
+import {Skeleton} from "../ui/skeleton.tsx";
 
 
 const InfoCard = ({title, number, link}) => {
@@ -17,7 +18,10 @@ const InfoCard = ({title, number, link}) => {
                 </div>
             </CardHeader>
             <CardContent className="py-4 px-4 mb-4 text-3xl">
-                {number}
+                {number !== undefined ? number : (
+                    <Skeleton className="w-10 h-8" />
+                )
+                }
             </CardContent>
         </Card>
     )
