@@ -16,7 +16,7 @@ import {
     DropdownMenuTrigger
 } from "./dropdown-menu.tsx";
 import {Button} from "./button.tsx";
-import {ListFilter, X} from "lucide-react";
+import {ArrowUpDown, ListFilter, MoveDown, MoveUp, X} from "lucide-react";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "./tabs.tsx";
 import {Checkbox} from "./checkbox.tsx";
 
@@ -40,7 +40,7 @@ const DateFilterOptions = [
 ]
 
 const FilterSymbols = {
-    contains: "incl",
+    contains: "contains",
     equals: "=",
     greaterThan: ">",
     lessThan: "<",
@@ -103,6 +103,10 @@ const getFilterOptions = (type) => {
 
 
 export const DataTable = ({data: tableData, columns: tableColumns}, props) => {
+    function getColumnName (column) {
+        return column.columnDef.meta.title;
+    }
+
     const data = useMemo(() => tableData, [tableData]);
     const columns = useMemo(() => {
         return tableColumns.map(column => {
@@ -114,7 +118,39 @@ export const DataTable = ({data: tableData, columns: tableColumns}, props) => {
                 default:
                     return column;
             }
-        });
+        }).map(column => {
+            const headerLabel = column.header;
+            if (column.enableSorting) {
+                return {
+                    ...column,
+                    meta: {
+                        ...column.meta,
+                        title: column.meta?.title || headerLabel
+                    },
+                    header: ({column}) => {
+                        return (
+                            <Button
+                                variant="ghost"
+                                size="ghost"
+                                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                                className="capitalize"
+                            >
+                                {headerLabel}
+
+                                {column.getIsSorted() === "asc" && (
+                                    <MoveUp className="ml-2 h-4 w-4" />
+                                )}
+                                {column.getIsSorted() === "desc" && (
+                                    <MoveDown className="ml-2 h-4 w-4" />
+                                )}
+                            </Button>
+                        )
+
+                    }
+                }
+            }
+            return column;
+        })
     }, [tableColumns]);
 
 
@@ -173,9 +209,6 @@ export const DataTable = ({data: tableData, columns: tableColumns}, props) => {
         });
     }, [tempColumnFilters]);
 
-    function getColumnName (column) {
-        return column.columnDef.header.length > 1 ? column.columnDef.header : column.columnDef.meta?.title || column.id
-    }
 
 
     const FilterItem = ({filter}) => {
@@ -257,7 +290,7 @@ export const DataTable = ({data: tableData, columns: tableColumns}, props) => {
                                                     className="capitalize"
                                                     checked={column.getIsVisible()}
                                                 />
-                                                {column.columnDef.header.length > 1 ? column.columnDef.header : column.columnDef.meta?.title || column.id}
+                                                {getColumnName(column)}
                                             </div>
                                         )
                                     })}
@@ -271,7 +304,7 @@ export const DataTable = ({data: tableData, columns: tableColumns}, props) => {
                                             <DropdownMenuSub>
                                                 <DropdownMenuSubTrigger>
                                                     <div className="capitalize">
-                                                        {column.columnDef.header.length > 1 ? column.columnDef.header : column.columnDef.meta?.title || column.id}
+                                                        {getColumnName(column)}
                                                     </div>
                                                 </DropdownMenuSubTrigger>
                                                 <DropdownMenuSubContent>

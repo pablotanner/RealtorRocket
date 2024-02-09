@@ -36,7 +36,8 @@ const columns: ColumnDef<Property>[] = [
     },
     {
         accessorKey: "realEstateType",
-        header: "Type of Real Estate",
+        header: "Type",
+        enableSorting: true,
         cell: ({ row }) => (
             <div className="capitalize">{RealEstateType[row.getValue("realEstateType")]}</div>
         ),
@@ -46,18 +47,8 @@ const columns: ColumnDef<Property>[] = [
     },
     {
         accessorKey: "title",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    size="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Title
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            )
-        },
+        header: "Title",
+        enableSorting: true,
         cell: ({ row }) => <div className="lowercase">{row.getValue("title")}</div>,
         meta: {
             type: "string"
@@ -69,22 +60,13 @@ const columns: ColumnDef<Property>[] = [
         cell: ({ row }) => <div className="lowercase">{row.getValue("description")}</div>,
         meta: {
             type: "string"
-        }
+        },
+        enableSorting: true,
     },
     {
         accessorKey: "marketPrice",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    size="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Market Price
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            )
-        },
+        header: "Market Price",
+        enableSorting: true,
         cell: ({ row }) => <div>{moneyParser(row.getValue("marketPrice"))}</div>,
         meta: {
             type: "number"
@@ -92,18 +74,8 @@ const columns: ColumnDef<Property>[] = [
     },
     {
         accessorKey: "lotSize",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    size="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Lot Size
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            )
-        },
+        header: "Lot Size",
+        enableSorting: true,
         cell: ({ row }) => <div className="lowercase">{row.getValue("lotSize")} m<sup>2</sup></div>,
         meta: {
             type: "number"
@@ -111,49 +83,18 @@ const columns: ColumnDef<Property>[] = [
     },
     {
         accessorKey: "yearBuilt",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    size="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Year Built
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            )
-        },
+        header: "Year Built",
+        enableSorting: true,
         cell: ({ row }) => <div className="lowercase">{row.getValue("yearBuilt")}</div>,
         meta: {
             type: "number"
         }
     },
 
-    /*{
-        accessorKey: "amenities",
-        header: "Amenities",
-        cell: ({ row }) => (
-            <div className="lowercase">
-                {row.getValue("amenities").map((amenity: Amenity) => amenity.name).join(", ")}
-            </div>
-        ),
-    },
-
-     */
     {
         accessorKey: "units",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    size="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Units
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            )
-        },
+        header: "Units",
+        enableSorting: true,
         // @ts-expect-error - TS doesn't understand that we're using a custom accessor
         cell: ({ row }) => <div className="lowercase">{row.getValue("units").length} units</div>,
         meta: {
