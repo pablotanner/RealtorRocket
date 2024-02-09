@@ -16,9 +16,10 @@ import {
     DropdownMenuTrigger
 } from "./dropdown-menu.tsx";
 import {Button} from "./button.tsx";
-import {ArrowUpDown, ListFilter, MoveDown, MoveUp, X} from "lucide-react";
+import {ListFilter, MoveDown, MoveUp, X} from "lucide-react";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "./tabs.tsx";
 import {Checkbox} from "./checkbox.tsx";
+import {isAfter, isBefore, isSameDay} from "date-fns";
 
 
 
@@ -49,42 +50,62 @@ const FilterSymbols = {
 
 const stringFilterFn = (row, columnId, filterValue, addMeta) => {
     const value = row.getValue(columnId);
-    switch (filterValue.type) {
-        case "contains":
-            return value.toLowerCase().includes(filterValue.value.toLowerCase());
-        case "equals":
-            return value.toLowerCase() === filterValue.value.toLowerCase();
-        default:
-            return true;
+    try{
+        switch (filterValue.type) {
+            case "contains":
+                return value.toLowerCase().includes(filterValue.value.toLowerCase());
+            case "equals":
+                return value.toLowerCase() === filterValue.value.toLowerCase();
+            default:
+                return true;
+        }
+    }
+    catch (e) {
+        return false;
     }
 }
 
 const numberFilterFn = (row, columnId, filterValue, addMeta) => {
     const value = row.getValue(columnId);
-    switch (filterValue.type) {
-        case "equals":
-            return Number(value) === Number(filterValue.value);
-        case "greaterThan":
-            return Number(value) > Number(filterValue.value);
-        case "lessThan":
-            return Number(value) < Number(filterValue.value);
-        default:
-            return true;
+
+    try {
+        switch (filterValue.type) {
+            case "equals":
+                return Number(value) === Number(filterValue.value);
+            case "greaterThan":
+                return Number(value) > Number(filterValue.value);
+            case "lessThan":
+                return Number(value) < Number(filterValue.value);
+            default:
+                return true;
+        }
+    }
+    catch (e) {
+        return false;
     }
 }
 
 const dateFilterFn = (row, columnId, filterValue, addMeta) => {
     const value = row.getValue(columnId);
-    switch (filterValue.type) {
-        case "equals":
-            return value === filterValue.value;
-        case "greaterThan":
-            return value > filterValue.value;
-        case "lessThan":
-            return value < filterValue.value;
-        default:
-            return true;
+
+    try {
+        const date = new Date(value);
+        const filterDate = new Date(filterValue.value);
+        switch (filterValue.type) {
+            case "equals":
+                return isSameDay(date, filterDate)
+            case "greaterThan":
+                return isAfter(date, filterDate)
+            case "lessThan":
+                return isBefore(date, filterDate)
+            default:
+                return true;
+        }
     }
+    catch (e) {
+        return false;
+    }
+
 }
 
 
@@ -115,6 +136,8 @@ export const DataTable = ({data: tableData, columns: tableColumns}, props) => {
                     return {...column, filterFn: stringFilterFn};
                 case "number":
                     return {...column, filterFn: numberFilterFn};
+                case "date":
+                    return {...column, filterFn: dateFilterFn};
                 default:
                     return column;
             }
@@ -325,6 +348,7 @@ export const DataTable = ({data: tableData, columns: tableColumns}, props) => {
                                                     </div>
                                                     <Input
                                                         value={tempColumnFilters[column.id]?.value || ""}
+                                                        type={column.columnDef.meta.type}
                                                         onChange={(e) => handleInputChange(column.id, e.target.value)}
                                                     />
                                                     <Button

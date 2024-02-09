@@ -14,8 +14,9 @@ import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "../
 import {Input} from "../ui/input.tsx";
 import {FaMagnifyingGlass} from "react-icons/fa6";
 import {useNavigate} from "react-router-dom";
-import {moneyParser} from "../../utils/formatters.js";
+import {dateParser, moneyParser} from "../../utils/formatters.js";
 import {Unit} from "../../utils/classes.ts";
+import {DataTable} from "../ui/data-table.js";
 
 
 const SendToUnit = ({unit}) => {
@@ -82,32 +83,25 @@ const columns: ColumnDef<Unit>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: "unitIdentifier",
-        id: "unitIdentifier",
+        enableSorting: true,
         header: "Unit Identifier",
         cell: ({ row }) => (
-            <div className="capitalize">{row.getValue("unitIdentifier")}</div>
+            <div className="capitalize">{row.original.unitIdentifier}</div>
         ),
         meta: {
-            title: "Unit Identifier",
+            type: "string"
+        },
+        id: "unitIdentifier",
+        accessorFn: (row) => {
+            return row.unitIdentifier
         },
     },
     {
-        accessorKey: "realEstateObject.id",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    size="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Property
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            )
-        },
+        id: "property",
+        enableSorting: true,
+        header: "Property",
         meta: {
-            title: "Property",
+            type: "string",
         },
         cell: ({ row }) => {
             const property = row?.original?.realEstateObject;
@@ -117,30 +111,27 @@ const columns: ColumnDef<Unit>[] = [
             </div>
             )
         },
+        accessorFn: (row) => {
+            return row.realEstateObject.title
+        }
     },
     {
-        accessorKey: "status",
+        id: "status",
         header: "Status",
+        enableSorting: true,
         cell: ({ row }) => (
-            // @ts-expect-error - TS doesn't understand that we're using a custom accessor
-            <div className="capitalize">{row.getValue("status").toLowerCase()}</div>
+            <div className="capitalize">{row.original.status.toLowerCase()}</div>
         ),
         meta: {
-            title: "Status",
+            type: "string"
         },
     },
 
     {
-        accessorKey: "currentTenant",
+        id: "currentTenant",
         header: "Current Tenant",
+        enableSorting: true,
         cell: ({ row }) => {
-            /*
-            const lease = row?.original?.leases[0];
-            return (
-                <div className="capitalize">{lease?.id}</div>
-            )
-             */
-
             if (row?.original?.leases?.length > 0 && row?.original?.leases[0]?.tenant) {
                 // Tenant name
                 return (
@@ -154,28 +145,79 @@ const columns: ColumnDef<Unit>[] = [
             )
         },
         meta: {
-            title: "Current Tenant",
+            type: "string"
         },
-    },
+        accessorFn: (row) => {
+            if (row?.leases?.length > 0 && row?.leases[0]?.tenant) {
+                return row.leases[0]?.tenant?.firstName + row.leases[0]?.tenant?.lastName
+            }
+            return undefined
+        }
 
+
+    },
     {
-        accessorKey: "leaseEndDate",
-        header: "Lease End Date",
+        id: "leaseStartDate",
+        header: "Lease Start Date",
+        enableSorting: true,
         cell: ({ row }) => {
-            return (
-                <div>
-                    12/12/2024
-                </div>
-            )
+            if (row.original.leases[0]?.startDate) {
+                return (
+                    <div>
+                        {
+                            dateParser(row.original.leases[0]?.startDate)
+                        }
+                    </div>
+                )
+            } else {
+                return (
+                    <div>
+
+                    </div>
+                )
+            }
         },
         meta: {
-            title: "Lease End Date",
+            type: "date"
         },
+        accessorFn: (row) => {
+            return row.leases[0]?.startDate || undefined
+        }
     },
 
     {
-        accessorKey: "monthlyRent",
+        id: "leaseEndDate",
+        header: "Lease End Date",
+        enableSorting: true,
+        cell: ({ row }) => {
+            if (row.original.leases[0]?.endDate) {
+                return (
+                    <div>
+                        {
+                           dateParser(row.original.leases[0]?.endDate)
+                        }
+                    </div>
+                )
+            } else {
+                return (
+                    <div>
+
+                    </div>
+                )
+            }
+        },
+        meta: {
+            type: "date"
+        },
+        accessorFn: (row) => {
+            return row.leases[0]?.endDate || undefined
+        }
+    },
+
+    {
+        id: "monthlyRent",
         header: "Monthly Rent",
+        enableSorting: true,
         cell: ({ row }) => {
             return (
                 <div>
@@ -184,8 +226,11 @@ const columns: ColumnDef<Unit>[] = [
             )
         },
         meta: {
-            title: "Lease End Date",
+            type: "number"
         },
+        accessorFn: (row) => {
+            return row.rentalPrice || undefined
+        }
     },
 
 
@@ -202,128 +247,11 @@ const columns: ColumnDef<Unit>[] = [
 
 // eslint-disable-next-line react/prop-types
 const RentalTable = ({ units  }) => {
-    const [sorting, setSorting] = useState<SortingState>([]);
-    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-
-    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
-    const [rowSelection, setRowSelection] = useState({})
-
-    const table = useReactTable({
-        data: units,
-        columns,
-        onSortingChange: setSorting,
-        onColumnFiltersChange: setColumnFilters,
-        getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
-        getSortedRowModel: getSortedRowModel(),
-        getFilteredRowModel: getFilteredRowModel(),
-        onColumnVisibilityChange: setColumnVisibility,
-        onRowSelectionChange: setRowSelection,
-        state: {
-            sorting,
-            columnFilters,
-            columnVisibility,
-            rowSelection,
-        },
-    })
 
     return (
-        <div className="mt-6 flex flex-col gap-y-2 w-full">
-            {/* Header */}
-            <div className="flex flex-row justify-end gap-4">
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="ml-auto">
-                            Filter Columns <ChevronDown className="ml-2 h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        {table
-                            .getAllColumns()
-                            .filter((column) => column.getCanHide())
-                            .map((column) => {
-                                return (
-                                    <DropdownMenuCheckboxItem
-                                        key={column.id}
-                                        className="capitalize"
-                                        checked={column.getIsVisible()}
-                                        onCheckedChange={(value) =>
-                                            column.toggleVisibility(!!value)
-                                        }
-                                    >
-                                        {/*// @ts-expect-error - TS doesn't understand that we're using a custom accessor*/}
-                                        {column.columnDef.meta?.title ?? column.id}
-                                    </DropdownMenuCheckboxItem>
-                                )
-                            })}
-                    </DropdownMenuContent>
-                </DropdownMenu>
-                <div className="relative flex bg-gray-50 rounded-md items-center max-w-sm">
-                    <FaMagnifyingGlass className="absolute top-3 left-3 h-4 w-4 text-gray-400" />
-                    <Input
-                        disabled
-                        placeholder="Search Unit"
-                        value={(table.getColumn("unitIdentifier")?.getFilterValue() as string) ?? ""}
-                        onChange={(event) =>
-                            table.getColumn("unitIdentifier")?.setFilterValue(event.target.value)
-                        }
-                        className="pl-10 text-md bg-inherit"
-                    />
-                </div>
-            </div>
-
-
-
-            <Table>
-                <TableHeader>
-                    {table.getHeaderGroups().map((headerGroup) => (
-                        <TableRow key={headerGroup.id}>
-                            {headerGroup.headers.map((header) => {
-                                return (
-                                    <TableHead key={header.id}>
-                                        {header.isPlaceholder
-                                            ? null
-                                            : flexRender(
-                                                header.column.columnDef.header,
-                                                header.getContext()
-                                            )}
-                                    </TableHead>
-                                )
-                            })}
-                        </TableRow>
-                    ))}
-                </TableHeader>
-                <TableBody>
-                    {table.getRowModel().rows?.length ? (
-                        table.getRowModel().rows.map((row) => (
-                            <TableRow
-                                key={row.id}
-                                data-state={row.getIsSelected() && "selected"}
-                            >
-                                {row.getVisibleCells().map((cell) => (
-                                    <TableCell key={cell.id}>
-                                        {flexRender(
-                                            cell.column.columnDef.cell,
-                                            cell.getContext()
-                                        )}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        ))
-                    ) : (
-                        <TableRow>
-                            <TableCell
-                                colSpan={columns.length}
-                                className="h-24 text-center"
-                            >
-                                No results.
-                            </TableCell>
-                        </TableRow>
-                    )}
-                </TableBody>
-            </Table>
-        </div>
+        <DataTable data={units} columns={columns} />
     )
+
 }
 
 export default RentalTable;

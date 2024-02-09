@@ -34,11 +34,7 @@ const Rentals = (props) => {
             These are your rental properties, so the units of each property are displayed here. You can filter the units by property using the dropdown above.
             <br />
 
-            <div className="flex gap-4 flex-wrap">
                 <RentalTable units={units} />
-
-
-            </div>
         </>
 
     )
