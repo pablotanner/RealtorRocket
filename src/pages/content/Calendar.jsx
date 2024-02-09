@@ -68,12 +68,14 @@ const Calendar = () => {
                 <ul className="flex flex-col gap-1">
                     {unpackedEvents.map((event, index) => {
                         return (
-                            <li key={index} className="flex flex-row gap-2 ml-5 ">
-                                -<div className="font-500">{event.title}: </div>
+                            <li key={index} className="flex flex-row gap-2 ">
+                                <div className="font-500">{event.title}: </div>
                                 <div>{event.date.toLocaleDateString()}</div>
                             </li>
                         )
                     })}
+
+                    {unpackedEvents.length === 0 && <div>No events in selected range</div>}
                 </ul>
                 </div>
         )
@@ -104,7 +106,7 @@ const Calendar = () => {
     }
 
     return (
-        <div className="flex flex-row gap-2 min-w-fit">
+        <div className="flex flex-row gap-2 min-w-fit flex-wrap">
             <div className="flex flex-col gap-2 w-fit">
                 <div className="text-xl">
                     Week
