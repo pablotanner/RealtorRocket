@@ -15,7 +15,7 @@ import {useNavigate} from "react-router-dom";
 import {RealEstateType} from "../../utils/magicNumbers.js";
 import {useDeletePropertyMutation} from "../../services/api/propertyApi.js";
 
-import {Image} from "../ui/Image.tsx"
+import {Image} from "../ui/image.tsx"
 
 const DetailedPropertyTable = ({ properties }) => {
     const navigate = useNavigate()
