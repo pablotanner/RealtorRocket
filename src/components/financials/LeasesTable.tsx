@@ -16,6 +16,7 @@ import {Input} from "../ui/input.tsx";
 import {FaMagnifyingGlass} from "react-icons/fa6";
 import {useNavigate} from "react-router-dom";
 import {dateParser, moneyParser} from "../../utils/formatters.js";
+import {DataTable} from "../ui/data-table.js";
 
 class Tenant {
     id: string;
@@ -75,18 +76,18 @@ const columns: ColumnDef<Lease>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: "leaseId",
         id: "leaseId",
         header: "Lease ID",
         cell: ({ row }) => (
             <div className="capitalize">{row?.original?.id}</div>
         ),
         meta: {
-            title: "Lease ID",
+            type: "number",
         },
+        accessorFn: (row) => row?.id || undefined,
+        enableSorting: true,
     },
     {
-        accessorKey: "tenant",
         id: "tenant",
         header: "Tenant",
         cell: ({ row }) => {
@@ -100,28 +101,19 @@ const columns: ColumnDef<Lease>[] = [
                     <div className="capitalize text-red-500">No Tenant</div>
                 )
             }
-
         },
+        accessorFn: (row) => (row?.tenant?.firstName + row?.tenant?.lastName) || undefined,
         meta: {
-            title: "Tenant",
+            type: "string",
         },
+        enableSorting: true,
+
     },
     {
-        accessorKey: "startDate",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    size="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Start Date
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            )
-        },
+        id: "startDate",
+        header: "Start Date",
         meta: {
-            title: "Start Date",
+            type: "date",
         },
         cell: ({ row }) => {
             return (
@@ -130,23 +122,15 @@ const columns: ColumnDef<Lease>[] = [
                 </div>
             )
         },
+        accessorFn: (row) => row?.startDate || undefined,
+        enableSorting: true,
+
     },
     {
-        accessorKey: "endDate",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    size="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    End Date
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            )
-        },
+        id: "endDate",
+        header: "End Date",
         meta: {
-            title: "End Date",
+            type: "date",
         },
         cell: ({ row }) => {
             return (
@@ -155,23 +139,15 @@ const columns: ColumnDef<Lease>[] = [
                 </div>
             )
         },
+        accessorFn: (row) => row?.endDate || undefined,
+        enableSorting: true,
+
     },
     {
-        accessorKey: "rentalPrice",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    size="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Rental Price
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            )
-        },
+        id: "rentalPrice",
+        header: "Rental Price",
         meta: {
-            title: "Rental Price",
+            type: "string",
         },
         cell: ({ row }) => {
             return (
@@ -180,23 +156,15 @@ const columns: ColumnDef<Lease>[] = [
                 </div>
             )
         },
+        accessorFn: (row) => row?.rentalPrice || undefined,
+        enableSorting: true,
+
     },
     {
-        accessorKey: "totalRentDue",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    size="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Total Rent Due
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            )
-        },
+        id: "totalRentDue",
+        header: "Total Rent Due",
         meta: {
-            title: "Total Rent Due",
+            type: "number",
         },
         cell: ({ row }) => {
             return (
@@ -205,23 +173,15 @@ const columns: ColumnDef<Lease>[] = [
                 </div>
             )
         },
+        accessorFn: (row) => row?.totalRentDue || undefined,
+        enableSorting: true,
+
     },
     {
-        accessorKey: "totalRentPaid",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    size="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Total Rent Paid
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            )
-        },
+        id: "totalRentPaid",
+        header: "Total Rent Paid",
         meta: {
-            title: "Total Rent Paid",
+            type: "number",
         },
         cell: ({ row }) => {
             return (
@@ -230,156 +190,34 @@ const columns: ColumnDef<Lease>[] = [
                 </div>
             )
         },
+        accessorFn: (row) => row?.totalRentPaid || undefined,
+        enableSorting: true,
+
     },
     {
-        accessorKey: "lastPaymentDate",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    size="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Last Payment Date
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            )
-        },
+        id: "lastPaymentDate",
+        header: "Last Payment Date",
         meta: {
-            title: "Last Payment Date",
+            type: "date",
         },
         cell: ({ row }) => {
             return (
                 <div className="capitalize font-500">
-                    {row?.original?.lastPaymentDate}
+                    {dateParser(row?.original?.lastPaymentDate)}
                 </div>
             )
         },
+        accessorFn: (row) => row?.lastPaymentDate || undefined,
+        enableSorting: true,
+
     },
 
 ]
 
 const LeasesTable = ({ leases }) => {
-    const [sorting, setSorting] = useState<SortingState>([]);
-    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-
-    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
-    const [rowSelection, setRowSelection] = useState({})
-
-    const table = useReactTable({
-        data: leases,
-        columns,
-        onSortingChange: setSorting,
-        onColumnFiltersChange: setColumnFilters,
-        getCoreRowModel: getCoreRowModel(),
-        getSortedRowModel: getSortedRowModel(),
-        getFilteredRowModel: getFilteredRowModel(),
-        onColumnVisibilityChange: setColumnVisibility,
-        onRowSelectionChange: setRowSelection,
-        state: {
-            sorting,
-            columnFilters,
-            columnVisibility,
-            rowSelection,
-        },
-    })
 
     return (
-        <div className="mt-6 flex flex-col gap-y-2 w-full">
-            {/* Header */}
-            <div className="flex flex-row justify-end gap-4">
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="ml-auto">
-                            Filter Columns <ChevronDown className="ml-2 h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        {table
-                            .getAllColumns()
-                            .filter((column) => column.getCanHide())
-                            .map((column) => {
-                                return (
-                                    <DropdownMenuCheckboxItem
-                                        key={column.id}
-                                        className="capitalize"
-                                        checked={column.getIsVisible()}
-                                        onCheckedChange={(value) =>
-                                            column.toggleVisibility(!!value)
-                                        }
-                                    >
-                                        {/*// @ts-expect-error - TS doesn't understand that we're using a custom accessor*/}
-                                        {column.columnDef.meta?.title ?? column.id}
-                                    </DropdownMenuCheckboxItem>
-                                )
-                            })}
-                    </DropdownMenuContent>
-                </DropdownMenu>
-                <div className="relative flex bg-gray-50 rounded-md items-center max-w-sm">
-                    <FaMagnifyingGlass className="absolute top-3 left-3 h-4 w-4 text-gray-400" />
-                    <Input
-                        disabled
-                        placeholder="Search Lease"
-                        value={(table.getColumn("leaseId")?.getFilterValue() as string) ?? ""}
-                        onChange={(event) =>
-                            table.getColumn("leaseId")?.setFilterValue(event.target.value)
-                        }
-                        className="pl-10 text-md bg-inherit"
-                    />
-                </div>
-            </div>
-
-
-
-            <Table>
-                <TableHeader>
-                    {table.getHeaderGroups().map((headerGroup) => (
-                        <TableRow key={headerGroup.id}>
-                            {headerGroup.headers.map((header) => {
-                                return (
-                                    <TableHead key={header.id}>
-                                        {header.isPlaceholder
-                                            ? null
-                                            : flexRender(
-                                                header.column.columnDef.header,
-                                                header.getContext()
-                                            )}
-                                    </TableHead>
-                                )
-                            })}
-                        </TableRow>
-                    ))}
-                </TableHeader>
-                <TableBody>
-                    {table.getRowModel().rows?.length ? (
-                        table.getRowModel().rows.map((row) => (
-                            <TableRow
-                                key={row.id}
-                                data-state={row.getIsSelected() && "selected"}
-                            >
-                                {row.getVisibleCells().map((cell) => (
-                                    <TableCell key={cell.id}>
-                                        {flexRender(
-                                            cell.column.columnDef.cell,
-                                            cell.getContext()
-                                        )}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        ))
-                    ) : (
-                        <TableRow>
-                            <TableCell
-                                colSpan={columns.length}
-                                className="h-24 text-center"
-                            >
-                                No results.
-                            </TableCell>
-                        </TableRow>
-                    )}
-                </TableBody>
-            </Table>
-        </div>
+        <DataTable data={leases} columns={columns} />
     )
 }
 
