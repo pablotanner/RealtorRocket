@@ -30,6 +30,7 @@ import {useNavigate} from "react-router-dom";
 import ReviewCard from "./ReviewCard.js";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "../../ui/tooltip.tsx";
 import {zodInputStringPipe} from "../../../utils/formatters.js";
+import {Portal} from "@radix-ui/react-dialog";
 
 
 const realEstateTypes = {
@@ -397,11 +398,11 @@ const CreateProperty = (props) => {
                                             <TooltipTrigger asChild >
                                                 <HelpCircle className="ml-2 w-6 h-6 text-primary-dark cursor-pointer hover:text-primary-dark/70" />
                                             </TooltipTrigger>
-                                            <TooltipContent className="max-w-[400px]">
-                                                <p>
-                                                    This is only relevant for the creation of the property, you can add more units and change the rental configuration later.
-                                                </p>
-                                            </TooltipContent>
+                                                <Portal>
+                                                    <TooltipContent className="w-[400px]">
+                                                        This is only relevant for the creation of the property, you can add more units and change the rental configuration later.
+                                                    </TooltipContent>
+                                                </Portal>
                                         </Tooltip>
                                     </TooltipProvider>
                                 </div>

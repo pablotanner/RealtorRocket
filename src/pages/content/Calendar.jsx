@@ -120,7 +120,7 @@ const Calendar = () => {
                     modifiers={{ ...events }}
                 />
 
-                <Accordion type="multiple" collapsible defaultValue="upcoming">
+                <Accordion type="multiple" collapsible={true}>
                     <AccordionItem value="upcoming">
                         <AccordionTrigger>Upcoming</AccordionTrigger>
                         <AccordionContent>

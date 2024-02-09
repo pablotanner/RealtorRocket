@@ -5,7 +5,17 @@ import { ChevronDown } from "lucide-react"
 
 import {cn} from "../../utils.ts";
 
-const Accordion = AccordionPrimitive.Root
+const Accordion = React.forwardRef<
+    React.ElementRef<typeof AccordionPrimitive.Root>,
+    React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Root>
+>(({ className, ...props }, ref) => (
+    <AccordionPrimitive.Root
+        ref={ref}
+        className={className}
+        {...props}
+    />
+))
+Accordion.displayName = "Accordion"
 
 const AccordionItem = React.forwardRef<
     React.ElementRef<typeof AccordionPrimitive.Item>,
@@ -27,7 +37,7 @@ const AccordionTrigger = React.forwardRef<
         <AccordionPrimitive.Trigger
             ref={ref}
             className={cn(
-                "flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline [&[data-state=open]>svg]:rotate-180",
+                "flex flex-1 items-center justify-between py-4 font-medium transition-all hover:bg-gray-50 [&[data-state=open]>svg]:rotate-180",
                 className
             )}
             {...props}
