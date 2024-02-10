@@ -1,11 +1,16 @@
 import {Card, CardContent, CardHeader, CardTitle} from "../ui/card.tsx";
 import {Avatar, AvatarFallback} from "../ui/avatar.tsx";
 import {Button} from "../ui/button.tsx";
+import {dateParser} from "../../utils/formatters.js";
 
 
-const TenantCard = ({ tenant }) => {
+const TenantCard = ({ tenant, lease }) => {
 
+    if (!tenant) {
+        return null;
+    }
 
+    console.log(tenant, lease)
     return (
         <Card className="shadow-lg basis-[400px] flex-grow">
             <CardHeader className="flex flex-col items-center gap-2">
@@ -15,10 +20,13 @@ const TenantCard = ({ tenant }) => {
                 <Avatar className="w-32 h-32">
                     <img src={tenant?.profilePic} alt={tenant?.name}/>
                     <AvatarFallback className="text-2xl">
-                        JD
+                        {tenant?.firstName[0] + tenant?.lastName[0]}
                     </AvatarFallback>
                 </Avatar>
-                Started on 12nd of May 2021
+                <h1 className="font-500 text-xl">
+                    {tenant?.firstName} {tenant?.lastName}
+                </h1>
+                Started on {dateParser(lease?.startDate) || "N/A"}
             </CardHeader>
             <CardContent className="flex flex-col gap-4 items-center">
                 <div className="flex flex-row gap-2">
@@ -35,7 +43,7 @@ const TenantCard = ({ tenant }) => {
                 </div>
 
                 <div>
-                    Last Payment: 12nd of May 2021
+                    Last Payment on: {dateParser(lease?.lastPaymentDate) || "N/A"}
                 </div>
 
 

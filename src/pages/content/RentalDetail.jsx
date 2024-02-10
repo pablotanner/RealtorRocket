@@ -3,7 +3,7 @@ import DetailedPropertyCard from "../../components/properties/DetailedPropertyCa
 import RentalKeyCard from "../../components/rentals/RentalKeyCard.js";
 import {Label} from "../../components/ui/label.tsx";
 import {BathIcon, BedIcon, CarFront, LandPlot} from "lucide-react";
-import {numberToLiteral} from "../../utils/formatters.js";
+import {dateParser, numberToLiteral} from "../../utils/formatters.js";
 import TenantCard from "../../components/rentals/TenantCard.js";
 import {useSelector} from "react-redux";
 import {selectPropertyByUnitId, selectTenantById} from "../../services/slices/objectSlice.js";
@@ -26,7 +26,7 @@ const RentalDetail = (props) => {
                 <DetailedPropertyCard property={property}/>
                 <RentalKeyCard unit={data?.data} isSingleUnit={property?.units?.length === 1}/>
 
-                <TenantCard tenant={tenant}/>
+                <TenantCard tenant={tenant} lease={data?.data?.leases[0]}/>
 
 
                 <div className="bg-gray-100 p-4 rounded-lg shadow-lg max-w-full flex-grow border-gray-200 border-2" >
@@ -34,7 +34,23 @@ const RentalDetail = (props) => {
                         Lease History
                     </Label>
                     <p className="text-gray-500 font-300">
-                        No lease history available.
+                        {data?.data?.leases?.map((lease, index) => {
+                            return (
+                                <div key={index} className="mb-2">
+                                    <div className="w-full h-[1px] bg-gray-300" hidden={index===0}/>
+                                    <p className="text-off-black font-500">
+                                        Dates: {""}
+                                        {dateParser(lease?.startDate)} - {dateParser(lease?.endDate)}
+                                    </p>
+                                    <p className="text-gray-500 font-300">
+                                        Tenant ID: {lease?.tenantId}
+                                    </p>
+                                </div>
+                            )
+                        })}
+
+                        {data?.data?.leases.length === 0 || !data?.data?.leases ? "No lease history available" : ""}
+
                     </p>
                 </div>
 
