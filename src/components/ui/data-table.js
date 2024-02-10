@@ -335,6 +335,7 @@ export const DataTable = ({data: tableData, columns: tableColumns}, props) => {
                                                         <select
                                                             value={tempColumnFilters[column.id]?.type || ""}
                                                             onChange={(e) => handleSelectChange(column.id, e.target.value)}
+                                                            className="w-full mb-2 p-2 rounded-md border border-gray-300 bg-white text-sm capitalize font-500"
                                                         >
                                                             <option value="">Select Filter</option>
                                                             {filterOptions[index].map((option) => {
@@ -350,6 +351,7 @@ export const DataTable = ({data: tableData, columns: tableColumns}, props) => {
                                                         value={tempColumnFilters[column.id]?.value || ""}
                                                         type={column.columnDef.meta.type}
                                                         onChange={(e) => handleInputChange(column.id, e.target.value)}
+                                                        className="mb-2"
                                                     />
                                                     <Button
                                                         variant="outline"
