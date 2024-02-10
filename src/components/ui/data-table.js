@@ -307,10 +307,11 @@ export const DataTable = ({data: tableData, columns: tableColumns}, props) => {
                                     .filter((column) => column.getCanHide())
                                     .map((column) => {
                                         return (
-                                            <div key={column.id} className="flex flex-row items-center text-sm capitalize gap-1 mb-[4px] cursor-pointer" onClick={() => column.toggleVisibility()}>
+                                            <div key={column.id} className="flex flex-row items-center gap-1 text-sm capitalize cursor-pointer hover:bg-gray-100 rounded-md py-1"
+                                                 onClick={() => column.toggleVisibility()}>
                                                 <Checkbox
                                                     key={column.id}
-                                                    className="capitalize"
+                                                    className="ml-1 capitalize"
                                                     checked={column.getIsVisible()}
                                                 />
                                                 {getColumnName(column)}
