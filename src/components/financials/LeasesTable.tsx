@@ -1,20 +1,7 @@
 import {
     ColumnDef,
-    ColumnFiltersState, flexRender,
-    getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel,
-    SortingState,
-    useReactTable,
-    VisibilityState
 } from "@tanstack/react-table";
-import {DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuCheckboxItem} from "../ui/dropdown-menu.tsx";
 import {Checkbox} from "../ui/checkbox.tsx";
-import {Button} from "../ui/button.tsx";
-import {ArrowUpDown, ChevronDown, LinkIcon, MoreHorizontal} from "lucide-react";
-import {useState} from "react";
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "../ui/table.tsx";
-import {Input} from "../ui/input.tsx";
-import {FaMagnifyingGlass} from "react-icons/fa6";
-import {useNavigate} from "react-router-dom";
 import {dateParser, moneyParser} from "../../utils/formatters.js";
 import {DataTable} from "../ui/data-table.js";
 

@@ -156,7 +156,7 @@ export const DataTable = ({data: tableData, columns: tableColumns}, props) => {
                                 variant="ghost"
                                 size="ghost"
                                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                                className="capitalize"
+                                className="capitalize min-w-[175px] max-w-[100%] flex flex-row justify-start"
                             >
                                 {headerLabel}
 

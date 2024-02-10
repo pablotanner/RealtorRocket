@@ -6,7 +6,7 @@ import {BathIcon, BedIcon, CarFront, LandPlot} from "lucide-react";
 import {numberToLiteral} from "../../utils/formatters.js";
 import TenantCard from "../../components/rentals/TenantCard.js";
 import {useSelector} from "react-redux";
-import {selectPropertyByUnitId} from "../../services/slices/objectSlice.js";
+import {selectPropertyByUnitId, selectTenantById} from "../../services/slices/objectSlice.js";
 
 
 const RentalDetail = (props) => {
@@ -18,13 +18,15 @@ const RentalDetail = (props) => {
 
     const property = useSelector(state => selectPropertyByUnitId(state, id));
 
+    const tenant = useSelector(state => selectTenantById(state, data?.data?.leases[0]?.tenantId))
+
     return (
         <div className="min-w-fit flex flex-row flex-wrap gap-x-6 gap-y-8">
             <div className="flex flex-row flex-wrap justify-start w-[100%] gap-x-8 gap-y-8">
                 <DetailedPropertyCard property={property}/>
                 <RentalKeyCard unit={data?.data} isSingleUnit={property?.units?.length === 1}/>
 
-                <TenantCard/>
+                <TenantCard tenant={tenant}/>
 
 
                 <div className="bg-gray-100 p-4 rounded-lg shadow-lg max-w-full flex-grow border-gray-200 border-2" >
