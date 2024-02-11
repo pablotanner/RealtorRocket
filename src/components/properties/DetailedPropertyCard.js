@@ -63,18 +63,18 @@ const DetailedPropertyCard = ({ property }) => {
         <Card className="max-w-[500px] shadow-xl rounded-xl h-fit flex-shrink">
             <CardContent className="px-0">
                 <img
-                    src={property.images[0]?.imageUrl}
-                    alt={property.title || "?"}
+                    src={property?.images[0]?.imageUrl}
+                    alt={property?.title || "?"}
                     className="h-64 w-[100%] object-cover rounded-xl"
                 />
 
                 <div className="px-4 pt-3 flex flex-col gap-2">
                     <div className="flex justify-between flex-row items-center gap-1 flex-wrap">
                         <div className="text-2xl text-off-black font-500">
-                            {property.title}
+                            {property?.title}
                         </div>
                         <div className="text-gray-900 font-300 mt-1">
-                            {property.realEstateType}
+                            {property?.realEstateType}
                         </div>
                     </div>
 
