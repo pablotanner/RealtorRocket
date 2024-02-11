@@ -152,7 +152,7 @@ const CreateTenant = (props) => {
 
                 <div className="flex flex-col gap-4">
                     {page === 0 && (<>
-                            <RentalSelection onSelect={setSelectedUnitId} selected={selectedUnitId}/>
+                            <RentalSelection onSelect={setSelectedUnitId} selected={selectedUnitId} units={units}/>
                             <div className="flex flex-col gap-4">
                                 <div className="bg-gray-50 border-2 border-gray-100 p-2 rounded-xl" hidden={!selectedUnit}>
                                     <h3 className="text-lg font-400">Unit {selectedUnit?.id}</h3>

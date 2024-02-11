@@ -7,13 +7,11 @@ import {useGetUnitsQuery} from "../../services/api/unitApi.js";
 import {cn} from "../../utils.ts";
 
 
-const RentalSelection = ({onSelect, selected}) => {
+const RentalSelection = ({onSelect, selected, units}) => {
     const [open, setOpen] = useState(false)
     const [unitId, setUnitId] = useState(selected)
 
-    const {data: units, isLoading} = useGetUnitsQuery()
-
-    if (isLoading) {
+    if (!units) {
         return null
     }
     return (

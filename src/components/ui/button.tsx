@@ -14,7 +14,7 @@ const buttonVariants = cva(
           tab: "bg-gray-100 text-gray-500 hover:bg-gray-200 data-[active=true]:bg-white data-[active=true]:text-gray-900 data-[active=true]:shadow-md",
           dark: "bg-off-black text-white hover:bg-zinc-700",
           destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-          outline: "border border-secondary border-2 text-off-black bg-transparent hover:bg-secondary hover:text-accent-foreground",
+          outline: "border border-secondary border-2 text-off-black bg-transparent hover:border-gray-200 hover:text-accent-foreground",
           "outline-dark": "border border-off-black border-2 text-off-black bg-transparent hover:bg-gray-100 hover:text-accent-foreground",
           "outline-primary": "border border-primary-dark border-2 text-off-black bg-transparent hover:bg-white/80 hover:text-accent-foreground",
           secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",

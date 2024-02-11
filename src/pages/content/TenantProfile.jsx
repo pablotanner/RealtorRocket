@@ -86,13 +86,18 @@ const TenantProfile = (props) => {
                         <TabsTrigger value="requests">Maintenance Requests</TabsTrigger>
                     </TabsList>
                     <TabsContent value="information" >
+                        <h1>Tenant Information</h1>
                         <EditTenant tenant={tenant} />
                     </TabsContent>
                     <TabsContent value="leases">
+                        <h1>Lease History</h1>
                         <LeaseHistory leases={tenant?.leases} />
                     </TabsContent>
                     <TabsContent value="requests">
-
+                        <h1>
+                            Maintenance Requests
+                        </h1>
+                        No maintenance requests
                     </TabsContent>
                 </Tabs>
             </div>

@@ -68,7 +68,7 @@ const EditTenant = ({tenant}) => {
                 <form onSubmit={tenantProfileForm.handleSubmit(onSubmit)} className="flex flex-col gap-2">
                     <div className="flex flex-row gap-2 justify-start">
                         <Button
-                            variant={isEditing ? "light" : "gradient"}
+                            variant={isEditing ? "outline" : "gradient"}
                             onClick={() => {
                                 setIsEditing(!isEditing)
                                 tenantProfileForm.reset()
