@@ -25,19 +25,24 @@ const Financials = (props) => {
 
 
     return (
-        <div className="flex flex-col gap-4">
-            These are your leases.
+        <>
+            <h1>
+                Financials
+            </h1>
 
-            <div className="flex flex-row flex-wrap gap-4">
-                <InfoCard title="Rent Due (this month)" number={"$" + rentDue}  />
-                <InfoCard title="Rent Paid (this month)" number={"$" + rentPaid}  />
-                <InfoCard title="Active Leases" number={activeLeases}   />
+            <div className="flex flex-col gap-4">
+                These are your leases.
+
+                <div className="flex flex-row flex-wrap gap-4">
+                    <InfoCard title="Rent Due (this month)" number={"$" + rentDue}  />
+                    <InfoCard title="Rent Paid (this month)" number={"$" + rentPaid}  />
+                    <InfoCard title="Active Leases" number={activeLeases}   />
+                </div>
+
+                <LeasesTable leases={leases} />
             </div>
+        </>
 
-
-
-            <LeasesTable leases={leases} />
-        </div>
     )
 }
 

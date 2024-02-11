@@ -43,7 +43,10 @@ const Properties = (props) => {
 
     return (
         <div>
-            <div className="text-lg mb-4">
+            <h1>
+                Properties
+            </h1>
+            <div className="text-md mb-2">
                 These are your properties, for more information such as the units of each property, click on the property.
             </div>
 

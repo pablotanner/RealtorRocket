@@ -15,9 +15,9 @@ const PropertyDetail = (props) => {
     return (
         <div>
             <div className="flex flex-row justify-between">
-                <h className="text-xl font-600">
-                    {data?.data?.title || "No Title"}
-                </h>
+                <h1>
+                    {data?.data?.title}
+                </h1>
                 <Button variant="destructive" isLoading={isDeleting} onClick={() => deleteProperty(id).then(()=> navigate('/properties')) }>
                     Delete Property
                 </Button>

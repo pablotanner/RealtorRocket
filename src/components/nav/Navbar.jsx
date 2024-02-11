@@ -78,7 +78,6 @@ const items = [
 const Navbar = ({children}) => {
     const location = useLocation();
     const navigate = useNavigate();
-    const currentPage = items.find(item => item.url === location.pathname)?.title || "";
     const authSlice = useSelector(state => state.authSlice);
 
 
@@ -193,10 +192,7 @@ const Navbar = ({children}) => {
             <div className={"w-full overflow-x-auto pr-2 ml-2 md:ml-5 xl:pr-14 flex flex-col gap-y-1"}>
                 <Header/>
                 <div className="p-4 bg-white rounded-lg">
-                    <div className="text-xl md:text-3xl font-500 h-fit mb-6">
-                        {currentPage}
-                    </div>
-                        {children}
+                    {children}
                 </div>
             </div>
         </div>)

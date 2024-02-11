@@ -31,8 +31,15 @@ const Rentals = (props) => {
 
     return (
         <>
-            These are your rental properties, so the units of each property are displayed here. You can filter the units by property using the dropdown above.
-            <br />
+            <h1>
+                Rental Units
+            </h1>
+
+
+            <div className="text-md mb-3">
+                These are your rental properties, so the units of each property are displayed here. You can filter the units by property using the dropdown above.
+
+            </div>
 
                 <RentalTable units={units} />
         </>

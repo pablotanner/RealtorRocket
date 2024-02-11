@@ -3,6 +3,7 @@ import InfoCard from "../../components/home/InfoCard.js";
 import {useGetPropertiesQuery} from "../../services/api/propertyApi.js";
 import {useGetUnitsQuery} from "../../services/api/unitApi.js";
 import {useGetTenantsQuery} from "../../services/api/tenantApi.js";
+import {useGetUserQuery} from "../../services/api/userApi.js";
 
 const Home = () => {
 
@@ -12,8 +13,15 @@ const Home = () => {
 
     const {data: tenants} = useGetTenantsQuery();
 
+    const {data: user} = useGetUserQuery();
+
+    const name = user?.data?.name;
+
     return (
         <div className="gap-8 flex flex-col">
+            <h1>
+                Welcome, {name}!
+            </h1>
               <div className="flex flex-row gap-4 flex-wrap">
                   <InfoCard title="Total Properties" number={properties?.data?.length} link="/properties"/>
                   <InfoCard title="Total Rental Units" number={units?.data?.length} link="/rentals"/>

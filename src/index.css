@@ -20,6 +20,13 @@ body {
   scrollbar-gutter: stable;
 }
 
+h1 {
+    font-size: 1.75rem;
+    line-height: 2.5rem;
+    font-weight: 500;
+    color: var(--foreground);
+}
+
 @layer base {
   :root {
     --gradient-first: 187 92% 69%;

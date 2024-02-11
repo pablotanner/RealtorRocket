@@ -108,74 +108,76 @@ const Calendar = () => {
     }
 
     return (
-        <div className="flex flex-row gap-2 min-w-fit flex-wrap">
-            <div className="flex flex-col gap-2 w-fit">
-                <div className="text-xl">
-                    Week
-                    <p className="text-sm">
-                        {dayRange.from.toLocaleDateString()} - {dayRange.to.toLocaleDateString()}
-                    </p>
+        <>
+            <h1>
+                Your Calendar
+            </h1>
+            <div className="flex flex-row gap-2 min-w-fit flex-wrap">
+
+                <div className="flex flex-col gap-2 w-fit">
+                    <div className="text-xl">
+                        Week
+                        <p className="text-sm">
+                            {dayRange.from.toLocaleDateString()} - {dayRange.to.toLocaleDateString()}
+                        </p>
+                    </div>
+                    <CalendarComponent
+                        selected={dayRange}
+                        mode="range"
+                        fixedWeeks
+                        onDayClick={selectWeek}
+                        modifiers={{ ...events }}
+                    />
+
+                    <Accordion type="multiple" collapsible={true}>
+                        <AccordionItem value="upcoming">
+                            <AccordionTrigger>Upcoming</AccordionTrigger>
+                            <AccordionContent>
+                                Your next three events are:
+                                <UpcomingEvents/>
+                            </AccordionContent>
+                        </AccordionItem>
+                        <AccordionItem value="categories" open>
+                            <AccordionTrigger>Categories</AccordionTrigger>
+                            <AccordionContent className="max-w-fit">
+                                <div className="capitalize text-gray-800 font-300 flex flex-col">
+                                    <div className="flex flex-row items-center gap-2">
+                                        <div className="w-1 h-1 bg-red-500 rounded-full"/>
+                                        Maintenance
+                                    </div>
+
+                                    <div className="flex flex-row items-center gap-2">
+                                        <div className="w-1 h-1 bg-blue-500 rounded-full"/>
+                                        Lease
+                                    </div>
+
+                                    <div className="flex flex-row items-center gap-2">
+                                        <div className="w-1 h-1 bg-green-500 rounded-full"/>
+                                        Rent
+                                    </div>
+
+                                    <div className="flex flex-row items-center gap-2">
+                                        <div className="w-1 h-1 bg-gray-500 rounded-full"/>
+                                        Other
+                                    </div>
+
+                                </div>
+                            </AccordionContent>
+                        </AccordionItem>
+                    </Accordion>
+
                 </div>
-                <CalendarComponent
-                    selected={dayRange}
-                    mode="range"
-                    fixedWeeks
-                    onDayClick={selectWeek}
-                    modifiers={{ ...events }}
+
+                <div
+                    className="min-h-full w-[1px] bg-gray-100"
                 />
 
-                <Accordion type="multiple" collapsible={true}>
-                    <AccordionItem value="upcoming">
-                        <AccordionTrigger>Upcoming</AccordionTrigger>
-                        <AccordionContent>
-                            Your next three events are:
-                            <UpcomingEvents/>
-                        </AccordionContent>
-                    </AccordionItem>
-                    <AccordionItem value="categories" open>
-                        <AccordionTrigger>Categories</AccordionTrigger>
-                        <AccordionContent className="max-w-fit">
-                            <div className="capitalize text-gray-800 font-300 flex flex-col">
-                                <div className="flex flex-row items-center gap-2">
-                                    <div className="w-1 h-1 bg-red-500 rounded-full"/>
-                                    Maintenance
-                                </div>
+                <EventsInSelectedRange/>
 
-                                <div className="flex flex-row items-center gap-2">
-                                    <div className="w-1 h-1 bg-blue-500 rounded-full"/>
-                                    Lease
-                                </div>
 
-                                <div className="flex flex-row items-center gap-2">
-                                    <div className="w-1 h-1 bg-green-500 rounded-full"/>
-                                    Rent
-                                </div>
-
-                                <div className="flex flex-row items-center gap-2">
-                                    <div className="w-1 h-1 bg-gray-500 rounded-full"/>
-                                    Other
-                                </div>
-
-                            </div>
-                        </AccordionContent>
-                    </AccordionItem>
-                </Accordion>
 
             </div>
-
-            <div
-                className="min-h-full w-[1px] bg-gray-100"
-            />
-
-            <EventsInSelectedRange/>
-
-
-            <div>
-
-            </div>
-
-
-        </div>
+        </>
     )
 }
 
