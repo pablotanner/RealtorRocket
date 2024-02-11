@@ -148,6 +148,15 @@ enum CurrencyCode {
   ZMW
 }
 
+enum CivilStatus {
+  SINGLE
+  MARRIED
+  DIVORCED
+  WIDOWED
+  SEPARATED
+  OTHER
+}
+
 model User {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
@@ -221,10 +230,10 @@ model Tenant {
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   // Tenant information, visible to Realtors
-  civilStatus String? @map("civil_status")
+  civilStatus CivilStatus? @map("civil_status")
   occupation  String?
   income      Float?
-  creditScore Int?    @map("credit_score")
+  creditScore Int?         @map("credit_score")
 
   // Define a one-to-one relationship between Tenant and User.
   user   User? @relation(fields: [userId], references: [id], onDelete: Cascade)

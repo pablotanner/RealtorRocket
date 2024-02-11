@@ -3,7 +3,7 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {useForm} from "react-hook-form";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "../ui/form.tsx";
 import {Input} from "../ui/input.tsx";
-import {zodInputStringPipe} from "../../utils/formatters.js";
+import {zodNumberInputPipe} from "../../utils/formatters.js";
 
 
 const LeaseForm = ({lease, onChange}) => {
@@ -11,7 +11,7 @@ const LeaseForm = ({lease, onChange}) => {
     const leaseFormSchema = z.object({
         startDate: z.string().or(z.null()),
         endDate: z.string().or(z.null()),
-        rentalPrice: zodInputStringPipe(z.number().positive('Number must be positive')).or(z.null()),
+        rentalPrice: zodNumberInputPipe(z.number().positive('Number must be positive')).or(z.null()),
         leaseLength: z.string().or(z.null()),
     })
 

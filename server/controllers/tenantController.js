@@ -81,7 +81,9 @@ export async function getTenant(req, res) {
                 id: parseInt(req.params.id),
                 leases: {
                     some: {
-                        realtorId: req.user.userId
+                        realtor: {
+                            userId: req.user.userId
+                        }
                     }
                 }
             },

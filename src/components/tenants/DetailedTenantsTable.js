@@ -70,7 +70,7 @@ const DetailedTenantsTable = ({ tenants }) => {
                 <div key={key} className="flex flex-row gap-10 hover:bg-gray-100 rounded-xl p-1">
 
                     <div className="flex flex-row items-center gap-4 w-[15vw] min-w-[200px]">
-                        <Avatar>
+                        <Avatar className="cursor-pointer hover:border-2 hover:border-indigo-500" onClick={() => navigate("/tenants/" + tenant?.id)}>
                             <AvatarFallback>{tenant?.firstName[0]?.toUpperCase()}{tenant?.lastName[0]?.toUpperCase()}</AvatarFallback>
                         </Avatar>
                         <div className="flex flex-col">

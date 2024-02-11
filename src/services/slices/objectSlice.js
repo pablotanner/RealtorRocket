@@ -345,10 +345,7 @@ export const selectUnitByLeaseId = (state, leaseId) => {
 
 export const selectUnitByTenantId = (state, tenantId) => {
     if (!tenantId) return null;
-    return selectUnitById(state, selectLeaseByTenantId(state, tenantId)?.id);
-}
-
-export const selectUnitByPropertyId = (state, propertyId) => {
-    if (!propertyId) return null;
-    return selectUnitById(state, selectLeaseByPropertyId(state, propertyId)?.id);
+    const lease = selectLeaseByTenantId(state, tenantId);
+    if (!lease) return null;
+    return selectUnitById(state, lease?.unitId);
 }

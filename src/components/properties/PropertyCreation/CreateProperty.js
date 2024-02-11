@@ -29,7 +29,7 @@ import {useCreatePropertyMutation} from "../../../services/api/propertyApi.js";
 import {useNavigate} from "react-router-dom";
 import ReviewCard from "./ReviewCard.js";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "../../ui/tooltip.tsx";
-import {zodInputStringPipe} from "../../../utils/formatters.js";
+import {zodNumberInputPipe} from "../../../utils/formatters.js";
 import {Portal} from "@radix-ui/react-dialog";
 
 
@@ -96,12 +96,12 @@ const CreateProperty = (props) => {
     const propertySchema = z.object({
         title: z.string({errorMap: () => ({message: 'Please enter a title for the property'})}),
         description: z.string({errorMap: () => ({message: 'Please enter a title for the property'})}),
-        lotSize: zodInputStringPipe(z.number().positive('Number must be positive')).or(z.null()),
-        yearBuilt: zodInputStringPipe(z.number().positive('Number must be positive')).or(z.null()),
+        lotSize: zodNumberInputPipe(z.number().positive('Number must be positive')).or(z.null()),
+        yearBuilt: zodNumberInputPipe(z.number().positive('Number must be positive')).or(z.null()),
         realEstateType: z.enum(Object.keys(realEstateTypes), {
             errorMap: () => ({ message: 'Please select a Real Estate Type' })
         }),
-        marketPrice: zodInputStringPipe(z.number().positive('Number must be positive')).or(z.null()),
+        marketPrice: zodNumberInputPipe(z.number().positive('Number must be positive')).or(z.null()),
         street: z.string().or(z.null()),
         city: z.string().or(z.null()),
         state: z.string().or(z.null()),

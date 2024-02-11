@@ -8,10 +8,11 @@ import Tenants from "./content/Tenants.jsx";
 import Rentals from "./content/Rentals.jsx";
 import RentalDetail from "./content/RentalDetail.jsx";
 import {useGetUnitQuery, useGetUnitsQuery} from "../services/api/unitApi.js";
-import {useGetTenantsQuery} from "../services/api/tenantApi.js";
+import {useGetTenantQuery, useGetTenantsQuery} from "../services/api/tenantApi.js";
 import {useGetLeasesQuery} from "../services/api/leaseApi.js";
 import Financials from "./content/Financials.jsx";
 import Calendar from "./content/Calendar.jsx";
+import TenantProfile from "./content/TenantProfile.jsx";
 
 export const PropertiesPage = () => {
     return (
@@ -44,6 +45,17 @@ export const TenantsPage = () => {
     return (
         <PageWrapper query={useGetTenantsQuery}>
             <Tenants/>
+        </PageWrapper>
+    )
+}
+
+export const TenantProfilePage = () => {
+    const {id} = useParams();
+
+    return (
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        <PageWrapper query={() => useGetTenantQuery(id)}>
+            <TenantProfile/>
         </PageWrapper>
     )
 }

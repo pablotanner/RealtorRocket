@@ -84,6 +84,19 @@ const FormItem = React.forwardRef<
 })
 FormItem.displayName = "FormItem"
 
+const FormGroup = React.forwardRef<
+    HTMLDivElement,
+    React.HTMLAttributes<HTMLDivElement>
+    >(({ className, ...props }, ref) => {
+    const numberOfChildren = React.Children.count(props.children)
+
+
+      return (
+        <div ref={ref} className={cn(`grid grid-cols-${numberOfChildren} gap-4`, className)} {...props} />
+    )})
+
+FormGroup.displayName = "FormGroup"
+
 const FormLabel = React.forwardRef<
   React.ElementRef<typeof LabelPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>
@@ -101,6 +114,27 @@ const FormLabel = React.forwardRef<
 })
 FormLabel.displayName = "FormLabel"
 
+
+const FormValue = React.forwardRef<
+  HTMLSpanElement,
+  React.HTMLAttributes<HTMLSpanElement>
+>(({ className, ...props }, ref) => {
+  const { formItemId  } = useFormField()
+
+    return (
+        <span
+        ref={ref}
+        id={formItemId}
+        className={cn("text-sm text-muted-foreground", className)}
+        {...props}
+        >
+          {props.children || "N/A"}
+        </span>
+    )
+})
+
+FormValue.displayName = "FormValue"
+
 const FormControl = React.forwardRef<
   React.ElementRef<typeof Slot>,
   React.ComponentPropsWithoutRef<typeof Slot>
@@ -111,6 +145,7 @@ const FormControl = React.forwardRef<
     <Slot
       ref={ref}
       id={formItemId}
+      className={cn("flex", props?.className)}
       aria-describedby={
         !error
           ? `${formDescriptionId}`
@@ -173,4 +208,6 @@ export {
   FormDescription,
   FormMessage,
   FormField,
+  FormValue,
+  FormGroup
 }

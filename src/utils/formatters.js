@@ -1,6 +1,16 @@
 import {z} from "zod";
 
-export const zodInputStringPipe = (zodPipe) =>
+// Turns empty strings into null
+export const zodStringPipe = (zodPipe) =>
+    z
+        .string()
+        .transform((value) => (value === '' ? null : value))
+        .nullable()
+        .pipe(zodPipe);
+
+
+// Transforms a Zod string into a nullable number
+export const zodNumberInputPipe = (zodPipe) =>
     z
         .string()
         .transform((value) => (value === '' ? null : value))

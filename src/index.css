@@ -27,6 +27,23 @@ h1 {
     color: var(--foreground);
 }
 
+select {
+    @apply block;
+    @apply w-full;
+    @apply px-2;
+    @apply py-2;
+    @apply text-base;
+    @apply text-gray-700;
+    @apply bg-white;
+    @apply border;
+    @apply border-input;
+    @apply rounded-md;
+    @apply shadow-sm;
+    @apply focus:outline-none;
+    @apply sm:text-sm;
+    @apply sm:leading-5;
+}
+
 @layer base {
   :root {
     --gradient-first: 187 92% 69%;

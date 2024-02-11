@@ -15,6 +15,18 @@ export const RentalStatus = {
     UNKNOWN: "Unknown",
 }
 
+export const CivilStatus = {
+    SINGLE: "Single",
+    MARRIED: "Married",
+    DIVORCED: "Divorced",
+    WIDOWED: "Widowed",
+    SEPARATED: "Separated",
+    OTHER: "Other",
+    UNKNOWN: "Unknown",
+}
+
+
+
 export const RealEstateType = {
     SINGLE_FAMILY_HOME: "Single Family Home",
     MULTI_FAMILY_HOME: "Multi Family Home",
@@ -60,3 +72,5 @@ export const getRealEstateIcon = (type) => {
             return <BiQuestionMark className={iconClass}/>;
     }
 }
+
+
