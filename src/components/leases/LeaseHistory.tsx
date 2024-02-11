@@ -1,7 +1,7 @@
 import {dateParser, moneyParser} from "../../utils/formatters.js";
 import {DataTable} from "../ui/data-table.js";
 import {ColumnDef} from "@tanstack/react-table";
-import {Lease} from "@prisma/client";
+import {Lease} from "../../utils/classes.ts";
 import {Button} from "../ui/button.tsx";
 import {FilePlus2} from "lucide-react";
 

@@ -49,10 +49,8 @@ const columns: ColumnDef<Lease>[] = [
         id: "tenant",
         header: "Tenant",
         cell: ({ row }) => {
-            // @ts-expect-error - TS doesn't understand that we're using a custom accessor
             if (row?.original?.tenant) {
                 return (
-                    // @ts-expect-error - TS doesn't understand that we're using a custom accessor
                     <div className="capitalize">{row?.original?.tenant?.firstName} {row?.original?.tenant?.lastName}</div>
                 )
             }
@@ -62,7 +60,6 @@ const columns: ColumnDef<Lease>[] = [
                 )
             }
         },
-        // @ts-expect-error - TS doesn't understand that we're using a custom accessor
         accessorFn: (row) => (row?.tenant?.firstName + row?.tenant?.lastName) || undefined,
         meta: {
             type: "string",
