@@ -17,7 +17,7 @@ export const unitApi = authApi.injectEndpoints({
                 url: `/units/${id}`,
                 method: 'GET',
             }),
-            providesTags: ['Units'],
+            providesTags: (result, error, id) => [{ type: 'Units', id }],
         }),
     }),
     overrideExisting: false,

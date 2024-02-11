@@ -48,7 +48,7 @@ export const tenantApi = authApi.injectEndpoints({
                         });
                     })
             },
-            invalidatesTags: ['Tenants', 'Leases']
+            invalidatesTags: ['Tenants', 'Units', 'Leases']
         }),
         updateTenant: build.mutation({
             query: ({id, bodyData}) => ({
