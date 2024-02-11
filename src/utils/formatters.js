@@ -9,16 +9,18 @@ export const zodStringPipe = (zodPipe) =>
         .pipe(zodPipe);
 
 
-// Transforms a Zod string into a nullable number
+
+// Transforms a Zod string into a nullable number (0 if empty)
 export const zodNumberInputPipe = (zodPipe) =>
     z
         .string()
+        .or(z.number())
         .transform((value) => (value === '' ? null : value))
         .nullable()
         .refine((value) => value === null || !isNaN(Number(value)), {
             message: 'Invalid input',
         })
-        .transform((value) => (value === null ? 0 : Number(value)))
+        .transform((value) => (value === null ? null : Number(value)))
         .pipe(zodPipe);
 
 

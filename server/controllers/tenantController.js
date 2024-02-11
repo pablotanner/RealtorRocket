@@ -149,3 +149,37 @@ export async function deleteTenant(req, res) {
         res.status(500).json({ message: "Error deleting tenant" });
     }
 }
+
+// Allows realtors to update tenants, but only if the tenant is linked to a lease that the realtor owns.
+// If the tenant has created an account of their own, they can update their own tenant data using the same endpoint
+export async function updateTenant(req, res) {
+    const tenantData = {...req.body};
+
+    try {
+        const updatedTenant = await prisma.tenant.update({
+            where: {
+                id: parseInt(req.params.id),
+                leases: {
+                    some: {
+                        realtor: {
+                            userId: req.user.userId
+                        }
+                    }
+                }
+
+            },
+            data: {
+                ...tenantData,
+            },
+            include: {
+                leases: true
+            }
+        });
+
+        res.status(200).json({data: updatedTenant });
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json({ message: "Error updating tenant" });
+    }
+}

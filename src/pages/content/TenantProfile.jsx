@@ -8,6 +8,7 @@ import {Badge} from "../../components/ui/badge.tsx";
 import {dateParser} from "../../utils/formatters.js";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "../../components/ui/tabs.tsx";
 import EditTenant from "../../components/tenants/EditTenant.js";
+import LeaseHistory from "../../components/leases/LeaseHistory.js";
 
 
 const TenantProfile = (props) => {
@@ -21,7 +22,6 @@ const TenantProfile = (props) => {
 
     const displayTenantInformation = () => {
         const information = []
-        information.push("Software Engineer")
 
         if (tenant?.occupation) {
             information.push(tenant?.occupation)
@@ -39,8 +39,8 @@ const TenantProfile = (props) => {
         <div className="min-w-60">
             <div className="relative w-full h-[21rem] md:h-36 ">
                 <Image src={currentUnit?.images[0]?.imageUrl || property?.images[0]?.imageUrl} alt="House" className="w-full h-64 object-cover absolute z-10 rounded-sm"/>
-                <div className="absolute min-w-fit z-20 left-0 right-0 top-36 md:top-32 m-4 bg-white p-4 rounded-lg border-2 border-gray-50 flex flex-col items-center md:items-start md:flex-row gap-x-8 shadow-lg ">
-                    <Avatar className="w-36 h-36 -top-12 rounded-lg border-white border-[5px]">
+                <div className="absolute min-w-fit z-20 left-0 right-0 top-36 md:top-32 m-4 bg-white p-4 rounded-lg border-2 border-gray-50 flex flex-col items-center md:items-start md:flex-row gap-x-8 shadow-md ">
+                    <Avatar className="w-36 h-36 -top-12 rounded-lg border-white border-[5px] shadow-md">
                         <AvatarImage src={tenant?.profileImageUrl} alt="Tenant" className="rounded-none" />
                         <AvatarFallback className="rounded-none text-2xl" >
                             {tenant?.firstName.charAt(0)}{tenant?.lastName.charAt(0)}
@@ -89,7 +89,7 @@ const TenantProfile = (props) => {
                         <EditTenant tenant={tenant} />
                     </TabsContent>
                     <TabsContent value="leases">
-
+                        <LeaseHistory leases={tenant?.leases} />
                     </TabsContent>
                     <TabsContent value="requests">
 

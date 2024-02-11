@@ -17,9 +17,12 @@ import {Button} from "../ui/button.tsx";
 import {useState} from "react";
 import {Save} from "lucide-react";
 import {CivilStatus} from "../../utils/magicNumbers.js";
+import {useUpdateTenantMutation} from "../../services/api/tenantApi.js";
 
 const EditTenant = ({tenant}) => {
     const [isEditing, setIsEditing] = useState(false);
+
+    const [updateTenant, {isLoading: isUpdating}] = useUpdateTenantMutation();
 
 
     const tenantProfileSchema = z.object({
@@ -29,8 +32,8 @@ const EditTenant = ({tenant}) => {
         phone: zodStringPipe(z.string().or(z.null())),
         civilStatus: zodStringPipe(z.string().or(z.null())),
         occupation: zodStringPipe(z.string().or(z.null())),
-        income: zodNumberInputPipe(z.number().or(z.null())),
-        creditScore: zodNumberInputPipe(z.number().or(z.null())),
+        income: zodNumberInputPipe(z.number().positive('Number must be positive')).or(z.null()),
+        creditScore: zodNumberInputPipe(z.number().positive('Number must be positive')).or(z.null()),
     })
 
     const tenantProfileForm = useForm({
@@ -48,8 +51,14 @@ const EditTenant = ({tenant}) => {
     })
 
     const onSubmit = (data) => {
-        console.log(data)
-        setIsEditing(false)
+        updateTenant({id: tenant.id, bodyData: data}).then(
+            (res) => {
+                if (!res.error) {
+                    tenantProfileForm.reset(data)
+                    setIsEditing(false)
+                }
+            }
+        )
     }
 
 
@@ -70,7 +79,7 @@ const EditTenant = ({tenant}) => {
                         </Button>
 
                         {isEditing && (
-                            <Button type="submit" variant="gradient">
+                            <Button type="submit" variant="gradient" isLoading={isUpdating}>
                                 <Save className="w-4 h-4 mr-2"/>
                                 Save
                             </Button>

@@ -58,6 +58,7 @@ router.get('/tenants', authenticateToken, tenantController.getTenants)
 router.post('/tenants', authenticateToken, tenantController.createTenant)
 router.get('/tenants/:id', authenticateToken, tenantController.getTenant)
 router.delete('/tenants/:id', authenticateToken, tenantController.deleteTenant)
+router.put('/tenants/:id', authenticateToken, tenantController.updateTenant)
 
 try {
     app.get('/users', authenticateToken, async (req, res) => {

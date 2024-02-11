@@ -50,6 +50,30 @@ export const tenantApi = authApi.injectEndpoints({
             },
             invalidatesTags: ['Tenants', 'Leases']
         }),
+        updateTenant: build.mutation({
+            query: ({id, bodyData}) => ({
+                url: `/tenants/${id}`,
+                method: 'PUT',
+                body: bodyData,
+            }),
+            async onQueryStarted(arg, { queryFulfilled }) {
+                queryFulfilled
+                    .then(() => {
+                        toast({
+                            title: "Success",
+                            description: "Tenant updated successfully",
+                        });
+                    })
+                    .catch(() => {
+                        toast({
+                            title: "Uh oh! Something went wrong.",
+                            description: "There was a problem with your request, please try again.",
+                            variant: "destructive",
+                        });
+                    })
+            },
+            invalidatesTags: ['Tenants']
+        }),
         deleteTenant: build.mutation({
             query: (id) => ({
                 url: `/tenants/${id}`,
@@ -78,4 +102,4 @@ export const tenantApi = authApi.injectEndpoints({
 })
 
 
-export const {useGetTenantsQuery, useGetTenantQuery, useCreateTenantMutation, useDeleteTenantMutation} = tenantApi;
+export const {useGetTenantsQuery, useGetTenantQuery, useUpdateTenantMutation, useCreateTenantMutation, useDeleteTenantMutation} = tenantApi;
