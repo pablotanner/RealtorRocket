@@ -7,10 +7,31 @@ import {getAllEvents, getEventDates, getEventsForRange} from "../../services/sli
 
 const Calendar = () => {
 
-    const [dayRange, setDayRange] = useState({
-        from: previousSunday(new Date()),
-        to: nextSaturday(new Date())
-    });
+    const getDatesToSelect = (date) => {
+        if (date.getDay() === 0) {
+            return {
+                from: date,
+                to: nextSaturday(date)
+            }
+        }
+        else if (date.getDay() === 6) {
+            return {
+                from: previousSunday(date),
+                to: date
+            }
+        }
+        else {
+            return {
+                from: previousSunday(date),
+                to: nextSaturday(date)
+            }
+        }
+    }
+
+
+    const [dayRange, setDayRange] = useState(() => {
+        return getDatesToSelect(new Date());
+    })
 
     const detailedEvents = useSelector(state => getAllEvents(state));
 
@@ -83,26 +104,7 @@ const Calendar = () => {
 
 
     const selectWeek = (day) => {
-        // If selected day is a Sunday, we want to select the previous week
-        if (day.getDay() === 0) {
-            setDayRange({
-                from: day,
-                to: nextSaturday(day)
-            })
-            return;
-        }
-        else if (day.getDay() === 6) {
-            setDayRange({
-                from: previousSunday(day),
-                to: day
-            })
-            return;
-        }
-
-        setDayRange({
-            from: previousSunday(day),
-            to: nextSaturday(day)
-        })
+        setDayRange(getDatesToSelect(day));
     }
 
     return (
