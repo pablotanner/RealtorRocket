@@ -47,7 +47,6 @@ const CreateTenant = (props) => {
     const selectedUnit = units?.data?.find((unit) => unit.id === parseInt(selectedUnitId))
 
 
-    console.log(selectedUnit)
     const [createTenant, {isLoading: isCreating}] = useCreateTenantMutation()
 
 

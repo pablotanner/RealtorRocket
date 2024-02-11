@@ -1,4 +1,4 @@
-import {createEntityAdapter, createSlice} from '@reduxjs/toolkit';
+import {createEntityAdapter, createSelector, createSlice} from '@reduxjs/toolkit';
 import {authApi} from "../api/authApi.js";
 
 const propertiesAdapter = createEntityAdapter({
@@ -194,45 +194,65 @@ export const {
     selectIds: selectTenantIds,
 } = tenantsAdapter.getSelectors((state) => state.tenants);
 
-export const selectPropertiesByPropertyId = (state, propertyId) => {
-    if (!propertyId) return [];
-    else if (String(propertyId).toLowerCase() === 'all') {
-        return selectAllProperties(state);
+
+
+export const selectPropertiesByPropertyId = createSelector(
+    selectAllProperties,
+    (_, propertyId) => propertyId,
+    (properties, propertyId) => {
+        if (!propertyId) return [];
+        else if (String(propertyId).toLowerCase() === 'all') {
+            return properties;
+        }
+        return properties.filter(property => property.id === propertyId);
     }
-    return selectAllProperties(state).filter(property => property.id === propertyId);
-}
+)
 
 
-export const selectUnitsByPropertyId = (state, propertyId) => {
-    if (!propertyId) return [];
-    else if (String(propertyId).toLowerCase() === 'all') {
-        return selectAllUnits(state).map(unit => {
-            return {...unit, leases: selectLeasesByUnitId(state, unit.id) }
-        })
+
+export const selectUnitsByPropertyId = createSelector(
+    [selectAllUnits, selectAllLeases, (_, propertyId) => propertyId],
+    (units, leases, propertyId) => {
+        if (!propertyId) return [];
+        else if (String(propertyId).toLowerCase() === 'all') {
+            return units;
+        }
+        return units.filter(unit => unit.realEstateObjectId === propertyId).map(unit => {
+            // Directly filter leases without using selectLeasesByUnitId to avoid breaking memoization
+            const unitLeases = leases.filter(lease => lease.unitId === unit.id);
+            return {...unit, leases: unitLeases};
+        });
     }
-    return selectAllUnits(state).filter(unit => unit.realEstateObjectId === propertyId).map(unit => {
-        return {...unit, leases: selectLeasesByUnitId(state, unit.id) }
-    })
+);
 
-}
+export const selectLeasesByPropertyId = createSelector(
+    [selectAllLeases, (state) => state, (_, propertyId) => propertyId], // Pass the entire state to the selector
+    (leases, state, propertyId) => {
+        if (!propertyId) return [];
+        else if (String(propertyId).toLowerCase() === 'all') {
+            return leases;
+        }
 
-export const selectLeasesByUnitId = (state, unitId) => {
-    if (!unitId) return [];
-    return selectAllLeases(state).filter(lease => lease.unitId === unitId);
-}
+        // Now we correctly pass the whole state and the propertyId to selectUnitsByPropertyId
+        const units = selectUnitsByPropertyId(state, propertyId);
 
-export const selectLeasesByPropertyId = (state, propertyId) => {
-    if (!propertyId) return [];
-    if (String(propertyId).toLowerCase() === 'all') {
-        return selectAllLeases(state);
+
+        // Assuming units have a property that can be used to link them to leases, e.g., `leaseId`
+        const leaseIds = units.map(unit => unit.leaseId); // Ensure this matches your data model
+        return leases.filter(lease => leaseIds.includes(lease.id));
     }
-    const units = selectUnitsByPropertyId(state, propertyId);
-    const leases = [];
-    units.forEach(unit => {
-        leases.push(...selectLeasesByUnitId(state, unit.id));
-    });
-    return leases;
-}
+);
+
+
+
+export const selectLeasesByUnitId = createSelector(
+    [selectAllLeases, (_, unitId) => unitId],
+    (leases, unitId) => {
+        console.log(leases)
+        return leases.filter(lease => lease.unitId === unitId)
+    }
+)
+
 
 export const selectTenantsByPropertyId = (state, propertyId) => {
     if (!propertyId) return [];

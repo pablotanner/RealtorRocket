@@ -16,9 +16,15 @@ export const leaseApi = authApi.injectEndpoints({
                     url: `/leases?${queryParams}`,
                     method: 'GET',
                 }
-
             },
-            providesTags: ['Leases'],
+            providesTags: (result, error, filters) => {
+                // If no filters are provided, update the 'Leases' tag
+                if (!filters || Object.keys(filters).length === 0) {
+                    return ['Leases'];
+                }
+                // If filters are provided, do not update any tags
+                return [];
+            },
         }),
         getLease: build.query({
             query: (id) => ({

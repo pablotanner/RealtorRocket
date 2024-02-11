@@ -17,10 +17,9 @@ const Rentals = (props) => {
 
     const selectedPropertyId = useSelector((state) => state.userSlice.selectedProperty)
 
+    const units = useSelector((state) => selectUnitsByPropertyId(state, selectedPropertyId));
 
-
-    const units = useSelector(state => selectUnitsByPropertyId(state, selectedPropertyId))
-
+    console.log(units)
 
     if (!units || units.length === 0)  return (
         <div className="flex flex-col gap-4">
