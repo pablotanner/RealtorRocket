@@ -24,7 +24,7 @@ const RentalSelection = ({onSelect, selected, units}) => {
                     className="w-[200px] justify-between capitalize"
                 >
                     {unitId
-                        ? "Unit " + units?.data?.find((unit) => unit.id === parseInt(unitId))?.id
+                        ? (units?.data?.find((unit) => unit.id === parseInt(unitId))?.unitIdentifier || "Unit " + unitId)
                         : "Select Unit..."}
                     <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
@@ -38,9 +38,9 @@ const RentalSelection = ({onSelect, selected, units}) => {
                             <CommandItem
                                 key={unit.id}
                                 value={unit.id}
-                                onSelect={(currentValue) => {
-                                    setUnitId(currentValue === unitId ? null : currentValue)
-                                    onSelect(currentValue === unitId ? null : currentValue)
+                                onSelect={() => {
+                                    setUnitId(unit.id === unitId ? null : unit.id)
+                                    onSelect(unit.id === unitId ? null : unit.id)
                                     setOpen(false)
                                 }}
                             >
@@ -50,7 +50,7 @@ const RentalSelection = ({onSelect, selected, units}) => {
                                         parseInt(unitId) === unit.id ? "opacity-100" : "opacity-0"
                                     )}
                                 />
-                                {unit.id}
+                                {unit.unitIdentifier || "Unit " + unit.id}
                             </CommandItem>
                         ))}
                     </CommandGroup>

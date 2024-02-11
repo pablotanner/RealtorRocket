@@ -47,6 +47,7 @@ const CreateTenant = (props) => {
     const selectedUnit = units?.data?.find((unit) => unit.id === parseInt(selectedUnitId))
 
 
+    console.log(selectedUnit)
     const [createTenant, {isLoading: isCreating}] = useCreateTenantMutation()
 
 
@@ -155,7 +156,7 @@ const CreateTenant = (props) => {
                             <RentalSelection onSelect={setSelectedUnitId} selected={selectedUnitId} units={units}/>
                             <div className="flex flex-col gap-4">
                                 <div className="bg-gray-50 border-2 border-gray-100 p-2 rounded-xl" hidden={!selectedUnit}>
-                                    <h3 className="text-lg font-400">Unit {selectedUnit?.id}</h3>
+                                    <h3 className="text-lg font-400">{selectedUnit?.unitIdentifier || "Unit " + selectedUnit?.id}</h3>
                                     <p className="text-sm text-gray-500">Belongs to
                                         Property: {selectedUnit?.realEstateObject?.title}</p>
                                     <UnitStatus/>
@@ -235,7 +236,7 @@ const CreateTenant = (props) => {
                                 {"Assigning to existing lease: " + leaseData.leaseId }
                             </p>
                             <p className="font-400 text-lg text-primary">
-                                Unit: {selectedUnitId}
+                                {selectedUnit?.unitIdentifier || "Unit " + selectedUnit?.id}
                             </p>
 
 
