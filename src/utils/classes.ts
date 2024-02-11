@@ -58,7 +58,7 @@ export class Unit {
     leases: Lease[];
 }
 
-class Lease {
+export class Lease {
     id: number;
     createdAt: Date;
     updatedAt: Date;
@@ -80,7 +80,7 @@ class Lease {
     realtorId: number;
 }
 
-class Tenant {
+export class Tenant {
     id: number;
     createdAt: Date;
     updatedAt: Date;
@@ -98,7 +98,7 @@ class Tenant {
     maintenanceRequests: MaintenanceRequest[];
 }
 
-class User {
+export class User {
     id: number;
     createdAt: Date;
     updatedAt: Date;
