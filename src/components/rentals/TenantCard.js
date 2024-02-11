@@ -10,7 +10,6 @@ const TenantCard = ({ tenant, lease }) => {
         return null;
     }
 
-    console.log(tenant, lease)
     return (
         <Card className="shadow-lg basis-[400px] flex-grow">
             <CardHeader className="flex flex-col items-center gap-2">

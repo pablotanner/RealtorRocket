@@ -11,15 +11,10 @@ import {selectTenantByLeaseId, selectUnitsByPropertyId} from "../../services/sli
 
 
 const Rentals = (props) => {
-    const {data} = props;
-    const navigate = useNavigate()
+    const {propertySelection} = props;
 
+    const units = useSelector((state) => selectUnitsByPropertyId(state, propertySelection));
 
-    const selectedPropertyId = useSelector((state) => state.userSlice.selectedProperty)
-
-    const units = useSelector((state) => selectUnitsByPropertyId(state, selectedPropertyId));
-
-    console.log(units)
 
     if (!units || units.length === 0)  return (
         <div className="flex flex-col gap-4">

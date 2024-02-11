@@ -26,6 +26,7 @@ const initialState = {
 }
 
 
+
 /**
  * The addMatchers are used to update the properties/units/tenant/leases whenever the API call for them goes through,
  * the logic of when this happens is handled by the Tags in the API Slice.
@@ -105,7 +106,10 @@ const leaseSlice = createSlice({
             .addMatcher(
                 authApi.endpoints.getLeases.matchFulfilled,
                 (state, action) => {
-                    leasesAdapter.setAll(state, action.payload.data);
+                    // If the originalArgs are not present, it means that the API call was made without any filters (so GET all leases)
+                    if (!action.meta.arg.originalArgs){
+                        leasesAdapter.setAll(state, action.payload.data);
+                    }
                 }
             )
     },
@@ -215,7 +219,10 @@ export const selectUnitsByPropertyId = createSelector(
     (units, leases, propertyId) => {
         if (!propertyId) return [];
         else if (String(propertyId).toLowerCase() === 'all') {
-            return units;
+            return units.map(unit => {
+                const unitLeases = leases.filter(lease => lease.unitId === unit.id);
+                return {...unit, leases: unitLeases};
+            })
         }
         return units.filter(unit => unit.realEstateObjectId === propertyId).map(unit => {
             // Directly filter leases without using selectLeasesByUnitId to avoid breaking memoization
@@ -226,20 +233,17 @@ export const selectUnitsByPropertyId = createSelector(
 );
 
 export const selectLeasesByPropertyId = createSelector(
-    [selectAllLeases, (state) => state, (_, propertyId) => propertyId], // Pass the entire state to the selector
-    (leases, state, propertyId) => {
+    [selectAllLeases, selectAllUnits, (_, propertyId) => propertyId], // Pass the entire state to the selector
+    (leases, units, propertyId) => {
         if (!propertyId) return [];
         else if (String(propertyId).toLowerCase() === 'all') {
             return leases;
         }
 
-        // Now we correctly pass the whole state and the propertyId to selectUnitsByPropertyId
-        const units = selectUnitsByPropertyId(state, propertyId);
+        const unitIds = units.filter(unit => unit.realEstateObjectId === propertyId).map(unit => unit.id);
 
+        return leases.filter(lease => unitIds.includes(lease.unitId));
 
-        // Assuming units have a property that can be used to link them to leases, e.g., `leaseId`
-        const leaseIds = units.map(unit => unit.leaseId); // Ensure this matches your data model
-        return leases.filter(lease => leaseIds.includes(lease.id));
     }
 );
 
@@ -248,7 +252,6 @@ export const selectLeasesByPropertyId = createSelector(
 export const selectLeasesByUnitId = createSelector(
     [selectAllLeases, (_, unitId) => unitId],
     (leases, unitId) => {
-        console.log(leases)
         return leases.filter(lease => lease.unitId === unitId)
     }
 )
