@@ -57,7 +57,11 @@ const columns: ColumnDef<Property>[] = [
     {
         accessorKey: "description",
         header: "Description",
-        cell: ({ row }) => <div className="lowercase">{row.getValue("description")}</div>,
+        cell: ({ row }) => {
+            return (
+                <div title={row.original.description} className="lowercase overflow-hidden text-ellipsis whitespace-nowrap max-w-[200px]">{row.getValue("description")}</div>
+            )
+        },
         meta: {
             type: "string"
         },

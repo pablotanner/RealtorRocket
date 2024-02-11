@@ -2,9 +2,16 @@ import {Card, CardContent, CardHeader, CardTitle} from "../ui/card.tsx";
 import {Avatar, AvatarFallback} from "../ui/avatar.tsx";
 import {Button} from "../ui/button.tsx";
 import {dateParser} from "../../utils/formatters.js";
+import {useNavigate} from "react-router-dom";
 
 
 const TenantCard = ({ tenant, lease }) => {
+    const navigate = useNavigate();
+
+    const handleViewProfile = () => {
+        navigate(`/tenants/${tenant.id}`);
+    }
+
 
     if (!tenant) {
         return null;
@@ -31,6 +38,7 @@ const TenantCard = ({ tenant, lease }) => {
                 <div className="flex flex-row gap-2">
                     <Button
                         variant="light"
+                        onClick={handleViewProfile}
                     >
                         View Profile
                     </Button>

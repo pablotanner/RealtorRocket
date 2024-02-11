@@ -97,15 +97,15 @@ const DetailedTenantsTable = ({ tenants }) => {
 
                     </div>
 
-                    <div className="flex justify-center w-fit">
+                    <div className="flex justify-center w-fit items-center">
                         <TooltipProvider>
                             <Tooltip>
                                 <TooltipTrigger asChild>
-                                    <button>
-                                        <Badge itemType="button" variant="purple" className="h-fit whitespace-nowrap" >
-                                            Verified Tenant
+                                    <span>
+                                        <Badge variant="negative" className="h-fit whitespace-nowrap" >
+                                            Unverified Tenant
                                         </Badge>
-                                    </button>
+                                    </span>
                                 </TooltipTrigger>
                                 <TooltipContent>
                                     <p>

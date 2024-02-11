@@ -4,38 +4,8 @@ import {
 import {Checkbox} from "../ui/checkbox.tsx";
 import {dateParser, moneyParser} from "../../utils/formatters.js";
 import {DataTable} from "../ui/data-table.js";
+import {Lease} from "@prisma/client";
 
-class Tenant {
-    id: string;
-    firstName: string;
-    lastName: string;
-}
-
-class Lease {
-    id: string;
-    startDate: string;
-    endDate: string;
-    rentalPrice: number;
-    unit: Unit;
-    tenant: Tenant;
-    totalRentPaid: number;
-    totalRentDue: number;
-    lastPaymentDate: string;
-}
-
-class Unit {
-    id: string;
-    unitNumber: string;
-    floor: number;
-    unitSize: number;
-    numOfFloors: number;
-    numOfRooms: number;
-    numOfBathrooms: number;
-    numOfBedrooms: number;
-    rentalPrice: number;
-    status: string;
-    leases: Lease[];
-}
 
 
 const columns: ColumnDef<Lease>[] = [
@@ -78,8 +48,10 @@ const columns: ColumnDef<Lease>[] = [
         id: "tenant",
         header: "Tenant",
         cell: ({ row }) => {
+            // @ts-expect-error - TS doesn't understand that we're using a custom accessor
             if (row?.original?.tenant) {
                 return (
+                    // @ts-expect-error - TS doesn't understand that we're using a custom accessor
                     <div className="capitalize">{row?.original?.tenant?.firstName} {row?.original?.tenant?.lastName}</div>
                 )
             }
@@ -89,6 +61,7 @@ const columns: ColumnDef<Lease>[] = [
                 )
             }
         },
+        // @ts-expect-error - TS doesn't understand that we're using a custom accessor
         accessorFn: (row) => (row?.tenant?.firstName + row?.tenant?.lastName) || undefined,
         meta: {
             type: "string",
@@ -173,11 +146,11 @@ const columns: ColumnDef<Lease>[] = [
         cell: ({ row }) => {
             return (
                 <div className="capitalize font-500">
-                    {moneyParser(row?.original?.totalRentPaid)}
+                    {moneyParser(row?.original?.rentPaid)}
                 </div>
             )
         },
-        accessorFn: (row) => row?.totalRentPaid || undefined,
+        accessorFn: (row) => row?.rentPaid || undefined,
         enableSorting: true,
 
     },

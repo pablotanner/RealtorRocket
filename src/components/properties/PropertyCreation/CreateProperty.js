@@ -51,7 +51,7 @@ const realEstateTypes = {
 const CreateProperty = (props) => {
     const navigate = useNavigate();
 
-    const [createProperty, {data: createdProperty, isLoading, isSuccess}] = useCreatePropertyMutation();
+    const [createProperty, {isLoading}] = useCreatePropertyMutation();
 
     const [page, setPage] = useState(0);
 
@@ -153,16 +153,16 @@ const CreateProperty = (props) => {
         }
 
 
-        createProperty({...data , units: unitFormData})
-
+        createProperty({...data , units: unitFormData}).then((res) => {
+            if (res.error) {
+                console.log(res.error);
+            }
+            else {
+                navigate(`/properties/${res.data?.data?.id}`)
+            }
+        })
     }
 
-    useEffect(() => {
-        if (isSuccess) {
-            navigate(`/properties/${createdProperty?.data?.id}`)
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isLoading])
 
 
 

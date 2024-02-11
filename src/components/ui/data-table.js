@@ -123,14 +123,14 @@ const getFilterOptions = (type) => {
 }
 
 
-export const DataTable = ({data: tableData, columns: tableColumns}, props) => {
+export const DataTable = ({data: tableData, columns: tableColumns, ...props}) => {
     function getColumnName (column) {
         return column.columnDef.meta.title;
     }
 
     const data = useMemo(() => tableData, [tableData]);
     const columns = useMemo(() => {
-        return tableColumns.map(column => {
+        return tableColumns?.map(column => {
             switch (column.meta?.type) {
                 case "string":
                     return {...column, filterFn: stringFilterFn};
@@ -210,7 +210,7 @@ export const DataTable = ({data: tableData, columns: tableColumns}, props) => {
 
     // Filter options for each column (depends on data type; string/number/date)
     const filterOptions = useMemo(() => {
-        return table.getAllColumns().filter((column) => column.getCanFilter()).map((column) => {
+        return table.getAllColumns()?.filter((column) => column.getCanFilter())?.map((column) => {
             return getFilterOptions(column.columnDef.meta.type);
         });
     }, [table]);
@@ -266,10 +266,8 @@ export const DataTable = ({data: tableData, columns: tableColumns}, props) => {
 
 
     return (
-        <div>
-            <div>
-                <h1>{props.title}</h1>
-            </div>
+        <div className="flex flex-col gap-2">
+            <h2 >{props.title}</h2>
             <div className="flex flex-row gap-2 flex-wrap">
                 <div className="relative flex bg-gray-50 rounded-md items-center max-w-sm">
                     <FaMagnifyingGlass className="absolute top-3 left-3 h-4 w-4 text-gray-400" />
@@ -373,11 +371,15 @@ export const DataTable = ({data: tableData, columns: tableColumns}, props) => {
                     </DropdownMenuContent>
                 </DropdownMenu>
 
+                {props.children}
+
+
                 {columnFilters.map((filter, index) => {
                     return (
                         <FilterItem filter={filter} key={index} />
                     )
                 })}
+
             </div>
             <Table>
                 <TableHeader>

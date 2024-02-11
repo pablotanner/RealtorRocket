@@ -31,8 +31,20 @@ const SendToUnit = ({unit}) => {
             View Unit
         </div>
     )
-
 }
+
+const SendToTenant = ({tenant}) => {
+    const navigate = useNavigate()
+
+    return (
+            <div className="bg-primary-dark whitespace-nowrap items-center w-fit text-white p-2 flex flex-row rounded-2xl cursor-pointer hover:bg-primary-dark/70 transition-all ease-in"
+                 onClick={() => navigate(`/tenants/${tenant.id}`)}
+            >
+                <LinkIcon className="w-4 h-4 mr-2"/> {tenant?.firstName} {tenant?.lastName}
+            </div>
+    )
+}
+
 
 const RentalTableDropdown = ({unit}) => {
     const navigate = useNavigate()
@@ -135,9 +147,7 @@ const columns: ColumnDef<Unit>[] = [
             if (row?.original?.leases?.length > 0 && row?.original?.leases[0]?.tenant) {
                 // Tenant name
                 return (
-                    <div className="bg-primary-dark whitespace-nowrap items-center w-fit text-white p-2 flex flex-row rounded-2xl cursor-pointer hover:bg-primary-dark/70 transition-all ease-in">
-                        <LinkIcon className="w-4 h-4 mr-2"/> {row.original.leases[0]?.tenant?.firstName} {row.original.leases[0]?.tenant?.lastName}
-                    </div>
+                    <SendToTenant tenant={row.original.leases[0]?.tenant} />
                 )
             }
             return (

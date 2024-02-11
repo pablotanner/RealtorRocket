@@ -14,6 +14,7 @@ import {Button} from "../../ui/button.tsx";
 import TenantForm from "./TenantForm.js";
 import AddToLease from "./AddToLease.js";
 import {useCreateTenantMutation} from "../../../services/api/tenantApi.js";
+import {isBefore} from "date-fns";
 
 const CreateTenant = (props) => {
     const [modalOpen, setModalOpen] = useState(false)
@@ -59,7 +60,7 @@ const CreateTenant = (props) => {
 
     const UnitStatus = () => {
         if (selectedUnit?.leases?.length > 0) {
-            if (selectedUnit?.leases[0]?.endDate) {
+            if ( isBefore(selectedUnit?.leases[0]?.endDate, new Date())) {
                 return (<Badge variant="warning">Vacant</Badge>)
             }
             else {
@@ -130,6 +131,22 @@ const CreateTenant = (props) => {
         createTenant({bodyData:body, leaseId}).then((res) => {
             if (res.data) {
                 setModalOpen(false)
+                setPage(0)
+                setTenantData({
+                    firstName: null,
+                    lastName: null,
+                    email: null,
+                    phone: null,
+                })
+                setSelectedUnitId(null)
+                setLeaseData({
+                    decision: "new",
+                    leaseId: null,
+                    lease: {
+                        startDate: null,
+                        endDate: null,
+                    }
+                })
             }
         })
     }

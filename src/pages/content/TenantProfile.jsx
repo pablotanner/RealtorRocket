@@ -8,7 +8,7 @@ import {Badge} from "../../components/ui/badge.tsx";
 import {dateParser} from "../../utils/formatters.js";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "../../components/ui/tabs.tsx";
 import EditTenant from "../../components/tenants/EditTenant.js";
-import LeaseHistory from "../../components/leases/LeaseHistory.js";
+import LeaseHistory from "../../components/leases/LeaseHistory.tsx";
 
 
 const TenantProfile = (props) => {
@@ -90,7 +90,6 @@ const TenantProfile = (props) => {
                         <EditTenant tenant={tenant} />
                     </TabsContent>
                     <TabsContent value="leases">
-                        <h1>Lease History</h1>
                         <LeaseHistory leases={tenant?.leases} />
                     </TabsContent>
                     <TabsContent value="requests">
