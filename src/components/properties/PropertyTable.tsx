@@ -6,7 +6,7 @@ import {Checkbox} from "../ui/checkbox.tsx";
 import {Button} from "../ui/button.tsx";
 import {ArrowUpDown, MoreHorizontal} from "lucide-react";
 import {RealEstateType} from "../../utils/magicNumbers.js"
-import {moneyParser} from "../../utils/formatters.js";
+import {dateParser, moneyParser} from "../../utils/formatters.js";
 import {Property} from "../../utils/classes.ts";
 import {DataTable} from "../ui/data-table.js"
 
@@ -94,7 +94,6 @@ const columns: ColumnDef<Property>[] = [
             type: "number"
         }
     },
-
     {
         accessorKey: "units",
         header: "Units",
@@ -104,6 +103,16 @@ const columns: ColumnDef<Property>[] = [
         meta: {
             type: "number"
         }
+    },
+    {
+        accessorKey: "createdAt",
+        header: "Created At",
+        enableSorting: true,
+        cell: ({ row }) => <div className="lowercase">{dateParser(row.getValue("createdAt"))}</div>,
+        meta: {
+            type: "date"
+        },
+        accessorFn: (row) => new Date(row.createdAt)
     },
     {
         id: "actions",

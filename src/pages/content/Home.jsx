@@ -43,8 +43,9 @@ const Home = () => {
 
                 <Button
                     variant="outline"
-                    onClick={() => navigate("/calendar")}
+                    onClick={() => navigate("/notifications")}
                     className="mt-4"
+                    disabled
                 >
                     <Eye className="mr-1 h-4 w-4"/>
                     View All
@@ -86,7 +87,7 @@ const Home = () => {
 
                 <Button
                     variant="outline"
-                    onClick={() => navigate("/notifications")}
+                    onClick={() => navigate("/calendar")}
                     className="mt-4"
                 >
                     <Eye className="mr-1 h-4 w-4"/>
@@ -96,7 +97,6 @@ const Home = () => {
         )
     }
 
-    UpcomingEvents()
 
     return (
         <div className="gap-8 flex flex-col">
