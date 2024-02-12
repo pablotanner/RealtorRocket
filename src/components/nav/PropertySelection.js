@@ -6,6 +6,9 @@ import {getRealEstateIcon, RealEstateType} from "../../utils/magicNumbers.js";
 import {selectPropertyById} from "../../services/slices/objectSlice.js";
 import {DeleteIcon, Eye, MoreVertical} from "lucide-react";
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from "../ui/dropdown-menu.tsx";
+import {Dialog, DialogContent, DialogHeader} from "../ui/dialog.tsx";
+import {useState} from "react";
+import {dateParser} from "../../utils/formatters.js";
 
 const PropertySelection = () => {
     const {data, isLoading, isSuccess} = useGetPropertiesQuery();
@@ -16,6 +19,8 @@ const PropertySelection = () => {
 
     // Will be null if no property (all) is selected
     const property = useSelector(state => selectPropertyById(state, selection));
+
+    const [viewIsOpen, setViewIsOpen] = useState(false);
 
     if (isLoading || !isSuccess) {
         return (
@@ -72,12 +77,12 @@ const PropertySelection = () => {
                 <MoreVertical className="w-5 h-5 cursor-pointer"/>
             </DropdownMenuTrigger>
             <DropdownMenuContent hidden={!property}>
-                
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                    onClick={() => setViewIsOpen(true)}
+                >
                     <Eye className="w-5 h-5 mr-1"/>
                     View
                 </DropdownMenuItem>
-
                 <DropdownMenuItem
                     onClick={() => dispatch(selectProperty("all"))}
                 >
@@ -85,8 +90,22 @@ const PropertySelection = () => {
                     Remove Filter
                 </DropdownMenuItem>
             </DropdownMenuContent>
-
         </DropdownMenu>
+
+
+            <Dialog open={viewIsOpen && property} onOpenChange={() => setViewIsOpen(!viewIsOpen)}>
+                <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                        <h3 className="text-lg font-600">{property?.title}</h3>
+                    </DialogHeader>
+                    <div>
+                        <p>{RealEstateType[property?.realEstateType]}</p>
+                        <p>{property?.units?.length} Unit(s)</p>
+                        <p>Created on {dateParser(property?.createdAt)}</p>
+                    </div>
+                </DialogContent>
+            </Dialog>
+
 
         </div>
 
