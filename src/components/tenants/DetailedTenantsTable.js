@@ -109,7 +109,7 @@ const DetailedTenantsTable = ({ tenants }) => {
                                 </TooltipTrigger>
                                 <TooltipContent>
                                     <p>
-                                        This tenant has created an account and verified their email address.
+                                        This tenant has not created an account yet.
                                     </p>
                                 </TooltipContent>
                             </Tooltip>

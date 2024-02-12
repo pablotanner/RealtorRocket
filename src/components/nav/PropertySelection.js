@@ -3,8 +3,9 @@ import {useGetPropertiesQuery} from "../../services/api/propertyApi.js";
 import {useDispatch, useSelector} from "react-redux";
 import {selectProperty} from "../../services/slices/userSlice.js";
 import {getRealEstateIcon, RealEstateType} from "../../utils/magicNumbers.js";
-import {HoverCard, HoverCardContent, HoverCardTrigger} from "../ui/hover-card.tsx";
 import {selectPropertyById} from "../../services/slices/objectSlice.js";
+import {DeleteIcon, Eye, MoreVertical} from "lucide-react";
+import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from "../ui/dropdown-menu.tsx";
 
 const PropertySelection = () => {
     const {data, isLoading, isSuccess} = useGetPropertiesQuery();
@@ -36,36 +37,12 @@ const PropertySelection = () => {
 
 
     return (
+        <div className="flex flex-row items-center gap-2">
+
         <Select onValueChange={(value) => dispatch(selectProperty(value))} value={selection}>
-            <HoverCard>
-                <HoverCardTrigger>
-                    <SelectTrigger>
-                        <SelectValue/>
-                    </SelectTrigger>
-                </HoverCardTrigger>
-                {
-                    property ? (
-                        <HoverCardContent className="flex flex-row gap-4 justify-start whitespace-nowrap w-fit">
-                            <div className="flex flex-col gap-2 text-sm items-start whitespace-break-spaces">
-                                <img
-                                    src={property?.images[0]?.imageUrl}
-                                    className="w-12 h-12 min-w-12 min-h-12 rounded-full object-cover"
-                                />
-                                Units: {property?.units.length}
-                            </div>
-                            <div className="font-500 text-sm text-off-black">
-                                Added on {new Date(property?.createdAt).toLocaleDateString()} <br/>
-                                {RealEstateType[property?.realEstateType]}
-                                <p className="text-gray-500 text-xs font-400 whitespace-break-spaces">
-                                    {property?.description}
-                                </p>
-                            </div>
-                        </HoverCardContent>
-                    ) : null
-                }
-
-            </HoverCard>
-
+            <SelectTrigger>
+                <SelectValue/>
+            </SelectTrigger>
 
             <SelectContent>
                 <SelectGroup>
@@ -89,6 +66,30 @@ const PropertySelection = () => {
                 </SelectGroup>
             </SelectContent>
         </Select>
+
+        <DropdownMenu>
+            <DropdownMenuTrigger hidden={!property}>
+                <MoreVertical className="w-5 h-5 cursor-pointer"/>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent hidden={!property}>
+                
+                <DropdownMenuItem>
+                    <Eye className="w-5 h-5 mr-1"/>
+                    View
+                </DropdownMenuItem>
+
+                <DropdownMenuItem
+                    onClick={() => dispatch(selectProperty("all"))}
+                >
+                    <DeleteIcon className="w-5 h-5 mr-1"/>
+                    Remove Filter
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+
+        </DropdownMenu>
+
+        </div>
+
     )
 }
 
