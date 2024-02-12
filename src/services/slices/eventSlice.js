@@ -42,8 +42,9 @@ const eventSlice = createSlice({
                     catch (e) {
                         // Do nothing
                     }
-
                 })
+                // Sort the lease array by date (newest first)
+                state.lease.sort((a,b) => new Date(b.date) - new Date(a.date))
             }
         )
     }

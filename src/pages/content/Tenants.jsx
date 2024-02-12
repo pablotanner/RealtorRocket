@@ -18,7 +18,7 @@ const Tenants = (props) => {
                 Tenants
             </h1>
             <div className="flex flex-row items-center gap-4 flex-wrap sm:flex-nowrap justify-between">
-                This page will display the tenants of the user's rental properties, will be possible to filter by property (dropdown in header)
+                The table below shows all your tenants. To view a tenant's profile page, click on their profile picture.
                 <CreateTenant trigger={<Button variant="gradient"><UserRoundPlus className="w-4 h-4 mr-3"/> Create Tenant</Button>} />
             </div>
 

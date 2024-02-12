@@ -4,6 +4,7 @@ import { Card,
 import {moneyParser} from "../../utils/formatters.js";
 import {useNavigate} from "react-router-dom";
 import {LinkIcon} from "lucide-react";
+import {RealEstateType} from "../../utils/magicNumbers.js";
 
 const DetailedPropertyCard = ({ property }) => {
     const navigate = useNavigate();
@@ -69,12 +70,12 @@ const DetailedPropertyCard = ({ property }) => {
                 />
 
                 <div className="px-4 pt-3 flex flex-col gap-2">
-                    <div className="flex justify-between flex-row items-center gap-1 flex-wrap">
+                    <div className="flex justify-between flex-row items-center gap-2 flex-wrap">
                         <div className="text-2xl text-off-black font-500">
                             {property?.title}
                         </div>
                         <div className="text-gray-900 font-300 mt-1">
-                            {property?.realEstateType}
+                            {RealEstateType[property?.realEstateType]}
                         </div>
                     </div>
 
