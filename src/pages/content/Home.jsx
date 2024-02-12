@@ -104,8 +104,8 @@ const Home = () => {
                 Welcome, {name}!
             </h1>
 
-            <div className="flex flex-row justify-start gap-8">
-                <div className="flex flex-col gap-4">
+            <div className="flex flex-row justify-start gap-8 flex-wrap md:flex-nowrap">
+                <div className="flex flex-col gap-4 flex-grow-0">
                     <div className="flex flex-row gap-4 flex-wrap">
                         <InfoCard title="Total Properties" number={properties?.data?.length} link="/properties"/>
                         <InfoCard title="Total Rental Units" number={units?.data?.length} link="/rentals"/>
@@ -169,7 +169,7 @@ const Home = () => {
 
                 </div>
 
-                <div className="w-fit h-full flex flex-col gap-4">
+                <div className="h-full flex  flex-row md:flex-col gap-4 flex-shrink-0">
                     <UpcomingEvents />
                     <Notifications />
                 </div>
