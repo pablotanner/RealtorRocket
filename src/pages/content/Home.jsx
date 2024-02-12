@@ -9,6 +9,9 @@ import {getAllEvents} from "../../services/slices/eventSlice.js";
 import {Bell, CalendarDays, Eye} from "lucide-react";
 import {Button} from "../../components/ui/button.tsx";
 import {useNavigate} from "react-router-dom";
+import {DatePicker} from "../../components/ui/date-picker.tsx";
+import {useState} from "react";
+import {getDatePlaceholder, getLang} from "../../utils/formatters.js";
 
 const Home = () => {
     const navigate = useNavigate();
@@ -24,6 +27,8 @@ const Home = () => {
     const name = user?.data?.name;
 
     const events = useSelector(state => getAllEvents(state))
+
+
 
     const Notifications = () => {
 
@@ -97,12 +102,21 @@ const Home = () => {
         )
     }
 
+    /*
+    const [date, setDate] = useState(new Date());
+    <DatePicker initialStartDate={date} onChange={(startDate) => setDate(startDate)}
+
+    />
+
+     */
+
 
     return (
         <div className="gap-8 flex flex-col">
             <h1>
                 Welcome, {name}!
             </h1>
+
 
             <div className="flex flex-row justify-start gap-8 flex-wrap md:flex-nowrap">
                 <div className="flex flex-col gap-4 flex-grow-0">

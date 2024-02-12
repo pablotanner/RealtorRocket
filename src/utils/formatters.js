@@ -1,5 +1,12 @@
 import {z} from "zod";
 
+
+export function getLang() {
+    if (navigator.languages != undefined)
+        return navigator.languages[0];
+    return navigator.language;
+}
+
 // Turns empty strings into null
 export const zodStringPipe = (zodPipe) =>
     z
@@ -28,6 +35,7 @@ export const moneyParser = (value) => {
     if (value === null || value === undefined) {
         return 'N/A'
     }
+
     return value.toLocaleString('en-US', {
         style: 'currency',
         currency: 'USD',
@@ -64,10 +72,22 @@ export const numberToLiteral = (value) => {
     return numberLiterals[value];
 }
 
-
 export const dateParser = (value) => {
     if (value === null || value === undefined) {
-        return 'N/A'
+        return null;
     }
-    return new Date(value).toLocaleDateString('en-US');
+    const locale = getLang();
+
+    return new Date(value).toLocaleDateString(locale);
+}
+
+// Gives the date placeholder depending on locale, e.g. "mm/dd/yyyy" or "dd/mm/yyyy"
+export function getDatePlaceholder() {
+    const locale = getLang();
+    if (locale === 'en-US') {
+        return 'mm/dd/yyyy';
+    }
+    return 'dd/mm/yyyy';
+
+
 }
