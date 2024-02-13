@@ -5,13 +5,10 @@ import {useGetUnitsQuery} from "../../services/api/unitApi.js";
 import {useGetTenantsQuery} from "../../services/api/tenantApi.js";
 import {useGetUserQuery} from "../../services/api/userApi.js";
 import {useSelector} from "react-redux";
-import {getAllEvents} from "../../services/slices/eventSlice.js";
+import {selectFutureEvents} from "../../services/slices/eventSlice.js";
 import {Bell, CalendarDays, Eye} from "lucide-react";
 import {Button} from "../../components/ui/button.tsx";
 import {useNavigate} from "react-router-dom";
-import {DatePicker} from "../../components/ui/date-picker.tsx";
-import {useState} from "react";
-import {getDatePlaceholder, getLang} from "../../utils/formatters.js";
 
 const Home = () => {
     const navigate = useNavigate();
@@ -26,7 +23,8 @@ const Home = () => {
 
     const name = user?.data?.name;
 
-    const events = useSelector(state => getAllEvents(state))
+    const futureEvents = useSelector(state => selectFutureEvents(state))
+
 
 
 
@@ -60,16 +58,11 @@ const Home = () => {
     }
 
     const UpcomingEvents = () => {
-        const unpackedEvents = [];
 
-        for (const eventType in events) {
-            const eventList = events[eventType].sort((a, b) => a.date - b.date)
-            for (const event of eventList) {
-                if (event.date > new Date()) unpackedEvents.push(event);
-            }
-        }
+        const upcomingEvents = [...futureEvents];
 
-        unpackedEvents.length = 3;
+        upcomingEvents.length = 3;
+
 
         return (
             <div className="bg-white px-4 py-4 border-2 border-secondary rounded-lg">
@@ -80,11 +73,11 @@ const Home = () => {
                     Your Next Events are
                 </div>
                 <ul className="flex flex-col gap-1 whitespace-nowrap">
-                    {unpackedEvents.map((event, index) => {
+                    {upcomingEvents.map((event, index) => {
                         return (
                             <li key={index} className="flex flex-row gap-2 ml-1">
                                 -<div className="font-500">{event.title}: </div>
-                                <div>{event.date.toLocaleDateString()}</div>
+                                <div>{new Date(event.date).toLocaleDateString()}</div>
                             </li>
                         )
                     })}

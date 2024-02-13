@@ -1,50 +1,54 @@
-import {createSlice} from "@reduxjs/toolkit";
+import {createEntityAdapter, createSelector, createSlice} from "@reduxjs/toolkit";
 import {authApi} from "../api/authApi.js";
+import {endOfYesterday, isAfter, isBefore} from "date-fns";
 
-const initialState = {
-    lease: [],
-    maintenance: [],
-    rent: [],
-    other: []
-}
+const eventsAdapter = createEntityAdapter({
+    selectId: (event) => event.id,
+    sortComparer: (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+})
+
+const initialState = eventsAdapter.getInitialState({
+})
+
 
 const eventSlice = createSlice({
     name: 'events',
     initialState,
     reducers: {
+        addEvent: eventsAdapter.addOne,
+        removeEvent: eventsAdapter.removeOne,
+        updateEvent: eventsAdapter.updateOne,
+        addManyEvents: eventsAdapter.addMany,
+        removeManyEvents: eventsAdapter.removeMany,
+        updateManyEvents: eventsAdapter.updateMany,
     },
     extraReducers: (builder) => {
         builder.addMatcher(
             authApi.endpoints.getLeases.matchFulfilled,
             (state,action) => {
                 const leases = action.payload.data;
+
+                const leaseEvents = [];
+
                 leases.forEach(lease => {
-                    try{
-                        if (lease.startDate) {
-                            state.lease.push(
-                                {
-                                    date: lease.startDate,
-                                    title: "Lease Start Date",
-                                    leaseId: lease.id
-                                }
-                            )
-                        }
-                        if (lease.endDate) {
-                            state.lease.push(
-                                {
-                                    date: lease.endDate,
-                                    title: "Lease End Date",
-                                    leaseId: lease.id
-                                }
-                            )
-                        }
+                    if (lease.startDate) {
+                        leaseEvents.push({
+                            id: lease.id + '-start',
+                            title: 'Lease Start',
+                            date: lease.startDate,
+                            category: 'lease'
+                        })
                     }
-                    catch (e) {
-                        // Do nothing
+                    if (lease.endDate) {
+                        leaseEvents.push({
+                            id: lease.id + '-end',
+                            title: 'Lease End',
+                            date: lease.endDate,
+                            category: 'lease'
+                        })
                     }
                 })
-                // Sort the lease array by date (newest first)
-                state.lease.sort((a,b) => new Date(b.date) - new Date(a.date))
+                eventsAdapter.addMany(state, leaseEvents);
             }
         )
     }
@@ -53,36 +57,41 @@ const eventSlice = createSlice({
 
 export const eventsReducer = eventSlice.reducer;
 
-
-export const getAllEvents = (state) => {
-    const events = state.events;
-    return Object.keys(events).reduce((acc, key) => {
-        acc[key] = events[key].map(event => ({
-            ...event, // Spread to copy properties of the event
-            date: new Date(event.date) // Create a new object with the date converted
-        }));
-        return acc;
-    }, {});
-}
+export const {
+    selectAll: selectAllEvents,
+    selectById: selectEventById,
+    selectIds: selectEventIds,
+} = eventsAdapter.getSelectors(state => state.events);
 
 
-// Map events to only contain the date
-export const getEventDates = (state) => {
-    const events = getAllEvents(state);
-    return Object.keys(events).reduce((acc, key) => {
-        acc[key] = events[key].map(event => event.date);
-        return acc;
-    }, {})
-}
-
-export const getEventsForRange = (state, start, end) => {
-    const events = getAllEvents(state);
-    if (!start || !end) {
-        return events;
+export const selectEventsByCategory = createSelector(
+    [selectAllEvents],
+    (events) => {
+        const eventsByCategory = {};
+        events.map(event => {
+            if (!eventsByCategory[event.category]) {
+                eventsByCategory[event.category] = [];
+            }
+            eventsByCategory[event.category].push(event);
+        })
+        return eventsByCategory;
     }
-    return Object.keys(events).reduce((acc, key) => {
-        acc[key] = events[key].filter(event => event.date >= start && event.date <= end);
-        return acc;
-    }, {})
+);
 
-}
+export const selectFutureEvents = createSelector(
+    [selectAllEvents],
+    (events) => events.filter(event => isAfter(new Date(event.date), endOfYesterday() )).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+)
+
+export const selectEventsForRange = createSelector(
+    [selectAllEvents, (_, dateRange) => (dateRange)],
+    (events, dateRange) => {
+        const start = dateRange.from;
+        const end = dateRange.to;
+
+        return events.filter(event => {
+            const eventDate = new Date(event.date);
+            return isAfter(eventDate,new Date(start)) && isBefore(eventDate, new Date(end));
+        })
+    }
+);

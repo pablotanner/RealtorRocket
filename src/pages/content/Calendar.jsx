@@ -3,7 +3,7 @@ import {useState} from "react";
 import {nextSaturday, previousSunday} from "date-fns";
 import {Accordion, AccordionContent, AccordionItem, AccordionTrigger} from "../../components/ui/accordion.tsx";
 import {useSelector} from "react-redux";
-import {getAllEvents, getEventDates, getEventsForRange} from "../../services/slices/eventSlice.js";
+import {selectEventsByCategory, selectEventsForRange, selectFutureEvents} from "../../services/slices/eventSlice.js";
 
 const Calendar = () => {
 
@@ -33,36 +33,32 @@ const Calendar = () => {
         return getDatesToSelect(new Date());
     })
 
-    const detailedEvents = useSelector(state => getAllEvents(state));
+    const events = useSelector(state => selectFutureEvents(state))
 
-    const events = useSelector(state => getEventDates(state))
+    const eventsByCategory = useSelector(state => selectEventsByCategory(state));
 
+    const eventModifiers = {
+        maintenance: eventsByCategory.maintenance?.map(event => new Date(event.date)),
+        lease: eventsByCategory.lease?.map(event => new Date(event.date)),
+        rent: eventsByCategory.rent?.map(event => new Date(event.date)),
+        other: eventsByCategory.other?.map(event => new Date(event.date)),
+    }
 
-    const selectedEvents = useSelector(state => getEventsForRange(state, dayRange.from, dayRange.to));
+    const eventsInRange = useSelector(state => selectEventsForRange(state, dayRange));
 
 
     const UpcomingEvents = () => {
-        const unpackedEvents = [];
+        const upcomingEvents = [...events];
 
-        for (const key in detailedEvents) {
-            const events = detailedEvents[key];
-            for (const event of events) {
-                // If the event is in the future, we want to display it
-                if (event.date > new Date()) unpackedEvents.push(event);
-            }
-        }
-
-        unpackedEvents.sort((a, b) => a.date - b.date);
-
-        unpackedEvents.length = 3;
+        upcomingEvents.length = 3;
 
         return (
                 <ul className="flex flex-col gap-1">
-                    {unpackedEvents.map((event, index) => {
+                    {upcomingEvents.map((event, index) => {
                         return (
                             <li key={index} className="flex flex-row gap-2 ml-5 ">
                                 -<div className="font-500">{event.title}: </div>
-                                <div>{event.date.toLocaleDateString()}</div>
+                                <div>{new Date(event.date).toLocaleDateString()}</div>
                             </li>
                         )
                     })}
@@ -71,32 +67,20 @@ const Calendar = () => {
     }
 
     const EventsInSelectedRange = () => {
-        const unpackedEvents = [];
-
-        for (const key in selectedEvents) {
-            const events = selectedEvents[key];
-            for (const event of events) {
-                unpackedEvents.push(event);
-            }
-        }
-
-        unpackedEvents.sort((a, b) => a.date - b.date);
-
-
         return (
             <div>
                 <h className="text-xl">Events in selected range</h>
                 <ul className="flex flex-col gap-1">
-                    {unpackedEvents.map((event, index) => {
+                    {eventsInRange?.map((event, index) => {
                         return (
                             <li key={index} className="flex flex-row gap-2 ">
                                 <div className="font-500">{event.title}: </div>
-                                <div>{event.date.toLocaleDateString()}</div>
+                                <div>{new Date(event.date).toLocaleDateString()}</div>
                             </li>
                         )
                     })}
 
-                    {unpackedEvents.length === 0 && <div>No events in selected range</div>}
+                    {eventsInRange.length === 0 && <div>No events in selected range</div>}
                 </ul>
                 </div>
         )
@@ -126,7 +110,7 @@ const Calendar = () => {
                         mode="range"
                         fixedWeeks
                         onDayClick={selectWeek}
-                        modifiers={{ ...events }}
+                        modifiers={{ ...eventModifiers }}
                     />
 
                     <Accordion type="multiple" collapsible={true}>
