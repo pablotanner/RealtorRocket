@@ -169,7 +169,7 @@ const DetailedPropertyTable = ({ properties }) => {
 
     const PropertyRow = ({ property }) => {
         return (
-            <div style={{gridTemplateColumns: "minmax(250px,30%) 1fr 1fr 1fr 50px" }} className="bg-white rounded-2xl border-gray-100 border-2 p-4 w-full grid grid-cols-5 gap-8 overflow-auto h-[150px] hover:bg-gray-50">
+            <div style={{gridTemplateColumns: "minmax(250px,30%) 1fr 1fr 1fr 50px" }} className="bg-white rounded-2xl border-gray-100 border-2 p-4 w-full grid grid-cols-5 gap-8 overflow-auto h-[150px] hover:bg-gray-50 min-h-fit">
                 <div className="flex flex-row gap-4 w-full items-center">
                     <Image src={property?.images[0].imageUrl} className="w-20 h-20 object-cover rounded-sm hover:opacity-75 cursor-pointer"
                          onClick={() => navigate(`/properties/${property?.id}`)} alt="Property Image"

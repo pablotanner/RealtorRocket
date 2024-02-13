@@ -31,7 +31,7 @@ const Home = () => {
     const Notifications = () => {
 
         return (
-            <div className="bg-white px-4 py-4 border-2 border-secondary rounded-lg">
+            <div className="bg-white px-4 py-4 border-2 border-secondary rounded-lg flex-grow">
                 <div className="text-lg font-500 mb-2 text-off-black flex flex-row gap-2 items-center">
                     <span className="rounded-full bg-white border-2 border-secondary flex items-center justify-center p-2">
                         <Bell className="w-6 h-6 text-off-black"/>
@@ -65,7 +65,7 @@ const Home = () => {
 
 
         return (
-            <div className="bg-white px-4 py-4 border-2 border-secondary rounded-lg">
+            <div className="bg-white px-4 py-4 border-2 border-secondary rounded-lg flex-grow">
                 <div className="text-lg font-500 mb-2 text-off-black flex flex-row gap-2 items-center">
                     <span className="rounded-full bg-white border-2 border-secondary flex items-center justify-center p-2">
                         <CalendarDays className="w-6 h-6 text-off-black"/>
@@ -176,7 +176,7 @@ const Home = () => {
 
                 </div>
 
-                <div className="h-full flex  flex-row md:flex-col gap-4 flex-shrink-0">
+                <div className="h-full flex flex-row md:flex-col gap-4 flex-grow flex-wrap">
                     <UpcomingEvents />
                     <Notifications />
                 </div>

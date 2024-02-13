@@ -20,7 +20,7 @@ const Header = () => {
     const navigate = useNavigate();
 
     return (
-        <div className="border-b-gray-100 border-b-2">
+        <div className="border-b-gray-100 border-b-2 min-w-[350px]">
         <div className="flex flex-row mb-1 md:mb-3  justify-between items-center gap-x-2 p-2 md:p-4 bg-white rounded-lg">
             <PropertySelection/>
 
