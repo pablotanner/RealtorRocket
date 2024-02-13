@@ -189,16 +189,19 @@ const DetailedPropertyTable = ({ properties }) => {
                     {getLocation(property)}
                 </div>
 
-                <div className="flex flex-row gap-2 flex-wrap items-center">
+                <div className="flex flex-row gap-2 flex-wrap items-center min-h-fit">
                         {property.units.map((unit, index) => {
                             let unitLabel = `${unit?.unitIdentifier}`
                             if (property?.units?.length === 1) {
                                 unitLabel = "Single Unit"
                             }
+                            if (index > 2) {
+                                return null
+                            }
                             return (
                                 <div key={index} className="flex flex-col gap-2 bg-indigo-100 whitespace-nowrap font-400 text-white h-fit p-1 rounded-md hover:bg-indigo-200 cursor-pointer">
-                                    <p className="text-gray-800">
-                                        {unitLabel}
+                                    <p className="text-gray-800 text-center">
+                                        {index === 2 ? "..." : unitLabel}
                                     </p>
                                 </div>
                             )
