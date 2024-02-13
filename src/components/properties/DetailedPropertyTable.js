@@ -199,9 +199,12 @@ const DetailedPropertyTable = ({ properties }) => {
                                 return null
                             }
                             return (
-                                <div key={index} className="flex flex-col gap-2 bg-indigo-100 whitespace-nowrap font-400 text-white h-fit p-1 rounded-md hover:bg-indigo-200 cursor-pointer">
+                                <div key={index} className="flex flex-col gap-2 bg-indigo-100 whitespace-nowrap font-400 text-white h-fit p-1 rounded-md hover:bg-indigo-200 cursor-pointer"
+                                     onClick={() => navigate('/rentals/' + unit?.id)}
+                                     style={index===2 ? {backgroundColor: "rgba(0, 0, 0, 0.1)"} : {}}
+                                >
                                     <p className="text-gray-800 text-center">
-                                        {index === 2 ? "..." : unitLabel}
+                                        {index === 2 ? (property?.units.length - index) + " more"  : unitLabel}
                                     </p>
                                 </div>
                             )
