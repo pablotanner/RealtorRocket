@@ -30,6 +30,7 @@ const columns: ColumnDef<Lease>[] = [
                 aria-label="Select row"
             />
         ),
+        accessorFn: () => "",
         enableSorting: false,
         enableHiding: false,
     },
@@ -42,7 +43,7 @@ const columns: ColumnDef<Lease>[] = [
         meta: {
             type: "number",
         },
-        accessorFn: (row) => row?.id || undefined,
+        accessorFn: (row) => row?.id || "",
         enableSorting: true,
     },
     {
@@ -51,16 +52,16 @@ const columns: ColumnDef<Lease>[] = [
         cell: ({ row }) => {
             if (row?.original?.tenant) {
                 return (
-                    <div className="capitalize">{row?.original?.tenant?.firstName} {row?.original?.tenant?.lastName}</div>
+                    <div className="capitalize font-500">{row?.original?.tenant?.firstName} {row?.original?.tenant?.lastName}</div>
                 )
             }
             else {
                 return (
-                    <div className="capitalize text-red-500">No Tenant</div>
+                    <div className="capitalize text-red-500 font-500">No Tenant</div>
                 )
             }
         },
-        accessorFn: (row) => (row?.tenant?.firstName + row?.tenant?.lastName) || undefined,
+        accessorFn: (row) => (row?.tenant?.firstName + row?.tenant?.lastName) || "",
         meta: {
             type: "string",
         },
@@ -75,12 +76,12 @@ const columns: ColumnDef<Lease>[] = [
         },
         cell: ({ row }) => {
             return (
-                <div className="capitalize font-500">
+                <div className="capitalize">
                     {dateParser(row?.original?.startDate)}
                 </div>
             )
         },
-        accessorFn: (row) => row?.startDate || undefined,
+        accessorFn: (row) => row?.startDate || "",
         enableSorting: true,
 
     },
@@ -92,12 +93,12 @@ const columns: ColumnDef<Lease>[] = [
         },
         cell: ({ row }) => {
             return (
-                <div className="capitalize font-500">
+                <div className="capitalize">
                     {dateParser(row?.original?.endDate)}
                 </div>
             )
         },
-        accessorFn: (row) => row?.endDate || undefined,
+        accessorFn: (row) => row?.endDate || "",
         enableSorting: true,
 
     },
@@ -109,12 +110,12 @@ const columns: ColumnDef<Lease>[] = [
         },
         cell: ({ row }) => {
             return (
-                <div className="capitalize font-500">
+                <div className="capitalize">
                     {moneyParser(row?.original?.rentalPrice)}
                 </div>
             )
         },
-        accessorFn: (row) => row?.rentalPrice || undefined,
+        accessorFn: (row) => row?.rentalPrice || "",
         enableSorting: true,
 
     },
@@ -126,12 +127,12 @@ const columns: ColumnDef<Lease>[] = [
         },
         cell: ({ row }) => {
             return (
-                <div className="capitalize font-500">
+                <div className="capitalize">
                     {moneyParser(row?.original?.totalRentDue)}
                 </div>
             )
         },
-        accessorFn: (row) => row?.totalRentDue || undefined,
+        accessorFn: (row) => row?.totalRentDue || "",
         enableSorting: true,
 
     },
@@ -143,12 +144,12 @@ const columns: ColumnDef<Lease>[] = [
         },
         cell: ({ row }) => {
             return (
-                <div className="capitalize font-500">
+                <div className="capitalize">
                     {moneyParser(row?.original?.rentPaid)}
                 </div>
             )
         },
-        accessorFn: (row) => row?.rentPaid || undefined,
+        accessorFn: (row) => row?.rentPaid || "",
         enableSorting: true,
 
     },
@@ -160,14 +161,13 @@ const columns: ColumnDef<Lease>[] = [
         },
         cell: ({ row }) => {
             return (
-                <div className="capitalize font-500">
+                <div className="capitalize">
                     {dateParser(row?.original?.lastPaymentDate)}
                 </div>
             )
         },
-        accessorFn: (row) => row?.lastPaymentDate || undefined,
+        accessorFn: (row) => row?.lastPaymentDate || "",
         enableSorting: true,
-
     },
 
 ]

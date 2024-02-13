@@ -33,7 +33,7 @@ export const zodNumberInputPipe = (zodPipe) =>
 
 export const moneyParser = (value) => {
     if (value === null || value === undefined) {
-        return 'N/A'
+        return null;
     }
 
     return value.toLocaleString('en-US', {

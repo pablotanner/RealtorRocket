@@ -132,7 +132,8 @@ const TenantTable = ({tenants}) => {
             },
             meta: {
                 type: "string"
-            }
+            },
+            accessorFn: (row) => row.firstName + " " + row?.lastName + " " + row?.email
         },
         {
             accessorKey: "leaseStatus",

@@ -125,7 +125,7 @@ const getFilterOptions = (type) => {
 
 export const DataTable = ({data: tableData, columns: tableColumns, ...props}) => {
     function getColumnName (column) {
-        return column.columnDef.meta.title;
+        return column?.columnDef?.meta?.title || column?.columnDef?.header || column?.id || "";
     }
 
     const data = useMemo(() => tableData, [tableData]);
@@ -141,7 +141,7 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                 default:
                     return column;
             }
-        }).map(column => {
+        })?.map(column => {
             const headerLabel = column.header;
             if (column.enableSorting) {
                 return {
@@ -211,7 +211,7 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
     // Filter options for each column (depends on data type; string/number/date)
     const filterOptions = useMemo(() => {
         return table.getAllColumns()?.filter((column) => column.getCanFilter())?.map((column) => {
-            return getFilterOptions(column.columnDef.meta.type);
+            return getFilterOptions(column?.columnDef?.meta?.type);
         });
     }, [table]);
 
@@ -302,8 +302,8 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                             <TabsContent value="columns" className="px-2 pb-4">
                                 {table
                                     .getAllColumns()
-                                    .filter((column) => column.getCanHide())
-                                    .map((column) => {
+                                    ?.filter((column) => column.getCanHide())
+                                    ?.map((column) => {
                                         return (
                                             <div key={column.id} className="flex flex-row items-center gap-1 text-sm capitalize cursor-pointer hover:bg-gray-100 rounded-md py-1"
                                                  onClick={() => column.toggleVisibility()}>
@@ -319,7 +319,7 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                             </TabsContent>
 
                             <TabsContent value="filters">
-                                {table.getAllColumns().filter((column) => column.getCanFilter()).map((column, index) => {
+                                {table.getAllColumns()?.filter((column) => column.getCanFilter())?.map((column, index) => {
 
                                     return (
                                         <div key={column.id}>
@@ -337,7 +337,7 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                                                             className="w-full mb-2 p-2 rounded-md border border-gray-300 bg-white text-sm capitalize font-500"
                                                         >
                                                             <option value="">Select Filter</option>
-                                                            {filterOptions[index].map((option) => {
+                                                            {filterOptions[index]?.map((option) => {
                                                                 return (
                                                                     <option key={option.value} value={option.value}>
                                                                         {option.label}
@@ -348,7 +348,7 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                                                     </div>
                                                     <Input
                                                         value={tempColumnFilters[column.id]?.value || ""}
-                                                        type={column.columnDef.meta.type}
+                                                        type={column?.columnDef?.meta?.type}
                                                         onChange={(e) => handleInputChange(column.id, e.target.value)}
                                                         className="mb-2"
                                                     />
@@ -374,7 +374,7 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                 {props.children}
 
 
-                {columnFilters.map((filter, index) => {
+                {columnFilters?.map((filter, index) => {
                     return (
                         <FilterItem filter={filter} key={index} />
                     )
@@ -383,10 +383,10 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
             </div>
             <Table>
                 <TableHeader>
-                    {table.getHeaderGroups().map((headerGroup) => {
+                    {table.getHeaderGroups()?.map((headerGroup) => {
                         return (
                             <TableRow key={headerGroup.id}>
-                                {headerGroup.headers.map((header) => {
+                                {headerGroup?.headers?.map((header) => {
                                     return (
                                         <TableHead key={header.id} colSpan={header.colSpan} scope="col">
                                             {header.isPlaceholder ? null : (
@@ -407,8 +407,7 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                     })}
                 </TableHeader>
                 <TableBody>
-                    {table.getRowModel().rows.map((row => {
-
+                    {table?.getRowModel()?.rows?.map((row => {
                         return (
                             <TableRow key={row.id}>
                                 {row.getVisibleCells().map((cell) => {
