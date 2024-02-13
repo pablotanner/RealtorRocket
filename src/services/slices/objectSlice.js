@@ -372,3 +372,14 @@ export const selectUnitByTenantId = (state, tenantId) => {
     if (!lease) return null;
     return selectUnitById(state, lease?.unitId);
 }
+
+
+
+export const selectUnitsByLeaseIds = createSelector(
+    selectAllUnits,
+    (_, leaseIds) => leaseIds,
+    (units, leaseIds) => {
+        if (!leaseIds || leaseIds.length === 0) return [];
+        return units.filter(unit => leaseIds.includes(unit?.leases[0]?.id) && unit?.leases[0]?.id !== undefined);
+    }
+)

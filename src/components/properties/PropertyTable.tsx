@@ -4,7 +4,7 @@ import {
 import {DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuCheckboxItem} from "../ui/dropdown-menu.tsx";
 import {Checkbox} from "../ui/checkbox.tsx";
 import {Button} from "../ui/button.tsx";
-import {ArrowUpDown, MoreHorizontal} from "lucide-react";
+import {MoreHorizontal} from "lucide-react";
 import {RealEstateType} from "../../utils/magicNumbers.js"
 import {dateParser, moneyParser} from "../../utils/formatters.js";
 import {Property} from "../../utils/classes.ts";
@@ -95,17 +95,18 @@ const columns: ColumnDef<Property>[] = [
         }
     },
     {
-        accessorKey: "units",
+        id: "units",
         header: "Units",
         enableSorting: true,
         // @ts-expect-error - TS doesn't understand that we're using a custom accessor
         cell: ({ row }) => <div className="lowercase">{row.getValue("units").length} units</div>,
         meta: {
             type: "number"
-        }
+        },
+        accessorFn: (row) => row.units?.length || 0
     },
     {
-        accessorKey: "createdAt",
+        id: "createdAt",
         header: "Created At",
         enableSorting: true,
         cell: ({ row }) => <div className="lowercase">{dateParser(row.getValue("createdAt"))}</div>,

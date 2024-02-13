@@ -1,9 +1,9 @@
-import DetailedTenantsTable from "../../components/tenants/DetailedTenantsTable.js";
 import {Button} from "../../components/ui/button.tsx";
 import CreateTenant from "../../components/tenants/TenantCreation/CreateTenant.js";
 import {UserRoundPlus} from "lucide-react";
 import {selectTenantsByPropertyId} from "../../services/slices/objectSlice.js";
 import {useSelector} from "react-redux";
+import TenantTable from "../../components/tenants/TenantTable.tsx";
 
 
 const Tenants = (props) => {
@@ -22,7 +22,8 @@ const Tenants = (props) => {
                 <CreateTenant trigger={<Button variant="gradient"><UserRoundPlus className="w-4 h-4 mr-3"/> Create Tenant</Button>} />
             </div>
 
-            <DetailedTenantsTable tenants={tenants} />
+            <TenantTable tenants={tenants} />
+
         </div>
     )
 }

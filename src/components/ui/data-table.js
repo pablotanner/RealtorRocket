@@ -177,7 +177,7 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
     }, [tableColumns]);
 
 
-    const [sorting, setSorting] = useState([])
+    const [sorting, setSorting] = useState([props.defaultSort || {}])
 
     // Filters before being applied to the table
     const [tempColumnFilters, setTempColumnFilters] = useState([])

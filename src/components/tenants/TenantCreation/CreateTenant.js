@@ -14,7 +14,8 @@ import {Button} from "../../ui/button.tsx";
 import TenantForm from "./TenantForm.js";
 import AddToLease from "./AddToLease.js";
 import {useCreateTenantMutation} from "../../../services/api/tenantApi.js";
-import {isBefore} from "date-fns";
+import {isAfter, isBefore} from "date-fns";
+import {dateParser} from "../../../utils/formatters.js";
 
 const CreateTenant = (props) => {
     const [modalOpen, setModalOpen] = useState(false)
@@ -50,17 +51,30 @@ const CreateTenant = (props) => {
 
     const [createTenant, {isLoading: isCreating}] = useCreateTenantMutation()
 
+    function getMostRecentLease(unit) {
+        if (!unit?.leases || unit?.leases?.length === 0) {
+            return null
+        }
+
+        return [...unit?.leases]?.sort((a, b) => {
+            return isAfter(a?.startDate, b?.startDate) ? -1 : 1
+        })[0]
+    }
+
 
     const getLastLeased = () => {
-        if (selectedUnit?.leases.length > 0) {
-            if (selectedUnit?.leases[0]?.endDate) return selectedUnit?.leases[0]?.endDate; else return "Current Lease hasn't ended yet"
+        if (selectedUnit?.leases?.length > 0) {
+            const mostRecentLease = getMostRecentLease(selectedUnit)
+            return mostRecentLease?.endDate ? mostRecentLease?.endDate : null
         }
-        return "Never"
+        return null
     }
 
     const UnitStatus = () => {
         if (selectedUnit?.leases?.length > 0) {
-            if ( isBefore(selectedUnit?.leases[0]?.endDate, new Date())) {
+            const mostRecentLease = getMostRecentLease(selectedUnit)
+
+            if ( isBefore(mostRecentLease?.endDate, new Date()) && mostRecentLease?.endDate) {
                 return (<Badge variant="warning">Vacant</Badge>)
             }
             else {
@@ -176,8 +190,8 @@ const CreateTenant = (props) => {
                                     <p className="text-sm text-gray-500">Belongs to
                                         Property: {selectedUnit?.realEstateObject?.title}</p>
                                     <UnitStatus/>
-                                    <p className="text-sm text-gray-500">Previous Lease Ended
-                                        on: {getLastLeased(selectedUnit)}
+                                    <p className="text-sm text-gray-500">
+                                        {selectedUnit?.leases?.length > 0 ? "Previous Lease Expiration: " + dateParser(getLastLeased(selectedUnit)) : null}
                                     </p>
                                 </div>
 
