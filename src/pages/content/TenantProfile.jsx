@@ -37,9 +37,9 @@ const TenantProfile = (props) => {
 
     return (
         <div className="min-w-60">
-            <div className="relative w-full h-[21rem] md:h-36 ">
+            <div className="relative w-full h-[21rem] lg:h-36 ">
                 <Image src={currentUnit?.images[0]?.imageUrl || property?.images[0]?.imageUrl} alt="House" className="w-full h-64 object-cover absolute z-10 rounded-sm"/>
-                <div className="absolute min-w-fit z-20 left-0 right-0 top-36 md:top-32 m-4 bg-white p-4 rounded-lg border-2 border-gray-50 flex flex-col items-center md:items-start md:flex-row gap-x-8 shadow-md ">
+                <div className="absolute min-w-fit z-20 left-0 right-0 top-36 lg:top-32 m-4 bg-white p-4 rounded-lg border-2 border-gray-50 flex flex-col items-center lg:items-start lg:flex-row gap-x-8 shadow-md ">
                     <Avatar className="w-36 h-36 -top-12 rounded-lg border-white border-[5px] shadow-md">
                         <AvatarImage src={tenant?.profileImageUrl} alt="Tenant" className="rounded-none" />
                         <AvatarFallback className="rounded-none text-2xl" >
@@ -47,7 +47,7 @@ const TenantProfile = (props) => {
                         </AvatarFallback>
                     </Avatar>
 
-                    <div className="w-full -mt-12 md:mt-0 flex flex-col justify-center items-center md:items-start">
+                    <div className="w-full -mt-12 lg:mt-0 flex flex-col justify-center items-center lg:items-start">
                         <Badge variant="purple" className="p-1">
                             Added: {dateParser(tenant?.createdAt)}
                         </Badge>
@@ -59,11 +59,11 @@ const TenantProfile = (props) => {
                         </p>
                     </div>
 
-                    <div className="w-[3px] h-32 bg-gray-200 hidden md:flex "/>
+                    <div className="w-[3px] h-32 bg-gray-200 hidden lg:flex "/>
 
-                    <div className="flex flex-col gap-4 ">
-                        <div>
-                            This tenant has not created an account yet, please invite them to join.
+                    <div className="flex flex-col gap-2 ">
+                        <div className="text-center">
+                            This tenant has not created an account yet.
                             <Button variant="link" className="pl-2 text-primary-dark">
                                 Send Invite
                             </Button>
