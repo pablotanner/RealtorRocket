@@ -53,6 +53,8 @@ const CreateProperty = (props) => {
 
     const [createProperty, {isLoading}] = useCreatePropertyMutation();
 
+    const [isOpen, setIsOpen] = useState(false);
+
     const [page, setPage] = useState(0);
 
     const [rentalConfig, setRentalConfig] = useState(null);
@@ -167,7 +169,7 @@ const CreateProperty = (props) => {
 
 
     return (
-        <Dialog>
+        <Dialog open={isOpen} onOpenChange={() => setIsOpen(!isOpen)}>
             <DialogTrigger asChild>
                 {props.trigger}
             </DialogTrigger>
@@ -378,7 +380,15 @@ const CreateProperty = (props) => {
                                             </AccordionContent>
                                         </AccordionItem>
                                     </Accordion>
-                                <div className="flex justify-end mt-4">
+                                <div className="flex justify-between mt-4">
+                                    <Button variant="outline" onClick={() => {
+                                        setIsOpen(false);
+                                        propertyForm.reset();
+                                    }}
+                                            type="button">
+                                        Cancel
+                                    </Button>
+
                                     <Button variant="gradient" onClick={() => setPage(1)}>
                                         Next
                                         <ArrowRight className="ml-2 w-4 h-4" />
