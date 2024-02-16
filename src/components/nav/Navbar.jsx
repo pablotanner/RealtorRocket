@@ -189,7 +189,7 @@ const Navbar = ({children}) => {
                 */}
 
             </div>
-            <div className={"w-full overflow-x-auto pr-2  xl:pr-14 flex flex-col gap-y-1 ml-20 md:ml-60 min-w-[350px]"}>
+            <div className={"w-full overflow-x-auto pr-2 xl:pr-14 flex flex-col gap-y-1 ml-20 md:ml-60 min-w-[350px]"}>
                 <Header/>
                 <div className="p-4 bg-white rounded-lg min-w-[350px] border-secondary border-2">
                     {children}
