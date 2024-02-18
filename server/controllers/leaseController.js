@@ -68,18 +68,24 @@ export async function getLease(req, res) {
 
 // Create lease
 export async function createLease(req, res) {
+    const {tenantId, unitId} = req.body;
+    // Remove tenantId and unitId from req.body
+    delete req.body.tenantId;
+    delete req.body.unitId;
+
+
     try {
         const newLease = await prisma.lease.create({
             data: {
                 ...req.body,
                 tenant: {
                     connect: {
-                        id: req.body.tenantId
+                        id: tenantId
                     }
                 },
                 unit: {
                     connect: {
-                        id: req.body.unitId
+                        id: unitId
                     }
                 },
                 realtor: {

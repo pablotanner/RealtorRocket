@@ -3,12 +3,14 @@ import {selectPropertyById, selectUnitByTenantId} from "../../services/slices/ob
 import {Image} from "../../components/ui/image.tsx";
 import {Avatar, AvatarFallback, AvatarImage} from "../../components/ui/avatar.tsx";
 import {Button} from "../../components/ui/button.tsx";
-import {PencilIcon, SendIcon} from "lucide-react";
+import {FilePlus2, PencilIcon, SendIcon} from "lucide-react";
 import {Badge} from "../../components/ui/badge.tsx";
 import {dateParser} from "../../utils/formatters.js";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "../../components/ui/tabs.tsx";
 import EditTenant from "../../components/tenants/EditTenant.js";
 import LeaseHistory from "../../components/leases/LeaseHistory.tsx";
+import AddLease from "../../components/leases/AddLease.js";
+import {useState} from "react";
 
 
 const TenantProfile = (props) => {
@@ -18,6 +20,8 @@ const TenantProfile = (props) => {
     const currentUnit = useSelector((state) => selectUnitByTenantId(state, tenant?.id));
 
     const property = useSelector((state) => selectPropertyById(state, currentUnit?.realEstateObjectId));
+
+    const [showLeaseModal, setShowLeaseModal] = useState(false);
 
 
     const displayTenantInformation = () => {
@@ -90,7 +94,18 @@ const TenantProfile = (props) => {
                         <EditTenant tenant={tenant} />
                     </TabsContent>
                     <TabsContent value="leases">
-                        <LeaseHistory leases={tenant?.leases} />
+                        <LeaseHistory leases={tenant?.leases} >
+                            <AddLease
+                                open={showLeaseModal}
+                                onOpenChange={() => setShowLeaseModal(!showLeaseModal)}
+                                tenant={tenant}
+                            >
+                                <Button className="self-end justify-end" variant="outline" type="button">
+                                    <FilePlus2 className="w-4 h-4 mr-2" />
+                                    Add Lease
+                                </Button>
+                            </AddLease>
+                        </LeaseHistory>
                     </TabsContent>
                     <TabsContent value="requests">
                         <h1>

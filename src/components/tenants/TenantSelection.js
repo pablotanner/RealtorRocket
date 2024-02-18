@@ -6,11 +6,26 @@ import {Check, ChevronDown} from "lucide-react";
 import {cn} from "../../utils.ts";
 
 
-const RentalSelection = ({onSelect, selected, units, ...props}) => {
+const TenantSelection = ({onSelect, selected, tenants, ...props}) => {
     const [open, setOpen] = useState(false)
-    const [unitId, setUnitId] = useState(selected)
+    const [tenantId, setTenantId] = useState(selected.id)
 
-    if (!units) {
+    function getName(tenant) {
+        if (!tenant) {
+            return null
+        }
+        if (tenant.firstName && tenant.lastName) {
+            return tenant.firstName + " " + tenant.lastName
+        }
+        if (tenant.firstName) {
+            return tenant.firstName
+        }
+        if (tenant.lastName) {
+            return tenant.lastName
+        }
+    }
+
+    if (!tenants) {
         return null
     }
     return (
@@ -23,9 +38,9 @@ const RentalSelection = ({onSelect, selected, units, ...props}) => {
                     className={cn("w-[200px] justify-between capitalize", props.className)}
 
                 >
-                    {unitId
-                        ? (units?.data?.find((unit) => unit.id === parseInt(unitId))?.unitIdentifier || "Unit " + unitId)
-                        : "Select Unit..."}
+                    {tenantId
+                        ? (getName(tenants?.data?.find((tenant) => tenant.id === parseInt(tenantId))))
+                        : "Select Tenant..."}
                     <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
@@ -34,23 +49,23 @@ const RentalSelection = ({onSelect, selected, units, ...props}) => {
                     <CommandInput placeholder="Search Unit" />
                     <CommandEmpty>No Unit found.</CommandEmpty>
                     <CommandGroup>
-                        {units?.data?.map((unit) => (
+                        {tenants?.data?.map((tenant) => (
                             <CommandItem
-                                key={unit.id}
-                                value={unit.id}
+                                key={tenant.id}
+                                value={tenant.id}
                                 onSelect={() => {
-                                    setUnitId(unit.id === unitId ? null : unit.id)
-                                    onSelect(unit.id === unitId ? null : unit.id)
+                                    setTenantId(tenant.id === tenantId ? null : tenant.id)
+                                    onSelect(tenant.id === tenantId ? null : tenant.id)
                                     setOpen(false)
                                 }}
                             >
                                 <Check
                                     className={cn(
                                         "mr-2 h-4 w-4",
-                                        parseInt(unitId) === unit.id ? "opacity-100" : "opacity-0"
+                                        parseInt(tenantId) === tenant.id ? "opacity-100" : "opacity-0"
                                     )}
                                 />
-                                {unit.unitIdentifier || "Unit " + unit.id}
+                                {(tenant.firstName + " " + tenant.lastName) || "Tenant " + tenant.id}
                             </CommandItem>
                         ))}
                     </CommandGroup>
@@ -61,4 +76,4 @@ const RentalSelection = ({onSelect, selected, units, ...props}) => {
 
 }
 
-export default RentalSelection;
+export default TenantSelection;

@@ -1,5 +1,6 @@
 import customFetchBase from "./customFetchBase.js";
 import {authApi} from "./authApi.js";
+import {toast} from "../../components/ui/use-toast.tsx";
 
 export const leaseApi = authApi.injectEndpoints({
     reducerPath: 'leaseApi',
@@ -41,7 +42,24 @@ export const leaseApi = authApi.injectEndpoints({
                     body,
                 }
             },
-            invalidatesTags: ['Leases']
+            invalidatesTags: ['Leases', 'Units', 'Tenants'],
+            // API returns back the updated user, so we can use that to update the cache
+            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                queryFulfilled
+                    .then(() => {
+                        toast({
+                            title: "Success",
+                            description: "Lease created successfully.",
+                        });
+                    })
+                    .catch(() => {
+                        toast({
+                            title: "Uh oh! Something went wrong.",
+                            description: "There was a problem with your request.",
+                            variant: "destructive",
+                        });
+                    })
+            },
         })
     }),
     overrideExisting: false,

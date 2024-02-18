@@ -4,6 +4,8 @@ import {ColumnDef} from "@tanstack/react-table";
 import {Lease} from "../../utils/classes.ts";
 import {Button} from "../ui/button.tsx";
 import {FilePlus2} from "lucide-react";
+import AddLease from "./AddLease.js";
+import {useState} from "react";
 
 const columns: ColumnDef<Lease>[] = [
     {
@@ -93,14 +95,11 @@ const columns: ColumnDef<Lease>[] = [
     },
 ]
 
-const LeaseHistory = ({leases}) => {
+const LeaseHistory = ({leases, ...props}) => {
 
     return (
             <DataTable data={leases} columns={columns} title="Lease History">
-                <Button className="self-end justify-end" variant="outline">
-                    <FilePlus2 className="w-4 h-4 mr-2" />
-                    Add Lease
-                </Button>
+                {props.children}
             </DataTable>
         )
 }

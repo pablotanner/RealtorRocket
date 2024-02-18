@@ -15,9 +15,23 @@ export const zodStringPipe = (zodPipe) =>
         .nullable()
         .pipe(zodPipe);
 
-
-
 // Transforms a Zod string into a nullable number (0 if empty)
+
+
+// Accepts dates in format "yyyy-mm-dd" or if empty string, returns null, also if no time is provided, it will default to 00:00:00
+export const zodDateInputPipe = (zodPipe) =>
+    z
+        .string()
+        .transform((value) => (value === '' ? null : value))
+        .nullable()
+        .refine((value) => value === null || !isNaN(Date.parse(value)), {
+            message: 'Invalid input',
+        })
+        //.transform((value) => (value === null ? null : new Date(value)))
+        .transform((value) => (value === null ? null : new Date(value + 'T00:00:00').toISOString()))
+        .pipe(zodPipe);
+
+
 export const zodNumberInputPipe = (zodPipe) =>
     z
         .string()
