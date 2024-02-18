@@ -1,7 +1,16 @@
 import {z} from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useForm} from "react-hook-form";
-import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "../../ui/form.tsx";
+import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormGroup,
+    FormItem,
+    FormLabel,
+    FormMessage
+} from "../../ui/form.tsx";
 import {Accordion, AccordionContent, AccordionItem, AccordionTrigger} from "../../ui/accordion.tsx";
 import {Input} from "../../ui/input.tsx";
 import {useEffect} from "react";
@@ -156,33 +165,37 @@ const UnitForm = ({unit, setUnit, setTrigger, rentalType }) => {
                                             )}
                                         />
 
-                                        <FormField
-                                            control={unitForm.control}
-                                            name="numOfBedrooms"
-                                            render={({field}) => (
-                                                <FormItem >
-                                                    <FormLabel>Number of Bedrooms</FormLabel>
-                                                    <FormControl>
-                                                        <Input type="number" placeholder="3" {...field} />
-                                                    </FormControl>
-                                                    <FormMessage/>
-                                                </FormItem>
-                                            )}
-                                        />
+                                        <FormGroup>
+                                            <FormField
+                                                control={unitForm.control}
+                                                name="numOfBedrooms"
+                                                render={({field}) => (
+                                                    <FormItem >
+                                                        <FormLabel>Number of Bedrooms</FormLabel>
+                                                        <FormControl>
+                                                            <Input type="number" placeholder="3" {...field} />
+                                                        </FormControl>
+                                                        <FormMessage/>
+                                                    </FormItem>
+                                                )}
+                                            />
 
-                                        <FormField
-                                            control={unitForm.control}
-                                            name="numOfBathrooms"
-                                            render={({field}) => (
-                                                <FormItem >
-                                                    <FormLabel>Number of Bathrooms</FormLabel>
-                                                    <FormControl>
-                                                        <Input type="number" placeholder="2" {...field} />
-                                                    </FormControl>
-                                                    <FormMessage/>
-                                                </FormItem>
-                                            )}
-                                        />
+                                            <FormField
+                                                control={unitForm.control}
+                                                name="numOfBathrooms"
+                                                render={({field}) => (
+                                                    <FormItem >
+                                                        <FormLabel>Number of Bathrooms</FormLabel>
+                                                        <FormControl>
+                                                            <Input type="number" placeholder="2" {...field} />
+                                                        </FormControl>
+                                                        <FormMessage/>
+                                                    </FormItem>
+                                                )}
+                                            />
+                                        </FormGroup>
+
+
 
                                         <FormField
                                             control={unitForm.control}

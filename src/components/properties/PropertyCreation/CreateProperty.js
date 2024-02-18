@@ -20,7 +20,16 @@ import {
 import {z} from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "../../ui/form.tsx";
+import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormGroup,
+    FormItem,
+    FormLabel,
+    FormMessage
+} from "../../ui/form.tsx";
 import {Accordion, AccordionContent, AccordionItem, AccordionTrigger} from "../../ui/accordion.tsx";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "../../ui/tabs.tsx";
 import UnitForm from "./UnitForm.js";
@@ -202,47 +211,50 @@ const CreateProperty = (props) => {
                                                     )}
                                                 />
 
-                                                <FormField
-                                                    control={propertyForm.control}
-                                                    name="description"
-                                                    render={({field}) => (
-                                                        <FormItem >
-                                                            <FormLabel>Description (*)</FormLabel>
-                                                            <FormControl>
-                                                                <Input placeholder="A newly built mansion next to the Norris Lake" {...field} />
-                                                            </FormControl>
-                                                            <FormMessage/>
-                                                        </FormItem>
-                                                    )}
-                                                />
-
-                                                <FormField
-                                                    control={propertyForm.control}
-                                                    name="realEstateType"
-                                                    render={({field}) => (
-                                                        <FormItem className="min-w-fit w-[20%]">
-                                                            <FormLabel>Real Estate Type (*)</FormLabel>
-                                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                <FormGroup >
+                                                    <FormField
+                                                        control={propertyForm.control}
+                                                        name="description"
+                                                        render={({field}) => (
+                                                            <FormItem >
+                                                                <FormLabel>Description (*)</FormLabel>
                                                                 <FormControl>
-                                                                    <SelectTrigger>
-                                                                        <SelectValue />
-                                                                    </SelectTrigger>
+                                                                    <Input placeholder="A newly built mansion next to the Norris Lake" {...field} />
                                                                 </FormControl>
-                                                                <SelectContent>
-                                                                    {Object.entries(realEstateTypes).map(([key, value]) => (
-                                                                        <SelectItem key={key} value={key}>
-                                                                            {value}
-                                                                        </SelectItem>
-                                                                    ))}
-                                                                </SelectContent>
-                                                            </Select>
-                                                            <FormMessage/>
-                                                        </FormItem>
-                                                    )}
-                                                />
+                                                                <FormMessage/>
+                                                            </FormItem>
+                                                        )}
+                                                    />
+                                                    <FormField
+                                                        control={propertyForm.control}
+                                                        name="realEstateType"
+                                                        render={({field}) => (
+                                                            <FormItem className="min-w-fit">
+                                                                <FormLabel>Real Estate Type (*)</FormLabel>
+                                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                                    <FormControl>
+                                                                        <SelectTrigger>
+                                                                            <SelectValue />
+                                                                        </SelectTrigger>
+                                                                    </FormControl>
+                                                                    <SelectContent>
+                                                                        {Object.entries(realEstateTypes).map(([key, value]) => (
+                                                                            <SelectItem key={key} value={key}>
+                                                                                {value}
+                                                                            </SelectItem>
+                                                                        ))}
+                                                                    </SelectContent>
+                                                                </Select>
+                                                                <FormMessage/>
+                                                            </FormItem>
+                                                        )}
+                                                    />
+
+                                                </FormGroup>
 
 
-                                                <div className="flex flex-col md:flex-row gap-4">
+
+                                                <FormGroup>
                                                     <FormField
                                                         control={propertyForm.control}
                                                         name="marketPrice"
@@ -276,7 +288,7 @@ const CreateProperty = (props) => {
                                                             </FormItem>
                                                         )}
                                                     />
-                                                </div>
+                                                </FormGroup>
                                             </AccordionContent>
                                         </AccordionItem>
 
@@ -299,61 +311,68 @@ const CreateProperty = (props) => {
                                                     )}
                                                 />
 
-                                                <FormField
-                                                    control={propertyForm.control}
-                                                    name="city"
-                                                    render={({field}) => (
-                                                        <FormItem >
-                                                            <FormLabel>City </FormLabel>
-                                                            <FormControl>
-                                                                <Input placeholder="Seattle" {...field} />
-                                                            </FormControl>
-                                                            <FormMessage/>
-                                                        </FormItem>
-                                                    )}
-                                                />
+                                                <FormGroup>
+                                                    <FormField
+                                                        control={propertyForm.control}
+                                                        name="city"
+                                                        render={({field}) => (
+                                                            <FormItem >
+                                                                <FormLabel>City </FormLabel>
+                                                                <FormControl>
+                                                                    <Input placeholder="Seattle" {...field} />
+                                                                </FormControl>
+                                                                <FormMessage/>
+                                                            </FormItem>
+                                                        )}
+                                                    />
 
-                                                <FormField
-                                                    control={propertyForm.control}
-                                                    name="state"
-                                                    render={({field}) => (
-                                                        <FormItem >
-                                                            <FormLabel>State </FormLabel>
-                                                            <FormControl>
-                                                                <Input placeholder="Washington" {...field} />
-                                                            </FormControl>
-                                                            <FormMessage/>
-                                                        </FormItem>
-                                                    )}
-                                                />
+                                                    <FormField
+                                                        control={propertyForm.control}
+                                                        name="state"
+                                                        render={({field}) => (
+                                                            <FormItem >
+                                                                <FormLabel>State </FormLabel>
+                                                                <FormControl>
+                                                                    <Input placeholder="Washington" {...field} />
+                                                                </FormControl>
+                                                                <FormMessage/>
+                                                            </FormItem>
+                                                        )}
+                                                    />
 
-                                                <FormField
-                                                    control={propertyForm.control}
-                                                    name="zip"
-                                                    render={({field}) => (
-                                                        <FormItem >
-                                                            <FormLabel>ZIP </FormLabel>
-                                                            <FormControl>
-                                                                <Input placeholder="49203" {...field} />
-                                                            </FormControl>
-                                                            <FormMessage/>
-                                                        </FormItem>
-                                                    )}
-                                                />
+                                                </FormGroup>
 
-                                                <FormField
-                                                    control={propertyForm.control}
-                                                    name="country"
-                                                    render={({field}) => (
-                                                        <FormItem >
-                                                            <FormLabel>Country </FormLabel>
-                                                            <FormControl>
-                                                                <Input placeholder="USA" {...field} />
-                                                            </FormControl>
-                                                            <FormMessage/>
-                                                        </FormItem>
-                                                    )}
-                                                />
+                                                <FormGroup>
+                                                    <FormField
+                                                        control={propertyForm.control}
+                                                        name="zip"
+                                                        render={({field}) => (
+                                                            <FormItem >
+                                                                <FormLabel>ZIP </FormLabel>
+                                                                <FormControl>
+                                                                    <Input placeholder="49203" {...field} />
+                                                                </FormControl>
+                                                                <FormMessage/>
+                                                            </FormItem>
+                                                        )}
+                                                    />
+
+                                                    <FormField
+                                                        control={propertyForm.control}
+                                                        name="country"
+                                                        render={({field}) => (
+                                                            <FormItem >
+                                                                <FormLabel>Country </FormLabel>
+                                                                <FormControl>
+                                                                    <Input placeholder="USA" {...field} />
+                                                                </FormControl>
+                                                                <FormMessage/>
+                                                            </FormItem>
+                                                        )}
+                                                    />
+                                                </FormGroup>
+
+
                                             </AccordionContent>
                                         </AccordionItem>
                                         <AccordionItem value={"images"}>
