@@ -269,14 +269,14 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
         <div className="flex flex-col gap-2">
             <h2 >{props.title}</h2>
             <div className="flex flex-row gap-2 flex-wrap">
-                <div className="relative flex bg-gray-50 rounded-md items-center max-w-sm">
-                    <FaMagnifyingGlass className="absolute top-3 left-3 h-4 w-4 text-gray-400" />
+                <div className="relative flex bg-secondary/20 rounded-md items-center max-w-sm">
+                    <FaMagnifyingGlass className="absolute top-3 left-3 h-4 w-4 text-off-black" />
                     <Input
                         placeholder="Search..."
                         onChange={(e) => {
                             table.setGlobalFilter(e.target.value)
                         }}
-                        className="pl-10 text-sm bg-inherit"
+                        className="pl-10 text-sm bg-inherit rounded-md border-2 border-secondary"
                     />
                 </div>
 

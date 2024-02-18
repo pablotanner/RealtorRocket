@@ -30,7 +30,6 @@ const columns: ColumnDef<Lease>[] = [
                 aria-label="Select row"
             />
         ),
-        accessorFn: () => "",
         enableSorting: false,
         enableHiding: false,
     },
