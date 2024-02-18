@@ -4,7 +4,19 @@ import { Check, ChevronRight, Circle } from "lucide-react"
 
 import {cn} from "../../utils.ts";
 
-const DropdownMenu = DropdownMenuPrimitive.Root
+const DropdownMenu = React.forwardRef<
+    React.ElementRef<typeof DropdownMenuPrimitive.Root>,
+    React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Root>
+>(({...props }) => {
+
+  return (
+    <DropdownMenuPrimitive.Root
+        {...props}
+    />
+  )
+})
+
+DropdownMenu.displayName = DropdownMenuPrimitive.Root.displayName
 
 const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger
 
