@@ -173,9 +173,9 @@ const CreateProperty = (props) => {
             <DialogTrigger asChild>
                 {props.trigger}
             </DialogTrigger>
-            <DialogContent className="overflow-auto max-h-screen" preventOutside={true}>
+            <DialogContent className="overflow-auto " preventOutside={true}>
                 <Form {...propertyForm}>
-                    <form onSubmit={propertyForm.handleSubmit(onSubmit)} className="mt-4">
+                    <form onSubmit={propertyForm.handleSubmit(onSubmit)} className="mt-8">
                         <MultiStep page={page} onPageNumberClick={onPageNumberClick}>
                             <div className="flex flex-col">
                                 <div className="text-xl font-600 mb-4">

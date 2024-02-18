@@ -36,7 +36,7 @@ const TenantProfile = (props) => {
 
 
     return (
-        <div className="min-w-60">
+        <div className="">
             <div className="relative w-full h-[21rem] lg:h-36 ">
                 <Image src={currentUnit?.images[0]?.imageUrl || property?.images[0]?.imageUrl} alt="House" className="w-full h-64 object-cover absolute z-10 rounded-sm"/>
                 <div className="absolute min-w-fit z-20 left-0 right-0 top-36 lg:top-32 m-4 bg-white p-4 rounded-lg border-2 border-gray-50 flex flex-col items-center lg:items-start lg:flex-row gap-x-8 shadow-md ">
@@ -79,8 +79,8 @@ const TenantProfile = (props) => {
             </div>
 
             <div className="mt-[200px] bg-white border-t-2 pt-4 border-gray-100">
-                <Tabs defaultValue="information" className="p-2 border-gray-100 border-2 rounded-lg">
-                    <TabsList>
+                <Tabs defaultValue="information" className="p-2 border-gray-100 border-2 rounded-lg overflow-auto">
+                    <TabsList className="mr-1">
                         <TabsTrigger value="information">Information</TabsTrigger>
                         <TabsTrigger value="leases">Lease History</TabsTrigger>
                         <TabsTrigger value="requests">Maintenance Requests</TabsTrigger>

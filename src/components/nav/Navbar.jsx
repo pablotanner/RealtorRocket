@@ -115,15 +115,17 @@ const Navbar = ({children}) => {
         return location.pathname.includes(url) ? "nav-button-active" : "nav-button";
     }
 
-    return (<div className={"flex bg-[#F4F4F4]"}>
+
+    const NavBar = () => {
+        return (
             <div
-                className={"min-h-screen flex flex-col justify-between z-50 border-r-2 border-secondary w-16 md:w-56 bg-white rounded-lg fixed "}
+                className={"h-full flex flex-col justify-between z-50 border-r-2 border-secondary w-16 md:w-56 bg-white rounded-lg fixed "}
             >
                 <div>
-                <h className="text-primary-dark font-700 flex flex-row justify-center md:justify-start items-center gap-x-1 py-4 md:pl-2 md:mr-2 text-lg whitespace-nowrap">
-                    <BiSolidRocket className="w-6 h-6 flex justify-center"/>
-                    <p className="hidden md:flex">Realtor Rocket</p>
-                </h>
+                    <h className="text-primary-dark font-700 flex flex-row justify-center md:justify-start items-center gap-x-1 py-4 md:pl-2 md:mr-2 text-lg whitespace-nowrap">
+                        <BiSolidRocket className="w-6 h-6 flex justify-center"/>
+                        <p className="hidden md:flex">Realtor Rocket</p>
+                    </h>
                     <nav
                         className="hidden md:flex flex-col mt-5 gap-y-2">
                         <p className="text-muted-foreground font-500 mx-2 uppercase">
@@ -167,34 +169,29 @@ const Navbar = ({children}) => {
 
                     <nav className="md:hidden flex flex-col justify-center items-center gap-y-1">
                         {items.map((item, index) => (
-                                <Button key={index} variant={getNavButtonVariant(item.url)} size="icon"
-                                        className="justify-center items-center"
-                                        onClick={() => navigate(item.url)}>
-                                    {item.icon}
-                                </Button>
-                            ))}
+                            <Button key={index} variant={getNavButtonVariant(item.url)} size="icon"
+                                    className="justify-center items-center"
+                                    onClick={() => navigate(item.url)}>
+                                {item.icon}
+                            </Button>
+                        ))}
 
                     </nav>
                 </div>
-                {/*
-
-                <Button variant="destructive" className="m-2 md:m-5" onClick={() => logoutUser()}>
-                    <span className="hidden md:flex">
-                        Logout
-                    </span>
-                    <span className="md:hidden justify-center">
-                        <LogOutIcon/>
-                    </span>
-                </Button>
-                */}
 
             </div>
-            <div className={"w-full overflow-x-auto pr-2 xl:pr-14 flex flex-col gap-y-1 ml-20 md:ml-60 min-w-[350px]"}>
+        )
+    }
+
+    return (
+        <div className="flex min-w-[350px] gap-4">
+            <NavBar/>
+            <main className={"pl-16 md:pl-56 min-h-screen w-full"}>
                 <Header/>
-                <div className="p-4 bg-white rounded-lg min-w-[350px] border-secondary border-2">
+                <div className="p-4 bg-white rounded-lg border-secondary border-2">
                     {children}
                 </div>
-            </div>
+            </main>
         </div>)
 }
 

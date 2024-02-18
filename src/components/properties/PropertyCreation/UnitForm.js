@@ -46,7 +46,7 @@ const UnitForm = ({unit, setUnit, setTrigger, rentalType }) => {
     return (
                     <Form {...unitForm}>
                         <form onSubmit={unitForm.handleSubmit(onSubmit)} className="flex flex-col gap-y-4 w-[100%]">
-                            <Accordion defaultValue={rentalType === "whole" ? "details" : "location"}>
+                            <Accordion defaultValue={rentalType === "whole" ? "details" : "location"} collapsible>
                                 <AccordionItem value="location" hidden={rentalType==="whole"}>
                                     <AccordionTrigger> Unit Location </AccordionTrigger>
                                     <AccordionContent className="flex flex-col gap-4">
