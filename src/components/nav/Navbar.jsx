@@ -122,7 +122,7 @@ const Navbar = ({children}) => {
                 className={"h-full flex flex-col justify-between z-50 border-r-2 border-secondary w-16 md:w-56 bg-white rounded-lg fixed "}
             >
                 <div>
-                    <h className="text-primary-dark font-700 flex flex-row justify-center md:justify-start items-center gap-x-1 py-4 md:pl-2 md:mr-2 text-lg whitespace-nowrap">
+                    <h className="text-primary-dark font-700 flex flex-row justify-center md:justify-start items-center gap-x-1 pt-4 pb-2 ml-0 md:ml-4 md:pl-2 md:mr-2 text-lg whitespace-nowrap">
                         <BiSolidRocket className="w-6 h-6 flex justify-center"/>
                         <p className="hidden md:flex">Realtor Rocket</p>
                     </h>
