@@ -26,9 +26,10 @@ interface DatePickerProps {
     includeTime?: boolean;
     defaultTime?: string;
     props?: any;
+    disabled?: boolean;
 }
 
-export function DatePicker({isRange, initialStartDate, initialEndDate, onChange, placeholder = getDatePlaceholder(), className, includeTime, defaultTime, ...props}: DatePickerProps) {
+export function DatePicker({isRange, initialStartDate, initialEndDate, onChange, placeholder = getDatePlaceholder(), className, includeTime, defaultTime, disabled, ...props}: DatePickerProps) {
 
     const initialState = isRange ? {
         from: initialStartDate,
@@ -90,6 +91,8 @@ export function DatePicker({isRange, initialStartDate, initialEndDate, onChange,
                         "justify-start text-left font-normal",
                         !(date) && "text-muted-foreground", className
                     )}
+                    disabled={disabled}
+                    {...props}
                 >
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {getDisplayValue()}
