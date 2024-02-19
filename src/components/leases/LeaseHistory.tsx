@@ -98,7 +98,9 @@ const columns: ColumnDef<Lease>[] = [
 const LeaseHistory = ({leases, ...props}) => {
 
     return (
-            <DataTable data={leases} columns={columns} title="Lease History">
+            <DataTable data={leases} columns={columns} title="Lease History"
+                       defaultSort={{id: "startDate", desc: true}}
+            >
                 {props.children}
             </DataTable>
         )

@@ -3,14 +3,14 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {useForm} from "react-hook-form";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "../ui/form.tsx";
 import {Input} from "../ui/input.tsx";
-import {zodNumberInputPipe} from "../../utils/formatters.js";
+import {getDateTimeString, zodDateInputPipe, zodNumberInputPipe} from "../../utils/formatters.js";
 
 
 const LeaseForm = ({lease, onChange}) => {
 
     const leaseFormSchema = z.object({
-        startDate: z.string().or(z.null()),
-        endDate: z.string().or(z.null()),
+        startDate: zodDateInputPipe(z.string({errorMap: () => ({message: 'Please enter a valid date.'})}).or(z.null())),
+        endDate: zodDateInputPipe(z.string({errorMap: () => ({message: 'Please enter a valid date.'})}).or(z.null())),
         rentalPrice: zodNumberInputPipe(z.number().positive('Number must be positive')).or(z.null()),
         leaseLength: z.string().or(z.null()),
     })
@@ -23,23 +23,38 @@ const LeaseForm = ({lease, onChange}) => {
             rentalPrice: lease?.rentalPrice || null,
             leaseLength: lease?.leaseLength || null,
         },
-        mode: "onBlur"
+        mode: 'onBlur',
     })
+
+    const handleChange = (values) => {
+        onChange(values)
+    }
+
 
     return (
         <Form {...leaseForm}>
-            <form onChange={() => {
-                onChange(leaseForm.getValues())
-            }}>
+            <form
+                onChange={() => handleChange(leaseForm.getValues())}
+            >
                    <FormField
                         control={leaseForm.control}
                         name="startDate"
                         render={({field}) => (
                             <FormItem >
                                 <FormLabel>Start Date</FormLabel>
-                                <FormControl>
-                                    <Input type="date" {...field} />
+                                <FormControl
+                                    onChange={
+                                        (date) => {
+                                            leaseForm.setValue('startDate', getDateTimeString(date))
+                                            onChange(leaseForm.getValues())
+                                        }
+                                    }
+                                >
+                                    <Input type="date" {...field} defaultValue={lease?.startDate} />
                                 </FormControl>
+                                <FormDescription>
+                                    This field is optional.
+                                </FormDescription>
                                 <FormMessage/>
                             </FormItem>
                         )}
@@ -51,8 +66,14 @@ const LeaseForm = ({lease, onChange}) => {
                     render={({field}) => (
                         <FormItem >
                             <FormLabel>End Date</FormLabel>
-                            <FormControl>
-                                <Input type="date" {...field} />
+                            <FormControl onChange={
+                                (date) => {
+                                    leaseForm.setValue('endDate', getDateTimeString(date))
+                                    onChange(leaseForm.getValues())
+
+                                }
+                            }>
+                                <Input type="date" defaultValue={lease?.endDate} {...field} />
                             </FormControl>
                             <FormDescription>
                                 This field is optional.
@@ -70,6 +91,9 @@ const LeaseForm = ({lease, onChange}) => {
                             <FormControl>
                                 <Input type="number" {...field} />
                             </FormControl>
+                            <FormDescription>
+                                This field is optional.
+                            </FormDescription>
                             <FormMessage/>
                         </FormItem>
                     )}/>

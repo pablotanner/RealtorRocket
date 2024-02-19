@@ -12,6 +12,7 @@ import {Button} from "../ui/button.tsx";
 import {PlusIcon} from "lucide-react";
 import {zodDateInputPipe, zodNumberInputPipe} from "../../utils/formatters.js";
 import {useCreateLeaseMutation} from "../../services/api/leaseApi.js";
+import {DatePicker} from "../ui/date-picker.tsx";
 
 
 const AddLease = ({unit, tenant, ...props}) => {
@@ -86,7 +87,14 @@ const AddLease = ({unit, tenant, ...props}) => {
                                     <FormItem >
                                         <FormLabel>Lease Start*</FormLabel>
                                         <FormControl>
+                                            {/*
+                                            <DatePicker initialStartDate={new Date()} onChange={(date) => {
+                                                leaseForm.setValue('startDate', date)
+                                                leaseForm.trigger('startDate')
+                                            }}/>
+                                            */}
                                             <Input type="date" {...field} />
+
                                         </FormControl>
                                         <FormMessage/>
                                     </FormItem>
@@ -100,7 +108,7 @@ const AddLease = ({unit, tenant, ...props}) => {
                                     <FormItem >
                                         <FormLabel>Lease End</FormLabel>
                                         <FormControl>
-                                            <Input type="date" {...field} />
+                                            <Input  {...field} defaultValue="12:00" type="datetime-local" />
                                         </FormControl>
                                         <FormMessage/>
                                     </FormItem>

@@ -11,19 +11,24 @@ import {
 } from "./popover.tsx"
 import {DateRange} from "react-day-picker";
 import {dateParser, getDatePlaceholder} from "../../utils/formatters.js";
+import TimePicker from "./time-picker.tsx";
 
 
 interface DatePickerProps {
     isRange?: boolean;
     //dates?: [Date, Date];
-    initialStartDate: Date;
-    initialEndDate: Date;
+    initialStartDate?: Date;
+    initialEndDate?: Date;
     onChange?: (startDate: Date, endDate: Date) => void;
     dateFormat?: string;
     placeholder?: string;
+    className?: string;
+    includeTime?: boolean;
+    defaultTime?: string;
+    props?: any;
 }
 
-export function DatePicker({isRange, initialStartDate, initialEndDate, onChange, placeholder = getDatePlaceholder()}: DatePickerProps) {
+export function DatePicker({isRange, initialStartDate, initialEndDate, onChange, placeholder = getDatePlaceholder(), className, includeTime, defaultTime, ...props}: DatePickerProps) {
 
     const initialState = isRange ? {
         from: initialStartDate,
@@ -32,6 +37,7 @@ export function DatePicker({isRange, initialStartDate, initialEndDate, onChange,
 
     const [date, setDate] = React.useState<DateRange | Date | undefined>(initialState);
 
+    const [time, setTime] = React.useState(defaultTime);
 
     const handleSelect = (dates) => {
         if (isRange) {
@@ -39,10 +45,30 @@ export function DatePicker({isRange, initialStartDate, initialEndDate, onChange,
             onChange?.(dates.from, dates.to);
         }
         else {
-            setDate(dates);
-            onChange?.(dates, dates);
+            setDate(dates as Date);
+
+            if (includeTime && time) {
+                const timeDate = new Date(dates as Date);
+                timeDate.setHours(parseInt(time.split(":")[0]));
+                timeDate.setMinutes(parseInt(time.split(":")[1]));
+                onChange?.(timeDate, timeDate);
+            }
+            else {
+                onChange?.(dates, dates)
+            }
         }
     }
+
+    const handleTimeChange = (time) => {
+        setTime(time);
+        if (date) {
+            const timeDate = new Date(date as Date);
+            timeDate.setHours(parseInt(time.split(":")[0]));
+            timeDate.setMinutes(parseInt(time.split(":")[1]));
+            onChange?.(timeDate, timeDate);
+        }
+    }
+
 
     const getDisplayValue = () => {
         if (isRange) {
@@ -62,7 +88,7 @@ export function DatePicker({isRange, initialStartDate, initialEndDate, onChange,
                     variant={"outline"}
                     className={cn(
                         "justify-start text-left font-normal",
-                        !(date) && "text-muted-foreground"
+                        !(date) && "text-muted-foreground", className
                     )}
                 >
                     <CalendarIcon className="mr-2 h-4 w-4" />
@@ -78,6 +104,11 @@ export function DatePicker({isRange, initialStartDate, initialEndDate, onChange,
                     onSelect={handleSelect}
                     selected={isRange ? date as DateRange: date as Date}
                 />
+                {
+                    includeTime ? (
+                        <TimePicker value={time} onChange={handleTimeChange} />
+                    ) : null
+                }
             </PopoverContent>
         </Popover>
     )
