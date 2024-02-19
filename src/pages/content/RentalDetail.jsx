@@ -2,12 +2,15 @@ import {useNavigate, useParams} from "react-router-dom";
 import DetailedPropertyCard from "../../components/properties/DetailedPropertyCard.js";
 import RentalKeyCard from "../../components/rentals/RentalKeyCard.js";
 import {Label} from "../../components/ui/label.tsx";
-import {BathIcon, BedIcon, CarFront, LandPlot} from "lucide-react";
+import {BathIcon, BedIcon, CarFront, FilePlus2, LandPlot} from "lucide-react";
 import {dateParser, numberToLiteral} from "../../utils/formatters.js";
 import TenantCard from "../../components/rentals/TenantCard.js";
 import {useSelector} from "react-redux";
 import {selectPropertyByUnitId, selectTenantById} from "../../services/slices/objectSlice.js";
 import LeaseHistory from "../../components/leases/LeaseHistory.tsx";
+import {Button} from "../../components/ui/button.tsx";
+import AddLease from "../../components/leases/AddLease.js";
+import {useState} from "react";
 
 
 const RentalDetail = (props) => {
@@ -20,6 +23,8 @@ const RentalDetail = (props) => {
     const property = useSelector(state => selectPropertyByUnitId(state, id));
 
     const tenant = useSelector(state => selectTenantById(state, data?.data?.leases[0]?.tenantId))
+
+    const [showLeaseModal, setShowLeaseModal] = useState(false);
 
     return (
         <>
@@ -85,7 +90,18 @@ const RentalDetail = (props) => {
                 </div>
 
                 <div className="p-4 rounded-lg bg-white flex-grow w-fit flex-shrink shadow-lg border-secondary border-2 overflow-auto" >
-                    <LeaseHistory leases={data?.data?.leases}/>
+                    <LeaseHistory leases={data?.data?.leases}>
+                        <AddLease
+                            open={showLeaseModal}
+                            onOpenChange={() => setShowLeaseModal(!showLeaseModal)}
+                            unit={data?.data}
+                        >
+                            <Button className="self-end justify-end" variant="outline" type="button">
+                                <FilePlus2 className="w-4 h-4 mr-2" />
+                                Add Lease
+                            </Button>
+                        </AddLease>
+                    </LeaseHistory>
                 </div>
 
 

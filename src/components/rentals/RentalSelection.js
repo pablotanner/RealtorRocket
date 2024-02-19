@@ -8,7 +8,8 @@ import {cn} from "../../utils.ts";
 
 const RentalSelection = ({onSelect, selected, units, ...props}) => {
     const [open, setOpen] = useState(false)
-    const [unitId, setUnitId] = useState(selected)
+    const [unitId, setUnitId] = useState(selected?.id || selected)
+
 
     if (!units) {
         return null

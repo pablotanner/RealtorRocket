@@ -8,7 +8,7 @@ import {cn} from "../../utils.ts";
 
 const TenantSelection = ({onSelect, selected, tenants, ...props}) => {
     const [open, setOpen] = useState(false)
-    const [tenantId, setTenantId] = useState(selected.id)
+    const [tenantId, setTenantId] = useState(selected?.id)
 
     function getName(tenant) {
         if (!tenant) {
