@@ -157,6 +157,29 @@ enum CivilStatus {
   OTHER
 }
 
+enum LeaseStatus {
+  ACTIVE
+  PENDING
+  EXPIRED
+  TERMINATED
+}
+
+enum PaymentFrequency {
+  MONTHLY
+  QUARTERLY
+  ANNUALLY
+  WEEKLY
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  LATE
+  OVERDUE
+  CANCELLED
+  REJECTED
+}
+
 model User {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
@@ -247,6 +270,7 @@ model Tenant {
 
   leases              Lease[]
   maintenanceRequests MaintenanceRequest[]
+  RentPayment         RentPayment[]
 
   @@map("tenant")
 }
@@ -416,7 +440,9 @@ model Unit {
   realEstateObjectId Int              @map("real_estate_object_id")
 
   // The lease(s) for the unit (if any, including past leases)
-  leases Lease[]
+  leases   Lease[]
+  // The expenses for the unit, e.g. maintenance, repairs, etc.
+  expenses Expense[]
 
   @@map("unit")
 }
@@ -426,16 +452,17 @@ model Lease {
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  startDate   DateTime?     @map("start_date")
-  endDate     DateTime?     @map("end_date")
-  rentalPrice Float?        @map("rental_price") // actual rent
-  leaseLength Int?          @map("lease_length")
-  leaseTerms  String?       @map("lease_terms")
-  currency    CurrencyCode? @default(USD)
+  startDate        DateTime?         @map("start_date")
+  endDate          DateTime?         @map("end_date")
+  rentalPrice      Float?            @map("rental_price") // actual rent
+  status           LeaseStatus?      @default(ACTIVE)
+  paymentFrequency PaymentFrequency? @map("payment_frequency")
+  notes            String?           @map("notes")
+  specialTerms     String?           @map("special_terms")
+  currency         CurrencyCode?     @default(USD)
 
-  totalRentDue    Float?    @map("total_rent_due") // Total rent due for the lease period
-  rentPaid        Float?    @map("rent_paid") // Total rent paid for the lease period
-  lastPaymentDate DateTime? @map("last_payment_date") // Date of last payment
+  totalRentDue Float? @map("total_rent_due") // Total rent due for the lease period
+  rentPaid     Float? @map("rent_paid") // Total rent paid for the lease period
 
   // Documents specific to this lease
   documents Document[]
@@ -449,7 +476,22 @@ model Lease {
   realtor   Realtor @relation(fields: [realtorId], references: [id])
   realtorId Int     @map("realtor_id")
 
+  expenses        Expense[]
+  rentPayments    RentPayment[]
+  paymentSchedule LeasePaymentSchedule[]
+
   @@map("lease")
+}
+
+model LeasePaymentSchedule {
+  id        Int           @id @default(autoincrement())
+  dueDate   DateTime // When the payment for this period is due
+  amountDue Float // Amount due for this period
+  status    PaymentStatus @default(PENDING) // PENDING, PAID, PARTIAL, OVERDUE
+  lease     Lease         @relation(fields: [leaseId], references: [id])
+  leaseId   Int           @map("lease_id")
+
+  @@map("lease_payment_schedules")
 }
 
 model Image {
@@ -537,6 +579,54 @@ model MaintenanceRequest {
   unitId Int?  @map("unit_id")
 
   @@map("maintenance_request")
+}
+
+model Expense {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  title       String?
+  description String?
+  amount      Float?
+  currency    CurrencyCode? @default(USD)
+  date        DateTime?
+  category    String?
+  status      String?
+  notes       String?
+
+  unit   Unit? @relation(fields: [unitId], references: [id])
+  unitId Int?  @map("unit_id")
+
+  lease   Lease? @relation(fields: [leaseId], references: [id])
+  leaseId Int?   @map("lease_id")
+
+  @@map("expense")
+}
+
+model RentPayment {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  amount        Float?
+  currency      CurrencyCode?  @default(USD)
+  date          DateTime?
+  status        PaymentStatus?
+  notes         String?
+  paymentMethod String?        @map("payment_method")
+
+  submittedBy    String?   @map("submitted_by") // UserId of the user who submitted the payment
+  submissionDate DateTime? @map("submission_date")
+  approvalDate   DateTime? @map("approval_date")
+
+  lease   Lease? @relation(fields: [leaseId], references: [id])
+  leaseId Int?   @map("lease_id")
+
+  tenant   Tenant? @relation(fields: [tenantId], references: [id])
+  tenantId Int?    @map("tenant_id")
+
+  @@map("rent_payment")
 }
 
 enum DocumentType {
