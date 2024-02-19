@@ -13,6 +13,7 @@ import {useGetLeasesQuery} from "../services/api/leaseApi.js";
 import Financials from "./content/Financials.jsx";
 import Calendar from "./content/Calendar.jsx";
 import TenantProfile from "./content/TenantProfile.jsx";
+import Explorer from "./content/Explorer.jsx";
 
 export const PropertiesPage = () => {
     return (
@@ -92,5 +93,11 @@ export const CalendarPage = () => {
         <PageWrapper>
             <Calendar/>
         </PageWrapper>
+    )
+}
+
+export const ExplorerPage = () => {
+    return (
+        <Explorer/>
     )
 }
