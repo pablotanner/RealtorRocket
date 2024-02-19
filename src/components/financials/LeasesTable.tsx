@@ -5,6 +5,7 @@ import {Checkbox} from "../ui/checkbox.tsx";
 import {dateParser, moneyParser} from "../../utils/formatters.js";
 import {DataTable} from "../ui/data-table.js";
 import {Lease} from "../../utils/classes.ts";
+import {Scroll} from "lucide-react";
 
 
 
@@ -174,7 +175,11 @@ const columns: ColumnDef<Lease>[] = [
 const LeasesTable = ({ leases }) => {
 
     return (
-        <DataTable data={leases} columns={columns} />
+        <div className={"border-2 border-secondary p-4 rounded-lg"}>
+
+            <DataTable data={leases} columns={columns}  title="Leases" icon={<Scroll className={"w-5 h-5"} />} />
+        </div>
+
     )
 }
 

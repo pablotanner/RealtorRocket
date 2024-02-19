@@ -3,7 +3,7 @@ import {DataTable} from "../ui/data-table.js";
 import {ColumnDef} from "@tanstack/react-table";
 import {Lease} from "../../utils/classes.ts";
 import {Button} from "../ui/button.tsx";
-import {FilePlus2} from "lucide-react";
+import {FilePlus2, Scroll} from "lucide-react";
 import AddLease from "./AddLease.js";
 import {useState} from "react";
 
@@ -98,7 +98,7 @@ const columns: ColumnDef<Lease>[] = [
 const LeaseHistory = ({leases, ...props}) => {
 
     return (
-            <DataTable data={leases} columns={columns} title="Lease History"
+            <DataTable data={leases} columns={columns} title="Lease History" icon={<Scroll className={"w-5 h-5"} />}
                        defaultSort={{id: "startDate", desc: true}}
             >
                 {props.children}
