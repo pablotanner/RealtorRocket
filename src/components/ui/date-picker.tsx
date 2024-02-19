@@ -95,7 +95,7 @@ export function DatePicker({isRange, initialStartDate, initialEndDate, onChange,
                     {getDisplayValue()}
                 </Button>
             </PopoverTrigger>
-            <PopoverContent >
+            <PopoverContent className="flex flex-col items-center justify-center" >
                 {/* @ts-expect-error - TS doesn't understand that date is a DateRange */}
                 <Calendar
                     initialFocus
@@ -106,7 +106,10 @@ export function DatePicker({isRange, initialStartDate, initialEndDate, onChange,
                 />
                 {
                     includeTime ? (
-                        <TimePicker value={time} onChange={handleTimeChange} />
+                        <div className="w-full">
+                            <TimePicker value={time} onChange={handleTimeChange} />
+                        </div>
+
                     ) : null
                 }
             </PopoverContent>
