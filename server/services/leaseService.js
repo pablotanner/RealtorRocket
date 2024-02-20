@@ -2,32 +2,41 @@ import prisma from '../prisma.js';
 
 
 function calculatePaymentDates(startDate, endDate, paymentFrequency) {
-  const paymentDates = [];
-  const currentDate = new Date(startDate);
-  const lastDate = new Date(endDate);
-  while (currentDate <= lastDate) {
-    paymentDates.push(new Date(currentDate));
-    if (paymentFrequency === "WEEKLY") {
-        currentDate.setDate(currentDate.getDate() + 7);
+    if (!startDate || !endDate || !paymentFrequency) {
+        return [];
     }
-    else if (paymentFrequency === "MONTHLY") {
-      currentDate.setMonth(currentDate.getMonth() + 1);
+    try {
+        const paymentDates = [];
+        const currentDate = new Date(startDate);
+        const lastDate = new Date(endDate);
+        while (currentDate <= lastDate) {
+            paymentDates.push(new Date(currentDate));
+            if (paymentFrequency === "WEEKLY") {
+                currentDate.setDate(currentDate.getDate() + 7);
+            }
+            else if (paymentFrequency === "MONTHLY") {
+                currentDate.setMonth(currentDate.getMonth() + 1);
+            }
+            else if (paymentFrequency === "YEARLY") {
+                currentDate.setFullYear(currentDate.getFullYear() + 1);
+            }
+            else if (paymentFrequency === "QUARTERLY") {
+                currentDate.setMonth(currentDate.getMonth() + 3);
+            }
+            else {
+                return [];
+            }
+        }
+        return paymentDates;
     }
-    else if (paymentFrequency === "YEARLY") {
-      currentDate.setFullYear(currentDate.getFullYear() + 1);
+    catch (error) {
+        console.log("error calculating payment dates", error);
+        return [];
     }
-    else if (paymentFrequency === "QUARTERLY") {
-      currentDate.setMonth(currentDate.getMonth() + 3);
-    }
-    else {
-      return [];
-    }
-  }
-  return paymentDates;
 }
 
 export async function createLeaseWithPaymentSchedule(leaseData, userId) {
-  const paymentDates = calculatePaymentDates(
+    const paymentDates = calculatePaymentDates(
     leaseData.startDate,
     leaseData.endDate,
     leaseData.paymentFrequency
@@ -59,13 +68,18 @@ export async function createLeaseWithPaymentSchedule(leaseData, userId) {
     },
   });
 
-  const paymentSchedules = await prisma.leasePaymentSchedule.createMany({
-    data: paymentDates.map((date) => ({
-      dueDate: date,
-      amountDue: leaseData.rentalPrice,
-      leaseId: lease.id,
-    })),
-  })
+  try {
+    const paymentSchedules = await prisma.leasePaymentSchedule.createMany({
+      data: paymentDates.map((date) => ({
+        dueDate: date,
+        amountDue: leaseData.rentalPrice,
+        leaseId: lease.id,
+      })),
+    });
+  }
+    catch (error) {
+        console.log("failed to add payment schedules", error);
+    }
 
     const updatedLease = await prisma.lease.findUnique({
         where: {

@@ -61,14 +61,6 @@ router.get('/tenants/:id', authenticateToken, tenantController.getTenant)
 router.delete('/tenants/:id', authenticateToken, tenantController.deleteTenant)
 router.put('/tenants/:id', authenticateToken, tenantController.updateTenant)
 
-try {
-    app.get('/users', authenticateToken, async (req, res) => {
-        const users = await prisma.user.findMany();
-        res.json(users);
-    })
-} catch (error) {
-    console.log(error);
-}
 
 app.use((err, req, res, next) => {
     console.log(err.stack);

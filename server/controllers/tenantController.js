@@ -11,8 +11,12 @@ export async function createTenant(req, res) {
     delete tenantData.unitId;
 
 
+    let newTenant = null;
+    let lease = null;
+
+
     try {
-        const newTenant = await prisma.tenant.create({
+        newTenant = await prisma.tenant.create({
             data: {
                 ...tenantData,
                 leases: {
@@ -26,24 +30,31 @@ export async function createTenant(req, res) {
                 leases: true
             }
         });
-        let lease = null;
-
-        if (!leaseId) {
-            const leaseBody = req.body?.lease;
-            leaseBody.unitId = req.body.unitId;
-            leaseBody.tenantId = newTenant.id;
-            lease = await createLeaseWithPaymentSchedule(leaseBody, req.user.userId);
-        }
-
-        res.status(200).json({data: {
-            ...newTenant,
-            leases: [lease]
-            } });
     }
     catch (error) {
         console.log(error)
         res.status(500).json({ message: "Error creating tenant" });
     }
+
+    try {
+
+        if (!leaseId && req.body?.lease) {
+            const leaseBody = req.body?.lease;
+            leaseBody.unitId = req.body.unitId;
+            leaseBody.tenantId = newTenant?.id;
+            lease = await createLeaseWithPaymentSchedule(leaseBody, req.user.userId);
+        }
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json({ message: "Error creating lease" });
+    }
+
+    res.status(200).json({data: {
+            ...newTenant,
+            leases: [lease]
+        } });
+
 }
 
 export async function getTenants(req, res) {
