@@ -199,7 +199,7 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
         onRowSelectionChange: setRowSelection,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
-        getPaginationRowModel: getPaginationRowModel(),
+        //getPaginationRowModel: getPaginationRowModel(),
         state: {
             sorting,
             columnFilters,

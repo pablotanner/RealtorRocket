@@ -17,12 +17,17 @@ const tenantsAdapter = createEntityAdapter({
     selectId: (tenant) => tenant.id,
     sortComparer: (a, b) => b.createdAt.localeCompare(a.createdAt),
 });
+const paymentsAdapter = createEntityAdapter({
+    selectId: (payment) => payment.id,
+    sortComparer: (a, b) => b.createdAt.localeCompare(a.createdAt),
+})
 
 const initialState = {
     properties: propertiesAdapter.getInitialState(),
     units: unitsAdapter.getInitialState(),
     leases: leasesAdapter.getInitialState(),
     tenants: tenantsAdapter.getInitialState(),
+    payments: paymentsAdapter.getInitialState(),
 }
 
 
@@ -135,6 +140,29 @@ const tenantSlice = createSlice({
     },
 })
 
+const paymentSlice = createSlice({
+    name: 'payments',
+    initialState: initialState.payments,
+    reducers: {
+        paymentAdded: paymentsAdapter.addOne,
+        paymentsAdded: paymentsAdapter.addMany,
+        paymentUpdated: paymentsAdapter.updateOne,
+        paymentRemoved: paymentsAdapter.removeOne,
+    },
+    extraReducers: (builder) => {
+        builder
+            .addMatcher(
+                authApi.endpoints.getPayments.matchFulfilled,
+                (state, action) => {
+                    // If the originalArgs are not present, it means that the API call was made without any filters (so GET all leases)
+                    if (!action.meta.arg.originalArgs){
+                        paymentsAdapter.setAll(state, action.payload.data);
+                    }
+                }
+            )
+    },
+})
+
 export const {
     propertyAdded,
     propertiesAdded,
@@ -165,6 +193,15 @@ export const {
 export const leasesReducer = leaseSlice.reducer;
 
 export const {
+    paymentAdded,
+    paymentsAdded,
+    paymentUpdated,
+    paymentRemoved,
+} = paymentSlice.actions;
+
+export const paymentsReducer = paymentSlice.reducer;
+
+export const {
     tenantAdded,
     tenantsAdded,
     tenantUpdated,
@@ -191,6 +228,14 @@ export const {
     selectById: selectLeaseById,
     selectIds: selectLeaseIds,
 } = leasesAdapter.getSelectors((state) => state.leases);
+
+
+export const {
+    selectAll: selectAllPayments,
+    selectById: selectPaymentById,
+    selectIds: selectPaymentIds,
+} = paymentsAdapter.getSelectors((state) => state.payments);
+
 
 export const {
     selectAll: selectAllTenants,
@@ -231,6 +276,21 @@ export const selectUnitsByPropertyId = createSelector(
         });
     }
 );
+
+export const selectPaymentsByPropertyId = createSelector(
+    [selectAllPayments, selectAllLeases, (_, propertyId) => propertyId],
+    (payments, leases, propertyId) => {
+        console.log(payments, leases, propertyId)
+        if (!propertyId) return [];
+        else if (String(propertyId).toLowerCase() === 'all') {
+            return payments;
+        }
+        const leaseIds = leases?.filter(lease => lease?.unit?.realEstateObjectId === propertyId)?.map(lease => lease.id);
+        if (!leaseIds || leaseIds.length === 0) return [];
+        return payments.filter(payment => leaseIds.includes(payment.leaseId));
+    }
+)
+
 
 export const selectLeasesByPropertyId = createSelector(
     [selectAllLeases, selectAllUnits, (_, propertyId) => propertyId], // Pass the entire state to the selector

@@ -1,6 +1,6 @@
 import LeasesTable from "../../components/financials/LeasesTable.tsx";
 import {useSelector} from "react-redux";
-import {selectLeasesByPropertyId} from "../../services/slices/objectSlice.js";
+import {selectLeasesByPropertyId, selectPaymentsByPropertyId} from "../../services/slices/objectSlice.js";
 import InfoCard from "../../components/home/InfoCard.js";
 import {isAfter} from "date-fns";
 import {moneyParser} from "../../utils/formatters.js";
@@ -37,7 +37,9 @@ const Financials = (props) => {
         return acc.concat(lease.paymentSchedule);
     }, []);
 
-    const {data: payments} = useGetPaymentsQuery()
+    //const {data: payments} = useGetPaymentsQuery()
+
+    const payments = useSelector(state => selectPaymentsByPropertyId(state, propertySelection))
 
 
     return (
@@ -76,7 +78,7 @@ const Financials = (props) => {
                     </TabsList>
 
                     <TabsContent value="payments">
-                        <PaymentTable payments={payments?.data}>
+                        <PaymentTable payments={payments}>
                             <AddPayment
                                 open={showPaymentModal}
                                 onOpenChange={() => setShowPaymentModal(!showPaymentModal)}

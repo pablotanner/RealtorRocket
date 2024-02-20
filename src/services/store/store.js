@@ -14,7 +14,13 @@ import { tenantApi } from "../api/tenantApi.js";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { financialsApi } from "../api/financialsApi.js";
 
-import {leasesReducer, propertiesReducer, tenantsReducer, unitsReducer} from "../slices/objectSlice.js";
+import {
+    leasesReducer,
+    paymentsReducer,
+    propertiesReducer,
+    tenantsReducer,
+    unitsReducer
+} from "../slices/objectSlice.js";
 import { configureStore } from '@reduxjs/toolkit/react'
 import {eventsReducer} from "../slices/eventSlice.js";
 
@@ -28,8 +34,10 @@ export const store = configureStore({
         properties: propertiesReducer,
         units: unitsReducer,
         leases: leasesReducer,
+        payments: paymentsReducer,
         tenants: tenantsReducer,
         events: eventsReducer
+
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({}).concat([authApi.middleware])
