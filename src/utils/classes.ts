@@ -2,7 +2,7 @@ import {
     AccountStatus,
     AmenitiesOnRealEstate,
     CurrencyCode,
-    Image, ListingStatus, MaintenanceRequest, Message, PaymentStatus,
+    Image, ListingStatus, MaintenanceRequest, Message,
     PreferencesOnRealEstate,
     RealEstateType,
     Realtor, UserRole,
@@ -16,7 +16,7 @@ export class LeasePaymentSchedule {
     amountDue: number | null;
     lease: Lease;
     leaseId: number;
-    status: PaymentStatus | null;
+    status:  string;
 }
 
 export class Property {
