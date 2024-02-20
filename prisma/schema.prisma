@@ -270,7 +270,7 @@ model Tenant {
 
   leases              Lease[]
   maintenanceRequests MaintenanceRequest[]
-  RentPayment         RentPayment[]
+  rentPayments        RentPayment[]
 
   @@map("tenant")
 }

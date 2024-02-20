@@ -175,7 +175,7 @@ const columns: ColumnDef<Lease>[] = [
 const LeasesTable = ({ leases }) => {
 
     return (
-        <div className={"border-2 border-secondary p-4 rounded-lg"}>
+        <div className={"border-2 border-secondary p-4 rounded-lg "}>
 
             <DataTable data={leases} columns={columns}  title="Leases" icon={<Scroll className={"w-5 h-5"} />} />
         </div>

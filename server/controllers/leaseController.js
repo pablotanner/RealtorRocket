@@ -25,7 +25,8 @@ export async function getLeases(req, res) {
             where: query,
             include: {
                 tenant: true,
-                unit: true
+                unit: true,
+                paymentSchedule: true
             },
             orderBy: {
                 createdAt: "desc"
@@ -52,7 +53,8 @@ export async function getLease(req, res) {
             },
             include: {
                 tenant: true,
-                unit: true
+                unit: true,
+                paymentSchedule: true
             }
         });
 

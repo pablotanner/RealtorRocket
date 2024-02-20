@@ -267,12 +267,19 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
 
     return (
         <div className="flex flex-col gap-4">
-            <h2 className="flex flex-row items-center gap-4" hidden={!props.title}>
+            <div className="flex flex-row items-center gap-4" hidden={!props.title}>
                 <div className="p-2 border border-secondary rounded-lg text-primary-dark shadow-md" hidden={!props.icon}>
                     {props.icon}
                 </div>
-                {props.title}
-            </h2>
+                <div>
+                    <h2>
+                        {props.title}
+                    </h2>
+                    <p>
+                        {props.subtitle}
+                    </p>
+                </div>
+            </div>
             <div className="flex flex-row gap-2 flex-wrap">
                 <div className="relative flex bg-white rounded-md items-center max-w-sm">
                     <FaMagnifyingGlass className="absolute top-3 left-3 h-4 w-4 text-off-black" />

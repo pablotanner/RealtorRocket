@@ -4,6 +4,8 @@ import {selectLeasesByPropertyId} from "../../services/slices/objectSlice.js";
 import InfoCard from "../../components/home/InfoCard.js";
 import {isAfter} from "date-fns";
 import {moneyParser} from "../../utils/formatters.js";
+import PaymentScheduleTable from "../../components/financials/PaymentScheduleTable.tsx";
+import {Tabs, TabsContent, TabsList, TabsTrigger} from "../../components/ui/tabs.tsx";
 
 
 const Financials = (props) => {
@@ -23,6 +25,10 @@ const Financials = (props) => {
         return  isAfter(new Date(lease.endDate), new Date()) || !lease.endDate;
     }).length;
 
+    const paymentSchedules = leases.reduce((acc, lease) => {
+        return acc.concat(lease.paymentSchedule);
+    }, []);
+
 
     return (
         <>
@@ -38,8 +44,45 @@ const Financials = (props) => {
                     <InfoCard title="Rent Paid (this month)" number={moneyParser(rentPaid)}  />
                     <InfoCard title="Active Leases" number={activeLeases}   />
                 </div>
+                
+                <Tabs defaultValue="paymentSchedule">
+                    <TabsList>
+                        <TabsTrigger value="paymentSchedule">
+                            Payment Schedule
+                        </TabsTrigger>
+                        <TabsTrigger value="leases">
+                            Leases
+                        </TabsTrigger>
+                        <TabsTrigger value="payments">
+                            Payments
+                        </TabsTrigger>
+                        <TabsTrigger value="expenses">
+                            Expenses
+                        </TabsTrigger>
 
-                <LeasesTable leases={leases} />
+                    </TabsList>
+
+                    <TabsContent value="paymentSchedule">
+                        <PaymentScheduleTable paymentSchedules={paymentSchedules} />
+                    </TabsContent>
+
+                    <TabsContent value="leases">
+                        <LeasesTable leases={leases} />
+                    </TabsContent>
+
+                    <TabsContent value="payments">
+                        This tab will keep track of your payments and user submitted payments waiting to be accepted
+                    </TabsContent>
+
+                    <TabsContent value="expenses">
+                        This tab will show your expenses
+                    </TabsContent>
+                </Tabs>
+                
+
+
+
+
             </div>
         </>
 
