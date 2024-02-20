@@ -15,6 +15,8 @@ import {useCreateLeaseMutation, useGetLeasesQuery} from "../../services/api/leas
 import {DatePicker} from "../ui/date-picker.tsx";
 import {useCreatePaymentMutation} from "../../services/api/financialsApi.js";
 import LeaseSelection from "../leases/LeaseSelection.js";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../ui/select.tsx";
+import {PaymentStatus} from "../../utils/magicNumbers.js";
 
 
 const AddPayment = ({...props}) => {
@@ -118,9 +120,22 @@ const AddPayment = ({...props}) => {
                             render={({field}) => (
                                 <FormItem >
                                     <FormLabel>Status</FormLabel>
-                                    <FormControl>
-                                        <Input type="text" placeholder="PENDING, PAID, CANCELLED, REJECTED" {...field} />
-                                    </FormControl>
+                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select a verified email to display" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {
+                                                Object.keys(PaymentStatus).map((status, index) => {
+                                                    return (
+                                                        <SelectItem key={index} value={status}>{PaymentStatus[status]}</SelectItem>
+                                                    )
+                                                })
+                                            }
+                                        </SelectContent>
+                                    </Select>
                                     <FormMessage/>
                                 </FormItem>
                             )}

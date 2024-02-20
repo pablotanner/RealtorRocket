@@ -6,7 +6,7 @@ import {Check, ChevronDown} from "lucide-react";
 import {cn} from "../../utils.ts";
 
 
-const LeaseSelection = ({onSelect, selected, leases, isLoading}) => {
+const LeaseSelection = ({onSelect, selected, leases, isLoading, ...props}) => {
     const [open, setOpen] = useState(false)
     const [leaseId, setLeaseId] = useState(selected)
 
@@ -46,7 +46,8 @@ const LeaseSelection = ({onSelect, selected, leases, isLoading}) => {
                     variant="outline"
                     role="combobox"
                     aria-expanded={open}
-                    className="w-[200px] justify-between capitalize"
+                    className={cn("w-[200px] justify-between capitalize", props.className)}
+                    {...props}
                 >
                     {leaseId
                         ? "Lease " + leases?.find((lease) => lease.id === parseInt(leaseId))?.id

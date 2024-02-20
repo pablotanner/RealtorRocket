@@ -25,6 +25,31 @@ export const CivilStatus = {
     UNKNOWN: "Unknown",
 }
 
+export const PaymentStatus = {
+    PAID: "Paid",
+    PENDING: "Pending",
+    LATE: "Late",
+    OVERDUE: "Overdue",
+    CANCELLED: "Cancelled",
+    REJECTED: "Rejected",
+    UNKNOWN: "Unknown",
+}
+
+export const PaymentFrequency = {
+    MONTHLY: "Monthly",
+    WEEKLY: "Weekly",
+    QUARTERLY: "Quarterly",
+    YEARLY: "Yearly",
+}
+
+export const LeaseStatus = {
+    ACTIVE: "Active",
+    //INACTIVE: "Inactive",
+    EXPIRED: "Expired",
+    TERMINATED: "Terminated",
+    PENDING: "Pending",
+    UNKNOWN: "Unknown",
+}
 
 
 export const RealEstateType = {
