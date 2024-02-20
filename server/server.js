@@ -10,6 +10,7 @@ import * as miscController from "./controllers/miscController.js";
 import * as realEstateController from "./controllers/realEstateController.js";
 import * as leaseController from "./controllers/leaseController.js";
 import * as tenantController from "./controllers/tenantController.js";
+import {checkOverduePayments} from "./jobs/overduePayments.js";
 
 const app = express();
 const router = express.Router();
@@ -60,6 +61,10 @@ router.post('/tenants', authenticateToken, tenantController.createTenant)
 router.get('/tenants/:id', authenticateToken, tenantController.getTenant)
 router.delete('/tenants/:id', authenticateToken, tenantController.deleteTenant)
 router.put('/tenants/:id', authenticateToken, tenantController.updateTenant)
+
+//Jobs
+//      Schedule the job to run daily at 00:00 (midnight)
+cron.schedule('0 0 * * *', checkOverduePayments);
 
 
 app.use((err, req, res, next) => {

@@ -104,9 +104,11 @@ const PaymentScheduleTable = ({ paymentSchedules }) => {
             <DataTable
                 data={paymentSchedules}
                 columns={columns}
-                title="Payment Schedules"
+                defaultSort={{id: "dueDate", desc: false}}
+                title="Planned Payments"
                 subtitle="These are the payment schedules for your leases."
                 icon={<CalendarClock className={"w-5 h-5"} />} />
+
         </div>
 
     )

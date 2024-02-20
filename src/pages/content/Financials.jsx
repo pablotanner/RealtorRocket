@@ -48,7 +48,7 @@ const Financials = (props) => {
                 <Tabs defaultValue="paymentSchedule">
                     <TabsList>
                         <TabsTrigger value="paymentSchedule">
-                            Payment Schedule
+                            Planned Payments
                         </TabsTrigger>
                         <TabsTrigger value="leases">
                             Leases
