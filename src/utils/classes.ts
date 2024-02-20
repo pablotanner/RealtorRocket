@@ -8,6 +8,16 @@ import {
     Realtor, UserRole,
 } from "@prisma/client";
 
+export class LeasePaymentSchedule {
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    dueDate: Date;
+    amountDue: number | null;
+    lease: Lease;
+    leaseId: number;
+}
+
 export class Property {
     id: number;
     createdAt: Date;

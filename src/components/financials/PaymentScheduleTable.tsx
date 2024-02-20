@@ -4,9 +4,9 @@ import {
 import {Checkbox} from "../ui/checkbox.tsx";
 import {dateParser, moneyParser} from "../../utils/formatters.js";
 import {DataTable} from "../ui/data-table.js";
-import {Lease} from "../../utils/classes.ts";
-import {CalendarClock, Scroll} from "lucide-react";
-import {LeasePaymentSchedule} from "@prisma/client";
+import {Lease, LeasePaymentSchedule} from "../../utils/classes.ts";
+import {CalendarClock} from "lucide-react";
+
 import {Badge} from "../ui/badge.tsx";
 
 
