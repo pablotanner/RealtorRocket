@@ -20,18 +20,14 @@ export async function createPayment(req, res) {
 
         let approvalDate;
 
-        if (lease.realtor.userId === req.user.id) {
+        if (lease.realtor.userId === req.user.userId) {
             approvalDate = new Date();
         }
 
         const newPayment = await prisma.rentPayment.create({
             data: {
                 ...paymentData,
-                submittedBy: {
-                    connect: {
-                        id: req.user.id
-                    }
-                },
+                submittedBy: String(req.user.userId),
                 submissionDate: new Date(),
                 approvalDate: approvalDate,
                 lease: {
@@ -39,16 +35,18 @@ export async function createPayment(req, res) {
                         id: leaseId
                     }
                 },
+                /*
                 tenant: {
                     connect: {
                         id: tenantId
                     }
-                },
+                 */
             }});
 
         res.status(200).json({data: newPayment });
     }
     catch (error) {
+        console.log(error)
         res.status(500).json({ message: "Error creating payment" });
     }
 }

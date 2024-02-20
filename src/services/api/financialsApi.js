@@ -28,10 +28,10 @@ export const financialsApi = authApi.injectEndpoints({
             providesTags: ['Payments']
         }),
         createPayment: build.mutation({
-            query: ({bodyData}) => ({
+            query: (body) => ({
                 url: `/payments`,
                 method: 'POST',
-                body: bodyData,
+                body
             }),
             async onQueryStarted(arg, { queryFulfilled }) {
                 queryFulfilled
@@ -55,6 +55,6 @@ export const financialsApi = authApi.injectEndpoints({
     overrideExisting: false,
 })
 
-export const {useGetPaymentSchedule, useCreatePayment} = financialsApi;
+export const {useGetPaymentSchedule, useGetPaymentsQuery, useCreatePaymentMutation} = financialsApi;
 
 

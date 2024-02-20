@@ -58,7 +58,7 @@ const LeaseSelection = ({onSelect, selected, leases, isLoading}) => {
                 <Command >
                     <CommandInput placeholder="Search Unit" />
                     <CommandEmpty>No Lease found.</CommandEmpty>
-                    <CommandGroup>
+                    <CommandGroup className="overflow-auto max-h-[500px]">
                         {leases?.map((lease) => (
                             <CommandItem
                                 key={lease.id}

@@ -6,10 +6,18 @@ import {isAfter} from "date-fns";
 import {moneyParser} from "../../utils/formatters.js";
 import PaymentScheduleTable from "../../components/financials/PaymentScheduleTable.tsx";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "../../components/ui/tabs.tsx";
+import PaymentTable from "../../components/financials/PaymentTable.tsx";
+import {useGetPaymentsQuery} from "../../services/api/financialsApi.js";
+import {Button} from "../../components/ui/button.tsx";
+import {FilePlus2} from "lucide-react";
+import AddPayment from "../../components/payments/AddPayment.js";
+import {useState} from "react";
 
 
 const Financials = (props) => {
     const {propertySelection} = props;
+
+    const [showPaymentModal, setShowPaymentModal] = useState(false);
 
     const leases = useSelector(state => selectLeasesByPropertyId(state, propertySelection));
 
@@ -29,6 +37,8 @@ const Financials = (props) => {
         return acc.concat(lease.paymentSchedule);
     }, []);
 
+    const {data: payments} = useGetPaymentsQuery()
+
 
     return (
         <>
@@ -45,22 +55,40 @@ const Financials = (props) => {
                     <InfoCard title="Active Leases" number={activeLeases}   />
                 </div>
                 
-                <Tabs defaultValue="paymentSchedule">
+                <Tabs defaultValue="payments">
                     <TabsList>
+                        <TabsTrigger value="payments">
+                        Payments
+                        </TabsTrigger>
+
                         <TabsTrigger value="paymentSchedule">
                             Planned Payments
                         </TabsTrigger>
+
                         <TabsTrigger value="leases">
                             Leases
                         </TabsTrigger>
-                        <TabsTrigger value="payments">
-                            Payments
-                        </TabsTrigger>
+
                         <TabsTrigger value="expenses">
                             Expenses
                         </TabsTrigger>
 
                     </TabsList>
+
+                    <TabsContent value="payments">
+                        <PaymentTable payments={payments?.data}>
+                            <AddPayment
+                                open={showPaymentModal}
+                                onOpenChange={() => setShowPaymentModal(!showPaymentModal)}
+
+                            >
+                                <Button className="self-end justify-end" variant="outline" type="button">
+                                    <FilePlus2 className="w-4 h-4 mr-2" />
+                                    Add Payment
+                                </Button>
+                            </AddPayment>
+                        </PaymentTable>
+                    </TabsContent>
 
                     <TabsContent value="paymentSchedule">
                         <PaymentScheduleTable paymentSchedules={paymentSchedules} />
@@ -70,9 +98,7 @@ const Financials = (props) => {
                         <LeasesTable leases={leases} />
                     </TabsContent>
 
-                    <TabsContent value="payments">
-                        This tab will keep track of your payments and user submitted payments waiting to be accepted
-                    </TabsContent>
+
 
                     <TabsContent value="expenses">
                         This tab will show your expenses
