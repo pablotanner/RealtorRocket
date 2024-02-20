@@ -12,7 +12,8 @@ import {Button} from "../ui/button.tsx";
 import {PlusIcon} from "lucide-react";
 import {zodDateInputPipe, zodNumberInputPipe, zodStringPipe} from "../../utils/formatters.js";
 import {useCreateLeaseMutation} from "../../services/api/leaseApi.js";
-import {DatePicker} from "../ui/date-picker.tsx";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../ui/select.tsx";
+import {PaymentFrequency} from "../../utils/magicNumbers.js";
 
 
 const AddLease = ({unit, tenant, ...props}) => {
@@ -38,7 +39,7 @@ const AddLease = ({unit, tenant, ...props}) => {
             startDate: null,
             endDate: null,
             rentalPrice: null,
-            paymentFrequency: null,
+            paymentFrequency: "MONTHLY",
             tenantId: tenant?.id || null,
             unitId: unit?.id || null,
         },
@@ -130,10 +131,23 @@ const AddLease = ({unit, tenant, ...props}) => {
                                 name="paymentFrequency"
                                 render={({field}) => (
                                     <FormItem >
-                                        <FormLabel>Payment Frequency*</FormLabel>
-                                        <FormControl>
-                                            <Input type="text" placeholder="WEEKLY, MONTHLY, QUARTERLY, YEARLY" {...field} />
-                                        </FormControl>
+                                        <FormLabel>Payment Frequency *</FormLabel>
+                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select a Payment Frequency" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {
+                                                    Object.keys(PaymentFrequency).map((status, index) => {
+                                                        return (
+                                                            <SelectItem key={index} value={status}>{PaymentFrequency[status]}</SelectItem>
+                                                        )
+                                                    })
+                                                }
+                                            </SelectContent>
+                                        </Select>
                                         <FormMessage/>
                                     </FormItem>
                                 )}

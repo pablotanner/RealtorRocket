@@ -4,6 +4,8 @@ import {useForm} from "react-hook-form";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "../ui/form.tsx";
 import {Input} from "../ui/input.tsx";
 import {getDateTimeString, zodDateInputPipe, zodNumberInputPipe} from "../../utils/formatters.js";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../ui/select.tsx";
+import {PaymentFrequency} from "../../utils/magicNumbers.js";
 
 
 const LeaseForm = ({lease, onChange}) => {
@@ -21,7 +23,7 @@ const LeaseForm = ({lease, onChange}) => {
             startDate: lease?.startDate || null,
             endDate: lease?.endDate || null,
             rentalPrice: lease?.rentalPrice || null,
-            paymentFrequency: lease?.paymentFrequency || null,
+            paymentFrequency: lease?.paymentFrequency || "MONTHLY" || null,
         },
         mode: 'onBlur',
     })
@@ -104,12 +106,22 @@ const LeaseForm = ({lease, onChange}) => {
                     render={({field}) => (
                         <FormItem >
                             <FormLabel>Payment Frequency</FormLabel>
-                            <FormControl>
-                                <Input type="text" {...field} />
-                            </FormControl>
-                            <FormDescription>
-                                This field is optional.
-                            </FormDescription>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select a Payment Frequency" />
+                                    </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                    {
+                                        Object.keys(PaymentFrequency).map((status, index) => {
+                                            return (
+                                                <SelectItem key={index} value={status}>{PaymentFrequency[status]}</SelectItem>
+                                            )
+                                        })
+                                    }
+                                </SelectContent>
+                            </Select>
                             <FormMessage/>
                         </FormItem>
                     )}/>

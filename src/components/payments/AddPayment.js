@@ -69,7 +69,7 @@ const AddPayment = ({...props}) => {
             <DialogContent >
                 <DialogHeader>
                     <DialogTitle>
-                        Add Lease
+                        Add Payment
                     </DialogTitle>
                 </DialogHeader>
                 <Form {...paymentForm}>
@@ -123,7 +123,7 @@ const AddPayment = ({...props}) => {
                                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                                         <FormControl>
                                             <SelectTrigger>
-                                                <SelectValue placeholder="Select a verified email to display" />
+                                                <SelectValue placeholder="Select the Payment Status" />
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
