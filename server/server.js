@@ -11,6 +11,7 @@ import * as realEstateController from "./controllers/realEstateController.js";
 import * as leaseController from "./controllers/leaseController.js";
 import * as tenantController from "./controllers/tenantController.js";
 import {checkOverduePayments} from "./jobs/overduePayments.js";
+import * as paymentController from "./controllers/paymentController.js";
 
 const app = express();
 const router = express.Router();
@@ -61,6 +62,11 @@ router.post('/tenants', authenticateToken, tenantController.createTenant)
 router.get('/tenants/:id', authenticateToken, tenantController.getTenant)
 router.delete('/tenants/:id', authenticateToken, tenantController.deleteTenant)
 router.put('/tenants/:id', authenticateToken, tenantController.updateTenant)
+
+// Payments
+router.post('/payments', authenticateToken, paymentController.createPayment)
+router.get('/payments', authenticateToken, paymentController.getPayments)
+
 
 //Jobs
 //      Schedule the job to run daily at 00:00 (midnight)

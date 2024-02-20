@@ -13,10 +13,48 @@ export const financialsApi = authApi.injectEndpoints({
             }),
             providesTags: (result, error, id) => [{ type: 'Leases', id }],
         }),
+        getPayment: build.query({
+            query: (id) => ({
+                url: `/payments/${id}`,
+                method: 'GET',
+            }),
+            providesTags: (result, error, id) => [{ type: 'Payment', id }],
+        }),
+        getPayments: build.query({
+            query: () => ({
+                url: `/payments`,
+                method: 'GET',
+            }),
+            providesTags: ['Payments']
+        }),
+        createPayment: build.mutation({
+            query: ({bodyData}) => ({
+                url: `/payments`,
+                method: 'POST',
+                body: bodyData,
+            }),
+            async onQueryStarted(arg, { queryFulfilled }) {
+                queryFulfilled
+                    .then(() => {
+                        toast({
+                            title: "Success",
+                            description: "Payment created successfully",
+                        });
+                    })
+                    .catch(() => {
+                        toast({
+                            title: "Uh oh! Something went wrong.",
+                            description: "There was a problem with your request, please try again.",
+                            variant: "destructive",
+                        });
+                    })
+            },
+            invalidatesTags: ['Payments']
+        }),
     }),
     overrideExisting: false,
 })
 
-export const {useGetPaymentSchedule} = financialsApi;
+export const {useGetPaymentSchedule, useCreatePayment} = financialsApi;
 
 

@@ -11,6 +11,8 @@ import { propertyApi } from "../api/propertyApi.js";
 import { leaseApi } from "../api/leaseApi.js";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { tenantApi } from "../api/tenantApi.js";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { financialsApi } from "../api/financialsApi.js";
 
 import {leasesReducer, propertiesReducer, tenantsReducer, unitsReducer} from "../slices/objectSlice.js";
 import { configureStore } from '@reduxjs/toolkit/react'

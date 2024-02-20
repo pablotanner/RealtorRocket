@@ -19,6 +19,30 @@ export class LeasePaymentSchedule {
     status:  string;
 }
 
+export class RentPayment {
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+
+    amount: number | null;
+    currency: string | null; // Assuming CurrencyCode is a string enum elsewhere
+    date: Date | null;
+    status: string | null; // Assuming PaymentStatus is a string enum or similar
+    notes: string | null;
+    paymentMethod: string | null;
+
+    submittedBy: string | null;
+    submissionDate: Date | null;
+    approvalDate: Date | null;
+
+    leaseId: number | null;
+    tenantId: number | null;
+
+    // Assuming Lease and Tenant are defined elsewhere
+    lease: Lease | null;
+    tenant: Tenant | null;
+}
+
 export class Property {
     id: number;
     createdAt: Date;
