@@ -13,7 +13,7 @@ const Unit = ({ unit, selectedUnit, onSelectUnit }) => {
 
     useEffect(() => {
         if (selectedUnit?.id === unit?.id) {
-            ref.current.scrollIntoView({ behavior: 'smooth' });
+            ref.current.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
         }
     }, [selectedUnit]);
 
