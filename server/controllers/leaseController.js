@@ -1,5 +1,6 @@
 
 import prisma from '../prisma.js';
+import {createLeaseWithPaymentSchedule} from "../services/leaseService.js";
 
 
 // Get leases of realtor, either all or by unitId and/or tenantId
@@ -68,35 +69,11 @@ export async function getLease(req, res) {
 
 // Create lease
 export async function createLease(req, res) {
-    const {tenantId, unitId} = req.body;
-    // Remove tenantId and unitId from req.body
-    delete req.body.tenantId;
-    delete req.body.unitId;
-
 
     try {
-        const newLease = await prisma.lease.create({
-            data: {
-                ...req.body,
-                tenant: {
-                    connect: {
-                        id: tenantId
-                    }
-                },
-                unit: {
-                    connect: {
-                        id: unitId
-                    }
-                },
-                realtor: {
-                    connect: {
-                        userId: req.user.userId
-                    }
-                }
-            }
-        });
+        const lease = await createLeaseWithPaymentSchedule(req.body,  req.user.userId);
 
-        res.status(200).json({data: newLease });
+        res.status(200).json({data: lease });
     }
     catch (error) {
         console.log(error)

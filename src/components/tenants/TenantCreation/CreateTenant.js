@@ -128,9 +128,6 @@ const CreateTenant = (props) => {
             parsedLease.rentalPrice = parseFloat(parsedLease.rentalPrice)
         }
 
-        if (parsedLease.leaseLength) {
-            parsedLease.leaseLength = parseInt(parsedLease.leaseLength)
-        }
 
 
         const body = {

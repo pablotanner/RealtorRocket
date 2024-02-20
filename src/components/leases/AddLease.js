@@ -10,7 +10,7 @@ import TenantSelection from "../tenants/TenantSelection.js";
 import {useGetTenantsQuery} from "../../services/api/tenantApi.js";
 import {Button} from "../ui/button.tsx";
 import {PlusIcon} from "lucide-react";
-import {zodDateInputPipe, zodNumberInputPipe} from "../../utils/formatters.js";
+import {zodDateInputPipe, zodNumberInputPipe, zodStringPipe} from "../../utils/formatters.js";
 import {useCreateLeaseMutation} from "../../services/api/leaseApi.js";
 import {DatePicker} from "../ui/date-picker.tsx";
 
@@ -25,12 +25,9 @@ const AddLease = ({unit, tenant, ...props}) => {
 
     const leaseFormSchema = z.object({
         startDate: zodDateInputPipe(z.string({errorMap: () => ({message: 'Please enter a valid date.'})})),
-        endDate: zodDateInputPipe(z.string({errorMap: () => ({message: 'Please enter a valid date.'})}).or(z.null())),
+        endDate: zodDateInputPipe(z.string({errorMap: () => ({message: 'Please enter a valid date.'})})),
         rentalPrice: zodNumberInputPipe(z.number({errorMap: () => ({message: 'Please enter a valid number.'})})),
-        leaseLength: zodNumberInputPipe(z.number().or(z.null())),
-        totalRentDue: zodNumberInputPipe(z.number().or(z.null())),
-        rentPaid: zodNumberInputPipe(z.number().or(z.null())),
-        lastPaymentDate: zodDateInputPipe(z.string({errorMap: () => ({message: 'Please enter a valid date.'})}).or(z.null())),
+        paymentFrequency: zodStringPipe(z.string({errorMap: () => ({message: 'Please enter a valid payment frequency.'})})),
         tenantId: z.number({errorMap: () => ({message: 'Please select a tenant.'})}),
         unitId: z.number({errorMap: () => ({message: 'Please select a unit.'})}),
     })
@@ -41,10 +38,7 @@ const AddLease = ({unit, tenant, ...props}) => {
             startDate: null,
             endDate: null,
             rentalPrice: null,
-            leaseLength: null,
-            totalRentDue: null,
-            rentPaid: null,
-            lastPaymentDate: null,
+            paymentFrequency: null,
             tenantId: tenant?.id || null,
             unitId: unit?.id || null,
         },
@@ -131,15 +125,14 @@ const AddLease = ({unit, tenant, ...props}) => {
                             )}
                         />
 
-                        <FormGroup>
                             <FormField
                                 control={leaseForm.control}
-                                name="leaseLength"
+                                name="paymentFrequency"
                                 render={({field}) => (
                                     <FormItem >
-                                        <FormLabel>Lease Length</FormLabel>
+                                        <FormLabel>Payment Frequency*</FormLabel>
                                         <FormControl>
-                                            <Input type="number" placeholder="30" {...field} />
+                                            <Input type="text" placeholder="WEEKLY, MONTHLY, QUARTERLY, YEARLY" {...field} />
                                         </FormControl>
                                         <FormMessage/>
                                     </FormItem>
@@ -147,53 +140,8 @@ const AddLease = ({unit, tenant, ...props}) => {
                             />
 
 
-                            <FormField
-                                control={leaseForm.control}
-                                name="totalRentDue"
-                                render={({field}) => (
-                                    <FormItem >
-                                        <FormLabel>Total Rent Due</FormLabel>
-                                        <FormControl>
-                                            <Input type="number" placeholder="0" {...field} />
-                                        </FormControl>
-                                        <FormMessage/>
-                                    </FormItem>
-                                )}
-                            />
-                        </FormGroup>
 
 
-
-                        <FormGroup>
-                            <FormField
-                                control={leaseForm.control}
-                                name="rentPaid"
-                                render={({field}) => (
-                                    <FormItem >
-                                        <FormLabel>Rent Paid</FormLabel>
-                                        <FormControl>
-                                            <Input type="number" placeholder="0" {...field} />
-                                        </FormControl>
-                                        <FormMessage/>
-                                    </FormItem>
-                                )}
-                            />
-
-                            <FormField
-                                control={leaseForm.control}
-                                name="lastPaymentDate"
-                                render={({field}) => (
-                                    <FormItem >
-                                        <FormLabel>Last Payment Date</FormLabel>
-                                        <FormControl>
-                                            <Input type="date" {...field} />
-                                        </FormControl>
-                                        <FormMessage/>
-                                    </FormItem>
-                                )}
-                            />
-
-                        </FormGroup>
 
 
 

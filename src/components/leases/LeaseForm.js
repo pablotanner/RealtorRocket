@@ -12,7 +12,7 @@ const LeaseForm = ({lease, onChange}) => {
         startDate: zodDateInputPipe(z.string({errorMap: () => ({message: 'Please enter a valid date.'})}).or(z.null())),
         endDate: zodDateInputPipe(z.string({errorMap: () => ({message: 'Please enter a valid date.'})}).or(z.null())),
         rentalPrice: zodNumberInputPipe(z.number().positive('Number must be positive')).or(z.null()),
-        leaseLength: z.string().or(z.null()),
+        paymentFrequency: z.string().or(z.null()),
     })
 
     const leaseForm = useForm({
@@ -21,7 +21,7 @@ const LeaseForm = ({lease, onChange}) => {
             startDate: lease?.startDate || null,
             endDate: lease?.endDate || null,
             rentalPrice: lease?.rentalPrice || null,
-            leaseLength: lease?.leaseLength || null,
+            paymentFrequency: lease?.paymentFrequency || null,
         },
         mode: 'onBlur',
     })
@@ -100,12 +100,12 @@ const LeaseForm = ({lease, onChange}) => {
 
                 <FormField
                     control={leaseForm.control}
-                    name="leaseLength"
+                    name="paymentFrequency"
                     render={({field}) => (
                         <FormItem >
-                            <FormLabel>Lease Length</FormLabel>
+                            <FormLabel>Payment Frequency</FormLabel>
                             <FormControl>
-                                <Input type="number" {...field} />
+                                <Input type="text" {...field} />
                             </FormControl>
                             <FormDescription>
                                 This field is optional.

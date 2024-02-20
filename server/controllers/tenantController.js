@@ -1,4 +1,5 @@
 import prisma from '../prisma.js';
+import {createLeaseWithPaymentSchedule} from "../services/leaseService.js";
 
 
 // Creates a tenant, if provided link them to a lease, otherwise create new lease using lease data in body
@@ -10,27 +11,14 @@ export async function createTenant(req, res) {
     delete tenantData.unitId;
 
 
-
     try {
         const newTenant = await prisma.tenant.create({
             data: {
                 ...tenantData,
                 leases: {
                     ...(leaseId ?
-                            {connect: {id: parseInt(leaseId)}} :
-                            {create: {
-                                    ...req.body.lease,
-                                    unit: {
-                                        connect: {
-                                            id: parseInt(req.body.unitId)
-                                        }
-                                    },
-                                    realtor: {
-                                        connect: {
-                                            userId: req.user.userId
-                                        }
-                                    }
-                                }}
+                            {connect: {id: parseInt(leaseId)}} : null
+
                     )
                 }
             },
@@ -38,8 +26,19 @@ export async function createTenant(req, res) {
                 leases: true
             }
         });
+        let lease = null;
 
-        res.status(200).json({data: newTenant });
+        if (!leaseId) {
+            const leaseBody = req.body?.lease;
+            leaseBody.unitId = req.body.unitId;
+            leaseBody.tenantId = newTenant.id;
+            lease = await createLeaseWithPaymentSchedule(leaseBody, req.user.userId);
+        }
+
+        res.status(200).json({data: {
+            ...newTenant,
+            leases: [lease]
+            } });
     }
     catch (error) {
         console.log(error)
