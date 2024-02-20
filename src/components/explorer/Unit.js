@@ -2,13 +2,22 @@ import {cn} from "../../utils.ts";
 import PropertyStatus from "../properties/PropertyStatus.js";
 import {selectTenantByUnitId} from "../../services/slices/objectSlice.js";
 import {useSelector} from "react-redux";
+import {useEffect, useRef} from "react";
 
 
 const Unit = ({ unit, selectedUnit, onSelectUnit }) => {
+    const ref = useRef()
 
     const currentTenant = useSelector((state) => selectTenantByUnitId(state, unit?.id));
 
-    console.log("currentTenant", unit.id, currentTenant)
+
+    useEffect(() => {
+        if (selectedUnit?.id === unit?.id) {
+            ref.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [selectedUnit]);
+
+
     const getRoomHeight = (numOfRooms) => {
         if (numOfRooms === 1) {
             return "h-[180px]";
@@ -52,8 +61,9 @@ const Unit = ({ unit, selectedUnit, onSelectUnit }) => {
 
     return (
         <div
+            ref={ref}
             data-selected={selectedUnit?.id === unit?.id}
-            className="bg-secondary h-[125px] w-full flex flex-col justify-evenly gap-1 items-center border-2 border-gray-200 cursor-pointer hover:bg-gray-200 transition-all duration-100 ease-in-out data-[selected='true']:bg-indigo-200  border-t-0 first:border-t-2 first:border-t-gray-200 data-[selected='true']:outline-indigo-500 data-[selected='true']:outline data-[selected='true']:outline-2"
+            className="bg-secondary h-[150px] w-full flex flex-col justify-evenly gap-1 items-center border-2 border-gray-200 cursor-pointer hover:bg-gray-200 transition-all duration-100 ease-in-out data-[selected='true']:bg-indigo-200  border-t-0 first:border-t-2 first:border-t-gray-200 data-[selected='true']:outline-indigo-500 data-[selected='true']:outline data-[selected='true']:outline-2"
             onClick={() => {
                 selectedUnit?.id === unit?.id ? onSelectUnit(null) : onSelectUnit(unit)
             }

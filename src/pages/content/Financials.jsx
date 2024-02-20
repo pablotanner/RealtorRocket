@@ -21,25 +21,30 @@ const Financials = (props) => {
 
     const leases = useSelector(state => selectLeasesByPropertyId(state, propertySelection));
 
-    const rentDue = leases.reduce((acc, lease) => {
-        return acc + lease?.rentalPrice || 0;
-    }, 0);
-
-    const rentPaid = leases.reduce((acc, lease) => {
-        return acc + lease?.rentPaid || 0;
-    }, 0);
-
-    const activeLeases = leases.filter(lease =>{
-        return  isAfter(new Date(lease.endDate), new Date()) || !lease.endDate;
-    }).length;
+    const payments = useSelector(state => selectPaymentsByPropertyId(state, propertySelection))
 
     const paymentSchedules = leases.reduce((acc, lease) => {
         return acc.concat(lease.paymentSchedule);
     }, []);
 
-    //const {data: payments} = useGetPaymentsQuery()
 
-    const payments = useSelector(state => selectPaymentsByPropertyId(state, propertySelection))
+    const rentDue = paymentSchedules.reduce((acc, scheduledPayment) => {
+        if (scheduledPayment.status !== "PAID") {
+            return acc + scheduledPayment?.amountDue || 0;
+        }
+    }, 0) || 0;
+
+    const rentPaid = payments.reduce((acc, payment) => {
+        if (payment.status === "PAID") {
+            return acc + payment?.amount || 0;
+        }
+    }, 0) || 0;
+
+    const activeLeases = leases.filter(lease =>{
+        return  isAfter(new Date(lease.endDate), new Date()) || !lease.endDate;
+    }).length;
+
+
 
 
     return (
@@ -49,15 +54,15 @@ const Financials = (props) => {
             </h1>
 
             <div className="flex flex-col gap-4">
-                These are your leases.
+                This page offers an overview of the financials for either a single property or all properties, depending on your selection.
 
                 <div className="flex flex-row flex-wrap gap-4">
                     <InfoCard title="Rent Due (this month)" number={moneyParser(rentDue)}  />
-                    <InfoCard title="Rent Paid (this month)" number={moneyParser(rentPaid)}  />
+                    <InfoCard title="Rent Paid" number={moneyParser(rentPaid)}  />
                     <InfoCard title="Active Leases" number={activeLeases}   />
                 </div>
                 
-                <Tabs defaultValue="payments">
+                <Tabs defaultValue="payments" className="overflow-auto">
                     <TabsList>
                         <TabsTrigger value="payments">
                         Payments
