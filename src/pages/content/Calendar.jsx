@@ -1,9 +1,12 @@
 import {Calendar as CalendarComponent}  from '../../components/ui/calendar.tsx'
 import {useState} from "react";
-import {nextSaturday, previousSunday} from "date-fns";
+import {isAfter, nextSaturday, previousSunday} from "date-fns";
 import {Accordion, AccordionContent, AccordionItem, AccordionTrigger} from "../../components/ui/accordion.tsx";
 import {useSelector} from "react-redux";
 import {selectEventsByCategory, selectEventsForRange, selectFutureEvents} from "../../services/slices/eventSlice.js";
+import {Banknote, Scroll} from "lucide-react";
+import {PiHandCoins} from "react-icons/pi";
+import {dateParser} from "../../utils/formatters.js";
 
 const Calendar = () => {
 
@@ -46,6 +49,41 @@ const Calendar = () => {
 
     const eventsInRange = useSelector(state => selectEventsForRange(state, dayRange));
 
+    const Event = ({type, title, date, description}) => {
+
+        const icons = {
+            "lease": <Scroll className="w-4 h-4"/>,
+            "rent": <PiHandCoins className="w-4 h-4"/>,
+            "payment": <Banknote className="w-4 h-4"/>
+        }
+
+        const colors = {
+            "lease": "blue-500",
+            "rent": "green-500",
+        }
+
+        return (
+            <div className={"p-2 font-400 text-white rounded-lg bg-"+colors[type?.toLowerCase()]}>
+                <div className="font-200 text-sm flex flex-row justify-between capitalize">
+                    <p>
+                        {dateParser(date)}
+                    </p>
+                    {type}
+                </div>
+                <div className="flex flex-row items-center gap-2 font-600">
+                    <div className="p-1 border border-white rounded-full">
+                        {icons[type?.toLowerCase()]}
+                    </div>
+                    {title}
+                </div>
+
+                {description}
+
+            </div>
+        )
+    }
+
+
 
     const UpcomingEvents = () => {
         const upcomingEvents = [...events];
@@ -69,19 +107,12 @@ const Calendar = () => {
     const EventsInSelectedRange = () => {
         return (
             <div>
-                <h className="text-xl">Events in selected range</h>
-                <ul className="flex flex-col gap-1">
-                    {eventsInRange?.map((event, index) => {
-                        return (
-                            <li key={index} className="flex flex-row gap-2 ">
-                                <div className="font-500">{event.title}: </div>
-                                <div>{new Date(event.date).toLocaleDateString()}</div>
-                            </li>
-                        )
-                    })}
+                <h className="text-xl">Events in Selected Week</h>
+                <div className="flex flex-col gap-2">
+                    {[...eventsInRange].sort((a, b) => isAfter(new Date(a.date), new Date(b.date))).map((event, index) => <Event key={index} type={event.category} {...event} />)}
 
-                    {eventsInRange.length === 0 && <div>No events in selected range</div>}
-                </ul>
+                    {eventsInRange.length === 0 && <div>No Events.</div>}
+                </div>
                 </div>
         )
     }

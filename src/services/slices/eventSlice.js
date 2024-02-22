@@ -1,6 +1,7 @@
 import {createEntityAdapter, createSelector, createSlice} from "@reduxjs/toolkit";
 import {authApi} from "../api/authApi.js";
 import {endOfYesterday, isAfter, isBefore} from "date-fns";
+import {moneyParser} from "../../utils/formatters.js";
 
 const eventsAdapter = createEntityAdapter({
     selectId: (event) => event.id,
@@ -45,6 +46,17 @@ const eventSlice = createSlice({
                             title: 'Lease End',
                             date: lease.endDate,
                             category: 'lease'
+                        })
+                    }
+                    if (lease.paymentSchedule) {
+                        lease.paymentSchedule.forEach((paymentSchedule) => {
+                            leaseEvents.push({
+                                id: paymentSchedule.id,
+                                title: `Payment Deadline for Lease ${paymentSchedule.leaseId}`,
+                                description: `Amount: ${moneyParser(paymentSchedule?.amountDue)}`,
+                                date: paymentSchedule.dueDate,
+                                category: "rent"
+                            })
                         })
                     }
                 })
