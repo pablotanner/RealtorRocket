@@ -280,7 +280,6 @@ export const selectUnitsByPropertyId = createSelector(
 export const selectPaymentsByPropertyId = createSelector(
     [selectAllPayments, selectAllLeases, (_, propertyId) => propertyId],
     (payments, leases, propertyId) => {
-        console.log(payments, leases, propertyId)
         if (!propertyId) return [];
         else if (String(propertyId).toLowerCase() === 'all') {
             return payments;

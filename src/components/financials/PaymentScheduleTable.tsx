@@ -5,14 +5,26 @@ import {Checkbox} from "../ui/checkbox.tsx";
 import {dateParser, moneyParser} from "../../utils/formatters.js";
 import {DataTable} from "../ui/data-table.js";
 import {Lease, LeasePaymentSchedule} from "../../utils/classes.ts";
-import {CalendarClock} from "lucide-react";
+import {CalendarClock, Eye} from "lucide-react";
 
 import {Badge} from "../ui/badge.tsx";
+import ViewPayment from "../payments/ViewPayment.js";
 
 
 
 
 const columns: ColumnDef<LeasePaymentSchedule>[] = [
+    {
+        id: "view",
+        header: "",
+        cell: ({ row }) => (
+            <ViewPayment payment={row?.original}>
+                <Eye className="w-5 h-5 hover:text-primary mt-1"/>
+            </ViewPayment>
+        ),
+        enableSorting: false,
+        enableHiding: false,
+    },
     {
         id: "id",
         header: "ID",

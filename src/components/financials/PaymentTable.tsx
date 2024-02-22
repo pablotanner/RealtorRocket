@@ -4,14 +4,26 @@ import {
 import {dateParser, moneyParser} from "../../utils/formatters.js";
 import {DataTable} from "../ui/data-table.js";
 import {RentPayment} from "../../utils/classes.ts";
-import { Coins} from "lucide-react";
+import {Coins, Eye} from "lucide-react";
 
+import ViewPayment from "../payments/ViewPayment.js"
 import {Badge} from "../ui/badge.tsx";
 
 
 
 
 const columns: ColumnDef<RentPayment>[] = [
+    {
+        id: "view",
+        header: "",
+        cell: ({ row }) => (
+            <ViewPayment payment={row?.original}>
+               <Eye className="w-5 h-5 hover:text-primary mt-1"/>
+            </ViewPayment>
+        ),
+        enableSorting: false,
+        enableHiding: false,
+    },
     {
         id: "id",
         header: "ID",

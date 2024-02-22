@@ -7,7 +7,6 @@ import {moneyParser} from "../../utils/formatters.js";
 import PaymentScheduleTable from "../../components/financials/PaymentScheduleTable.tsx";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "../../components/ui/tabs.tsx";
 import PaymentTable from "../../components/financials/PaymentTable.tsx";
-import {useGetPaymentsQuery} from "../../services/api/financialsApi.js";
 import {Button} from "../../components/ui/button.tsx";
 import {FilePlus2} from "lucide-react";
 import AddPayment from "../../components/payments/AddPayment.js";
