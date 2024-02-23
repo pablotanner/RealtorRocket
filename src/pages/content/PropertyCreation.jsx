@@ -1,5 +1,16 @@
 import {useState} from "react";
-import {BuildingIcon, Check, Home, SquareIcon, SquareStack} from "lucide-react";
+import {
+    BuildingIcon,
+    Check,
+    CrossIcon,
+    Home,
+    Image,
+    Info,
+    ListIcon,
+    MapPin,
+    SquareIcon,
+    SquareStack, XIcon
+} from "lucide-react";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {propertySchema} from "../../utils/formSchemas.js";
@@ -9,6 +20,8 @@ import {Input} from "../../components/ui/input.tsx";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../../components/ui/select.tsx";
 import {PaymentStatus} from "../../utils/magicNumbers.js";
 import {RealEstateType} from "../../utils/magicNumbers.js";
+import {Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious} from "../../components/ui/carousel.tsx";
+import {Button} from "../../components/ui/button.tsx";
 
 
 const PropertyCreation = () => {
@@ -16,6 +29,11 @@ const PropertyCreation = () => {
     const [tab, setTab] = useState(1)
 
     const [unitMultiplicity, setUnitMultiplicity] = useState("single")
+
+    const [images, setImages] = useState([])
+
+    const [imageUrlInput, setImageUrlInput] = useState("")
+
 
     const unitMultiplicityOptions = [
         {
@@ -117,17 +135,18 @@ const PropertyCreation = () => {
                     <form onSubmit={propertyForm.handleSubmit(onSubmit)} className="flex flex-col flex-wrap gap-4">
 
                         <Card>
-                            <CardHeader className="border-b-2 text-lg font-500 border-secondary p-4">
+                            <CardHeader className="border-b-2 text-lg font-500 border-secondary p-4 flex flex-row items-center gap-2">
+                                <ListIcon/>
                                 Unit Type
                             </CardHeader>
-                            <CardContent className="p-6 flex flex-row gap-4">
+                            <CardContent className="p-6 flex flex-col sm:flex-row gap-4">
 
                                 {unitMultiplicityOptions.map((option, index) => {
                                     return (
                                         <div
                                             key={index}
                                             data-active={option.value === unitMultiplicity}
-                                            className="rounded-lg relative border-secondary border-2 shadow-md p-4 flex bg-secondary/20 items-center justify-center cursor-pointer data-[active=true]:bg-gradient-to-br from-indigo-50 to-white data-[active=true]:text-indigo-600 data-[active=true]:border-primary-dark"
+                                            className="rounded-lg flex-shrink relative border-secondary border-2 shadow-md p-4 flex bg-secondary/20 items-center justify-center cursor-pointer data-[active=true]:bg-gradient-to-br from-indigo-50 to-white data-[active=true]:text-indigo-600 data-[active=true]:border-primary-dark"
                                             onClick={() => setUnitMultiplicity(option.value)}
                                         >
                                             <div className="text-xl font-600 flex flex-col gap-3">
@@ -158,7 +177,8 @@ const PropertyCreation = () => {
 
 
                         <Card>
-                            <CardHeader className="border-b-2 text-lg font-500 border-secondary p-4">
+                            <CardHeader className="border-b-2 text-lg font-500 border-secondary p-4 flex flex-row items-center gap-2">
+                                <Info/>
                                 Property Information
                             </CardHeader>
                             <CardContent>
@@ -271,11 +291,11 @@ const PropertyCreation = () => {
                         </Card>
 
                         <Card>
-                            <CardHeader className="border-b-2 text-lg font-500 border-secondary p-4">
+                            <CardHeader className="border-b-2 text-lg font-500 border-secondary p-4 flex flex-row items-center gap-2">
+                                <MapPin/>
                                 Location
                             </CardHeader>
                             <CardContent>
-
                                 <FormGroup useFlex>
                                     <FormField
                                         control={propertyForm.control}
@@ -356,6 +376,60 @@ const PropertyCreation = () => {
 
 
 
+
+                            </CardContent>
+                        </Card>
+
+
+                        <Card>
+                            <CardHeader className="border-b-2 text-lg font-500 border-secondary p-4 flex flex-row items-center gap-2">
+                                <Image/>
+                                Images
+                            </CardHeader>
+                            <CardContent>
+
+                                <div>
+                                    <div>
+                                        <FormItem >
+                                            <FormLabel>Image URL</FormLabel>
+                                            <div className="flex flex-row gap-2">
+                                                <Input placeholder="Enter an image URL here" className="max-w-96" value={imageUrlInput} onChange={(e) => setImageUrlInput(e.target.value)}/>
+                                                <Button type="button" onClick={() => {
+                                                    setImages([...images, imageUrlInput])
+                                                    setImageUrlInput("")
+                                                }}
+                                                        disabled={!imageUrlInput}
+                                                        variant="outline"
+                                                >
+                                                    Add Image
+                                                </Button>
+                                            </div>
+                                        </FormItem>
+                                    </div>
+                                </div>
+
+                                <div className="py-4 px-9" hidden={!images.length}>
+                                    <Carousel className="w-full max-w-xs">
+                                        <CarouselContent>
+                                            {images.map((image, index) => (
+                                                <CarouselItem key={index}>
+                                                    <div className="p-1">
+                                                        <img src={image} alt={`Property Image ${index}`} className="w-full h-64 object-cover rounded-lg"/>
+                                                    </div>
+                                                    <Button className="w-full" type="button" variant="outline" onClick={() => {
+                                                        setImages(images.filter((_, i) => i !== index))
+                                                    }}
+                                                    >
+                                                        <XIcon className="w-4 h-4 mr-2"/>
+                                                        Delete
+                                                    </Button>
+                                                </CarouselItem>
+                                            ))}
+                                        </CarouselContent>
+                                        <CarouselPrevious />
+                                        <CarouselNext />
+                                    </Carousel>
+                                </div>
 
                             </CardContent>
                         </Card>

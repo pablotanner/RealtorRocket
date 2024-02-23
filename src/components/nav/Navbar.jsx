@@ -186,7 +186,7 @@ const Navbar = ({children}) => {
     }
 
     return (
-        <div className="flex min-w-[350px]">
+        <div className="flex min-w-[375px]">
             <NavBar/>
             <main className={"pl-[4.25rem] md:pl-[14.75rem] min-h-screen w-full"}>
                 <Header/>
