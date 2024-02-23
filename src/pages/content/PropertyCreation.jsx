@@ -1,5 +1,7 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {
+    ArrowLeft,
+    ArrowRight,
     BuildingIcon,
     Check,
     CrossIcon,
@@ -18,7 +20,7 @@ import {Form, FormControl, FormField, FormGroup, FormItem, FormLabel, FormMessag
 import {Card, CardContent, CardHeader, CardTitle} from "../../components/ui/card.tsx";
 import {Input} from "../../components/ui/input.tsx";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../../components/ui/select.tsx";
-import {PaymentStatus} from "../../utils/magicNumbers.js";
+import {PaymentStatus, RentalStatus} from "../../utils/magicNumbers.js";
 import {RealEstateType} from "../../utils/magicNumbers.js";
 import {Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious} from "../../components/ui/carousel.tsx";
 import {Button} from "../../components/ui/button.tsx";
@@ -29,8 +31,6 @@ const PropertyCreation = () => {
     const [tab, setTab] = useState(1)
 
     const [unitMultiplicity, setUnitMultiplicity] = useState("single")
-
-    const [images, setImages] = useState([])
 
     const [imageUrlInput, setImageUrlInput] = useState("")
 
@@ -50,24 +50,6 @@ const PropertyCreation = () => {
         }
     ]
 
-    const tabList = [
-        {
-            title: "Property Information",
-            status: "incomplete"
-        },
-        {
-            title: "Unit Type",
-            status: "incomplete"
-        },
-        {
-            title: "Unit Information",
-            status: "incomplete"
-        },
-        {
-            title: "Review",
-            status: "incomplete"
-        }
-    ]
 
 
     const propertyForm = useForm(({
@@ -84,21 +66,72 @@ const PropertyCreation = () => {
             state: "",
             zip: "",
             country: "",
-            images: "",
-        }
+            images: [],
+            units: [
+                {
+                    unitNumber: "",
+                    floor: "",
+                    unitSize: "",
+                    numOfFloors: "",
+                    numOfRooms: "",
+                    numOfBedrooms: "",
+                    numOfBathrooms: "",
+                    garages: "",
+                    status: "",
+                    rentalPrice: ""
+                }
+            ]
+        },
     }))
+
+    const [tabStates, setTabStates] = useState([
+        {
+            title: "Property Information",
+            status: "incomplete"
+        },
+        {
+            title: "Unit Information",
+            status: "incomplete"
+        },
+        {
+            title: "Review",
+            status: "incomplete"
+        }
+    ])
+
+    useEffect(() => {
+        if (propertyForm.formState.isValid){
+            setTabStates(tabStates.map((tab, index) => {
+                if (index === 0){
+                    return {...tab, status: "complete"}
+                }
+                return tab
+            }))
+        }
+        else {
+            setTabStates(tabStates.map((tab, index) => {
+                if (index === 0){
+                    return {...tab, status: "incomplete"}
+                }
+                return tab
+            }))
+        }
+    }, [propertyForm.formState.isValid])
+
 
     const onSubmit = (data) => {
         console.log(data)
     }
 
-
     const StepTab = ({title, status, index}) => {
+        const isDisabled = index !== 1 && tabStates[index - 2].status !== "complete"
+
         return (
             <div
+                data-disabled={isDisabled}
                 data-selected={tab === index}
-                className="p-4 border-b-2 border-secondary select-none flex flex-col lg:flex-row gap-4 items-center justify-center lg:justify-start w-full hover:border-off-black cursor-pointer data-[selected='true']:border-off-black"
-                onClick={() => setTab(index)}
+                className="p-4 border-b-2 border-secondary select-none flex flex-col lg:flex-row gap-4 items-center justify-center lg:justify-start w-full hover:border-off-black cursor-pointer data-[selected='true']:border-off-black data-[disabled='true']:opacity-50 data-[disabled='true']:cursor-not-allowed data-[disabled='true']:hover:border-secondary"
+                onClick={() => !isDisabled && setTab(index)}
             >
                 <div
                     data-complete={status==="complete"}
@@ -115,13 +148,13 @@ const PropertyCreation = () => {
     }
 
     return (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 relative mb-16">
             <h1>
                 Create Property
             </h1>
 
             <div className="flex flex-row justify-between overflow-auto mb-4">
-                {tabList.map((tab, index) => {
+                {tabStates.map((tab, index) => {
                     return (
                         <StepTab title={tab.title} status={tab.status} index={index + 1} key={index}/>
                     )
@@ -130,7 +163,7 @@ const PropertyCreation = () => {
 
             <div
                 data-selected={tab === 1}
-                className="data-[selected='false']:hidden">
+                className=" data-[selected='false']:hidden">
                 <Form {...propertyForm}>
                     <form onSubmit={propertyForm.handleSubmit(onSubmit)} className="flex flex-col flex-wrap gap-4">
 
@@ -381,75 +414,226 @@ const PropertyCreation = () => {
                         </Card>
 
 
-                        <Card>
+                        <Card >
                             <CardHeader className="border-b-2 text-lg font-500 border-secondary p-4 flex flex-row items-center gap-2">
                                 <Image/>
                                 Images
                             </CardHeader>
-                            <CardContent>
-
-                                <div>
-                                    <div>
-                                        <FormItem >
-                                            <FormLabel>Image URL</FormLabel>
-                                            <div className="flex flex-row gap-2">
-                                                <Input placeholder="Enter an image URL here" className="max-w-96" value={imageUrlInput} onChange={(e) => setImageUrlInput(e.target.value)}/>
-                                                <Button type="button" onClick={() => {
-                                                    setImages([...images, imageUrlInput])
-                                                    setImageUrlInput("")
-                                                }}
-                                                        disabled={!imageUrlInput}
-                                                        variant="outline"
-                                                >
-                                                    Add Image
-                                                </Button>
-                                            </div>
-                                        </FormItem>
+                            <CardContent className="flex flex-col gap-4">
+                                <FormItem >
+                                    <FormLabel>Image URL</FormLabel>
+                                    <div className="flex flex-row gap-2">
+                                        <Input placeholder="Enter an image URL here" className="max-w-96" value={imageUrlInput} onChange={(e) => setImageUrlInput(e.target.value)}/>
+                                        <Button type="button" onClick={() => {
+                                            propertyForm.setValue("images", [...propertyForm.getValues("images"), imageUrlInput])
+                                            setImageUrlInput("")
+                                        }}
+                                                disabled={!imageUrlInput}
+                                                variant="outline"
+                                        >
+                                            Add Image
+                                        </Button>
                                     </div>
-                                </div>
+                                </FormItem>
 
-                                <div className="py-4 px-9" hidden={!images.length}>
-                                    <Carousel className="w-full max-w-xs">
-                                        <CarouselContent>
-                                            {images.map((image, index) => (
-                                                <CarouselItem key={index}>
-                                                    <div className="p-1">
-                                                        <img src={image} alt={`Property Image ${index}`} className="w-full h-64 object-cover rounded-lg"/>
-                                                    </div>
-                                                    <Button className="w-full" type="button" variant="outline" onClick={() => {
-                                                        setImages(images.filter((_, i) => i !== index))
-                                                    }}
-                                                    >
-                                                        <XIcon className="w-4 h-4 mr-2"/>
-                                                        Delete
-                                                    </Button>
-                                                </CarouselItem>
-                                            ))}
-                                        </CarouselContent>
-                                        <CarouselPrevious />
-                                        <CarouselNext />
-                                    </Carousel>
-                                </div>
+
+
+                                <Carousel className="w-full max-w-xs" hidden={!propertyForm.getValues("images").length}>
+                                    <div className="flex flex-row justify-between">
+                                        <CarouselPrevious className="relative translate-x-0 translate-y-0 top-0 left-0" />
+                                        <CarouselNext className="relative translate-x-0 translate-y-0 top-0 left-0" />
+                                    </div>
+                                    <CarouselContent>
+                                        {propertyForm.getValues("images").map((image, index) => (
+                                            <CarouselItem key={index}>
+                                                <div className="p-1">
+                                                    <img src={image} alt={`Property Image ${index}`} className="w-full h-64 object-cover rounded-lg"/>
+                                                </div>
+
+                                                <Button className="w-full" type="button" variant="outline" onClick={() => {
+                                                    propertyForm.setValue("images", propertyForm.getValues("images").filter((_, i) => i !== index))
+                                                    propertyForm.trigger("images")
+                                                }}
+                                                >
+                                                    <XIcon className="w-4 h-4 mr-2"/>
+                                                    Delete
+                                                </Button>
+                                            </CarouselItem>
+                                        ))}
+                                    </CarouselContent>
+                                </Carousel>
+
 
                             </CardContent>
                         </Card>
-
-
                     </form>
-
                 </Form>
-                <div>
-
-                </div>
-
-
-
-
 
             </div>
 
 
+            <div
+                data-selected={tab === 2}
+                className=" data-[selected='false']:hidden">
 
+
+                <Form {...propertyForm}>
+                    <form onSubmit={propertyForm.handleSubmit(onSubmit)} className="flex flex-col flex-wrap gap-4">
+
+                        {
+                            unitMultiplicity === "single" ? (
+                                <Card>
+                                    <CardHeader className="border-b-2 text-lg font-500 border-secondary p-4 flex flex-row items-center gap-2">
+                                        <MapPin/>
+                                        Unit Information
+                                    </CardHeader>
+                                    <CardContent>
+                                        <FormGroup useFlex>
+                                            <FormField
+                                                control={propertyForm.control}
+                                                name="units[0].unitNumber"
+                                                render={({field}) => (
+                                                    <FormItem >
+                                                        <FormLabel>Unit Number</FormLabel>
+                                                        <FormControl>
+                                                            <Input placeholder="" {...field} />
+                                                        </FormControl>
+                                                        <FormMessage/>
+                                                    </FormItem>
+                                                )}
+                                            />
+
+                                            <FormField
+                                                control={propertyForm.control}
+                                                name="units[0].floor"
+                                                render={({field}) => (
+                                                    <FormItem >
+                                                        <FormLabel>Floor</FormLabel>
+                                                        <FormControl>
+                                                            <Input placeholder="0" {...field} />
+                                                        </FormControl>
+                                                        <FormMessage/>
+                                                    </FormItem>
+                                                )}
+                                            />
+
+
+                                            <FormField
+                                                control={propertyForm.control}
+                                                name="units[0].unitSize"
+                                                render={({field}) => (
+                                                    <FormItem >
+                                                        <FormLabel>State</FormLabel>
+                                                        <FormControl>
+                                                            <Input placeholder="Washington" {...field} />
+                                                        </FormControl>
+                                                        <FormMessage/>
+                                                    </FormItem>
+                                                )}
+                                            />
+
+
+
+                                        </FormGroup>
+
+                                        <FormGroup useFlex>
+                                            <FormField
+                                                control={propertyForm.control}
+                                                name="units[0].rentalPrice"
+                                                render={({field}) => (
+                                                    <FormItem >
+                                                        <FormLabel>Rental Price</FormLabel>
+                                                        <FormControl>
+                                                            <Input placeholder="2500" {...field} />
+                                                        </FormControl>
+                                                        <FormMessage/>
+                                                    </FormItem>
+                                                )}
+                                            />
+
+                                            <FormField
+                                                control={propertyForm.control}
+                                                name="units[0].status"
+                                                render={({field}) => (
+                                                    <FormItem >
+                                                        <FormLabel>Status</FormLabel>
+                                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                            <FormControl>
+                                                                <SelectTrigger>
+                                                                    <SelectValue placeholder="Select..." />
+                                                                </SelectTrigger>
+                                                            </FormControl>
+                                                            <SelectContent>
+                                                                {
+                                                                    Object.keys(RentalStatus).map((type, index) => {
+                                                                        return (
+                                                                            <SelectItem key={index} value={type}>{RentalStatus[type]}</SelectItem>
+                                                                        )
+                                                                    })
+                                                                }
+                                                            </SelectContent>
+                                                        </Select>
+                                                        <FormMessage/>
+                                                    </FormItem>
+                                                )}
+                                            />
+                                        </FormGroup>
+
+                                    </CardContent>
+
+                                </Card>
+                            ) : ( <div>
+
+                            </div>
+
+                                )
+                        }
+
+                    </form>
+                </Form>
+            </div>
+
+
+            <div className="fixed bottom-0 left-0 z-50 w-full flex flex-row bg-white px-6 h-16 items-center border-y-2 border-secondary justify-between">
+                <Button
+                    variant="outline"
+                    disabled={tab === 1}
+                    onClick={() => {
+                        if (tab > 1){
+                            setTab(tab - 1)
+                        }
+                    }}
+
+                >
+                    <ArrowLeft className="w-4 h-4 mr-1"/>
+                    Back
+                </Button>
+                <Button variant="dark" onClick={() => {
+                    propertyForm.trigger();
+                    if (tab === 2 && propertyForm.formState.isValid){
+                        // set tab 2 to complete
+                        setTabStates(tabStates.map((tab, index) => {
+                            if (index === 1){
+                                return {...tab, status: "complete"}
+                            }
+                            return tab
+                        }))
+                        setTab(3)
+                        return;
+                    }
+
+                    if (tab === 3){
+                        propertyForm.handleSubmit(onSubmit)()
+                    } else if (tabStates[tab - 1].status === "complete"){
+                        setTab(tab + 1)
+                    }
+                }}
+                >
+                    Next
+                    <ArrowRight className="w-4 h-4 ml-1"/>
+                </Button>
+
+            </div>
 
         </div>
     )
