@@ -24,6 +24,15 @@ import {PaymentStatus, RentalStatus} from "../../utils/magicNumbers.js";
 import {RealEstateType} from "../../utils/magicNumbers.js";
 import {Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious} from "../../components/ui/carousel.tsx";
 import {Button} from "../../components/ui/button.tsx";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription, DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from "../../components/ui/dialog.tsx";
+import UnitCreationTable from "../../components/properties/PropertyCreation/UnitCreationTable.js";
 
 
 const PropertyCreation = () => {
@@ -147,7 +156,7 @@ const PropertyCreation = () => {
             </div>
         )
     }
-    
+
     return (
         <div className="flex flex-col gap-2 relative mb-16">
             <h1>
@@ -477,7 +486,7 @@ const PropertyCreation = () => {
 
 
                 <Form {...propertyForm}>
-                    <form onSubmit={propertyForm.handleSubmit(onSubmit)} className="flex flex-col flex-wrap gap-4">
+                    <form onSubmit={propertyForm.handleSubmit(onSubmit)} className="flex flex-col flex-wrap gap-4 overflow-auto">
 
                         {
                             unitMultiplicity === "single" ? (
@@ -724,9 +733,13 @@ const PropertyCreation = () => {
 
                                 </div>
 
-                            ) : ( <div>
+                            ) : (
+                                <UnitCreationTable units={propertyForm.getValues("units")} onChange={(units) => {
+                                    propertyForm.setValue("units", units);
+                                    propertyForm.trigger("units")
+                                }}/>
 
-                            </div>
+
 
                                 )
                         }
