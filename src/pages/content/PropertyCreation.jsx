@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {
     ArrowLeft,
-    ArrowRight,
+    ArrowRight, BadgeCheck,
     BuildingIcon,
     Check,
     CrossIcon, DoorClosed,
@@ -9,7 +9,7 @@ import {
     Image,
     Info,
     ListIcon,
-    MapPin,
+    MapPin, Plus,
     SquareIcon,
     SquareStack, XIcon
 } from "lucide-react";
@@ -33,9 +33,16 @@ import {
     DialogTrigger
 } from "../../components/ui/dialog.tsx";
 import UnitCreationTable from "../../components/properties/PropertyCreation/UnitCreationTable.js";
+import {useCreatePropertyMutation} from "../../services/api/propertyApi.js";
+import {useNavigate} from "react-router-dom";
 
 
 const PropertyCreation = () => {
+
+    const navigate = useNavigate();
+
+    const [createProperty, {isLoading: isCreating}] = useCreatePropertyMutation();
+
 
     const [tab, setTab] = useState(1)
 
@@ -130,7 +137,27 @@ const PropertyCreation = () => {
 
 
     const onSubmit = (data) => {
-        console.log(data)
+
+        const body = {
+            ...data,
+            images: data.images.map(image => ({imageUrl: image})),
+            units: data.units.map(unit => {
+                const {images, ...rest} = unit;
+                return rest;
+            })
+        }
+
+
+
+        createProperty(body).then((res) => {
+            if (res.error){
+                console.log(res.error)
+                return;
+            }
+            else {
+                navigate("/properties")
+            }
+        })
     }
 
     const StepTab = ({title, status, index}) => {
@@ -749,6 +776,25 @@ const PropertyCreation = () => {
             </div>
 
 
+            <div
+                data-selected={tab === 3}
+                className=" data-[selected='false']:hidden">
+
+                <Card>
+                    <CardHeader className="border-b-2 text-lg font-500 border-secondary p-4 flex flex-row items-center gap-2">
+                        <BadgeCheck/>
+                        Review
+                    </CardHeader>
+
+                    <CardContent>
+                        Info will be listed here
+                    </CardContent>
+                </Card>
+
+
+            </div>
+
+
             <div className="fixed bottom-0 left-0 z-50 w-full flex flex-row bg-white px-6 h-16 items-center border-y-2 border-secondary justify-between">
                 <Button
                     variant="outline"
@@ -763,7 +809,10 @@ const PropertyCreation = () => {
                     <ArrowLeft className="w-4 h-4 mr-1"/>
                     Back
                 </Button>
-                <Button variant="dark" onClick={() => {
+                <Button
+                    variant="dark"
+                    isLoading={isCreating}
+                    onClick={() => {
                     propertyForm.trigger();
                     if (tab === 2 && propertyForm.formState.isValid){
                         // set tab 2 to complete
@@ -784,8 +833,8 @@ const PropertyCreation = () => {
                     }
                 }}
                 >
-                    Next
-                    <ArrowRight className="w-4 h-4 ml-1"/>
+                    {tab === 3 ? "Create" : "Next"}
+                    {tab === 3 ? <Plus className="w-4 h-4 ml-1"/> : <ArrowRight className="w-4 h-4 ml-1"/>}
                 </Button>
 
             </div>

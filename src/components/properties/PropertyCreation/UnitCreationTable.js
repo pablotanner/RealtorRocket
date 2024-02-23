@@ -43,7 +43,7 @@ const UnitCreationTable = ({ units, onChange }) => {
                     </Button>
                 </div>
                 <TableRow>
-                    <TableHead className="font-700">Unit</TableHead>
+                    <TableHead className="font-700 text-center">Unit</TableHead>
                     <TableHead>Unit Number</TableHead>
                     <TableHead>Floor</TableHead>
                     <TableHead>Unit Size</TableHead>
@@ -54,6 +54,7 @@ const UnitCreationTable = ({ units, onChange }) => {
                     <TableHead>Garages</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead>Rental Price</TableHead>
+                    <TableHead></TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>

@@ -5,12 +5,15 @@ import {Button} from "../../components/ui/button.tsx";
 import {useState} from "react";
 import {selectPropertiesByPropertyId} from "../../services/slices/objectSlice.js";
 import {useSelector} from "react-redux";
+import {useNavigate} from "react-router-dom";
+import {Plus} from "lucide-react";
 
 const Properties = (props) => {
     const {propertySelection} = props;
 
     const [view, setView] = useState("detailed") // ["detailed", "compact"]
 
+    const navigate = useNavigate()
 
     const properties = useSelector(state => selectPropertiesByPropertyId(state, propertySelection));
 
@@ -33,7 +36,17 @@ const Properties = (props) => {
                         Compact
                     </Button>
                 </div>
-                <CreateProperty trigger={<Button variant="gradient" className="w-fit">Add Property</Button>}/>
+                {
+                    /*
+                                    <CreateProperty trigger={<Button variant="gradient" className="w-fit">Add Property</Button>}/>
+                     */
+                }
+
+                <Button variant="gradient" className="w-fit"
+                        onClick={() => navigate("/properties/create")}
+                >
+                    <Plus size={24} className="mr-2"/>
+                   Create Property</Button>
 
             </div>
         )

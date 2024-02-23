@@ -132,7 +132,7 @@ const columns: ColumnDef<Unit>[] = [
         header: "Status",
         enableSorting: true,
         cell: ({ row }) => (
-            <div className="capitalize">{row.original.status.toLowerCase()}</div>
+            <div className="capitalize">{row.original.status?.toLowerCase()}</div>
         ),
         meta: {
             type: "string"
