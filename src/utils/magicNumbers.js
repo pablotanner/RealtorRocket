@@ -7,39 +7,39 @@ import {HiOutlineHomeModern} from "react-icons/hi2";
 
 
 export const RentalStatus = {
-    RENTED: "Rented",
-    VACANT: "Vacant",
-    OCCUPIED: "Occupied",
-    UNOCCUPIED: "Unoccupied",
-    PENDING: "Pending",
-    UNKNOWN: "Unknown",
+    "RENTED": "Rented",
+    "VACANT": "Vacant",
+    "OCCUPIED": "Occupied",
+    "UNOCCUPIED": "Unoccupied",
+    "PENDING": "Pending",
+    "UNKNOWN": "Unknown",
 }
 
 export const CivilStatus = {
-    SINGLE: "Single",
-    MARRIED: "Married",
-    DIVORCED: "Divorced",
-    WIDOWED: "Widowed",
-    SEPARATED: "Separated",
-    OTHER: "Other",
-    UNKNOWN: "Unknown",
+    "SINGLE": "Single",
+    "MARRIED": "Married",
+    "DIVORCED": "Divorced",
+    "WIDOWED": "Widowed",
+    "SEPARATED": "Separated",
+    "OTHER": "Other",
+    "UNKNOWN": "Unknown",
 }
 
 export const PaymentStatus = {
-    PAID: "Paid",
-    PENDING: "Pending",
-    LATE: "Late",
-    OVERDUE: "Overdue",
-    CANCELLED: "Cancelled",
-    REJECTED: "Rejected",
-    UNKNOWN: "Unknown",
+    "PAID": "Paid",
+    "PENDING": "Pending",
+    "LATE": "Late",
+    "OVERDUE": "Overdue",
+    "CANCELLED": "Cancelled",
+    "REJECTED": "Rejected",
+    "UNKNOWN": "Unknown",
 }
 
 export const PaymentFrequency = {
-    MONTHLY: "Monthly",
-    WEEKLY: "Weekly",
-    QUARTERLY: "Quarterly",
-    YEARLY: "Yearly",
+    "MONTHLY": "Monthly",
+    "WEEKLY": "Weekly",
+    "QUARTERLY": "Quarterly",
+    "YEARLY": "Yearly",
 }
 
 export const LeaseStatus = {
@@ -53,17 +53,17 @@ export const LeaseStatus = {
 
 
 export const RealEstateType = {
-    SINGLE_FAMILY_HOME: "Single Family Home",
-    MULTI_FAMILY_HOME: "Multi Family Home",
-    CONDO: "Condo",
-    APARTMENT: "Apartment",
-    TOWNHOUSE: "Townhouse",
-    LUXURY: "Luxury",
-    OFFICE: "Office",
-    RETAIL: "Retail",
-    INDUSTRIAL: "Industrial",
-    LAND: "Land",
-    FARM: "Farm"
+    "SINGLE_FAMILY_HOME": "Single Family Home",
+    "MULTI_FAMILY_HOME": "Multi Family Home",
+    "CONDO": "Condo",
+    "APARTMENT": "Apartment",
+    "TOWNHOUSE": "Townhouse",
+    "LUXURY": "Luxury",
+    "OFFICE": "Office",
+    "RETAIL": "Retail",
+    "INDUSTRIAL": "Industrial",
+    "LAND": "Land",
+    "FARM": "Farm"
 }
 
 

@@ -78,7 +78,7 @@ const FormItem = React.forwardRef<
 
   return (
     <FormItemContext.Provider value={{ id }}>
-      <div ref={ref} className={cn("space-y-2", className)} {...props} />
+      <div ref={ref} className={cn("space-y-2 w-full", className)} {...props} />
     </FormItemContext.Provider>
   )
 })
@@ -88,8 +88,18 @@ const FormGroup = React.forwardRef<
     HTMLDivElement,
     React.HTMLAttributes<HTMLDivElement>
     >(({ className, ...props }, ref) => {
-    const numberOfChildren = React.Children.count(props.children)
 
+  // eslint-disable-next-line react/prop-types
+  // @ts-expect-error we use custom prop eslint-disable-next-line react/prop-types
+      if (props?.useFlex) {
+        return (
+            <div ref={ref} className={cn(`flex flex-col sm:flex-row gap-4 `, className)} {...props} />
+        )
+      }
+
+
+
+    const numberOfChildren = React.Children.count(props.children)
 
       return (
         <div ref={ref} className={cn(`grid grid-cols-${numberOfChildren} gap-4`, className)} {...props} />
@@ -106,7 +116,7 @@ const FormLabel = React.forwardRef<
   return (
     <Label
       ref={ref}
-      className={cn(error && "text-destructive", className)}
+      className={cn(error && "text-destructive", "whitespace-nowrap", className)}
       htmlFor={formItemId}
       {...props}
     />

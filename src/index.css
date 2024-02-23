@@ -30,6 +30,13 @@ h2 {
     color: var(--foreground);
 }
 
+h3 {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    font-weight: 500;
+    color: var(--foreground);
+}
+
 select {
     @apply block;
     @apply w-full;

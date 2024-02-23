@@ -34,6 +34,9 @@ module.exports = {
       screens: {
         'xs': '475px',
       },
+      fontSize: {
+        "md": "1rem",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

@@ -14,6 +14,7 @@ import Financials from "./content/Financials.jsx";
 import Calendar from "./content/Calendar.jsx";
 import TenantProfile from "./content/TenantProfile.jsx";
 import Explorer from "./content/Explorer.jsx";
+import PropertyCreation from "./content/PropertyCreation.jsx";
 
 export const PropertiesPage = () => {
     return (
@@ -31,6 +32,12 @@ export const PropertyDetailPage = () => {
         <PageWrapper query={() => useGetPropertyQuery(id)}>
             <PropertyDetail/>
         </PageWrapper>
+    )
+}
+
+export const PropertyCreationPage = () => {
+    return (
+        <PropertyCreation/>
     )
 }
 
