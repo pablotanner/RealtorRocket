@@ -4,7 +4,7 @@ import {
     ArrowRight,
     BuildingIcon,
     Check,
-    CrossIcon,
+    CrossIcon, DoorClosed,
     Home,
     Image,
     Info,
@@ -78,7 +78,8 @@ const PropertyCreation = () => {
                     numOfBathrooms: "",
                     garages: "",
                     status: "",
-                    rentalPrice: ""
+                    rentalPrice: "",
+                    images: []
                 }
             ]
         },
@@ -146,7 +147,7 @@ const PropertyCreation = () => {
             </div>
         )
     }
-
+    
     return (
         <div className="flex flex-col gap-2 relative mb-16">
             <h1>
@@ -417,7 +418,7 @@ const PropertyCreation = () => {
                         <Card >
                             <CardHeader className="border-b-2 text-lg font-500 border-secondary p-4 flex flex-row items-center gap-2">
                                 <Image/>
-                                Images
+                                Property Images
                             </CardHeader>
                             <CardContent className="flex flex-col gap-4">
                                 <FormItem >
@@ -462,8 +463,6 @@ const PropertyCreation = () => {
                                         ))}
                                     </CarouselContent>
                                 </Carousel>
-
-
                             </CardContent>
                         </Card>
                     </form>
@@ -482,106 +481,249 @@ const PropertyCreation = () => {
 
                         {
                             unitMultiplicity === "single" ? (
-                                <Card>
-                                    <CardHeader className="border-b-2 text-lg font-500 border-secondary p-4 flex flex-row items-center gap-2">
-                                        <MapPin/>
-                                        Unit Information
-                                    </CardHeader>
-                                    <CardContent>
-                                        <FormGroup useFlex>
-                                            <FormField
-                                                control={propertyForm.control}
-                                                name="units[0].unitNumber"
-                                                render={({field}) => (
-                                                    <FormItem >
-                                                        <FormLabel>Unit Number</FormLabel>
-                                                        <FormControl>
-                                                            <Input placeholder="" {...field} />
-                                                        </FormControl>
-                                                        <FormMessage/>
-                                                    </FormItem>
-                                                )}
-                                            />
-
-                                            <FormField
-                                                control={propertyForm.control}
-                                                name="units[0].floor"
-                                                render={({field}) => (
-                                                    <FormItem >
-                                                        <FormLabel>Floor</FormLabel>
-                                                        <FormControl>
-                                                            <Input placeholder="0" {...field} />
-                                                        </FormControl>
-                                                        <FormMessage/>
-                                                    </FormItem>
-                                                )}
-                                            />
-
-
-                                            <FormField
-                                                control={propertyForm.control}
-                                                name="units[0].unitSize"
-                                                render={({field}) => (
-                                                    <FormItem >
-                                                        <FormLabel>State</FormLabel>
-                                                        <FormControl>
-                                                            <Input placeholder="Washington" {...field} />
-                                                        </FormControl>
-                                                        <FormMessage/>
-                                                    </FormItem>
-                                                )}
-                                            />
-
-
-
-                                        </FormGroup>
-
-                                        <FormGroup useFlex>
-                                            <FormField
-                                                control={propertyForm.control}
-                                                name="units[0].rentalPrice"
-                                                render={({field}) => (
-                                                    <FormItem >
-                                                        <FormLabel>Rental Price</FormLabel>
-                                                        <FormControl>
-                                                            <Input placeholder="2500" {...field} />
-                                                        </FormControl>
-                                                        <FormMessage/>
-                                                    </FormItem>
-                                                )}
-                                            />
-
-                                            <FormField
-                                                control={propertyForm.control}
-                                                name="units[0].status"
-                                                render={({field}) => (
-                                                    <FormItem >
-                                                        <FormLabel>Status</FormLabel>
-                                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <div className="flex flex-col gap-4">
+                                    <Card>
+                                        <CardHeader className="border-b-2 text-lg font-500 border-secondary p-4 flex flex-row items-center gap-2">
+                                            <Info/>
+                                            Unit Information
+                                        </CardHeader>
+                                        <CardContent>
+                                            <FormGroup useFlex>
+                                                <FormField
+                                                    control={propertyForm.control}
+                                                    name="units[0].unitNumber"
+                                                    render={({field}) => (
+                                                        <FormItem >
+                                                            <FormLabel>Unit Number</FormLabel>
                                                             <FormControl>
-                                                                <SelectTrigger>
-                                                                    <SelectValue placeholder="Select..." />
-                                                                </SelectTrigger>
+                                                                <Input placeholder="" {...field} />
                                                             </FormControl>
-                                                            <SelectContent>
-                                                                {
-                                                                    Object.keys(RentalStatus).map((type, index) => {
-                                                                        return (
-                                                                            <SelectItem key={index} value={type}>{RentalStatus[type]}</SelectItem>
-                                                                        )
-                                                                    })
-                                                                }
-                                                            </SelectContent>
-                                                        </Select>
-                                                        <FormMessage/>
-                                                    </FormItem>
-                                                )}
-                                            />
-                                        </FormGroup>
+                                                            <FormMessage/>
+                                                        </FormItem>
+                                                    )}
+                                                />
 
-                                    </CardContent>
+                                                <FormField
+                                                    control={propertyForm.control}
+                                                    name="units[0].floor"
+                                                    render={({field}) => (
+                                                        <FormItem >
+                                                            <FormLabel>Floor</FormLabel>
+                                                            <FormControl>
+                                                                <Input placeholder="0" {...field} />
+                                                            </FormControl>
+                                                            <FormMessage/>
+                                                        </FormItem>
+                                                    )}
+                                                />
 
-                                </Card>
+
+                                                <FormField
+                                                    control={propertyForm.control}
+                                                    name="units[0].unitSize"
+                                                    render={({field}) => (
+                                                        <FormItem >
+                                                            <FormLabel>Unit Size </FormLabel>
+                                                            <FormControl>
+                                                                <Input placeholder="100" type="number" {...field} />
+                                                            </FormControl>
+                                                            <FormMessage/>
+                                                        </FormItem>
+                                                    )}
+                                                />
+
+
+
+                                            </FormGroup>
+
+                                            <FormGroup useFlex>
+                                                <FormField
+                                                    control={propertyForm.control}
+                                                    name="units[0].rentalPrice"
+                                                    render={({field}) => (
+                                                        <FormItem >
+                                                            <FormLabel>Rental Price</FormLabel>
+                                                            <FormControl>
+                                                                <Input placeholder="2500" {...field} />
+                                                            </FormControl>
+                                                            <FormMessage/>
+                                                        </FormItem>
+                                                    )}
+                                                />
+
+                                                <FormField
+                                                    control={propertyForm.control}
+                                                    name="units[0].status"
+                                                    render={({field}) => (
+                                                        <FormItem >
+                                                            <FormLabel>Status</FormLabel>
+                                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                                <FormControl>
+                                                                    <SelectTrigger>
+                                                                        <SelectValue placeholder="Select..." />
+                                                                    </SelectTrigger>
+                                                                </FormControl>
+                                                                <SelectContent>
+                                                                    {
+                                                                        Object.keys(RentalStatus).map((type, index) => {
+                                                                            return (
+                                                                                <SelectItem key={index} value={type}>{RentalStatus[type]}</SelectItem>
+                                                                            )
+                                                                        })
+                                                                    }
+                                                                </SelectContent>
+                                                            </Select>
+                                                            <FormMessage/>
+                                                        </FormItem>
+                                                    )}
+                                                />
+                                            </FormGroup>
+
+                                        </CardContent>
+
+                                    </Card>
+
+                                    <Card>
+                                        <CardHeader className="border-b-2 text-lg font-500 border-secondary p-4 flex flex-row items-center gap-2">
+                                            <DoorClosed/>
+                                            Rooms and Garages
+                                        </CardHeader>
+                                        <CardContent>
+                                            <FormGroup useFlex>
+                                                <FormField
+                                                    control={propertyForm.control}
+                                                    name="units[0].numOfFloors"
+                                                    render={({field}) => (
+                                                        <FormItem >
+                                                            <FormLabel>Number of Floors</FormLabel>
+                                                            <FormControl>
+                                                                <Input placeholder="1" type="number" {...field} />
+                                                            </FormControl>
+                                                            <FormMessage/>
+                                                        </FormItem>
+                                                    )}
+                                                />
+
+                                                <FormField
+                                                    control={propertyForm.control}
+                                                    name="units[0].numOfRooms"
+                                                    render={({field}) => (
+                                                        <FormItem >
+                                                            <FormLabel>Number of Rooms</FormLabel>
+                                                            <FormControl>
+                                                                <Input placeholder="6" type="number" {...field} />
+                                                            </FormControl>
+                                                            <FormMessage/>
+                                                        </FormItem>
+                                                    )}
+                                                />
+
+
+                                            </FormGroup>
+
+                                            <FormGroup useFlex>
+                                                <FormField
+                                                    control={propertyForm.control}
+                                                    name="units[0].numOfBedrooms"
+                                                    render={({field}) => (
+                                                        <FormItem >
+                                                            <FormLabel>Number of Bedrooms</FormLabel>
+                                                            <FormControl>
+                                                                <Input placeholder="2" type="number" {...field} />
+                                                            </FormControl>
+                                                            <FormMessage/>
+                                                        </FormItem>
+                                                    )}
+                                                />
+
+                                                <FormField
+                                                    control={propertyForm.control}
+                                                    name="units[0].numOfBathrooms"
+                                                    render={({field}) => (
+                                                        <FormItem >
+                                                            <FormLabel>Number of Bathrooms</FormLabel>
+                                                            <FormControl>
+                                                                <Input placeholder="2" type="number" {...field} />
+                                                            </FormControl>
+                                                            <FormMessage/>
+                                                        </FormItem>
+                                                    )}
+                                                />
+
+                                                <FormField
+                                                    control={propertyForm.control}
+                                                    name="units[0].numOfGarages"
+                                                    render={({field}) => (
+                                                        <FormItem >
+                                                            <FormLabel>Number of Garages</FormLabel>
+                                                            <FormControl>
+                                                                <Input placeholder="2" type="number" {...field} />
+                                                            </FormControl>
+                                                            <FormMessage/>
+                                                        </FormItem>
+                                                    )}
+                                                />
+                                            </FormGroup>
+
+                                        </CardContent>
+
+                                    </Card>
+
+                                    <Card >
+                                        <CardHeader className="border-b-2 text-lg font-500 border-secondary p-4 flex flex-row items-center gap-2">
+                                            <Image/>
+                                            Unit Images
+                                        </CardHeader>
+                                        <CardContent className="flex flex-col gap-4">
+                                            <FormItem >
+                                                <FormLabel>Image URL</FormLabel>
+                                                <div className="flex flex-row gap-2">
+                                                    <Input placeholder="Enter an image URL here" className="max-w-96" value={imageUrlInput} onChange={(e) => setImageUrlInput(e.target.value)}/>
+                                                    <Button type="button" onClick={() => {
+                                                        propertyForm.setValue("units[0].images", [...propertyForm.getValues("units[0].images"), imageUrlInput])
+                                                        setImageUrlInput("")
+                                                    }}
+                                                            disabled={!imageUrlInput}
+                                                            variant="outline"
+                                                    >
+                                                        Add Image
+                                                    </Button>
+                                                </div>
+                                            </FormItem>
+
+
+
+                                            <Carousel className="w-full max-w-xs" hidden={!propertyForm.getValues("units[0].images")?.length}>
+                                                <div className="flex flex-row justify-between">
+                                                    <CarouselPrevious className="relative translate-x-0 translate-y-0 top-0 left-0" />
+                                                    <CarouselNext className="relative translate-x-0 translate-y-0 top-0 left-0" />
+                                                </div>
+                                                <CarouselContent>
+                                                    {propertyForm.getValues("units[0].images").map((image, index) => (
+                                                        <CarouselItem key={index}>
+                                                            <div className="p-1">
+                                                                <img src={image} alt={`Property Image ${index}`} className="w-full h-64 object-cover rounded-lg"/>
+                                                            </div>
+
+                                                            <Button className="w-full" type="button" variant="outline" onClick={() => {
+                                                                propertyForm.setValue("units[0].images", propertyForm.getValues("units[0].images").filter((_, i) => i !== index))
+                                                                propertyForm.trigger("units[0].images")
+                                                            }}
+                                                            >
+                                                                <XIcon className="w-4 h-4 mr-2"/>
+                                                                Delete
+                                                            </Button>
+                                                        </CarouselItem>
+                                                    ))}
+                                                </CarouselContent>
+                                            </Carousel>
+
+
+                                        </CardContent>
+                                    </Card>
+
+                                </div>
+
                             ) : ( <div>
 
                             </div>

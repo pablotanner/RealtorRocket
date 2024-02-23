@@ -26,6 +26,7 @@ export const propertySchema = z.object({
         garages:  zodNumberInputPipe(z.string().or(z.null()).or(z.number())),
         status: zodStringPipe(z.string().or(z.null())),
         rentalPrice:zodNumberInputPipe(z.string().or(z.null()).or(z.number())),
+        images: z.array(z.string().or(z.null())),
     })),
 })
 
