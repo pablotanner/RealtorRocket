@@ -1,11 +1,8 @@
-import PropertyCard from "../../components/properties/PropertyCard.js";
-import {CardContent, CardFooter} from "../../components/ui/card.tsx";
-import CreateProperty from "../../components/properties/PropertyCreation/CreateProperty.js";
-import PropertyStatus from "../../components/properties/PropertyStatus.js";
+
 import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {Button} from "../../components/ui/button.tsx";
-import {PlusIcon} from "lucide-react";
+import {Plus, PlusIcon} from "lucide-react";
 import RentalTable from "../../components/rentals/RentalTable.tsx";
 import {selectTenantByLeaseId, selectUnitsByPropertyId} from "../../services/slices/objectSlice.js";
 
@@ -13,13 +10,19 @@ import {selectTenantByLeaseId, selectUnitsByPropertyId} from "../../services/sli
 const Rentals = (props) => {
     const {propertySelection} = props;
 
+    const navigate = useNavigate();
     const units = useSelector((state) => selectUnitsByPropertyId(state, propertySelection));
 
 
     if (!units || units.length === 0)  return (
         <div className="flex flex-col gap-4">
             You don't have any rental properties yet. You can create one by adding a new property using the button below.
-            <CreateProperty trigger={<Button variant="gradient" className="w-fit"><PlusIcon className="w-4 h-4 mr-4"/> Create Property</Button>} />
+            <Button variant="gradient" className="w-fit"
+                    onClick={() => navigate("/properties/create")}
+            >
+                <Plus size={24} className="mr-2"/>
+                Create Property
+            </Button>
         </div>
     )
 

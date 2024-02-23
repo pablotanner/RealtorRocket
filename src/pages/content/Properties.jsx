@@ -1,4 +1,3 @@
-import CreateProperty from "../../components/properties/PropertyCreation/CreateProperty.js";
 import PropertyTable from "../../components/properties/PropertyTable.tsx";
 import DetailedPropertyTable from "../../components/properties/DetailedPropertyTable.js";
 import {Button} from "../../components/ui/button.tsx";
@@ -46,7 +45,8 @@ const Properties = (props) => {
                         onClick={() => navigate("/properties/create")}
                 >
                     <Plus size={24} className="mr-2"/>
-                   Create Property</Button>
+                   Create Property
+                </Button>
 
             </div>
         )
