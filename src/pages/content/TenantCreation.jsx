@@ -49,6 +49,7 @@ import {selectAllLeases, selectAllUnits} from "../../services/slices/objectSlice
 import {dateParser, moneyParser} from "../../utils/formatters.js";
 import {Alert, AlertDescription, AlertTitle} from "../../components/ui/alert.tsx";
 import RentalSelection from "../../components/rentals/RentalSelection.js";
+import {useCreateTenantMutation} from "../../services/api/tenantApi.js";
 
 
 const TenantCreation = () => {
@@ -58,6 +59,8 @@ const TenantCreation = () => {
     const leases = useSelector(state =>  selectAllLeases(state))
 
     const units = useSelector(state => selectAllUnits(state))
+
+    const [createTenant, {isLoading: isCreating}] = useCreateTenantMutation()
 
     const [tab, setTab] = useState(1)
 
@@ -151,7 +154,7 @@ const TenantCreation = () => {
         if (unitId === "" || unitId === null || unitId === undefined) return null
         const unit = units?.find(unit => unit.id === unitId)
 
-        if (unit.tenant) {
+        if (unit?.tenantId) {
             return (
                 <Alert variant="destructive">
                     <AlertTriangle  className="h-5 w-5"/>
@@ -188,7 +191,6 @@ const TenantCreation = () => {
 
 
     useEffect(() => {
-        /*
         if (tenantForm.formState.isValid && tenantForm.getValues("unitId") !== ""){
             setTabStatus(3, "complete")
         }
@@ -196,11 +198,8 @@ const TenantCreation = () => {
             setTabStatus(3, "incomplete")
             setTabStatus(4, "incomplete")
         }
-         */
-
         if (tenantForm.formState.isValid) {
             setTabStatus(2, "complete")
-            setTabStatus(3, "complete")
         }
         else {
             setTabStatus(2, "incomplete")
@@ -222,13 +221,31 @@ const TenantCreation = () => {
 
         if (leaseOption === "existing" && tenantForm.getValues("leaseId") === ""){
             setTabStatus(2, "incomplete")
+            setTabStatus(3, "incomplete")
+            setTabStatus(4, "incomplete")
         }
 
     }, [formValues, tenantForm.formState.isValid, tenantForm.getValues("unitId"), leaseOption])
 
 
     const onSubmit = (data) => {
-        console.log(data)
+        const body = {...data}
+        const leaseId = body.leaseId
+
+        if (leaseOption === "new") {
+            body.lease = body.leases[0]
+        }
+
+        delete body.leaseId
+        delete body.leases
+
+        createTenant({bodyData: body, leaseId: leaseId}).then((res) => {
+            if (res.error) console.log(res.error);
+            else {
+                navigate("/tenants/" + res?.data?.data?.id)
+            }
+
+        })
     }
 
 
@@ -734,7 +751,7 @@ const TenantCreation = () => {
                             <CardContent className="p-6 flex flex-col gap-4">
 
                                 <div>
-                                    To assign the tenant to a unit, please select a unit from the list below.
+                                    Please select a unit to assign to the tenant.
                                 </div>
 
                                 <UnitWarning/>
@@ -909,7 +926,7 @@ const TenantCreation = () => {
                 <Button
                     type={tab === 4 ? "submit" : "button"}
                     variant="dark"
-                    //isLoading={isCreating}
+                    isLoading={isCreating}
                     onClick={() => {
                     tenantForm.trigger(["firstName", "lastName", "email", "phone", "occupation", "income"])
 
