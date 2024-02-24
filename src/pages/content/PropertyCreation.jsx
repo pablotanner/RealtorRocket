@@ -152,10 +152,6 @@ const PropertyCreation = () => {
             units: mappedUnits
         }
 
-        console.log(body)
-        return;
-
-
         createProperty(body).then((res) => {
             if (res.error){
                 console.log(res.error)
