@@ -98,8 +98,7 @@ const columns: ColumnDef<Property>[] = [
         id: "units",
         header: "Units",
         enableSorting: true,
-        // @ts-expect-error - TS doesn't understand that we're using a custom accessor
-        cell: ({ row }) => <div className="lowercase">{row.getValue("units").length} units</div>,
+        cell: ({ row }) => <div className="lowercase">{row?.original?.units?.length} unit(s)</div>,
         meta: {
             type: "number"
         },
@@ -150,6 +149,8 @@ const columns: ColumnDef<Property>[] = [
 
 // eslint-disable-next-line react/prop-types
 const PropertyTable = ({ properties  }) => {
+
+    console.log(properties)
 
     return (
         <DataTable
