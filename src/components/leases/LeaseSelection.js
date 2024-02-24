@@ -9,7 +9,6 @@ import {cn} from "../../utils.ts";
 const LeaseSelection = ({onSelect, selected, leases, isLoading, ...props}) => {
     const [open, setOpen] = useState(false)
     const [leaseId, setLeaseId] = useState(selected?.id || selected)
-
     if (isLoading){
         return (
             <Button

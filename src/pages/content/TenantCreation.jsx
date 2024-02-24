@@ -12,7 +12,7 @@ import {
     ListIcon,
     MapPin, Plus,
     SquareIcon,
-    SquareStack, XIcon
+    SquareStack, UserSearch, XIcon
 } from "lucide-react";
 import {useForm, useWatch} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
@@ -30,7 +30,13 @@ import {
 import {Card, CardContent, CardHeader, CardTitle} from "../../components/ui/card.tsx";
 import {Input} from "../../components/ui/input.tsx";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../../components/ui/select.tsx";
-import {getRealEstateIcon, LeaseStatus, ListingStatus, PaymentFrequency} from "../../utils/magicNumbers.js";
+import {
+    CivilStatus,
+    getRealEstateIcon,
+    LeaseStatus,
+    ListingStatus,
+    PaymentFrequency
+} from "../../utils/magicNumbers.js";
 import {RealEstateType} from "../../utils/magicNumbers.js";
 import {Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious} from "../../components/ui/carousel.tsx";
 import {Button} from "../../components/ui/button.tsx";
@@ -39,9 +45,10 @@ import {useNavigate} from "react-router-dom";
 import {addDays} from "date-fns";
 import LeaseSelection from "../../components/leases/LeaseSelection.js";
 import {useSelector} from "react-redux";
-import {selectAllLeases} from "../../services/slices/objectSlice.js";
+import {selectAllLeases, selectAllUnits} from "../../services/slices/objectSlice.js";
 import {dateParser, moneyParser} from "../../utils/formatters.js";
 import {Alert, AlertDescription, AlertTitle} from "../../components/ui/alert.tsx";
+import RentalSelection from "../../components/rentals/RentalSelection.js";
 
 
 const TenantCreation = () => {
@@ -50,6 +57,7 @@ const TenantCreation = () => {
 
     const leases = useSelector(state =>  selectAllLeases(state))
 
+    const units = useSelector(state => selectAllUnits(state))
 
     const [tab, setTab] = useState(1)
 
@@ -123,18 +131,6 @@ const TenantCreation = () => {
         if (leaseId === "" || leaseId === null || leaseId === undefined) return null
         const lease = leases?.find(lease => lease.id === leaseId)
 
-        /*
-
-        if (lease.tenant) {
-            return (
-                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-                    <strong className="font-bold">Warning!</strong>
-                    <span className="block sm:inline"> This lease is already assigned to a tenant.</span>
-                </div>
-            )
-        }
-         */
-
         if (lease.tenant) {
             return (
                 <Alert variant="destructive">
@@ -148,8 +144,30 @@ const TenantCreation = () => {
                 </Alert>
             )
         }
-
     }
+
+    const UnitWarning = () => {
+        const unitId = tenantForm.getValues("unitId")
+        if (unitId === "" || unitId === null || unitId === undefined) return null
+        const unit = units?.find(unit => unit.id === unitId)
+
+        if (unit.tenant) {
+            return (
+                <Alert variant="destructive">
+                    <AlertTriangle  className="h-5 w-5"/>
+                    <AlertTitle>
+                        Warning!
+                    </AlertTitle>
+                    <AlertDescription>
+                        This unit is already assigned to a tenant. If you proceed, the unit will be reassigned to the new tenant.
+                    </AlertDescription>
+                </Alert>
+            )
+        }
+    }
+
+    const selectedUnit = units.find(unit => unit.id === tenantForm.getValues("unitId"))
+
 
 
     function setTabStatus(index, status){
@@ -163,13 +181,14 @@ const TenantCreation = () => {
 
     const formValues = useWatch({
             control: tenantForm.control,
-            name: ["firstName", "lastName", "email", "phone", "occupation", "income", "leases[0].startDate", "leases[0].endDate", "leases[0].rentalPrice", "leases[0].paymentFrequency", "leases[0].status"]
+            name: ["firstName", "lastName", "email", "phone", "occupation", "civilStatus", "income", "leases[0].startDate", "leases[0].endDate", "leases[0].rentalPrice", "leases[0].paymentFrequency", "leases[0].status"]
         }
     )
 
 
 
     useEffect(() => {
+        /*
         if (tenantForm.formState.isValid && tenantForm.getValues("unitId") !== ""){
             setTabStatus(3, "complete")
         }
@@ -177,9 +196,11 @@ const TenantCreation = () => {
             setTabStatus(3, "incomplete")
             setTabStatus(4, "incomplete")
         }
+         */
 
         if (tenantForm.formState.isValid) {
             setTabStatus(2, "complete")
+            setTabStatus(3, "complete")
         }
         else {
             setTabStatus(2, "incomplete")
@@ -363,6 +384,33 @@ const TenantCreation = () => {
                                     />
                                 </FormGroup>
 
+                                <FormField
+                                    control={tenantForm.control}
+                                    name="civilStatus"
+                                    render={({field}) => (
+                                        <FormItem  >
+                                            <FormLabel>Civil Status</FormLabel>
+                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                <FormControl>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Select..." />
+                                                    </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent>
+                                                       {
+                                                           Object.keys(CivilStatus).map((status, index) => {
+                                                               return (
+                                                                   <SelectItem key={index} value={status}>{CivilStatus[status]}</SelectItem>
+                                                               )
+                                                           })
+                                                       }
+                                                </SelectContent>
+                                            </Select>
+                                            <FormMessage/>
+                                        </FormItem>
+                                    )}
+                                />
+
                             </CardContent>
                         </Card>
 
@@ -384,7 +432,7 @@ const TenantCreation = () => {
                         <Card>
                             <CardHeader className="border-b-2 text-lg font-500 border-secondary p-4 flex flex-row items-center gap-2">
                                 <ListIcon/>
-                                Unit Type
+                                Lease Assignment
                             </CardHeader>
                             <CardContent className="p-6 flex flex-col sm:flex-row gap-4">
 
@@ -463,6 +511,7 @@ const TenantCreation = () => {
                                                         tenantForm.setValue("leases[0].rentalPrice", "")
                                                         tenantForm.setValue("leases[0].paymentFrequency", "MONTHLY")
                                                         tenantForm.setValue("leases[0].status", "ACTIVE")
+                                                        tenantForm.setValue("leases[0].notes", "")
                                                         tenantForm.setValue("leaseId", "")
                                                         tenantForm.trigger()
                                                         return
@@ -474,6 +523,8 @@ const TenantCreation = () => {
                                                     tenantForm.setValue("leases[0].rentalPrice", lease.rentalPrice)
                                                     tenantForm.setValue("leases[0].paymentFrequency", lease.paymentFrequency)
                                                     tenantForm.setValue("leases[0].status", lease.status)
+                                                    tenantForm.setValue("leases[0].notes", lease.notes)
+
                                                     tenantForm.trigger()
                                                 }} leases={leases} />
 
@@ -630,6 +681,28 @@ const TenantCreation = () => {
                                                     )}
                                                 />
                                             </FormGroup>
+
+                                            <FormField
+                                                control={tenantForm.control}
+                                                name="leases[0].notes"
+                                                render={({field}) => (
+                                                    <FormItem  >
+                                                        <FormLabel>Notes</FormLabel>
+                                                        <FormControl>
+                                                            {
+                                                                leaseOption === "new" ? (
+                                                                    <Input placeholder="Enter any relevant notes here" {...field} />
+                                                                ) : (
+                                                                    <FormValue>
+                                                                        {field.value}
+                                                                    </FormValue>
+                                                                )
+                                                            }
+                                                        </FormControl>
+                                                        <FormMessage/>
+                                                    </FormItem>
+                                                )}
+                                            />
                                         </>
                                     ) : null
                                 }
@@ -653,7 +726,87 @@ const TenantCreation = () => {
                 <Form {...tenantForm}>
                     <form className="flex flex-col flex-wrap gap-4 overflow-auto">
 
-                        Testt tab 3
+                        <Card>
+                            <CardHeader className="border-b-2 text-lg font-500 border-secondary p-4 flex flex-row items-center gap-2">
+                                <UserSearch/>
+                                Unit Assignment
+                            </CardHeader>
+                            <CardContent className="p-6 flex flex-col gap-4">
+
+                                <div>
+                                    To assign the tenant to a unit, please select a unit from the list below.
+                                </div>
+
+                                <UnitWarning/>
+
+                                <RentalSelection onSelect={(id) => {
+                                    if (id === "" || id === null || id === undefined){
+                                        tenantForm.setValue("unitId", "")
+                                        tenantForm.trigger(["unitId"])
+                                        return
+                                    }
+                                    tenantForm.setValue("unitId", id)
+                                    tenantForm.trigger(["unitId"])
+                                }} selected={tenantForm.getValues("unitId")} units={units}  />
+
+                                {
+                                selectedUnit ? (
+                                    <>
+                                        <FormGroup >
+                                            <FormItem>
+                                                <FormLabel>Unit Identifier</FormLabel>
+                                                <FormValue>
+                                                    <p>
+                                                        {selectedUnit?.unitIdentifier}
+
+                                                    </p>
+                                                </FormValue>
+                                            </FormItem>
+
+                                            <FormItem>
+                                                <FormLabel>Current Tenant</FormLabel>
+                                                <FormValue>
+                                                    <p>
+                                                        {selectedUnit?.tenant ? selectedUnit?.tenant?.firstName + " " + selectedUnit?.tenant?.lastName : "N/A"}
+
+                                                    </p>
+                                                </FormValue>
+                                            </FormItem>
+                                        </FormGroup>
+
+                                        <FormGroup >
+                                            <FormItem>
+                                                <FormLabel>Unit Number</FormLabel>
+                                                <FormValue>
+                                                    <p>
+                                                        {selectedUnit?.unitNumber || "N/A"}
+
+                                                    </p>
+                                                </FormValue>
+                                            </FormItem>
+
+                                            <FormItem>
+                                                <FormLabel>Floor</FormLabel>
+                                                <FormValue>
+                                                    <p>
+                                                        {selectedUnit?.floor !== null ? selectedUnit?.floor : "N/A"}
+                                                    </p>
+                                                </FormValue>
+                                            </FormItem>
+                                        </FormGroup>
+
+
+                                    </>
+
+                                ) : null
+
+
+                                }
+
+
+
+                            </CardContent>
+                        </Card>
 
                     </form>
                 </Form>
@@ -671,7 +824,63 @@ const TenantCreation = () => {
                         Confirmation
                     </CardHeader>
                     <CardContent className="p-6 flex flex-col gap-4">
-                        Create Tenant revieww
+
+                        You are about to create a tenant with the following details. Please review and confirm.
+
+                        <div className="grid grid-cols-2">
+                            <div className="">
+                                <p className="font-400 text-gray-500">
+                                    Tenant Name
+                                </p>
+                                <p className="font-500 text-off-black text-lg">
+                                    {tenantForm.getValues("firstName")} {tenantForm.getValues("lastName")}
+                                </p>
+                            </div>
+
+
+                            <div className="">
+                                <p className="font-400 text-gray-500">
+                                    Lease Assignment
+                                </p>
+                                <p className="font-500 text-off-black text-lg">
+                                    {leaseOption === "new" ? "New Lease" : "Existing Lease"}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-2">
+                            <div className="">
+                                <p className="font-400 text-gray-500">
+                                    Lease Dates
+                                </p>
+                                <p className="font-500 text-off-black text-lg">
+                                    {dateParser(tenantForm.getValues("leases[0].startDate"))} - {dateParser(tenantForm.getValues("leases[0].endDate"))}
+                                </p>
+                            </div>
+
+
+                            <div className="">
+                                <p className="font-400 text-gray-500">
+                                    Payment Frequency
+                                </p>
+                                <p className="font-500 text-off-black text-lg">
+                                    {PaymentFrequency[tenantForm.getValues("leases[0].paymentFrequency")]}
+                                </p>
+                            </div>
+                        </div>
+
+
+                        <div className="grid grid-cols-1">
+                            <div className="">
+                                <p className="font-400 text-gray-500">
+                                    Unit Assignment
+                                </p>
+                                <p className="font-500 text-off-black text-lg">
+                                    {selectedUnit ? selectedUnit.unitIdentifier : "N/A"}
+                                </p>
+                            </div>
+
+                        </div>
 
 
 
@@ -682,7 +891,7 @@ const TenantCreation = () => {
             </div>
 
 
-            <div className="fixed bottom-0 left-0 z-50 w-full flex flex-row bg-white px-6 h-16 items-center border-y-2 border-secondary justify-between">
+            <div className="fixed bottom-0 left-0 z-20 w-full flex flex-row bg-white px-6 h-16 items-center border-y-2 border-secondary justify-between">
                 <Button
                     variant="outline"
                     disabled={tab === 1}

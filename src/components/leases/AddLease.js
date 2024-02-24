@@ -170,7 +170,7 @@ const AddLease = ({unit, tenant, ...props}) => {
                                             <RentalSelection onSelect={(unitId) => {
                                                 leaseForm.setValue('unitId', unitId)
                                                 leaseForm.trigger('unitId')
-                                            }} selected={unit} units={units}
+                                            }} selected={unit} units={units?.data}
                                                              className="w-full"
                                             />
                                         </FormControl>

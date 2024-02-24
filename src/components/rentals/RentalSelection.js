@@ -25,7 +25,7 @@ const RentalSelection = ({onSelect, selected, units, ...props}) => {
 
                 >
                     {unitId
-                        ? (units?.data?.find((unit) => unit.id === parseInt(unitId))?.unitIdentifier || "Unit " + unitId)
+                        ? (units?.find((unit) => unit.id === parseInt(unitId))?.unitIdentifier || "Unit " + unitId)
                         : "Select Unit..."}
                     <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
@@ -34,8 +34,8 @@ const RentalSelection = ({onSelect, selected, units, ...props}) => {
                 <Command >
                     <CommandInput placeholder="Search Unit" />
                     <CommandEmpty>No Unit found.</CommandEmpty>
-                    <CommandGroup>
-                        {units?.data?.map((unit) => (
+                    <CommandGroup className="max-h-[300px] overflow-auto z-[100]">
+                        {units?.map((unit) => (
                             <CommandItem
                                 key={unit.id}
                                 value={unit.id}
