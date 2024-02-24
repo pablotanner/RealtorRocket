@@ -1,13 +1,15 @@
 import {Button} from "../../components/ui/button.tsx";
-import CreateTenant from "../../components/tenants/TenantCreation/CreateTenant.js";
-import {UserRoundPlus} from "lucide-react";
+import {Plus, UserRoundPlus} from "lucide-react";
 import {selectTenantsByPropertyId} from "../../services/slices/objectSlice.js";
 import {useSelector} from "react-redux";
 import TenantTable from "../../components/tenants/TenantTable.tsx";
+import {useNavigate} from "react-router-dom";
 
 
 const Tenants = (props) => {
     const {propertySelection} = props;
+
+    const navigate = useNavigate()
 
     const tenants = useSelector(state => selectTenantsByPropertyId(state,propertySelection))
 
@@ -19,7 +21,13 @@ const Tenants = (props) => {
             </h1>
             <div className="flex flex-row items-center gap-4 flex-wrap sm:flex-nowrap justify-between">
                 The table below shows all your tenants. To view a tenant's profile page, click on their profile picture.
-                <CreateTenant trigger={<Button variant="gradient"><UserRoundPlus className="w-4 h-4 mr-3"/> Create Tenant</Button>} />
+
+                <Button variant="gradient" className="w-fit"
+                        onClick={() => navigate("/tenants/create")}
+                >
+                    <Plus size={24} className="mr-2"/>
+                    Create Tenant
+                </Button>
             </div>
 
             <TenantTable tenants={tenants} />
