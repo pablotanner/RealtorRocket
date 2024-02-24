@@ -36,40 +36,50 @@ function calculatePaymentDates(startDate, endDate, paymentFrequency) {
 }
 
 export async function createLeaseWithPaymentSchedule(leaseData, userId) {
-    const paymentDates = calculatePaymentDates(
-    leaseData.startDate,
-    leaseData.endDate,
-    leaseData.paymentFrequency
-  );
+    let paymentDates = [];
+    if (leaseData.status === "ACTIVE") {
+        paymentDates = calculatePaymentDates(
+            leaseData.startDate,
+            leaseData.endDate,
+            leaseData.paymentFrequency
+        );
+    }
+
 
   const data = {...leaseData};
 
   delete data.unitId;
   delete data.tenantId;
 
-  const lease = await prisma.lease.create({
-    data: {
-      ...data,
-      tenant: {
-        connect: {
-          id: leaseData.tenantId,
-        },
-      },
-      unit: {
-            connect: {
-                id: leaseData.unitId,
-            },
-        },
-      realtor: {
-            connect: {
-                userId: userId,
-            },
-        },
-    },
-  });
+  let lease, paymentSchedules;
+  try {
+      lease = await prisma.lease.create({
+          data: {
+              ...data,
+              tenant: {
+                  connect: {
+                      id: leaseData.tenantId,
+                  },
+              },
+              unit: {
+                  connect: {
+                      id: leaseData.unitId,
+                  },
+              },
+              realtor: {
+                  connect: {
+                      userId: userId,
+                  },
+              },
+          },
+      });
+  } catch (error) {
+        console.log("failed to create lease", error);
+  }
+
 
   try {
-    const paymentSchedules = await prisma.leasePaymentSchedule.createMany({
+    paymentSchedules = await prisma.leasePaymentSchedule.createMany({
       data: paymentDates.map((date) => ({
         dueDate: date,
         amountDue: leaseData.rentalPrice,

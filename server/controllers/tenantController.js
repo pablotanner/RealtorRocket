@@ -6,10 +6,10 @@ import {createLeaseWithPaymentSchedule} from "../services/leaseService.js";
 export async function createTenant(req, res) {
     const {leaseId} = req.query;
     const tenantData = {...req.body};
+    const unitId = tenantData.unitId;
     // Remove Lease data from tenantdata
     delete tenantData.lease;
     delete tenantData.unitId;
-
 
     let newTenant = null;
     let lease = null;
@@ -24,10 +24,17 @@ export async function createTenant(req, res) {
                             {connect: {id: parseInt(leaseId)}} : null
 
                     )
-                }
+                },
+                unit: {
+                    ...(unitId ?
+                            {connect: {id: parseInt(unitId)}} : null
+
+                    )
+                },
             },
             include: {
-                leases: true
+                leases: true,
+                unit: true
             }
         });
     }
@@ -73,7 +80,8 @@ export async function getTenants(req, res) {
                 createdAt: "desc"
             },
             include: {
-                leases: true
+                leases: true,
+                unit: true
             }
         });
 
@@ -98,7 +106,8 @@ export async function getTenant(req, res) {
                 }
             },
             include: {
-                leases: true
+                leases: true,
+                unit: true
             }
         });
 
