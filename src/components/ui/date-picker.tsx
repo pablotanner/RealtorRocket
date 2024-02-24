@@ -92,6 +92,7 @@ export function DatePicker({isRange, initialStartDate, initialEndDate, onChange,
                         !(date) && "text-muted-foreground", className
                     )}
                     disabled={disabled}
+                    type="button"
                     {...props}
                 >
                     <CalendarIcon className="mr-2 h-4 w-4" />

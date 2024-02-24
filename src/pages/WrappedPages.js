@@ -15,6 +15,7 @@ import Calendar from "./content/Calendar.jsx";
 import TenantProfile from "./content/TenantProfile.jsx";
 import Explorer from "./content/Explorer.jsx";
 import PropertyCreation from "./content/PropertyCreation.jsx";
+import TenantCreation from "./content/TenantCreation.jsx";
 
 export const PropertiesPage = () => {
     return (
@@ -56,6 +57,13 @@ export const TenantsPage = () => {
         </PageWrapper>
     )
 }
+
+export const TenantCreationPage = () => {
+    return (
+        <TenantCreation/>
+    )
+}
+
 
 export const TenantProfilePage = () => {
     const {id} = useParams();

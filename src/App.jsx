@@ -15,7 +15,7 @@ import {
     PropertyDetailPage,
     RentalDetailPage,
     RentalsPage,
-    TenantsPage, CalendarPage, TenantProfilePage, ExplorerPage, PropertyCreationPage
+    TenantsPage, CalendarPage, TenantProfilePage, ExplorerPage, PropertyCreationPage, TenantCreationPage
 } from "./pages/WrappedPages.js";
 
 
@@ -46,6 +46,7 @@ const AppContent = () => {
                 <Route path="/properties/:id" element={<PropertyDetailPage/>} />
                 <Route path="/properties" element={<PropertiesPage/>} />
                 <Route path="/tenants" element={<TenantsPage/>} />
+                <Route path="/tenants/create" element={<TenantCreationPage/>} />
                 <Route path="/tenants/:id" element={<TenantProfilePage/>} />
                 <Route path="/rentals" element={<RentalsPage/>}/>
                 <Route path="/rentals/:id" element={<RentalDetailPage/>} />

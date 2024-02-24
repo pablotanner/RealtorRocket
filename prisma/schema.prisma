@@ -271,6 +271,7 @@ model Tenant {
   leases              Lease[]
   maintenanceRequests MaintenanceRequest[]
   rentPayments        RentPayment[]
+  unit                Unit[]
 
   @@map("tenant")
 }
@@ -438,6 +439,10 @@ model Unit {
   // Define a many-to-one relationship between Unit and RealEstate.
   realEstateObject   RealEstateObject @relation(fields: [realEstateObjectId], references: [id], onDelete: Cascade)
   realEstateObjectId Int              @map("real_estate_object_id")
+
+  // current tenant
+  tenant   Tenant? @relation(fields: [tenantId], references: [id])
+  tenantId Int?    @map("tenant_id")
 
   // The lease(s) for the unit (if any, including past leases)
   leases   Lease[]

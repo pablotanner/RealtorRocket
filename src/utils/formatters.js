@@ -63,7 +63,7 @@ export const zodDateInputPipe = (zodPipe) =>
         })
         //.transform((value) => (value === null ? null : new Date(value)))
         .transform((value) => (value === null ? null :
-            getDateTimeString(value))
+            getDateTimeString(value) )
         )
         .pipe(zodPipe);
 
