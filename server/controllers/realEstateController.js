@@ -41,13 +41,14 @@ export async function createProperty(req, res) {
         const propertyTitle = req.body.title;
 
 
-
+        let index = 0;
         for (let unit of req.body.units) {
+            index++;
             for (let key in unit) {
                 if (unit[key] === "") {
                     unit[key] = null;
                 }
-                unit.unitIdentifier = req.body.units.length > 1 ? generateMultiUnitIdentifier(propertyTitle, unit.unitNumber) : generateSingleUnitIdentifier(propertyTitle);
+                unit.unitIdentifier = req.body.units.length > 1 ? generateMultiUnitIdentifier(propertyTitle, unit.unitNumber || index) : generateSingleUnitIdentifier(propertyTitle);
             }
         }
 
