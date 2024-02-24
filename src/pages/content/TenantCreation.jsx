@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import {
+    AlertTriangle, Archive,
     ArrowLeft,
     ArrowRight, BadgeCheck,
     BuildingIcon,
@@ -16,7 +17,16 @@ import {
 import {useForm, useWatch} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {propertySchema, tenantSchema} from "../../utils/formSchemas.js";
-import {Form, FormControl, FormField, FormGroup, FormItem, FormLabel, FormMessage} from "../../components/ui/form.tsx";
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormGroup,
+    FormItem,
+    FormLabel,
+    FormMessage,
+    FormValue
+} from "../../components/ui/form.tsx";
 import {Card, CardContent, CardHeader, CardTitle} from "../../components/ui/card.tsx";
 import {Input} from "../../components/ui/input.tsx";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../../components/ui/select.tsx";
@@ -27,12 +37,18 @@ import {Button} from "../../components/ui/button.tsx";
 import {useCreatePropertyMutation} from "../../services/api/propertyApi.js";
 import {useNavigate} from "react-router-dom";
 import {addDays} from "date-fns";
+import LeaseSelection from "../../components/leases/LeaseSelection.js";
+import {useSelector} from "react-redux";
+import {selectAllLeases} from "../../services/slices/objectSlice.js";
+import {dateParser, moneyParser} from "../../utils/formatters.js";
+import {Alert, AlertDescription, AlertTitle} from "../../components/ui/alert.tsx";
 
 
 const TenantCreation = () => {
 
     const navigate = useNavigate();
 
+    const leases = useSelector(state =>  selectAllLeases(state))
 
 
     const [tab, setTab] = useState(1)
@@ -51,7 +67,7 @@ const TenantCreation = () => {
         {
             title: "Existing Lease",
             description: "Select this option if you want to assign an existing lease to the tenant",
-            icon: <SquareStack className="w-6 h-6" />,
+            icon: <Archive className="w-6 h-6" />,
             value: "existing"
         }]
 
@@ -102,6 +118,39 @@ const TenantCreation = () => {
         }
     ])
 
+    const LeaseWarning = () => {
+        const leaseId = tenantForm.getValues("leaseId")
+        if (leaseId === "" || leaseId === null || leaseId === undefined) return null
+        const lease = leases?.find(lease => lease.id === leaseId)
+
+        /*
+
+        if (lease.tenant) {
+            return (
+                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                    <strong className="font-bold">Warning!</strong>
+                    <span className="block sm:inline"> This lease is already assigned to a tenant.</span>
+                </div>
+            )
+        }
+         */
+
+        if (lease.tenant) {
+            return (
+                <Alert variant="destructive">
+                    <AlertTriangle  className="h-5 w-5"/>
+                    <AlertTitle>
+                        Warning!
+                    </AlertTitle>
+                    <AlertDescription>
+                        This lease is already assigned to a tenant. If you proceed, the lease will be reassigned to the new tenant.
+                    </AlertDescription>
+                </Alert>
+            )
+        }
+
+    }
+
 
     function setTabStatus(index, status){
         const newTabStates = [...tabStates]
@@ -129,7 +178,6 @@ const TenantCreation = () => {
             setTabStatus(4, "incomplete")
         }
 
-
         if (tenantForm.formState.isValid) {
             setTabStatus(2, "complete")
         }
@@ -151,7 +199,11 @@ const TenantCreation = () => {
             setTabStatus(4, "incomplete")
         }
 
-    }, [formValues, tenantForm.formState.isValid, tenantForm.getValues("unitId")])
+        if (leaseOption === "existing" && tenantForm.getValues("leaseId") === ""){
+            setTabStatus(2, "incomplete")
+        }
+
+    }, [formValues, tenantForm.formState.isValid, tenantForm.getValues("unitId"), leaseOption])
 
 
     const onSubmit = (data) => {
@@ -161,7 +213,8 @@ const TenantCreation = () => {
 
 
     const StepTab = ({title, status, index}) => {
-        const isDisabled = index !== 1 && tabStates[index - 2].status !== "complete"
+        let isDisabled = index !== 1 && tabStates[index - 2].status !== "complete"
+
 
         return (
             <div
@@ -341,7 +394,17 @@ const TenantCreation = () => {
                                             key={index}
                                             data-active={option.value === leaseOption}
                                             className="rounded-lg flex-shrink relative border-secondary border-2 shadow-md p-4 flex bg-secondary/20 items-center justify-center cursor-pointer data-[active=true]:bg-gradient-to-br from-indigo-50 to-white data-[active=true]:text-indigo-600 data-[active=true]:border-primary-dark"
-                                            onClick={() => setLeaseOption(option.value)}
+                                            onClick={() => {
+                                                if (leaseOption === option.value) return
+
+                                                setLeaseOption(option.value);
+                                                tenantForm.setValue("leaseId", "");
+                                                tenantForm.trigger(["leaseId"])
+
+
+
+                                            }
+                                        }
                                         >
                                             <div className="text-xl font-600 flex flex-col gap-3">
                                                 <div className="p-2 bg-white border border-secondary rounded-lg w-fit shadow-sm">
@@ -370,139 +433,212 @@ const TenantCreation = () => {
                         </Card>
 
 
-                        <Card className="" hidden={leaseOption !== "new"}>
+                        <Card className="">
                             <CardHeader className="border-b-2 text-lg font-500 border-secondary p-4 flex flex-row items-center gap-2">
-                                <Info/>
-                                Create New Lease
+                                {
+                                    leaseOption === "new" ? <Plus className="w-6 h-6" /> : <Archive className="w-6 h-6" />
+                                }
+
+                                {
+                                    leaseOption === "new" ? "New Lease" : "Existing Lease"
+                                }
+
                             </CardHeader>
-                            <CardContent className="flex flex-col gap-4">
+                            <CardContent className="flex flex-col gap-4 p-4">
 
-                                <p className="mt-4">
-                                    If you want to automatically generate planned payments for the lease, please select the payment frequency, rental price, and set the lease status to active.
-                                </p>
+                                {
+                                    leaseOption === "new" ? (
+                                        <p className="">
+                                            If you want to automatically generate planned payments for the lease, please select the payment frequency, rental price, and set the lease status to active.
+                                        </p> )
+                                        :
+                                        (
+                                            <div className="flex flex-col gap-4">
+                                                Please select an existing lease to assign to the tenant.
 
-                                <FormGroup useFlex>
+                                                <LeaseSelection selected={tenantForm.getValues("leaseId")} onSelect={(id) => {
+                                                    if (id === "" || id === null || id === undefined){
+                                                        tenantForm.setValue("leases[0].startDate", "")
+                                                        tenantForm.setValue("leases[0].endDate", "")
+                                                        tenantForm.setValue("leases[0].rentalPrice", "")
+                                                        tenantForm.setValue("leases[0].paymentFrequency", "MONTHLY")
+                                                        tenantForm.setValue("leases[0].status", "ACTIVE")
+                                                        tenantForm.setValue("leaseId", "")
+                                                        tenantForm.trigger()
+                                                        return
+                                                    }
+                                                    const lease = leases.find(lease => lease.id === id)
+                                                    tenantForm.setValue("leaseId", lease.id)
+                                                    tenantForm.setValue("leases[0].startDate", lease.startDate)
+                                                    tenantForm.setValue("leases[0].endDate", lease.endDate)
+                                                    tenantForm.setValue("leases[0].rentalPrice", lease.rentalPrice)
+                                                    tenantForm.setValue("leases[0].paymentFrequency", lease.paymentFrequency)
+                                                    tenantForm.setValue("leases[0].status", lease.status)
+                                                    tenantForm.trigger()
+                                                }} leases={leases} />
 
-                                    <FormField
-                                        control={tenantForm.control}
-                                        name="leases[0].startDate"
-                                        render={({field}) => (
-                                            <FormItem  >
-                                                <FormLabel>Start Date *</FormLabel>
-                                                <FormControl onChange={() => tenantForm.trigger("leases[0].startDate")}>
-                                                    <Input type="date"  {...field} />
-                                                </FormControl>
-                                                <FormMessage/>
-                                            </FormItem>
-                                        )}
-                                    />
 
-                                    <FormField
-                                        control={tenantForm.control}
-                                        name="leases[0].endDate"
-                                        render={({field}) => (
-                                            <FormItem  >
-                                                <FormLabel>End Date *</FormLabel>
-                                                <FormControl onChange={() => tenantForm.trigger("leases[0].endDate")}>
-                                                    <Input  type="date" {...field} />
-                                                </FormControl>
-                                                <FormMessage/>
-                                            </FormItem>
-                                        )}
-                                    />
+                                                <LeaseWarning/>
+                                            </div>
 
-                                </FormGroup>
+                                        )
+                                }
 
-                                <FormGroup useFlex>
+                                {
+                                    leaseOption === "new" || (leaseOption === "existing" && tenantForm.getValues("leaseId") !== "")  ? (
+                                        <>
 
-                                    <FormField
-                                        control={tenantForm.control}
-                                        name="leases[0].rentalPrice"
-                                        render={({field}) => (
-                                            <FormItem  >
-                                                <FormLabel>Rental Price</FormLabel>
-                                                <FormControl>
-                                                    <Input placeholder="2000"  type="number" {...field} />
-                                                </FormControl>
-                                                <FormMessage/>
-                                            </FormItem>
-                                        )}
-                                    />
+                                            <FormGroup useFlex  >
 
-                                    <FormField
-                                        control={tenantForm.control}
-                                        name="leases[0].paymentFrequency"
-                                        render={({field}) => (
-                                            <FormItem  >
-                                                <FormLabel>Payment Frequency *</FormLabel>
-                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                                    <FormControl>
-                                                        <SelectTrigger>
-                                                            <SelectValue placeholder="Select..." />
-                                                        </SelectTrigger>
-                                                    </FormControl>
-                                                    <SelectContent>
-                                                        {
-                                                            Object.keys(PaymentFrequency).map((frequency, index) => {
-                                                                return (
-                                                                    <SelectItem key={index} value={frequency}>{PaymentFrequency[frequency]}</SelectItem>
+                                                <FormField
+                                                    control={tenantForm.control}
+                                                    name="leases[0].startDate"
+                                                    render={({field}) => (
+                                                        <FormItem  >
+                                                            <FormLabel>Start Date *</FormLabel>
+                                                            <FormControl onChange={() => tenantForm.trigger("leases[0].startDate")}>
+                                                                {
+                                                                    leaseOption === "new" ? (
+                                                                        <Input type="date"  {...field} />
+                                                                    ) : (
+                                                                        <FormValue>{dateParser(field.value)}</FormValue>
+                                                                    )
+                                                                }
+                                                            </FormControl>
+                                                            <FormMessage/>
+                                                        </FormItem>
+                                                    )}
+                                                />
+
+                                                <FormField
+                                                    control={tenantForm.control}
+                                                    name="leases[0].endDate"
+                                                    render={({field}) => (
+                                                        <FormItem  >
+                                                            <FormLabel>End Date *</FormLabel>
+                                                            <FormControl onChange={() => tenantForm.trigger("leases[0].endDate")}>
+                                                                {
+                                                                    leaseOption === "new" ? (
+                                                                        <Input type="date"  {...field} />
+                                                                    ) : (
+                                                                        <FormValue>{dateParser(field.value)}</FormValue>
+                                                                    )
+                                                                }
+                                                            </FormControl>
+                                                            <FormMessage/>
+                                                        </FormItem>
+                                                    )}
+                                                />
+
+                                            </FormGroup>
+
+                                            <FormGroup useFlex>
+
+                                                <FormField
+                                                    control={tenantForm.control}
+                                                    name="leases[0].rentalPrice"
+                                                    render={({field}) => (
+                                                        <FormItem  >
+                                                            <FormLabel>Rental Price</FormLabel>
+                                                            <FormControl>
+                                                                {
+                                                                    leaseOption === "new" ? (
+                                                                        <Input placeholder="2000"  type="number" {...field} />
+                                                                    ) : (
+                                                                        <FormValue>{moneyParser(field.value)}</FormValue>
+                                                                    )
+                                                                }
+                                                            </FormControl>
+                                                            <FormMessage/>
+                                                        </FormItem>
+                                                    )}
+                                                />
+
+                                                <FormField
+                                                    control={tenantForm.control}
+                                                    name="leases[0].paymentFrequency"
+                                                    render={({field}) => (
+                                                        <FormItem>
+                                                            <FormLabel>Payment Frequency *</FormLabel>
+                                                            {
+                                                                leaseOption === "new" ? (
+                                                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                                        <FormControl>
+                                                                            <SelectTrigger>
+                                                                                <SelectValue placeholder="Select..." />
+                                                                            </SelectTrigger>
+                                                                        </FormControl>
+                                                                        <SelectContent>
+                                                                            {
+                                                                                Object.keys(PaymentFrequency).map((frequency, index) => {
+                                                                                    return (
+                                                                                        <SelectItem key={index} value={frequency}>{PaymentFrequency[frequency]}</SelectItem>
+                                                                                    )
+                                                                                })
+                                                                            }
+                                                                        </SelectContent>
+                                                                    </Select>
+                                                                ) : (
+                                                                    <FormValue>
+                                                                        <div>
+                                                                            {PaymentFrequency[field.value]}
+                                                                        </div>
+                                                                    </FormValue>
                                                                 )
-                                                            })
-                                                        }
-                                                    </SelectContent>
-                                                </Select>
-                                                <FormMessage/>
-                                            </FormItem>
-                                        )}
-                                    />
+                                                            }
 
-                                    <FormField
-                                        control={tenantForm.control}
-                                        name="leases[0].status"
-                                        render={({field}) => (
-                                            <FormItem  >
-                                                <FormLabel>Lease Status</FormLabel>
-                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                                    <FormControl>
-                                                        <SelectTrigger>
-                                                            <SelectValue placeholder="Select..." />
-                                                        </SelectTrigger>
-                                                    </FormControl>
-                                                    <SelectContent>
-                                                           {
-                                                               Object.keys(LeaseStatus).map((status, index) => {
-                                                                   return (
-                                                                       <SelectItem key={index} value={status}>{LeaseStatus[status]}</SelectItem>
-                                                                   )
-                                                               })
-                                                           }
-                                                    </SelectContent>
-                                                </Select>
-                                                <FormMessage/>
-                                            </FormItem>
-                                        )}
-                                    />
+                                                            <FormMessage/>
+                                                        </FormItem>
+                                                    )}
+                                                />
 
-                                </FormGroup>
+                                                <FormField
+                                                    control={tenantForm.control}
+                                                    name="leases[0].status"
+                                                    render={({field}) => (
+                                                        <FormItem  >
+                                                            <FormLabel>Lease Status</FormLabel>
 
-                                <FormGroup useFlex>
+                                                            {
+                                                                leaseOption === "new" ? (
+                                                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                                        <FormControl>
+                                                                            <SelectTrigger>
+                                                                                <SelectValue placeholder="Select..." />
+                                                                            </SelectTrigger>
+                                                                        </FormControl>
+                                                                        <SelectContent>
+                                                                            {
+                                                                                Object.keys(LeaseStatus).map((status, index) => {
+                                                                                    return (
+                                                                                        <SelectItem key={index} value={status}>{LeaseStatus[status]}</SelectItem>
+                                                                                    )
+                                                                                })
+                                                                            }
+                                                                        </SelectContent>
+                                                                    </Select>
+                                                                ) : (
+                                                                    <FormValue>
+                                                                        <div>
+                                                                            {LeaseStatus[field.value]}
+                                                                        </div>
+                                                                    </FormValue>
+                                                                )
+                                                            }
+                                                            <FormMessage/>
+                                                        </FormItem>
+                                                    )}
+                                                />
+                                            </FormGroup>
+                                        </>
+                                    ) : null
+                                }
 
 
-
-                                </FormGroup>
 
                             </CardContent>
                         </Card>
 
-                        <Card className="" hidden={leaseOption !== "existing"}>
-                            <CardHeader className="border-b-2 text-lg font-500 border-secondary p-4 flex flex-row items-center gap-2">
-                                <Info/>
-                                Add to Existing Lease
-                            </CardHeader>
-                            <CardContent className="flex flex-col gap-4">
-                                Existingg
-                            </CardContent>
-                        </Card>
 
 
                     </form>
@@ -566,7 +702,11 @@ const TenantCreation = () => {
                     variant="dark"
                     //isLoading={isCreating}
                     onClick={() => {
-                    tenantForm.trigger()
+                    tenantForm.trigger(["firstName", "lastName", "email", "phone", "occupation", "income"])
+
+                    if (tab === 2){
+                        tenantForm.trigger(["leases[0].startDate", "leases[0].endDate", "leases[0].rentalPrice", "leases[0].paymentFrequency", "leases[0].status"])
+                    }
 
                     if (tab === 4 && tabStates[tab - 2].status === "complete"){
                         tenantForm.handleSubmit(onSubmit)()
@@ -578,8 +718,6 @@ const TenantCreation = () => {
                         setTab(tab + 1)
                         tenantForm.clearErrors();
                     }
-
-
 
                 }}
                 >
