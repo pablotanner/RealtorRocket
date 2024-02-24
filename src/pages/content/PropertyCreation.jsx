@@ -20,7 +20,7 @@ import {Form, FormControl, FormField, FormGroup, FormItem, FormLabel, FormMessag
 import {Card, CardContent, CardHeader, CardTitle} from "../../components/ui/card.tsx";
 import {Input} from "../../components/ui/input.tsx";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../../components/ui/select.tsx";
-import {PaymentStatus, RentalStatus} from "../../utils/magicNumbers.js";
+import {getRealEstateIcon, ListingStatus} from "../../utils/magicNumbers.js";
 import {RealEstateType} from "../../utils/magicNumbers.js";
 import {Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious} from "../../components/ui/carousel.tsx";
 import {Button} from "../../components/ui/button.tsx";
@@ -93,7 +93,7 @@ const PropertyCreation = () => {
                     numOfBedrooms: "",
                     numOfBathrooms: "",
                     garages: "",
-                    status: "",
+                    status: "ACTIVE",
                     rentalPrice: "",
                     images: []
                 }
@@ -111,7 +111,7 @@ const PropertyCreation = () => {
             status: "incomplete"
         },
         {
-            title: "Review",
+            title: "Confirmation",
             status: "incomplete"
         }
     ])
@@ -137,16 +137,23 @@ const PropertyCreation = () => {
 
 
     const onSubmit = (data) => {
+        const mappedUnits = data.units.map(unit => {
+            const {images, ...rest} = unit;
+            return rest;
+        })
+
+        if (unitMultiplicity === "single"){
+            mappedUnits.length = 1;
+        }
 
         const body = {
             ...data,
             images: data.images.map(image => ({imageUrl: image})),
-            units: data.units.map(unit => {
-                const {images, ...rest} = unit;
-                return rest;
-            })
+            units: mappedUnits
         }
 
+        console.log(body)
+        return;
 
 
         createProperty(body).then((res) => {
@@ -258,7 +265,7 @@ const PropertyCreation = () => {
                                         control={propertyForm.control}
                                         name="title"
                                         render={({field}) => (
-                                            <FormItem >
+                                            <FormItem  >
                                                 <FormLabel>Title *</FormLabel>
                                                 <FormControl>
                                                     <Input placeholder="Lakeview Mansion" {...field} />
@@ -546,7 +553,7 @@ const PropertyCreation = () => {
                                                         <FormItem >
                                                             <FormLabel>Floor</FormLabel>
                                                             <FormControl>
-                                                                <Input placeholder="0" {...field} />
+                                                                <Input placeholder="0" type="number" {...field} />
                                                             </FormControl>
                                                             <FormMessage/>
                                                         </FormItem>
@@ -601,9 +608,9 @@ const PropertyCreation = () => {
                                                                 </FormControl>
                                                                 <SelectContent>
                                                                     {
-                                                                        Object.keys(RentalStatus).map((type, index) => {
+                                                                        Object.keys(ListingStatus).map((type, index) => {
                                                                             return (
-                                                                                <SelectItem key={index} value={type}>{RentalStatus[type]}</SelectItem>
+                                                                                <SelectItem key={index} value={type}>{ListingStatus[type]}</SelectItem>
                                                                             )
                                                                         })
                                                                     }
@@ -688,7 +695,7 @@ const PropertyCreation = () => {
 
                                                 <FormField
                                                     control={propertyForm.control}
-                                                    name="units[0].numOfGarages"
+                                                    name="units[0].garages"
                                                     render={({field}) => (
                                                         <FormItem >
                                                             <FormLabel>Number of Garages</FormLabel>
@@ -783,11 +790,55 @@ const PropertyCreation = () => {
                 <Card>
                     <CardHeader className="border-b-2 text-lg font-500 border-secondary p-4 flex flex-row items-center gap-2">
                         <BadgeCheck/>
-                        Review
+                        Confirmation
                     </CardHeader>
+                    <CardContent className="p-6 flex flex-col gap-4">
+                        You are about to create a property with the following details. Please review and confirm.
 
-                    <CardContent>
-                        Info will be listed here
+                        <div className="grid grid-cols-2">
+                            <div className="">
+                                <p className="font-500 text-gray-400">
+                                    Title
+                                </p>
+                                <p className="font-500 text-off-black text-lg">
+                                    {propertyForm.getValues("title")}
+                                </p>
+                            </div>
+
+                            <div className="">
+                                <p className="font-500 text-gray-400">
+                                    Type
+                                </p>
+                                <p className="flex flex-row items-center font-500 text-off-black text-lg">
+                                    {getRealEstateIcon(propertyForm.getValues("realEstateType"))} {RealEstateType[propertyForm.getValues("realEstateType")]}
+                                </p>
+                            </div>
+                        </div>
+
+
+                        <div className="grid grid-cols-2">
+                            <div className="">
+                                <p className="font-500 text-gray-400">
+                                    Description
+                                </p>
+                                <p className="font-500 text-off-black text-lg">
+                                    {propertyForm.getValues("description")}
+                                </p>
+                            </div>
+
+
+                            <div className="">
+                                <p className="font-500 text-gray-400">
+                                    Number of Units
+                                </p>
+                                <p className="font-500 text-off-black text-lg">
+                                    {unitMultiplicity === "single" ? 1 : propertyForm.getValues("units").length}
+                                </p>
+                            </div>
+                        </div>
+
+
+
                     </CardContent>
                 </Card>
 
@@ -804,12 +855,14 @@ const PropertyCreation = () => {
                             setTab(tab - 1)
                         }
                     }}
+                    type="button"
 
                 >
                     <ArrowLeft className="w-4 h-4 mr-1"/>
                     Back
                 </Button>
                 <Button
+                    type={tab === 3 ? "submit" : "button"}
                     variant="dark"
                     isLoading={isCreating}
                     onClick={() => {

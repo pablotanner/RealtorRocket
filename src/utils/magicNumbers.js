@@ -25,6 +25,17 @@ export const CivilStatus = {
     "UNKNOWN": "Unknown",
 }
 
+export const ListingStatus = {
+    "ACTIVE": "Active",
+    "INACTIVE": "Inactive",
+    "RENTED": "Rented",
+    "NOT_RENTED": "Not Rented",
+    "RESERVED": "Reserved",
+    "SOLD": "Sold",
+    "PENDING": "Pending",
+    "UNKNOWN": "Unknown",
+}
+
 export const PaymentStatus = {
     "PAID": "Paid",
     "PENDING": "Pending",

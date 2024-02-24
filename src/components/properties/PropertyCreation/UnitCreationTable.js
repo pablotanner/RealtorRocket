@@ -10,6 +10,9 @@ import {
 } from "../../ui/dropdown-menu.tsx";
 import {Copy, Plus, Trash} from "lucide-react";
 import {Button} from "../../ui/button.tsx";
+import {FormControl} from "../../ui/form.tsx";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../../ui/select.tsx";
+import {ListingStatus, RentalStatus} from "../../../utils/magicNumbers.js";
 
 
 const UnitCreationTable = ({ units, onChange }) => {
@@ -21,6 +24,7 @@ const UnitCreationTable = ({ units, onChange }) => {
             <TableHeader>
                 <div>
                     <Button variant="outline"
+                            type="button"
                             onClick={() => {
                                 //Add a new unit
                                 onChange([...units, {
@@ -32,7 +36,7 @@ const UnitCreationTable = ({ units, onChange }) => {
                                     numOfBedrooms: "",
                                     numOfBathrooms: "",
                                     garages: "",
-                                    status: "",
+                                    status: "ACTIVE",
                                     rentalPrice: "",
                                     images: []
                                 }]);
@@ -84,6 +88,7 @@ const UnitCreationTable = ({ units, onChange }) => {
                                         newUnits[index].floor = e.target.value;
                                         onChange(newUnits);
                                     }}
+                                    className="w-20"
                                 />
                             </TableCell>
                             <TableCell>
@@ -95,6 +100,7 @@ const UnitCreationTable = ({ units, onChange }) => {
                                         newUnits[index].unitSize = e.target.value;
                                         onChange(newUnits);
                                     }}
+                                    className="w-20"
                                 />
                             </TableCell>
                             <TableCell>
@@ -106,6 +112,7 @@ const UnitCreationTable = ({ units, onChange }) => {
                                         newUnits[index].numOfFloors = e.target.value;
                                         onChange(newUnits);
                                     }}
+                                    className="w-20"
                                 />
                             </TableCell>
                             <TableCell>
@@ -117,6 +124,7 @@ const UnitCreationTable = ({ units, onChange }) => {
                                         newUnits[index].numOfRooms = e.target.value;
                                         onChange(newUnits);
                                     }}
+                                    className="w-20"
                                 />
                             </TableCell>
                             <TableCell>
@@ -128,6 +136,7 @@ const UnitCreationTable = ({ units, onChange }) => {
                                         newUnits[index].numOfBedrooms = e.target.value;
                                         onChange(newUnits);
                                     }}
+                                    className="w-20"
                                 />
                             </TableCell>
                             <TableCell>
@@ -139,6 +148,7 @@ const UnitCreationTable = ({ units, onChange }) => {
                                         newUnits[index].numOfBathrooms = e.target.value;
                                         onChange(newUnits);
                                     }}
+                                    className="w-20"
                                 />
                             </TableCell>
                             <TableCell>
@@ -150,18 +160,32 @@ const UnitCreationTable = ({ units, onChange }) => {
                                         newUnits[index].garages = e.target.value;
                                         onChange(newUnits);
                                     }}
+                                    className="w-20"
                                 />
                             </TableCell>
                             <TableCell>
-                                <Input
-                                    type="text"
-                                    value={unit.status}
-                                    onChange={(e) => {
-                                        const newUnits = [...units];
-                                        newUnits[index].status = e.target.value;
-                                        onChange(newUnits);
-                                    }}
-                                />
+                                <Select onValueChange={(e) => {
+                                    const newUnits = [...units];
+                                    newUnits[index].status = e;
+                                    onChange(newUnits);}}
+                                        defaultValue={unit.status}>
+                                    <FormControl>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select..." />
+                                        </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                        {
+                                            Object.keys(ListingStatus).map((type, index) => {
+                                                return (
+                                                    <SelectItem key={index} value={type}>{ListingStatus[type]}</SelectItem>
+                                                )
+                                            })
+                                        }
+                                    </SelectContent>
+                                </Select>
+
+
                             </TableCell>
                             <TableCell>
                                 <Input
@@ -172,6 +196,7 @@ const UnitCreationTable = ({ units, onChange }) => {
                                         newUnits[index].rentalPrice = e.target.value;
                                         onChange(newUnits);
                                     }}
+                                    className="w-20"
                                 />
                             </TableCell>
                             <TableCell>
