@@ -34,7 +34,7 @@ export function DatePicker({value, onChange, disabled, className, allowTime, ...
                 <Button
                     variant={"outline"}
                     className={cn(
-                        "justify-start text-left font-normal w-full",
+                        "justify-start text-left font-500 w-full border border-input hover:border-gray-300",
                         !(value) && "text-muted-foreground", className
                     )}
                     disabled={disabled}
@@ -68,28 +68,35 @@ export function DatePicker({value, onChange, disabled, className, allowTime, ...
                     selected={value}
                 />
 
-                <div className="flex flex-col w-full">
+                <div className="flex flex-col w-full rounded-lg">
+                    <div className="w-full h-[1px] bg-secondary" />
                     {
                         allowTime && (
-                            <div
-                                data-disabled={!value}
-                                className="w-full border-y select-none border-secondary p-2 flex flex-row items-center gap-4 relative hover:bg-secondary/90 hover:text-primary-dark  data-[disabled='true']:hover:bg-gray-50 data-[disabled='true']:text-gray-500 data-[disabled='true']:hover:text-gray-500">
-                                <Clock className="h-4 w-4 absolute" />
-                                <input
-                                    type={"time"}
-                                    className="pl-6 outline-none bg-transparent w-full  select-none"
-                                    value={value ? value.toLocaleTimeString().slice(0, 5) : ""}
-                                    onChange={(e) => {
-                                        const time = e.target.value;
-                                        const timeDate = new Date(value as Date);
-                                        timeDate.setHours(parseInt(time.split(":")[0]));
-                                        timeDate.setMinutes(parseInt(time.split(":")[1]));
-                                        onChange(timeDate);
-                                    }}
-                                    disabled={!value}
-                                />
-                                <ChevronDown className="h-4 w-4 absolute right-1 cursor-pointer pointer-events-none"/>
-                            </div>
+                            <>
+                                <div
+                                    data-disabled={!value}
+                                    className="w-full rounded-xl select-none p-2 flex flex-row items-center gap-4 relative hover:bg-secondary/90 hover:text-primary-dark  data-[disabled='true']:hover:bg-gray-50 data-[disabled='true']:text-gray-500 data-[disabled='true']:hover:text-gray-500">
+                                    <Clock className="h-4 w-4 absolute" />
+                                    <input
+                                        type={"time"}
+                                        className="pl-6 outline-none bg-transparent w-full  select-none"
+                                        value={value ? value.toLocaleTimeString().slice(0, 5) : ""}
+                                        onChange={(e) => {
+                                            const time = e.target.value;
+                                            const timeDate = new Date(value as Date);
+                                            timeDate.setHours(parseInt(time.split(":")[0]));
+                                            timeDate.setMinutes(parseInt(time.split(":")[1]));
+                                            onChange(timeDate);
+                                        }}
+                                        disabled={!value}
+                                    />
+                                    <ChevronDown className="h-4 w-4 absolute right-1 cursor-pointer pointer-events-none"/>
+                                </div>
+
+
+                                <div className="w-full h-[1px] bg-secondary" />
+                            </>
+
                         )
                     }
 
@@ -99,7 +106,7 @@ export function DatePicker({value, onChange, disabled, className, allowTime, ...
                         onClick={() => {
                             onChange(null)
                         }}
-                        className="w-full border-y border-secondary p-2 flex flex-row items-center gap-4 relative cursor-pointer hover:bg-secondary">
+                        className="w-full rounded-xl p-2 flex flex-row items-center gap-4 relative cursor-pointer hover:bg-secondary hover:text-red-500">
                         <Trash className="h-4 w-4" />
                         Reset
 
