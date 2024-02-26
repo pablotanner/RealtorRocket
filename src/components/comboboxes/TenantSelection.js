@@ -48,7 +48,7 @@ const TenantSelection = ({onSelect, selected, tenants, ...props}) => {
                 <Command >
                     <CommandInput placeholder="Search Unit" />
                     <CommandEmpty>No Tenant found.</CommandEmpty>
-                    <CommandGroup>
+                    <CommandGroup className="max-h-[300px] overflow-auto z-[100]">
                         {tenants?.data?.map((tenant) => (
                             <CommandItem
                                 key={tenant.id}

@@ -13,7 +13,7 @@ import {PlusIcon} from "lucide-react";
 import {zodDateInputPipe, zodNumberInputPipe, zodStringPipe} from "../../utils/formatters.js";
 import {useCreateLeaseMutation} from "../../services/api/leaseApi.js";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../ui/select.tsx";
-import {PaymentFrequency} from "../../utils/magicNumbers.js";
+import {LeaseStatus, PaymentFrequency} from "../../utils/magicNumbers.js";
 
 
 const AddLease = ({unit, tenant, ...props}) => {
@@ -31,6 +31,7 @@ const AddLease = ({unit, tenant, ...props}) => {
         paymentFrequency: zodStringPipe(z.string({errorMap: () => ({message: 'Please enter a valid payment frequency.'})})),
         tenantId: z.number({errorMap: () => ({message: 'Please select a tenant.'})}),
         unitId: z.number({errorMap: () => ({message: 'Please select a unit.'})}),
+        status: zodStringPipe(z.string({errorMap: () => ({message: 'Please select a status'})})),
     })
 
     const leaseForm = useForm({
@@ -39,6 +40,7 @@ const AddLease = ({unit, tenant, ...props}) => {
             startDate: null,
             endDate: null,
             rentalPrice: null,
+            status: "ACTIVE",
             paymentFrequency: "MONTHLY",
             tenantId: tenant?.id || null,
             unitId: unit?.id || null,
@@ -126,6 +128,7 @@ const AddLease = ({unit, tenant, ...props}) => {
                             )}
                         />
 
+                        <FormGroup useFlex>
                             <FormField
                                 control={leaseForm.control}
                                 name="paymentFrequency"
@@ -153,9 +156,34 @@ const AddLease = ({unit, tenant, ...props}) => {
                                 )}
                             />
 
+                            <FormField
+                                control={leaseForm.control}
+                                name="status"
+                                render={({field}) => (
+                                    <FormItem >
+                                        <FormLabel>Lease Status *</FormLabel>
+                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select a Lease Status" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {
+                                                    Object.keys(LeaseStatus).map((status, index) => {
+                                                        return (
+                                                            <SelectItem key={index} value={status}>{LeaseStatus[status]}</SelectItem>
+                                                        )
+                                                    })
+                                                }
+                                            </SelectContent>
+                                        </Select>
+                                        <FormMessage/>
+                                    </FormItem>
+                                )}
+                            />
 
-
-
+                        </FormGroup>
 
 
 
