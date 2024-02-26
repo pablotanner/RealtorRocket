@@ -19,7 +19,7 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {propertySchema, tenantSchema} from "../../utils/formSchemas.js";
 import {
     Form,
-    FormControl,
+    FormControl, FormDescription,
     FormField,
     FormGroup,
     FormItem,
@@ -102,7 +102,8 @@ const TenantCreation = () => {
                     rentalPrice: "",
                     paymentFrequency: "MONTHLY",
                     status: "ACTIVE",
-                    notes: ""
+                    notes: "",
+                    unitId: ""
                 }
             ],
             leaseId: "",
@@ -529,6 +530,8 @@ const TenantCreation = () => {
                                                         tenantForm.setValue("leases[0].paymentFrequency", "MONTHLY")
                                                         tenantForm.setValue("leases[0].status", "ACTIVE")
                                                         tenantForm.setValue("leases[0].notes", "")
+                                                        tenantForm.setValue("leases[0].unitId", "")
+                                                        tenantForm.setValue("unitId", "")
                                                         tenantForm.setValue("leaseId", "")
                                                         tenantForm.trigger()
                                                         return
@@ -541,7 +544,8 @@ const TenantCreation = () => {
                                                     tenantForm.setValue("leases[0].paymentFrequency", lease.paymentFrequency)
                                                     tenantForm.setValue("leases[0].status", lease.status)
                                                     tenantForm.setValue("leases[0].notes", lease.notes)
-
+                                                    tenantForm.setValue("leases[0].unitId", lease.unitId)
+                                                    tenantForm.setValue("unitId", lease.unitId)
                                                     tenantForm.trigger()
                                                 }} leases={leases} />
 
@@ -557,6 +561,47 @@ const TenantCreation = () => {
                                         <>
 
                                             <FormGroup useFlex  >
+
+                                                <FormField
+                                                    control={tenantForm.control}
+                                                    name="leases[0].unitId"
+                                                    render={({field}) => (
+                                                        <FormItem  >
+                                                            <FormLabel>Unit</FormLabel>
+                                                            <FormControl>
+                                                                {
+                                                                    leaseOption === "new" ? (
+                                                                        <RentalSelection className="w-full"  onSelect={(id) => {
+                                                                            if (id === "" || id === null || id === undefined){
+                                                                                tenantForm.setValue("leases[0].unitId", "")
+                                                                                tenantForm.setValue("unitId", "")
+                                                                                tenantForm.trigger(["leases[0].unitId", "unitId"])
+                                                                                return
+                                                                            }
+                                                                            tenantForm.setValue("leases[0].unitId", id)
+                                                                            tenantForm.setValue("unitId", id)
+                                                                            tenantForm.trigger(["leases[0].unitId","unitId"])
+                                                                        }} selected={tenantForm.getValues("leases[0].unitId")} units={units}  />
+                                                                    ) : (
+                                                                        <FormValue>{units?.find((unit) => unit.id === field.value
+                                                                        )?.unitIdentifier}</FormValue>
+                                                                    )
+                                                                }
+
+                                                            </FormControl>
+                                                            <FormMessage/>
+                                                            <FormDescription>
+                                                                {
+                                                                    leaseOption === "new" ? (
+                                                                        "What unit would you like to create a lease for?"
+                                                                    ) : (
+                                                                        "This is the unit that the lease is currently assigned to."
+                                                                    )
+                                                                }
+                                                            </FormDescription>
+                                                        </FormItem>
+                                                    )}
+                                                />
 
                                                 <FormField
                                                     control={tenantForm.control}
@@ -699,27 +744,31 @@ const TenantCreation = () => {
                                                 />
                                             </FormGroup>
 
-                                            <FormField
-                                                control={tenantForm.control}
-                                                name="leases[0].notes"
-                                                render={({field}) => (
-                                                    <FormItem  >
-                                                        <FormLabel>Notes</FormLabel>
-                                                        <FormControl>
-                                                            {
-                                                                leaseOption === "new" ? (
-                                                                    <Input placeholder="Enter any relevant notes here" {...field} />
-                                                                ) : (
-                                                                    <FormValue>
-                                                                        {field.value}
-                                                                    </FormValue>
-                                                                )
-                                                            }
-                                                        </FormControl>
-                                                        <FormMessage/>
-                                                    </FormItem>
-                                                )}
-                                            />
+                                            <FormGroup>
+                                                <FormField
+                                                    control={tenantForm.control}
+                                                    name="leases[0].notes"
+                                                    render={({field}) => (
+                                                        <FormItem  >
+                                                            <FormLabel>Notes</FormLabel>
+                                                            <FormControl>
+                                                                {
+                                                                    leaseOption === "new" ? (
+                                                                        <Input placeholder="Enter any relevant notes here" {...field} />
+                                                                    ) : (
+                                                                        <FormValue>
+                                                                            {field.value}
+                                                                        </FormValue>
+                                                                    )
+                                                                }
+                                                            </FormControl>
+                                                            <FormMessage/>
+                                                        </FormItem>
+                                                    )}
+                                                />
+
+                                            </FormGroup>
+
                                         </>
                                     ) : null
                                 }
@@ -750,9 +799,9 @@ const TenantCreation = () => {
                             </CardHeader>
                             <CardContent className="p-6 flex flex-col gap-4">
 
-                                <div>
-                                    Please select a unit to assign to the tenant.
-                                </div>
+                                <p>
+                                    Please select the unit that the tenant is currently assigned to, if you don't want to assign a unit, leave this field empty.
+                                </p>
 
                                 <UnitWarning/>
 
@@ -931,7 +980,7 @@ const TenantCreation = () => {
                     tenantForm.trigger(["firstName", "lastName", "email", "phone", "occupation", "income"])
 
                     if (tab === 2){
-                        tenantForm.trigger(["leases[0].startDate", "leases[0].endDate", "leases[0].rentalPrice", "leases[0].paymentFrequency", "leases[0].status"])
+                        tenantForm.trigger(["leases[0].startDate", "leases[0].endDate", "leases[0].rentalPrice", "leases[0].paymentFrequency", "leases[0].status", "leases[0].unitId"])
                     }
 
                     if (tab === 4 && tabStates[tab - 2].status === "complete"){

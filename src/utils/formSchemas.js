@@ -61,6 +61,7 @@ export const tenantSchema = z.object({
         paymentFrequency: zodStringPipe(z.string({errorMap: () => ({message: 'Please select a payment frequency'})})),
         status: zodStringPipe(z.string({errorMap: () => ({message: 'Please select a status'})})),
         notes: zodStringPipe(z.string().or(z.null())),
+        unitId: zodNumberInputPipe(z.string({errorMap: () => ({message: 'Please select a unit'})}).or(z.number())),
     })),
     leaseId: zodNumberInputPipe(z.string().or(z.null()).or(z.number())),
     unitId: zodNumberInputPipe(z.string().or(z.null()).or(z.number())),

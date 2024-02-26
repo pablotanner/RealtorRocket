@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Popover, PopoverContent, PopoverTrigger} from "../ui/popover.tsx";
 import {Button} from "../ui/button.tsx";
 import {Command,CommandEmpty, CommandGroup, CommandInput, CommandItem} from "../ui/command.tsx";
@@ -9,6 +9,11 @@ import {cn} from "../../utils.ts";
 const RentalSelection = ({onSelect, selected, units, ...props}) => {
     const [open, setOpen] = useState(false)
     const [unitId, setUnitId] = useState(selected?.id || selected)
+
+
+    useEffect(() => {
+        setUnitId(selected?.id || selected)
+    }, [selected])
 
 
     if (!units) {

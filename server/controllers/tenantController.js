@@ -47,7 +47,6 @@ export async function createTenant(req, res) {
 
         if (!leaseId && req.body?.lease) {
             const leaseBody = req.body?.lease;
-            leaseBody.unitId = req.body.unitId;
             leaseBody.tenantId = newTenant?.id;
             lease = await createLeaseWithPaymentSchedule(leaseBody, req.user.userId);
         }
