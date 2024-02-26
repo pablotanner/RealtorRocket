@@ -6,7 +6,7 @@ import {
     DialogTitle,
     DialogTrigger
 } from "../../ui/dialog.tsx";
-import RentalSelection from "../../rentals/RentalSelection.js";
+import RentalSelection from "../../comboboxes/RentalSelection.js";
 import {useState} from "react";
 import {useGetUnitsQuery} from "../../../services/api/unitApi.js";
 import {Badge} from "../../ui/badge.tsx";

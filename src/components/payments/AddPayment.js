@@ -4,9 +4,9 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger} from "../ui/dialog.tsx";
 import {Form, FormControl, FormField, FormGroup, FormItem, FormLabel, FormMessage} from "../ui/form.tsx";
 import {Input} from "../ui/input.tsx";
-import RentalSelection from "../rentals/RentalSelection.js";
+import RentalSelection from "../comboboxes/RentalSelection.js";
 import {useGetUnitsQuery} from "../../services/api/unitApi.js";
-import TenantSelection from "../tenants/TenantSelection.js";
+import TenantSelection from "../comboboxes/TenantSelection.js";
 import {useGetTenantsQuery} from "../../services/api/tenantApi.js";
 import {Button} from "../ui/button.tsx";
 import {PlusIcon} from "lucide-react";
@@ -14,7 +14,7 @@ import {zodDateInputPipe, zodNumberInputPipe, zodStringPipe} from "../../utils/f
 import {useCreateLeaseMutation, useGetLeasesQuery} from "../../services/api/leaseApi.js";
 import {DatePicker} from "../ui/date-picker.tsx";
 import {useCreatePaymentMutation} from "../../services/api/financialsApi.js";
-import LeaseSelection from "../leases/LeaseSelection.js";
+import LeaseSelection from "../comboboxes/LeaseSelection.js";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../ui/select.tsx";
 import {PaymentStatus} from "../../utils/magicNumbers.js";
 

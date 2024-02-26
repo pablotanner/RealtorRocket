@@ -1,6 +1,6 @@
 import {Button} from "../../ui/button.tsx";
 import {useState} from "react";
-import LeaseSelection from "../../leases/LeaseSelection.js";
+import LeaseSelection from "../../comboboxes/LeaseSelection.js";
 import {useGetLeasesQuery} from "../../../services/api/leaseApi.js";
 import LeaseForm from "../../leases/LeaseForm.js";
 

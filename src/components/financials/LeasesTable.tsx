@@ -153,22 +153,6 @@ const columns: ColumnDef<Lease>[] = [
         enableSorting: true,
 
     },
-    {
-        id: "lastPaymentDate",
-        header: "Last Payment Date",
-        meta: {
-            type: "date",
-        },
-        cell: ({ row }) => {
-            return (
-                <div className="capitalize">
-                    {dateParser(row?.original?.lastPaymentDate)}
-                </div>
-            )
-        },
-        accessorFn: (row) => row?.lastPaymentDate || "",
-        enableSorting: true,
-    },
 
 ]
 

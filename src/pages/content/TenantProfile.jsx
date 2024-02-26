@@ -1,5 +1,10 @@
 import {useSelector} from "react-redux";
-import {selectPropertyById, selectUnitById, selectUnitByTenantId} from "../../services/slices/objectSlice.js";
+import {
+    selectLeasesByTenantId,
+    selectPropertyById,
+    selectUnitById,
+    selectUnitByTenantId
+} from "../../services/slices/objectSlice.js";
 import {Image} from "../../components/ui/image.tsx";
 import {Avatar, AvatarFallback, AvatarImage} from "../../components/ui/avatar.tsx";
 import {Button} from "../../components/ui/button.tsx";
@@ -24,6 +29,9 @@ const TenantProfile = (props) => {
     const currentUnit = useSelector((state) => selectUnitById(state, currentUnitId));
 
     const property = useSelector((state) => selectPropertyById(state, currentUnit?.realEstateObjectId));
+
+
+    const leases = useSelector((state) => selectLeasesByTenantId(state, tenant?.id));
 
     const [showLeaseModal, setShowLeaseModal] = useState(false);
 
@@ -121,7 +129,7 @@ const TenantProfile = (props) => {
                         <EditTenant tenant={tenant} />
                     </TabsContent>
                     <TabsContent value="leases">
-                        <LeaseHistory leases={tenant?.leases} >
+                        <LeaseHistory leases={leases} >
                             <AddLease
                                 open={showLeaseModal}
                                 onOpenChange={() => setShowLeaseModal(!showLeaseModal)}

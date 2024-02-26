@@ -5,13 +5,12 @@ import {dateParser} from "../../utils/formatters.js";
 import {useNavigate} from "react-router-dom";
 
 
-const TenantCard = ({ tenant, lease }) => {
+const TenantCard = ({ tenant }) => {
     const navigate = useNavigate();
 
     const handleViewProfile = () => {
         navigate(`/tenants/${tenant.id}`);
     }
-
 
     if (!tenant) {
         return null;
@@ -32,7 +31,11 @@ const TenantCard = ({ tenant, lease }) => {
                 <h1 className="font-500 text-xl">
                     {tenant?.firstName} {tenant?.lastName}
                 </h1>
-                Started on {dateParser(lease?.startDate) || "N/A"}
+                {tenant?.leases?.length === 1 ? (
+                    "1 Lease"
+                ) : (
+                    `${tenant?.leases?.length} Leases`
+                )}
             </CardHeader>
             <CardContent className="flex flex-col gap-4 items-center">
                 <div className="flex flex-row gap-2">
@@ -48,13 +51,6 @@ const TenantCard = ({ tenant, lease }) => {
                         Send Message
                     </Button>
                 </div>
-
-                <div>
-                    Last Payment on: {dateParser(lease?.lastPaymentDate) || "N/A"}
-                </div>
-
-
-
             </CardContent>
 
         </Card>

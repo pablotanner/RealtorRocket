@@ -101,12 +101,15 @@ export class Lease {
     startDate: Date | null;
     endDate: Date | null;
     rentalPrice: number | null;
+    paymentFrequency: string | null;
     leaseLength: number | null;
     leaseTerms: string | null;
     currency: CurrencyCode | null;
     totalRentDue: number | null;
     rentPaid: number | null;
-    lastPaymentDate: Date | null;
+    status: string | null;
+    paymentSchedule: LeasePaymentSchedule[];
+    notes: string | null;
     documents: Document[];
     tenant: Tenant | null;
     tenantId: number | null;

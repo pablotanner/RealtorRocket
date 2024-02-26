@@ -22,9 +22,10 @@ const RentalDetail = (props) => {
 
     const property = useSelector(state => selectPropertyByUnitId(state, id));
 
-    const tenant = useSelector(state => selectTenantById(state, data?.data?.leases[0]?.tenantId))
+    const tenant = useSelector(state => selectTenantById(state, data?.data?.tenantId))
 
     const [showLeaseModal, setShowLeaseModal] = useState(false);
+
 
     return (
         <>
@@ -38,7 +39,7 @@ const RentalDetail = (props) => {
                     <DetailedPropertyCard property={property}/>
                     <RentalKeyCard unit={data?.data} isSingleUnit={property?.units?.length === 1}/>
 
-                    <TenantCard tenant={tenant} lease={data?.data?.leases[0]}/>
+                    <TenantCard tenant={tenant}/>
 
                 </div>
 

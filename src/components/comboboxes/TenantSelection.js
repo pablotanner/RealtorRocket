@@ -47,7 +47,7 @@ const TenantSelection = ({onSelect, selected, tenants, ...props}) => {
             <PopoverContent className="w-[200px] p-0" noPortal>
                 <Command >
                     <CommandInput placeholder="Search Unit" />
-                    <CommandEmpty>No Unit found.</CommandEmpty>
+                    <CommandEmpty>No Tenant found.</CommandEmpty>
                     <CommandGroup>
                         {tenants?.data?.map((tenant) => (
                             <CommandItem
