@@ -318,19 +318,12 @@ export const selectLeasesByUnitId = createSelector(
 
 export const selectTenantsByPropertyId = (state, propertyId) => {
     if (!propertyId) return [];
-    else if (String(propertyId).toLowerCase() === 'all') {
-        return selectAllTenants(state);
+    let tenants = selectAllTenants(state);
+    if (String(propertyId).toLowerCase() !== 'all') {
+        tenants = tenants.filter(tenant => tenant.unit?.length > 0 && tenant.unit[0]?.realEstateObjectId === propertyId);
     }
-    const units = selectUnitsByPropertyId(state, propertyId);
-    const tenants = [];
-    units.forEach(unit => {
-        const leases = selectLeasesByUnitId(state, unit.id);
-        leases.forEach(lease => {
-            const tenant = selectTenantById(state, lease.tenantId);
-            if (tenant) tenants.push(tenant);
-        });
-    });
-    return tenants.filter((tenant) => tenant !== undefined);
+
+    return tenants;
 }
 
 export const selectTenantsByLeaseId = (state, leaseId) => {

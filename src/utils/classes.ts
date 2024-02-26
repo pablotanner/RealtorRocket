@@ -87,6 +87,7 @@ export class Unit {
     status: ListingStatus | null;
     documents: Document[];
     images: Image[];
+    tenantId: number | null;
     maintenanceRequests: MaintenanceRequest[];
     realEstateObject: Property;
     realEstateObjectId: number;
@@ -127,6 +128,7 @@ export class Tenant {
     userId: number | null;
     firstName: string | null;
     lastName: string | null;
+    unit: Unit[] | null;
     email: string | null;
     phone: string | null;
     leases: Lease[];

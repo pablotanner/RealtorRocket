@@ -17,10 +17,13 @@ import {useNavigate} from "react-router-dom";
 import {dateParser, moneyParser} from "../../utils/formatters.js";
 import {Unit} from "../../utils/classes.ts";
 import {DataTable} from "../ui/data-table.js";
+import {selectTenantById} from "../../services/slices/objectSlice.js";
+import {useSelector} from "react-redux";
 
 
 const SendToUnit = ({unit}) => {
     const navigate = useNavigate()
+
 
     return (
         <div className="capitalize whitespace-nowrap flex  flex-row text-off-black font-600 bg-white w-fit p-2 py-1 rounded-full shadow-sm hover:bg-gray-50 cursor-pointer border-2 border-gray-100"
@@ -33,8 +36,18 @@ const SendToUnit = ({unit}) => {
     )
 }
 
-const SendToTenant = ({tenant}) => {
+const SendToTenant = ({tenantId}) => {
     const navigate = useNavigate()
+
+    const tenant = useSelector(state => selectTenantById(state, tenantId))
+
+    if (!tenant) {
+        return (
+            <div className="bg-primary-dark whitespace-nowrap items-center w-fit text-white p-2 flex flex-row rounded-2xl cursor-pointer hover:bg-primary-dark/70 transition-all ease-in">
+                No Tenant
+            </div>
+        )
+    }
 
     return (
             <div className="bg-primary-dark whitespace-nowrap items-center w-fit text-white p-2 flex flex-row rounded-2xl cursor-pointer hover:bg-primary-dark/70 transition-all ease-in"
@@ -144,10 +157,10 @@ const columns: ColumnDef<Unit>[] = [
         header: "Current Tenant",
         enableSorting: true,
         cell: ({ row }) => {
-            if (row?.original?.leases?.length > 0 && row?.original?.leases[0]?.tenant) {
+            if (row?.original?.tenantId) {
                 // Tenant name
                 return (
-                    <SendToTenant tenant={row.original.leases[0]?.tenant} />
+                    <SendToTenant tenantId={row.original?.tenantId} />
                 )
             }
             return (

@@ -28,22 +28,9 @@ const TenantTable = ({tenants}) => {
     const [deleteTenant, {isLoading: isDeletingTenant}] = useDeleteTenantMutation()
 
 
-    // Get all lease ids of our tenants
-    const leaseIds = tenants?.map(tenant => tenant.leases[0].id);
-
-    const relevantUnits = useSelector((state) => selectUnitsByLeaseIds(state, leaseIds));
-
-    const mappedTenants = tenants?.map(tenant => {
-        const unit = relevantUnits.find(unit => unit?.leases.map(lease => {
-            return lease.id}).includes(tenant.leases[0].id))
-        return {...tenant, unit}
-    })
-
     // True if the user has an active lease (end date is after today or no end date at all)
     const getActiveLeases = (leases) => {
-        return leases.filter(lease => {
-            return isAfter(new Date(lease.endDate), new Date()) || !lease.endDate
-        })
+        return leases.filter(lease => lease.status === "ACTIVE")
     }
 
     const TenantOptions = ({tenant}) => {
@@ -155,16 +142,28 @@ const TenantTable = ({tenants}) => {
                     }
                 }
 
+                let mostRecentLease;
+
+                try {
+                    mostRecentLease = tenant?.leases[0]
+                }
+                catch (e) {
+                    mostRecentLease = null;
+                }
+
+
                 const activeLeases = getActiveLeases(tenant?.leases);
 
                 return (
                     <div className="flex flex-row items-center gap-2">
                         <div className="flex flex-col">
-                            <p className="font-500 text-md ">
-                                {activeLeases.length ? "Active" : "Inactive"}
+                            <p className="font-400 text-md ">
+                                {
+                                    activeLeases.length ? `${activeLeases.length} Active Leases` : "No Active Lease"
+                                }
                             </p>
                             <p className="font-300 text-gray-500 text-sm">
-                                {tenant?.leases?.length ? getLeaseText(tenant?.leases[0]) : "No Lease"}
+                                {mostRecentLease ? getLeaseText(mostRecentLease) : "No Lease"}
                             </p>
                         </div>
                     </div>
@@ -179,22 +178,36 @@ const TenantTable = ({tenants}) => {
             }
         },
         {
-            id: "mostRecentUnit",
-            header: "Most Recent Unit",
+            id: "currentUnit",
+            header: "Current Unit",
             enableSorting: true,
             cell: ({ row }) => {
                 const tenant = row.original;
 
-                // @ts-expect-error - We added this above by mapping the tenants
-                const mostRecentUnit = tenant.unit;
+                let mostRecentUnit;
 
+                try {
+                    mostRecentUnit = tenant?.unit[0]
+                }
+                catch (e) {
+                    mostRecentUnit = null;
+                }
 
 
                 return (
                     <div className="flex flex-col justify-center">
-                        <p className="font-500 text-md text-gray-800">
-                            {tenant?.leases?.length ? mostRecentUnit?.unitIdentifier : "No Lease"}
-                        </p>
+
+                        {
+                            mostRecentUnit ? (
+                                <p className="font-500 text-md text-gray-800" >
+                                    {mostRecentUnit?.unitIdentifier}
+                                </p>
+                            ) : (
+                                <p className="font-300 text-md text-gray-500">
+                                    No Unit
+                                </p>
+                            )
+                        }
                     </div>
                 )
             },
@@ -268,7 +281,7 @@ const TenantTable = ({tenants}) => {
 
     return (
         <DataTable
-            data={mappedTenants}
+            data={tenants}
             columns={columns}
             defaultSort={{id: "leaseStatus", desc: false}}
         />
