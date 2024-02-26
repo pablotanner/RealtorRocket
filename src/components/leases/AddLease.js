@@ -90,7 +90,7 @@ const AddLease = ({unit, tenant, ...props}) => {
                                                 leaseForm.trigger('startDate')
                                             }}/>
                                             */}
-                                            <Input {...field} defaultValue="09:00" type="datetime-local"/>
+                                            <Input {...field} type="datetime-local"/>
 
                                         </FormControl>
                                         <FormMessage/>
@@ -105,7 +105,7 @@ const AddLease = ({unit, tenant, ...props}) => {
                                     <FormItem >
                                         <FormLabel>Lease End</FormLabel>
                                         <FormControl>
-                                            <Input  {...field} defaultValue="15:00" type="datetime-local" />
+                                            <Input  {...field} type="datetime-local" />
                                         </FormControl>
                                         <FormMessage/>
                                     </FormItem>

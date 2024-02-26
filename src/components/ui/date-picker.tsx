@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Calendar as CalendarIcon } from "lucide-react"
+import {Calendar as CalendarIcon, ChevronDown, Clock, Trash, Trash2} from "lucide-react"
 
 import {cn} from "../../utils.ts";
 import { Button } from "./button.tsx"
@@ -12,75 +12,21 @@ import {
 import {DateRange} from "react-day-picker";
 import {dateParser, getDatePlaceholder} from "../../utils/formatters.js";
 import TimePicker from "./time-picker.tsx";
+import {Input} from "./input.tsx";
 
 
 interface DatePickerProps {
-    isRange?: boolean;
-    //dates?: [Date, Date];
-    initialStartDate?: Date;
-    initialEndDate?: Date;
-    onChange?: (startDate: Date, endDate: Date) => void;
+    value: Date;
+    onChange: (date: Date) => void;
     dateFormat?: string;
-    placeholder?: string;
-    className?: string;
-    includeTime?: boolean;
-    defaultTime?: string;
-    props?: any;
     disabled?: boolean;
+    className?: string;
+    allowTime?: boolean;
+
+
 }
 
-export function DatePicker({isRange, initialStartDate, initialEndDate, onChange, placeholder = getDatePlaceholder(), className, includeTime, defaultTime, disabled, ...props}: DatePickerProps) {
-
-    const initialState = isRange ? {
-        from: initialStartDate,
-        to: initialEndDate,
-    } : initialStartDate;
-
-    const [date, setDate] = React.useState<DateRange | Date | undefined>(initialState);
-
-    const [time, setTime] = React.useState(defaultTime);
-
-    const handleSelect = (dates) => {
-        if (isRange) {
-            setDate(dates);
-            onChange?.(dates.from, dates.to);
-        }
-        else {
-            setDate(dates as Date);
-
-            if (includeTime && time) {
-                const timeDate = new Date(dates as Date);
-                timeDate.setHours(parseInt(time.split(":")[0]));
-                timeDate.setMinutes(parseInt(time.split(":")[1]));
-                onChange?.(timeDate, timeDate);
-            }
-            else {
-                onChange?.(dates, dates)
-            }
-        }
-    }
-
-    const handleTimeChange = (time) => {
-        setTime(time);
-        if (date) {
-            const timeDate = new Date(date as Date);
-            timeDate.setHours(parseInt(time.split(":")[0]));
-            timeDate.setMinutes(parseInt(time.split(":")[1]));
-            onChange?.(timeDate, timeDate);
-        }
-    }
-
-
-    const getDisplayValue = () => {
-        if (isRange) {
-            // @ts-expect-error - TS doesn't understand that date is a DateRange
-            return `${dateParser(date?.from) || placeholder} - ${dateParser(date?.to) || placeholder}`;
-        }
-        else if (date) {
-            return dateParser(date);
-        }
-        return placeholder;
-    }
+export function DatePicker({value, onChange, disabled, className, allowTime, ...props}: DatePickerProps) {
 
     return (
         <Popover>
@@ -88,34 +34,80 @@ export function DatePicker({isRange, initialStartDate, initialEndDate, onChange,
                 <Button
                     variant={"outline"}
                     className={cn(
-                        "justify-start text-left font-normal",
-                        !(date) && "text-muted-foreground", className
+                        "justify-start text-left font-normal w-full",
+                        !(value) && "text-muted-foreground", className
                     )}
                     disabled={disabled}
                     type="button"
                     {...props}
                 >
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {getDisplayValue()}
+                    {value ? dateParser(value) : getDatePlaceholder()}
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="flex flex-col items-center justify-center" >
-                {/* @ts-expect-error - TS doesn't understand that date is a DateRange */}
+
                 <Calendar
                     initialFocus
-                    mode={isRange ? "range" : "single"}
-                    //selected={isRange ? [startDate, endDate] : startDate}
-                    onSelect={handleSelect}
-                    selected={isRange ? date as DateRange: date as Date}
+                    mode={"single"}
+                    onSelect={(date) => {
+                        if (date) {
+                            // Remember time
+                            const time = value ? value.toLocaleTimeString().slice(0, 5) : null;
+                            const timeDate = new Date(date as Date);
+                            if (time) {
+                                timeDate.setHours(parseInt(time.split(":")[0]));
+                                timeDate.setMinutes(parseInt(time.split(":")[1]));
+                            }
+                            onChange(timeDate)
+                        }
+                        else {
+                            onChange(null)
+                        }
+                    }}
+                    selected={value}
                 />
-                {
-                    includeTime ? (
-                        <div className="w-full">
-                            <TimePicker value={time} onChange={handleTimeChange} />
-                        </div>
 
-                    ) : null
-                }
+                <div className="flex flex-col w-full">
+                    {
+                        allowTime && (
+                            <div
+                                data-disabled={!value}
+                                className="w-full border-y select-none border-secondary p-2 flex flex-row items-center gap-4 relative hover:bg-secondary/90 hover:text-primary-dark  data-[disabled='true']:hover:bg-gray-50 data-[disabled='true']:text-gray-500 data-[disabled='true']:hover:text-gray-500">
+                                <Clock className="h-4 w-4 absolute" />
+                                <input
+                                    type={"time"}
+                                    className="pl-6 outline-none bg-transparent w-full  select-none"
+                                    value={value ? value.toLocaleTimeString().slice(0, 5) : ""}
+                                    onChange={(e) => {
+                                        const time = e.target.value;
+                                        const timeDate = new Date(value as Date);
+                                        timeDate.setHours(parseInt(time.split(":")[0]));
+                                        timeDate.setMinutes(parseInt(time.split(":")[1]));
+                                        onChange(timeDate);
+                                    }}
+                                    disabled={!value}
+                                />
+                                <ChevronDown className="h-4 w-4 absolute right-1 cursor-pointer pointer-events-none"/>
+                            </div>
+                        )
+                    }
+
+
+                    <div
+                        data-disabled={!value}
+                        onClick={() => {
+                            onChange(null)
+                        }}
+                        className="w-full border-y border-secondary p-2 flex flex-row items-center gap-4 relative cursor-pointer hover:bg-secondary">
+                        <Trash className="h-4 w-4" />
+                        Reset
+
+                    </div>
+
+                </div>
+
+
             </PopoverContent>
         </Popover>
     )

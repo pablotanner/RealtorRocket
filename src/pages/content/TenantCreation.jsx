@@ -826,7 +826,7 @@ const TenantCreation = () => {
                                 <UnitWarning/>
 
                                 <RentalSelection onSelect={(id) => {
-                                    if (id === "" |F| id === null || id === undefined){
+                                    if (id === "" || id === null || id === undefined){
                                         tenantForm.setValue("unitId", "")
                                         tenantForm.trigger(["unitId"])
                                         return
