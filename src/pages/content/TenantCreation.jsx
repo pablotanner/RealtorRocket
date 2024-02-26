@@ -50,6 +50,9 @@ import {dateParser, moneyParser} from "../../utils/formatters.js";
 import {Alert, AlertDescription, AlertTitle} from "../../components/ui/alert.tsx";
 import RentalSelection from "../../components/rentals/RentalSelection.js";
 import {useCreateTenantMutation} from "../../services/api/tenantApi.js";
+import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "../../components/ui/tooltip.tsx";
+import {BiQuestionMark} from "react-icons/bi";
+import {AiOutlineQuestionCircle} from "react-icons/ai";
 
 
 const TenantCreation = () => {
@@ -796,6 +799,23 @@ const TenantCreation = () => {
                             <CardHeader className="border-b-2 text-lg font-500 border-secondary p-4 flex flex-row items-center gap-2">
                                 <UserSearch/>
                                 Unit Assignment
+                                    <TooltipProvider>
+                                        <Tooltip>
+                                            <TooltipTrigger asChild>
+                                                <div className="ml-1 cursor-pointer">
+                                                    <AiOutlineQuestionCircle className="w-5 h-5"/>
+                                                </div>
+                                            </TooltipTrigger>
+                                            <TooltipContent className="mb-1">
+                                                <p>
+                                                    This is used to track the current tenant assigned to the unit.
+                                                </p>
+                                            </TooltipContent>
+                                        </Tooltip>
+
+                                    </TooltipProvider>
+
+
                             </CardHeader>
                             <CardContent className="p-6 flex flex-col gap-4">
 
@@ -806,7 +826,7 @@ const TenantCreation = () => {
                                 <UnitWarning/>
 
                                 <RentalSelection onSelect={(id) => {
-                                    if (id === "" || id === null || id === undefined){
+                                    if (id === "" |F| id === null || id === undefined){
                                         tenantForm.setValue("unitId", "")
                                         tenantForm.trigger(["unitId"])
                                         return
