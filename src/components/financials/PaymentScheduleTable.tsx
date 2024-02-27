@@ -1,16 +1,13 @@
 import {
     ColumnDef,
 } from "@tanstack/react-table";
-import {Checkbox} from "../ui/checkbox.tsx";
 import {dateParser, moneyParser} from "../../utils/formatters.js";
 import {DataTable} from "../ui/data-table.js";
-import {Lease, LeasePaymentSchedule} from "../../utils/classes.ts";
+import {LeasePaymentSchedule} from "../../utils/classes.ts";
 import {CalendarClock, Eye} from "lucide-react";
 
 import {Badge} from "../ui/badge.tsx";
 import ViewPayment from "../payments/ViewPayment.js";
-
-
 
 
 const columns: ColumnDef<LeasePaymentSchedule>[] = [
@@ -29,7 +26,7 @@ const columns: ColumnDef<LeasePaymentSchedule>[] = [
         id: "id",
         header: "ID",
         cell: ({ row }) => (
-            <div className="capitalize">{row?.original?.id}</div>
+            <div className="capitalize">#{row?.original?.id}</div>
         ),
         meta: {
             type: "number",
@@ -107,6 +104,46 @@ const columns: ColumnDef<LeasePaymentSchedule>[] = [
         accessorFn: (row) => row?.status,
         enableSorting: true,
     },
+    {
+        id: "lease",
+        header: "Lease",
+        cell: ({ row }) => {
+            const lease = row.original?.lease;
+
+            console.log(row.original?.leaseId)
+
+            if (!lease) return "No Lease"
+            return (
+                <div>
+                    #{lease?.id}
+                </div>
+            )
+        },
+        meta: {
+            type: "number",
+        },
+        accessorFn: (row) => row?.leaseId || "",
+        enableSorting: true,
+    },
+    {
+        id: "tenant",
+        header: "Tenant",
+        cell: ({ row }) => {
+            const tenant = row.original?.lease?.tenant;
+
+            if (!tenant) return "No Tenant"
+            return (
+                <div>
+                    {tenant?.firstName} {tenant?.lastName}
+                </div>
+            )
+        },
+        meta: {
+            type: "string",
+        },
+        accessorFn: (row) => row?.lease?.tenantId,
+        enableSorting: true,
+    },
 ]
 
 const PaymentScheduleTable = ({ paymentSchedules }) => {
@@ -118,7 +155,7 @@ const PaymentScheduleTable = ({ paymentSchedules }) => {
                 columns={columns}
                 defaultSort={{id: "dueDate", desc: false}}
                 title="Planned Payments"
-                subtitle="These are the payment schedules for your leases."
+                subtitle="These are the planned payments (payment deadlines) created for your leases."
                 icon={<CalendarClock className={"w-5 h-5"} />} />
 
         </div>

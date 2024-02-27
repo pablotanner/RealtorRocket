@@ -28,7 +28,7 @@ const columns: ColumnDef<RentPayment>[] = [
         id: "id",
         header: "ID",
         cell: ({ row }) => (
-            <div className="capitalize">{row?.original?.id}</div>
+            <div className="capitalize">#{row?.original?.id}</div>
         ),
         meta: {
             type: "number",
@@ -138,11 +138,20 @@ const columns: ColumnDef<RentPayment>[] = [
         enableSorting: true,
     },
     {
-        id: "leaseId",
-        header: "Lease ID",
-        cell: ({ row }) => (
-            <div className="capitalize">{row?.original?.leaseId}</div>
-        ),
+        id: "lease",
+        header: "Lease",
+        cell: ({ row }) => {
+            const lease = row.original?.lease;
+
+            console.log(row.original?.leaseId)
+
+            if (!lease) return "No Lease"
+            return (
+                <div>
+                    #{lease?.id}
+                </div>
+            )
+        },
         meta: {
             type: "number",
         },
@@ -150,15 +159,22 @@ const columns: ColumnDef<RentPayment>[] = [
         enableSorting: true,
     },
     {
-        id: "tenantId",
-        header: "Tenant ID",
-        cell: ({ row }) => (
-            <div className="capitalize">{row?.original?.tenantId}</div>
-        ),
-        meta: {
-            type: "number",
+        id: "tenant",
+        header: "Tenant",
+        cell: ({ row }) => {
+            const tenant = row.original?.lease?.tenant;
+
+            if (!tenant) return "No Tenant"
+            return (
+                <div>
+                    {tenant?.firstName} {tenant?.lastName}
+                </div>
+            )
         },
-        accessorFn: (row) => row?.tenantId || "",
+        meta: {
+            type: "string",
+        },
+        accessorFn: (row) => row?.lease?.tenantId,
         enableSorting: true,
     },
 ]
@@ -172,7 +188,7 @@ const PaymentTable = ({ payments, ...props }) => {
                 columns={columns}
                 defaultSort={{id: "date", desc: false}}
                 title="Payments"
-                subtitle="These are your payments, either created by yourself or by your tenants."
+                subtitle="These are all payments created by your tenants or yourself."
                 icon={<Coins className={"w-5 h-5"} />}
             >
                 {props.children}

@@ -23,7 +23,7 @@ const UnitLink = ({unitId}) => {
     if (!unit) return null;
 
     return (
-        <div className="p-2 rounded-full bg-white border-2 border-gray-100 w-fit hover:bg-gray-100 font-500 flex flex-row cursor-pointer" onClick={() => {
+        <div className="p-2 whitespace-nowrap rounded-full bg-white border-2 border-gray-100 w-fit hover:bg-gray-100 font-500 flex flex-row cursor-pointer" onClick={() => {
             navigate(`/rentals/${unit?.id}`)
         }}>
             <Link className="w-5 h-5 mr-2" />
@@ -139,8 +139,8 @@ const LeaseHistory = ({leases, ...props}) => {
             enableSorting: true,
         },
         {
-            id: "oldestUnpaidPayment",
-            header: "Oldest Unpaid Payment",
+            id: "nextPaymentDue",
+            header: "Next Payment Due",
             meta: {
                 type: "date",
             },

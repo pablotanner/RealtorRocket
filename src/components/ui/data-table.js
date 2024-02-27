@@ -423,9 +423,6 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                             <TableRow key={row.id}>
                                 {row.getVisibleCells().map((cell) => {
                                     const sticky = cell?.column?.columnDef?.meta?.sticky;
-
-                                    console.log(sticky)
-
                                     return (
                                         <TableCell key={cell.id}
                                                    className={cn(sticky && "sticky w-fit items-center bg-[#F9FAFB] z-20", sticky === "left" && "left-0", sticky === "right" && "-right-2")}

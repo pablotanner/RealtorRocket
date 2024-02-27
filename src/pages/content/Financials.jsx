@@ -21,10 +21,22 @@ const Financials = (props) => {
     const leases = useSelector(state => selectLeasesByPropertyId(state, propertySelection));
 
     const payments = useSelector(state => selectPaymentsByPropertyId(state, propertySelection))
+        .map((payment) => {
+            return {
+                ...payment,
+                lease: leases.find(lease => lease.id === payment.leaseId)
+            }
+        })
 
     const paymentSchedules = leases.reduce((acc, lease) => {
         return acc.concat(lease.paymentSchedule);
-    }, []);
+    }, []).map(schedule => {
+        return {
+            ...schedule,
+            lease: leases.find(lease => lease.id === schedule.leaseId)
+        }
+    })
+
 
 
     const rentDue = paymentSchedules.reduce((acc, scheduledPayment) => {

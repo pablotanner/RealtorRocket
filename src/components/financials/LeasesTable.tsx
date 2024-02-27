@@ -35,10 +35,10 @@ const columns: ColumnDef<Lease>[] = [
         enableHiding: false,
     },
     {
-        id: "leaseId",
-        header: "Lease ID",
+        id: "lease",
+        header: "Lease",
         cell: ({ row }) => (
-            <div className="capitalize">{row?.original?.id}</div>
+            <div className="capitalize">#{row?.original?.id}</div>
         ),
         meta: {
             type: "number",
@@ -161,7 +161,7 @@ const LeasesTable = ({ leases }) => {
     return (
         <div className={"border-2 border-secondary p-4 rounded-lg "}>
 
-            <DataTable data={leases} columns={columns}  title="Leases" icon={<Scroll className={"w-5 h-5"} />} />
+            <DataTable data={leases} columns={columns}  title="Leases" subtitle="These are all your leases." icon={<Scroll className={"w-5 h-5"} />} />
         </div>
 
     )
