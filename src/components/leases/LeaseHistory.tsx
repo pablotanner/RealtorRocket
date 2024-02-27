@@ -2,15 +2,12 @@ import {dateParser, moneyParser} from "../../utils/formatters.js";
 import {DataTable} from "../ui/data-table.js";
 import {ColumnDef} from "@tanstack/react-table";
 import {Lease} from "../../utils/classes.ts";
-import {Button} from "../ui/button.tsx";
 import {FilePlus2, Link, Scroll} from "lucide-react";
-import AddLease from "./AddLease.js";
-import {useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 import {selectUnitById} from "../../services/slices/objectSlice.js";
 import {useSelector} from "react-redux";
 import {LeaseStatus, PaymentFrequency} from "../../utils/magicNumbers.js";
-import {isAfter} from "date-fns";
+import {LeaseStatusBadge} from "../../utils/statusBadges.js";
 
 
 const UnitLink = ({unitId}) => {
@@ -130,9 +127,7 @@ const LeaseHistory = ({leases, ...props}) => {
             },
             cell: ({ row }) => {
                 return (
-                    <div className="capitalize">
-                        {LeaseStatus[row?.original?.status]}
-                    </div>
+                    <LeaseStatusBadge status={row?.original?.status} />
                 )
             },
             accessorFn: (row) => row?.status || undefined,

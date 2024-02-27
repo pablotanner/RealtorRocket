@@ -43,7 +43,6 @@ export const PaymentStatus = {
     "OVERDUE": "Overdue",
     "CANCELLED": "Cancelled",
     "REJECTED": "Rejected",
-    "UNKNOWN": "Unknown",
 }
 
 export const PaymentFrequency = {
@@ -55,12 +54,11 @@ export const PaymentFrequency = {
 
 export const LeaseStatus = {
     ACTIVE: "Active",
-    //INACTIVE: "Inactive",
     EXPIRED: "Expired",
     TERMINATED: "Terminated",
     PENDING: "Pending",
-    UNKNOWN: "Unknown",
 }
+
 
 
 export const RealEstateType = {

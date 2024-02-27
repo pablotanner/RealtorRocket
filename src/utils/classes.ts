@@ -103,6 +103,7 @@ export class Lease {
     rentalPrice: number | null;
     paymentFrequency: string | null;
     leaseLength: number | null;
+    specialTerms: string | null;
     leaseTerms: string | null;
     currency: CurrencyCode | null;
     totalRentDue: number | null;

@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import {cn} from "../../utils.ts";
 
 const badgeVariants = cva(
-    "inline-flex items-center rounded-md border cursor-pointer px-1 py-0 text-xs font-600 capitalize transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+    "inline-flex items-center rounded-full border cursor-pointer px-2 py-[2px] text-xs font-500 capitalize transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
     {
         variants: {
             variant: {
@@ -15,13 +15,13 @@ const badgeVariants = cva(
                 destructive:
                     "border-red-600 bg-red-100 text-red-600 hover:bg-red-200",
                 outline: "text-foreground",
-                positive: "border-green-300 bg-green-50 text-emerald-600 hover:bg-green-100",
+                positive: "border-green-400/60 bg-green-50 text-emerald-700",
                 blue: "border-indigo-300 bg-indigo-50 text-indigo-500 hover:bg-indigo-100/80",
-                negative: "border-red-300 bg-red-50 text-red-500 hover:bg-red-100/80",
+                negative: "border-red-300 bg-red-50 text-red-700",
                 purple: "border-purple-300 bg-purple-50 text-purple-500 hover:bg-purple-100/80",
-                pink: "border-pink-300 bg-pink-50 text-pink-500 hover:bg-pink-100/80",
-                neutral: "border-gray-300 bg-gray-50 text-gray-500 hover:bg-gray-100/80",
-                warning: "border-yellow-300 bg-yellow-50 text-yellow-500 hover:bg-yellow-100/80",
+                pink: "border-pink-300/60 bg-pink-50 text-pink-600",
+                neutral: "border-gray-300 bg-gray-50 text-gray-600",
+                warning: "border-amber-400/50 bg-yellow-50 text-orange-700",
             },
         },
         defaultVariants: {

@@ -6,6 +6,7 @@ import {dateParser, moneyParser} from "../../utils/formatters.js";
 import {DataTable} from "../ui/data-table.js";
 import {Lease} from "../../utils/classes.ts";
 import {Scroll} from "lucide-react";
+import {LeaseStatusBadge} from "../../utils/statusBadges.js";
 
 
 
@@ -66,7 +67,6 @@ const columns: ColumnDef<Lease>[] = [
             type: "string",
         },
         enableSorting: true,
-
     },
     {
         id: "startDate",
@@ -100,7 +100,6 @@ const columns: ColumnDef<Lease>[] = [
         },
         accessorFn: (row) => row?.endDate || "",
         enableSorting: true,
-
     },
     {
         id: "rentalPrice",
@@ -117,8 +116,91 @@ const columns: ColumnDef<Lease>[] = [
         },
         accessorFn: (row) => row?.rentalPrice || "",
         enableSorting: true,
-
     },
+    {
+        id: "unit",
+        header: "Unit",
+        cell: ({ row }) => {
+            if (row?.original?.unit) {
+                return (
+                    <div className="capitalize">{row?.original?.unit?.unitIdentifier}</div>
+                )
+            }
+            else {
+                return (
+                    <div className="capitalize text-red-500">No Unit</div>
+                )
+            }
+        },
+        accessorFn: (row) => row?.unit?.unitIdentifier || "",
+        meta: {
+            type: "string",
+        },
+        enableSorting: true,
+    },
+    {
+        id: "status",
+        header: "Status",
+        meta: {
+            type: "string",
+        },
+        cell: ({ row }) => {
+            return (
+                <LeaseStatusBadge status={row?.original?.status} />
+            )
+        },
+        accessorFn: (row) => row?.status || undefined,
+        enableSorting: true,
+    },
+    {
+        id: "paymentFrequency",
+        header: "Payment Frequency",
+        meta: {
+            type: "string",
+        },
+        cell: ({ row }) => {
+            return (
+                <div className="capitalize">
+                    {row?.original?.paymentFrequency?.toLowerCase()}
+                </div>
+            )
+        },
+        accessorFn: (row) => row?.paymentFrequency || "",
+        enableSorting: true,
+    },
+    {
+        id: "notes",
+        header: "Notes",
+        meta: {
+            type: "string",
+        },
+        cell: ({ row }) => {
+            return (
+                <div className="capitalize">
+                    {row?.original?.notes}
+                </div>
+            )
+        },
+        accessorFn: (row) => row?.notes || "",
+        enableSorting: true,
+    },
+    {
+        id: "specialTerms",
+        header: "Special Terms",
+        meta: {
+            type: "string",
+        },
+        cell: ({ row }) => {
+            return (
+                <div className="capitalize">
+                    {row?.original?.specialTerms}
+                </div>
+            )
+        },
+        accessorFn: (row) => row?.specialTerms || "",
+        enableSorting: true,
+    },
+    /*
     {
         id: "totalRentDue",
         header: "Total Rent Due",
@@ -153,11 +235,14 @@ const columns: ColumnDef<Lease>[] = [
         enableSorting: true,
 
     },
+     */
+
 
 ]
 
 const LeasesTable = ({ leases }) => {
 
+    console.log(leases)
     return (
         <div className={"border-2 border-secondary p-4 rounded-lg "}>
 

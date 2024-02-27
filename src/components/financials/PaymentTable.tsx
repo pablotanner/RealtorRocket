@@ -4,10 +4,9 @@ import {
 import {dateParser, moneyParser} from "../../utils/formatters.js";
 import {DataTable} from "../ui/data-table.js";
 import {RentPayment} from "../../utils/classes.ts";
+import {PaymentStatusBadge} from "../../utils/statusBadges.js";
 import {Coins, Eye} from "lucide-react";
-
 import ViewPayment from "../payments/ViewPayment.js"
-import {Badge} from "../ui/badge.tsx";
 
 
 
@@ -91,31 +90,9 @@ const columns: ColumnDef<RentPayment>[] = [
             type: "string",
         },
         cell: ({ row }) => {
-            let variant = "neutral"
-            if (row?.original?.status === "PAID") {
-                variant = "positive"
-            }
-            else if (row?.original?.status === "OVERDUE" ) {
-                variant = "destructive"
-            }
-            else if (row?.original?.status === "PENDING" || row?.original?.status === "LATE"){
-                variant = "warning"
-            }
-            else if (row?.original?.status === "CANCELLED" || row?.original?.status === "REJECTED") {
-                variant = "purple"
-            }
-
-
 
             return (
-                <>
-                    {/*@ts-expect-error variants are defined above */}
-                    <Badge variant={variant}>
-                        {row?.original?.status?.toLowerCase() || "Unknown"}
-                    </Badge>
-                </>
-
-
+                <PaymentStatusBadge status={row?.original?.status} />
             )
         },
         accessorFn: (row) => row?.status,
@@ -142,8 +119,6 @@ const columns: ColumnDef<RentPayment>[] = [
         header: "Lease",
         cell: ({ row }) => {
             const lease = row.original?.lease;
-
-            console.log(row.original?.leaseId)
 
             if (!lease) return "No Lease"
             return (

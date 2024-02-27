@@ -5,9 +5,8 @@ import {dateParser, moneyParser} from "../../utils/formatters.js";
 import {DataTable} from "../ui/data-table.js";
 import {LeasePaymentSchedule} from "../../utils/classes.ts";
 import {CalendarClock, Eye} from "lucide-react";
-
-import {Badge} from "../ui/badge.tsx";
 import ViewPayment from "../payments/ViewPayment.js";
+import {PaymentStatusBadge} from "../../utils/statusBadges.js";
 
 
 const columns: ColumnDef<LeasePaymentSchedule>[] = [
@@ -74,31 +73,8 @@ const columns: ColumnDef<LeasePaymentSchedule>[] = [
             type: "string",
         },
         cell: ({ row }) => {
-            let variant = "neutral"
-            if (row?.original?.status === "PAID") {
-                variant = "positive"
-            }
-            else if (row?.original?.status === "OVERDUE" ) {
-                variant = "destructive"
-            }
-            else if (row?.original?.status === "PENDING" || row?.original?.status === "LATE"){
-                variant = "warning"
-            }
-            else if (row?.original?.status === "CANCELLED" || row?.original?.status === "REJECTED") {
-                variant = "purple"
-            }
-
-
-            
             return (
-                <>
-                    {/*@ts-expect-error variants are defined above */}
-                    <Badge variant={variant}>
-                        {row?.original?.status.toLowerCase()}
-                    </Badge>
-                </>
-                    
-
+                <PaymentStatusBadge status={row?.original?.status} />
             )
         },
         accessorFn: (row) => row?.status,
