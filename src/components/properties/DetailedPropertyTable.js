@@ -24,8 +24,6 @@ const DetailedPropertyTable = ({ properties }) => {
     const [deleteProperty, {isLoading: isDeletingProperty}] = useDeletePropertyMutation()
 
 
-
-
     const getLocation = (property) => {
         if (property?.city && property?.country) {
             return `${property?.city}, ${property?.country}`
@@ -175,17 +173,17 @@ const DetailedPropertyTable = ({ properties }) => {
                          onClick={() => navigate(`/properties/${property?.id}`)} alt="Property Image"
                     />
                     <div className="flex flex-col justify-start overflow-hidden">
-                        <h className="font-500 text-off-black text-[2vh] md:text-xl overflow-hidden">
+                        <p className="font-500 text-off-black text-[2vh] md:text-md overflow-hidden">
                             {property?.title}
-                        </h>
-                        <p className="text-gray-500">
+                        </p>
+                        <p className="text-gray-500 text-sm">
                             {RealEstateType[property.realEstateType]}
                         </p>
                     </div>
                 </div>
 
 
-                <div className="flex flex-row items-center">
+                <div className="flex flex-row items-center text-sm overflow-hidden">
                     {getLocation(property)}
                 </div>
 
@@ -223,7 +221,7 @@ const DetailedPropertyTable = ({ properties }) => {
     }
 
 
-    if (properties.length === 0) {
+    if (properties?.length === 0) {
         return (
             <div className="flex flex-col gap-1 ">
                 {/*<Header/>*/}

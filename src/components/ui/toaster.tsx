@@ -15,8 +15,8 @@ export function Toaster() {
 
 
     const VariantColors = {
-        success: "#079455",
-        error: "#D92D20",
+        success: "border-[#079455]",
+        error: "border-[#D92D20]",
     }
 
     const TypeIcons = {
@@ -30,8 +30,8 @@ export function Toaster() {
         const color = VariantColors[variant]
 
         return (
-            <div className={`p-[2px] rounded-full border-2 border-[${color}] border-opacity-20`}>
-                <div className={`p-[2px] rounded-full border-2 border-[${color}] border-opacity-40`}>
+            <div className={`p-[2px] rounded-full border-2 ${color} border-opacity-20`}>
+                <div className={`p-[2px] rounded-full border-2 ${color} border-opacity-40`}>
                     {TypeIcons[variant]}
                 </div>
             </div>
