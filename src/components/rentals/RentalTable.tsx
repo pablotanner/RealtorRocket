@@ -50,12 +50,16 @@ const SendToTenant = ({tenantId}) => {
     }
 
     return (
-            <div className="bg-primary-dark whitespace-nowrap items-center w-fit text-white p-2 flex flex-row rounded-2xl cursor-pointer hover:bg-primary-dark/70 transition-all ease-in"
-                 onClick={() => navigate(`/tenants/${tenant.id}`)}
-            >
-                <LinkIcon className="w-4 h-4 mr-2"/> {tenant?.firstName} {tenant?.lastName}
-            </div>
+        <Button
+            className="pl-0 text-gray-900 group"
+            variant="link"
+            onClick={() => navigate(`/tenants/${tenant.id}`)}
+        >
+            <LinkIcon className="w-4 h-4 mr-1 transform transition-transform duration-300 group-hover:rotate-[180deg]" />
+            {tenant?.firstName} {tenant?.lastName}
+        </Button>
     )
+
 }
 
 
