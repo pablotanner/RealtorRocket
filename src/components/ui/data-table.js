@@ -16,7 +16,7 @@ import {
     DropdownMenuTrigger
 } from "./dropdown-menu.tsx";
 import {Button} from "./button.tsx";
-import {ListFilter, MoveDown, MoveUp, X} from "lucide-react";
+import {AlertCircle, ListFilter, MoveDown, MoveUp, X} from "lucide-react";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "./tabs.tsx";
 import {Checkbox} from "./checkbox.tsx";
 import {isAfter, isBefore, isSameDay} from "date-fns";
@@ -428,26 +428,47 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                     })}
                 </TableHeader>
                 <TableBody>
-                    {table?.getRowModel()?.rows?.map((row => {
-                        return (
-                            <TableRow key={row.id}>
-                                {row.getVisibleCells().map((cell) => {
-                                    const sticky = cell?.column?.columnDef?.meta?.sticky;
-                                    return (
-                                        <TableCell key={cell.id}
-                                                   className={cn(sticky && "sticky w-fit items-center bg-[#F9FAFB] z-20", sticky === "left" && "left-0", sticky === "right" && "-right-2")}
-                                        >
-                                            {flexRender(
-                                                cell.column.columnDef.cell,
-                                                cell.getContext()
-                                            )}
-                                        </TableCell>
-                                    );
-                                })}
+                    {
+                        !data?.length ? (
+                            <TableRow>
+                                <TableCell colSpan={table?.getAllColumns()?.length}>
+                                    <div className="flex flex-col items-center gap-1 text-center">
+                                        <div className="p-3 bg-red-200/40 rounded-full">
+                                            <AlertCircle className="w-5 h-5 text-red-600" />
+                                        </div>
+                                        <h3 className="text-md text-gray-700">
+                                            No Data Available
+                                        </h3>
+                                        <p className="text-sm font-400 text-gray-500 max-w-[350px]">
+                                            There is no data available for this table, if you believe this is an error, please contact support.
+                                        </p>
+                                    </div>
+                                </TableCell>
                             </TableRow>
-                        );
-                    }))}
+                        ) : (
+                            table?.getRowModel()?.rows?.map((row => {
+                                return (
+                                    <TableRow key={row.id}>
+                                        {row.getVisibleCells().map((cell) => {
+                                            const sticky = cell?.column?.columnDef?.meta?.sticky;
+                                            return (
+                                                <TableCell key={cell.id}
+                                                           className={cn(sticky && "sticky w-fit items-center bg-[#F9FAFB] z-20", sticky === "left" && "left-0", sticky === "right" && "-right-2")}
+                                                >
+                                                    {flexRender(
+                                                        cell.column.columnDef.cell,
+                                                        cell.getContext()
+                                                    )}
+                                                </TableCell>
+                                            );
+                                        })}
+                                    </TableRow>
+                                );
+                            }))
+                        )
+                    }
                 </TableBody>
+
             </Table>
         </div>
     )
