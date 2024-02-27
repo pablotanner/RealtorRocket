@@ -58,7 +58,7 @@ const columns: ColumnDef<Lease>[] = [
             }
             else {
                 return (
-                    <div className="capitalize text-red-500 font-500">No Tenant</div>
+                    <div className="capitalize text-red-600/90 font-500">No Tenant</div>
                 )
             }
         },
@@ -241,8 +241,6 @@ const columns: ColumnDef<Lease>[] = [
 ]
 
 const LeasesTable = ({ leases }) => {
-
-    console.log(leases)
     return (
         <div className={"border-2 border-secondary p-4 rounded-lg "}>
 

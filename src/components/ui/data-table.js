@@ -155,7 +155,17 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                         return (
                             <Button
                                 variant="table"
-                                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                                onClick={() => {
+                                    if (!column.getIsSorted()) {
+                                        column.toggleSorting(false)
+                                    }
+                                    else if (column.getIsSorted() === "asc") {
+                                        column.toggleSorting(true)
+                                    }
+                                    else {
+                                        column.clearSorting()
+                                    }
+                                }}
                                 className="capitalize relative flex flex-row justify-start px-4 -ml-4 pr-6"
                             >
                                 {headerLabel}
