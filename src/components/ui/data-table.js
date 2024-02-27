@@ -20,6 +20,7 @@ import {ListFilter, MoveDown, MoveUp, X} from "lucide-react";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "./tabs.tsx";
 import {Checkbox} from "./checkbox.tsx";
 import {isAfter, isBefore, isSameDay} from "date-fns";
+import {cn} from "../../utils.ts";
 
 
 
@@ -153,18 +154,17 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                     header: ({column}) => {
                         return (
                             <Button
-                                variant="ghost"
-                                size="ghost"
+                                variant="table"
                                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                                className="capitalize min-w-[175px] max-w-[100%] flex flex-row justify-start"
+                                className="capitalize relative flex flex-row justify-start px-4 -ml-4 pr-6"
                             >
                                 {headerLabel}
 
                                 {column.getIsSorted() === "asc" && (
-                                    <MoveUp className="ml-2 h-4 w-4" />
+                                    <MoveUp className="absolute right-1 h-4 w-4" />
                                 )}
                                 {column.getIsSorted() === "desc" && (
-                                    <MoveDown className="ml-2 h-4 w-4" />
+                                    <MoveDown className="absolute right-1  h-4 w-4" />
                                 )}
                             </Button>
                         )
@@ -272,10 +272,10 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                     {props.icon}
                 </div>
                 <div>
-                    <h2>
+                    <h3>
                         {props.title}
-                    </h2>
-                    <p>
+                    </h3>
+                    <p className="text-[#475467] text-sm">
                         {props.subtitle}
                     </p>
                 </div>
@@ -400,16 +400,13 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                             <TableRow key={headerGroup.id}>
                                 {headerGroup?.headers?.map((header) => {
                                     return (
-                                        <TableHead key={header.id} colSpan={header.colSpan} scope="col">
+                                        <TableHead key={header.id} colSpan={header.colSpan} scope="col"
+                                                   className={cn(header.column?.columnDef?.meta?.isSticky && "sticky  right-0 z-30")}
+                                        >
                                             {header.isPlaceholder ? null : (
-                                                <div>
-                                                    <span>
-                                                        {flexRender(
-                                                            header.column.columnDef.header,
-                                                            header.getContext()
-                                                        )}
-                                                    </span>
-                                                </div>
+                                                flexRender(
+                                                        header.column.columnDef.header,
+                                                    header.getContext())
                                             )}
                                         </TableHead>
                                     );
@@ -424,7 +421,9 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                             <TableRow key={row.id}>
                                 {row.getVisibleCells().map((cell) => {
                                     return (
-                                        <TableCell key={cell.id}>
+                                        <TableCell key={cell.id}
+                                                   className={cn(cell.column?.columnDef?.meta?.isSticky && "sticky right-0 z-20")}
+                                        >
                                             {flexRender(
                                                 cell.column.columnDef.cell,
                                                 cell.getContext()

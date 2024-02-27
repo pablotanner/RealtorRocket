@@ -19,6 +19,7 @@ const buttonVariants = cva(
           "outline-primary": "border border-primary-dark border-2 text-off-black bg-transparent hover:bg-white/80 hover:text-accent-foreground",
           secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
           ghost: "text-off-black hover:bg-accent hover:text-accent-foreground",
+          table: "bg-transparent font-500 text-[#475467] hover:bg-gray-200/80",
           gradient: "bg-gradient-to-r from-primary to-primary-dark hover:from-primary/80 hover:to-primary-dark/80 text-white",
           link: "text-primary underline-offset-4 hover:underline",
           "nav-button": "text-muted-foreground bg-inherit justify-start hover:bg-[#EFEFEF] hover:text-[#000002] font-500",
