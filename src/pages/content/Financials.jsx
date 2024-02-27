@@ -16,6 +16,8 @@ import {useState} from "react";
 const Financials = (props) => {
     const {propertySelection} = props;
 
+    const [currentTab, setCurrentTab] = useState(0);
+
     const [showPaymentModal, setShowPaymentModal] = useState(false);
 
     const leases = useSelector(state => selectLeasesByPropertyId(state, propertySelection));
@@ -56,6 +58,41 @@ const Financials = (props) => {
     }).length;
 
 
+    const Tabs = [
+        {
+            title: "Payments",
+            content: (
+                <PaymentTable payments={payments}>
+                    <AddPayment
+                        open={showPaymentModal}
+                        onOpenChange={() => setShowPaymentModal(!showPaymentModal)}
+
+                    >
+                        <Button className="self-end justify-end" variant="outline" type="button">
+                            <FilePlus2 className="w-4 h-4 mr-2" />
+                            Add Payment
+                        </Button>
+                    </AddPayment>
+                </PaymentTable>
+            ),
+            count: payments?.length
+        },
+        {
+            title: "Payment Schedule",
+            content: <PaymentScheduleTable paymentSchedules={paymentSchedules} />,
+            count: paymentSchedules?.length
+        },
+        {
+            title: "Leases",
+            content: <LeasesTable leases={leases} />,
+            count: leases?.length
+        },
+        {
+            title: "Expenses",
+            content: "This tab will show your expenses",
+            count: 0
+        }
+    ]
 
 
     return (
@@ -72,57 +109,32 @@ const Financials = (props) => {
                     <InfoCard title="Rent Paid" number={moneyParser(rentPaid)}  />
                     <InfoCard title="Active Leases" number={activeLeases}   />
                 </div>
-                
-                <Tabs defaultValue="payments" className="overflow-auto">
-                    <TabsList>
-                        <TabsTrigger value="payments">
-                        Payments
-                        </TabsTrigger>
 
-                        <TabsTrigger value="paymentSchedule">
-                            Planned Payments
-                        </TabsTrigger>
+                <div className="flex flex-row overflow-auto">
+                    {Tabs.map((tab, index) => {
+                        return (
+                            <div
+                                data-active={currentTab === index}
+                                className="flex gap-2 items-center cursor-pointer rounded-t-md text-gray-600 font-500 px-4 py-2 border-b-2 border-transparent
+                                hover:border-gray-700
+                                transition-colors data-[active='true']:border-gray-700 data-[active='true']:text-gray-800
+                                hover:bg-secondary
 
-                        <TabsTrigger value="leases">
-                            Leases
-                        </TabsTrigger>
-
-                        <TabsTrigger value="expenses">
-                            Expenses
-                        </TabsTrigger>
-
-                    </TabsList>
-
-                    <TabsContent value="payments">
-                        <PaymentTable payments={payments}>
-                            <AddPayment
-                                open={showPaymentModal}
-                                onOpenChange={() => setShowPaymentModal(!showPaymentModal)}
-
+                                "
+                                key={index}
+                                onClick={() => setCurrentTab(index)}
                             >
-                                <Button className="self-end justify-end" variant="outline" type="button">
-                                    <FilePlus2 className="w-4 h-4 mr-2" />
-                                    Add Payment
-                                </Button>
-                            </AddPayment>
-                        </PaymentTable>
-                    </TabsContent>
-
-                    <TabsContent value="paymentSchedule">
-                        <PaymentScheduleTable paymentSchedules={paymentSchedules} />
-                    </TabsContent>
-
-                    <TabsContent value="leases">
-                        <LeasesTable leases={leases} />
-                    </TabsContent>
+                                {tab.title}
+                                <div className="p-1 rounded-lg shadow-sm text-xs bg-white w-7 h-7 flex items-center justify-center border border-secondary ">
+                                    {tab.count}
+                                </div>
+                            </div>
+                        )
+                    })}
+                </div>
 
 
-
-                    <TabsContent value="expenses">
-                        This tab will show your expenses
-                    </TabsContent>
-                </Tabs>
-                
+                {Tabs[currentTab].content}
 
 
 
