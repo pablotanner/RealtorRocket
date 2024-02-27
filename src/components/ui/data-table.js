@@ -399,9 +399,11 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                         return (
                             <TableRow key={headerGroup.id}>
                                 {headerGroup?.headers?.map((header) => {
+                                    const sticky = header.column?.columnDef?.meta?.sticky;
+
                                     return (
                                         <TableHead key={header.id} colSpan={header.colSpan} scope="col"
-                                                   className={cn(header.column?.columnDef?.meta?.isSticky && "sticky  right-0 z-30")}
+                                                   className={cn(sticky && "sticky w-fit bg-[#F9FAFB] z-30")}
                                         >
                                             {header.isPlaceholder ? null : (
                                                 flexRender(
@@ -420,9 +422,13 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                         return (
                             <TableRow key={row.id}>
                                 {row.getVisibleCells().map((cell) => {
+                                    const sticky = cell?.column?.columnDef?.meta?.sticky;
+
+                                    console.log(sticky)
+
                                     return (
                                         <TableCell key={cell.id}
-                                                   className={cn(cell.column?.columnDef?.meta?.isSticky && "sticky right-0 z-20")}
+                                                   className={cn(sticky && "sticky w-fit items-center bg-[#F9FAFB] z-20", sticky === "left" && "left-0", sticky === "right" && "-right-2")}
                                         >
                                             {flexRender(
                                                 cell.column.columnDef.cell,

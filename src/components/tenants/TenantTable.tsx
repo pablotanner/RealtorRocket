@@ -37,7 +37,7 @@ const TenantTable = ({tenants}) => {
         return (
             <DropdownMenu>
                 <DropdownMenuTrigger asChild className="cursor-pointer">
-                    <MoreHorizontal className="h-5 w-5"/>
+                    <MoreHorizontal className="h-5 w-5 ml-3"/>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-[150px]">
                     <DropdownMenuGroup>
