@@ -19,6 +19,7 @@ import {Unit} from "../../utils/classes.ts";
 import {DataTable} from "../ui/data-table.js";
 import {selectTenantById} from "../../services/slices/objectSlice.js";
 import {useSelector} from "react-redux";
+import {ListingStatusBadge} from "../../utils/statusBadges.js";
 
 
 const SendToUnit = ({unit}) => {
@@ -108,7 +109,13 @@ const columns: ColumnDef<Unit>[] = [
                 <SendToUnit unit={row.original} />
             )
         },
-        enableSorting: false,
+        meta: {
+            type: "string",
+        },
+        accessorFn: (row) => {
+            return row.unitIdentifier
+        },
+        enableSorting: true,
         enableHiding: false,
     },
     {
@@ -135,11 +142,14 @@ const columns: ColumnDef<Unit>[] = [
         header: "Status",
         enableSorting: true,
         cell: ({ row }) => (
-            <div className="capitalize">{row.original.status?.toLowerCase()}</div>
+            <ListingStatusBadge status={row.original.status} />
         ),
         meta: {
             type: "string"
         },
+        accessorFn: (row) => {
+            return row.status
+        }
     },
 
     {

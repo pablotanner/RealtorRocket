@@ -6,7 +6,7 @@ import {cn} from "../utils.ts";
 export const LeaseStatusBadge = ({ status }) => {
     if (!status) return null
 
-    const lowerStatus = status?.toLowerCase()
+    const lowerStatus = status.toLowerCase()
 
     const statusVariant = {
         active: 'positive',
@@ -24,16 +24,51 @@ export const LeaseStatusBadge = ({ status }) => {
 
     return (
         <Badge variant={statusVariant[lowerStatus]}>
-            <p className={cn("w-1 h-1 rounded-full mr-1", dotColor[lowerStatus])}/>
+            <p className={cn("inline-block w-1 h-1 rounded-full mr-1", dotColor[lowerStatus])}/>
             {lowerStatus}
         </Badge>
     )
 }
 
+export const ListingStatusBadge = ({ status }) => {
+    if (!status) return null;
+
+    const lowerStatus = status.toLowerCase();
+
+    const statusVariant = {
+        active: 'positive',
+        inactive: 'neutral',
+        rented: 'positive',
+        not_rented: 'negative',
+        reserved: 'warning',
+        sold: 'positive',
+        pending: 'warning',
+        unknown: 'neutral',
+    };
+
+    const dotColor = {
+        active: 'bg-green-600',
+        inactive: 'bg-gray-400',
+        rented: 'bg-green-600',
+        not_rented: 'bg-red-500',
+        reserved: 'bg-orange-600',
+        sold: 'bg-blue-600',
+        pending: 'bg-yellow-500',
+        unknown: 'bg-gray-400',
+    };
+
+    return (
+        <Badge variant={statusVariant[lowerStatus]}>
+            <span className={cn("inline-block w-1 h-1 rounded-full mr-2", dotColor[lowerStatus])}></span>
+            {lowerStatus}
+        </Badge>
+    );
+};
+
 export const PaymentStatusBadge = ({ status }) => {
     if (!status) return null
 
-    const lowerStatus = status?.toLowerCase()
+    const lowerStatus = status.toLowerCase()
 
     const statusVariant = {
         pending: 'warning',
