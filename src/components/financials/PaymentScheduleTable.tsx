@@ -34,6 +34,22 @@ const columns: ColumnDef<LeasePaymentSchedule>[] = [
         enableSorting: true,
     },
     {
+        id: "amountDue",
+        header: "Amount Due",
+        meta: {
+            type: "number",
+        },
+        cell: ({ row }) => {
+            return (
+                <div className="capitalize font-600">
+                    {moneyParser(row?.original?.amountDue)}
+                </div>
+            )
+        },
+        accessorFn: (row) => row?.amountDue || 0,
+        enableSorting: true,
+    },
+    {
         id: "dueDate",
         header: "Due Date",
         cell: ({ row }) => {
@@ -49,22 +65,6 @@ const columns: ColumnDef<LeasePaymentSchedule>[] = [
         },
         enableSorting: true,
 
-    },
-    {
-        id: "amountDue",
-        header: "Amount Due",
-        meta: {
-            type: "number",
-        },
-        cell: ({ row }) => {
-            return (
-                <div className="capitalize">
-                    {moneyParser(row?.original?.amountDue)}
-                </div>
-            )
-        },
-        accessorFn: (row) => row?.amountDue || 0,
-        enableSorting: true,
     },
     {
         id: "status",
@@ -85,8 +85,6 @@ const columns: ColumnDef<LeasePaymentSchedule>[] = [
         header: "Lease",
         cell: ({ row }) => {
             const lease = row.original?.lease;
-
-            console.log(row.original?.leaseId)
 
             if (!lease) return "No Lease"
             return (

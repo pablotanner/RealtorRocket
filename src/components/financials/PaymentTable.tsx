@@ -161,7 +161,7 @@ const PaymentTable = ({ payments, ...props }) => {
             <DataTable
                 data={payments}
                 columns={columns}
-                defaultSort={{id: "date", desc: false}}
+                defaultSort={{id: "paymentDate", desc: false}}
                 title="Payments"
                 subtitle="These are all payments created by your tenants or yourself."
                 icon={<Coins className={"w-5 h-5"} />}

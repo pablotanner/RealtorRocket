@@ -244,7 +244,16 @@ const LeasesTable = ({ leases }) => {
     return (
         <div className={"border-2 border-secondary p-4 rounded-lg "}>
 
-            <DataTable data={leases} columns={columns}  title="Leases" subtitle="These are all your leases." icon={<Scroll className={"w-5 h-5"} />} />
+            <DataTable
+                data={leases}
+                columns={columns}
+                title="Leases"
+                subtitle="These are all your leases."
+                icon={<Scroll className={"w-5 h-5"} />}
+                defaultSort={{id: "lease", desc: true}}
+
+
+            />
         </div>
 
     )

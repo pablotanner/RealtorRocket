@@ -40,9 +40,9 @@ const Header = () => {
                                 {(userProfile?.firstName?.[0] + userProfile?.lastName?.[0]) || "?"}
                             </AvatarFallback>
                         </Avatar>
-                        <h className="hidden xs:flex items-center ml-2 font-500 whitespace-nowrap">
+                        <p className="hidden xs:flex items-center ml-2 font-500 whitespace-nowrap">
                             {userProfile?.firstName} {userProfile?.lastName}
-                        </h>
+                        </p>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-40 mr-2 sm:mr-0">
                         <DropdownMenuGroup>

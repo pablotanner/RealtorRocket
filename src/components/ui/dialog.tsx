@@ -7,9 +7,10 @@ import {cn} from "../../utils.ts";
 const Dialog = React.forwardRef<
     React.ElementRef<typeof DialogPrimitive.Root>,
     React.ComponentPropsWithoutRef<typeof DialogPrimitive.Root>
->(({...props }) => {
+>(({...props }, ref) => {
     return (
         <DialogPrimitive.Root
+
             {...props}
         />
     )

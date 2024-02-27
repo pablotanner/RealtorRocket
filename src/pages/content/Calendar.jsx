@@ -107,7 +107,7 @@ const Calendar = () => {
     const EventsInSelectedRange = () => {
         return (
             <div>
-                <h className="text-xl">Events in Selected Week</h>
+                <h3>Events in Selected Week</h3>
                 <div className="flex flex-col gap-2">
                     {[...eventsInRange].sort((a, b) => isAfter(new Date(a.date), new Date(b.date))).map((event, index) => <Event key={index} type={event.category} {...event} />)}
 

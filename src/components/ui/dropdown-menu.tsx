@@ -7,7 +7,7 @@ import {cn} from "../../utils.ts";
 const DropdownMenu = React.forwardRef<
     React.ElementRef<typeof DropdownMenuPrimitive.Root>,
     React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Root>
->(({...props }) => {
+>(({...props }, ref) => {
 
   return (
     <DropdownMenuPrimitive.Root

@@ -150,8 +150,6 @@ const columns: ColumnDef<Property>[] = [
 // eslint-disable-next-line react/prop-types
 const PropertyTable = ({ properties  }) => {
 
-    console.log(properties)
-
     return (
         <DataTable
             data={properties}
