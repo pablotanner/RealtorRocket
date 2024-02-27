@@ -72,7 +72,7 @@ const Home = () => {
                     </span>
                     Your Next Events are
                 </div>
-                <ul className="flex flex-col gap-1 whitespace-nowrap">
+                <ul className="flex flex-col gap-1">
                     {upcomingEvents.map((event, index) => {
                         return (
                             <li key={index} className="flex flex-row gap-2 ml-1">
