@@ -2,12 +2,13 @@ import {dateParser, moneyParser} from "../../utils/formatters.js";
 import {DataTable} from "../ui/data-table.js";
 import {ColumnDef} from "@tanstack/react-table";
 import {Lease} from "../../utils/classes.ts";
-import {FilePlus2, Link, Scroll} from "lucide-react";
+import {FilePlus2, Link, LinkIcon, Scroll} from "lucide-react";
 import {useLocation, useNavigate} from "react-router-dom";
 import {selectUnitById} from "../../services/slices/objectSlice.js";
 import {useSelector} from "react-redux";
 import {LeaseStatus, PaymentFrequency} from "../../utils/magicNumbers.js";
 import {LeaseStatusBadge} from "../../utils/statusBadges.js";
+import {Button} from "../ui/button.tsx";
 
 
 const UnitLink = ({unitId}) => {
@@ -20,12 +21,14 @@ const UnitLink = ({unitId}) => {
     if (!unit) return null;
 
     return (
-        <div className="p-2 whitespace-nowrap rounded-full bg-white border-2 border-gray-100 w-fit hover:bg-gray-100 font-500 flex flex-row cursor-pointer" onClick={() => {
-            navigate(`/rentals/${unit?.id}`)
-        }}>
-            <Link className="w-5 h-5 mr-2" />
-            {unit?.unitIdentifier}
-        </div>
+        <Button
+            className="pl-0 text-gray-900 group"
+            variant="link"
+            onClick={() => navigate(`/rentals/${unit.id}`)}
+        >
+            <LinkIcon className="w-4 h-4 mr-1 transform transition-transform duration-300 group-hover:rotate-[180deg]" />
+            {unit?.unitIdentifier || `Unit ${unit?.id}`}
+        </Button>
     )
 }
 
