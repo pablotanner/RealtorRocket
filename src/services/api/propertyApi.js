@@ -28,13 +28,14 @@ export const propertyApi = authApi.injectEndpoints({
                         toast({
                             title: "Success",
                             description: "Property created successfully, your units are: " + unitShortCodes.join(", "),
+                            variant: "success",
                         });
                     })
                     .catch((error) => {
                         toast({
                             title: "Uh oh! Something went wrong.",
                             description: "There was a problem with your request.",
-                            variant: "destructive",
+                            variant: "error",
                         });
                     })
             },

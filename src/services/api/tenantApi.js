@@ -38,13 +38,14 @@ export const tenantApi = authApi.injectEndpoints({
                         toast({
                             title: "Success",
                             description: "Tenant created successfully",
+                            variant: "success",
                         });
                     })
                     .catch(() => {
                         toast({
                             title: "Uh oh! Something went wrong.",
                             description: "There was a problem with your request, please try again.",
-                            variant: "destructive",
+                            variant: "error",
                         });
                     })
             },
@@ -62,13 +63,14 @@ export const tenantApi = authApi.injectEndpoints({
                         toast({
                             title: "Success",
                             description: "Tenant updated successfully",
+                            variant: "success",
                         });
                     })
                     .catch(() => {
                         toast({
                             title: "Uh oh! Something went wrong.",
                             description: "There was a problem with your request, please try again.",
-                            variant: "destructive",
+                            variant: "error",
                         });
                     })
             },
@@ -85,13 +87,14 @@ export const tenantApi = authApi.injectEndpoints({
                         toast({
                             title: "Success",
                             description: "Tenant deleted successfully",
+                            variant: "success",
                         });
                     })
                     .catch(() => {
                         toast({
                             title: "Uh oh! Something went wrong.",
                             description: "There was a problem with your request, please try again.",
-                            variant: "destructive",
+                            variant: "error",
                         });
                     })
             },

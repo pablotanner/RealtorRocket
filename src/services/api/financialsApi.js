@@ -39,13 +39,14 @@ export const financialsApi = authApi.injectEndpoints({
                         toast({
                             title: "Success",
                             description: "Payment created successfully",
+                            variant: "success",
                         });
                     })
                     .catch(() => {
                         toast({
                             title: "Uh oh! Something went wrong.",
                             description: "There was a problem with your request, please try again.",
-                            variant: "destructive",
+                            variant: "error",
                         });
                     })
             },
