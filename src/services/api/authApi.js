@@ -25,6 +25,7 @@ export const authApi = createApi({
                         toast({
                             title: "Success",
                             description: "Logged in successfully",
+                            variant: "success",
                         });
                         return data;
                     })
@@ -32,7 +33,7 @@ export const authApi = createApi({
                         toast({
                             title: "Uh oh! Something went wrong.",
                             description: "There was a problem with your login",
-                            variant: "destructive",
+                            variant: "error",
                         });
                     })
             }

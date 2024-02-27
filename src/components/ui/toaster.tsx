@@ -45,7 +45,7 @@ export function Toaster() {
             {toasts.map(function ({ id, title, description, action, ...props }) {
                 return (
                     <Toast key={id}
-                    className="flex items-start"
+                    className="flex items-start justify-start"
                            {...props}>
                         {
                             props?.variant === "success" || props?.variant === "error" ? (
