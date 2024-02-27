@@ -102,7 +102,7 @@ const RentalTableDropdown = ({unit}) => {
 const columns: ColumnDef<Unit>[] = [
     {
         id: "unit",
-        header: "Unit",
+        header: "Unit Identifier",
         cell: ({ row })=> {
             return (
                 <SendToUnit unit={row.original} />
@@ -110,20 +110,6 @@ const columns: ColumnDef<Unit>[] = [
         },
         enableSorting: false,
         enableHiding: false,
-    },
-    {
-        enableSorting: true,
-        header: "Unit Identifier",
-        cell: ({ row }) => (
-            <div className="capitalize">{row.original.unitIdentifier}</div>
-        ),
-        meta: {
-            type: "string"
-        },
-        id: "unitIdentifier",
-        accessorFn: (row) => {
-            return row.unitIdentifier
-        },
     },
     {
         id: "property",
