@@ -135,7 +135,7 @@ const Navbar = ({children}) => {
                         </p>
                         <div className="flex flex-col gap-2">
                             {getNavItems("MENU").map((item, index) => (<Tooltip key={index}>
-                                    <TooltipTrigger className="flex items-center">
+                                    <TooltipTrigger className="flex items-center w-full">
                                         <Button variant={getNavButtonVariant(item.url)} className="w-full justify-start mx-2 flex gap-2" key={index}
                                                 onClick={() => navigate(item.url)}>
                                             {item.icon}
@@ -153,8 +153,8 @@ const Navbar = ({children}) => {
                         <p className="text-muted-foreground font-500 mx-2 mt-2 uppercase">
                             PERSONAL
                         </p>
-                        {getNavItems("PERSONAL").map((item, index) => (<Tooltip key={index}>
-                                <TooltipTrigger className="flex items-center">
+                        {getNavItems("PERSONAL").map((item, index) => (<Tooltip  key={index}>
+                                <TooltipTrigger className="flex items-center w-full">
                                     <Button variant={getNavButtonVariant(item.url)} className="w-full justify-start mx-2 flex gap-2" key={index}
                                             onClick={() => navigate(item.url)}>
                                         {item.icon}

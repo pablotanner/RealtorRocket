@@ -2,12 +2,39 @@ import * as React from "react"
 import * as TooltipPrimitive from "@radix-ui/react-tooltip"
 
 import {cn} from "../../utils.ts";
+import {useState} from "react";
 
 const TooltipProvider = TooltipPrimitive.Provider
 
-const Tooltip = TooltipPrimitive.Root
 
-const TooltipTrigger = TooltipPrimitive.Trigger
+const Tooltip = React.forwardRef<
+    React.ElementRef<typeof TooltipPrimitive.Root>,
+    React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Root>
+>(({ children, ...props }, ref) =>  {
+    const [open, setOpen] = useState(false)
+
+    return (
+        <TooltipPrimitive.Root
+            open={open}
+            delayDuration={100}
+            onOpenChange={setOpen}
+            {...props}
+        >
+            <div onClick={() => setOpen(true)}>{children}</div>
+        </TooltipPrimitive.Root>
+    )
+})
+
+const TooltipTrigger = React.forwardRef<
+    React.ElementRef<typeof TooltipPrimitive.Trigger>,
+    React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Trigger>
+>(({ className, ...props }, ref) => (
+    <TooltipPrimitive.Trigger
+        ref={ref}
+        className={cn("inline-block", className)}
+        {...props}
+    />
+))
 
 const TooltipContent = React.forwardRef<
     React.ElementRef<typeof TooltipPrimitive.Content>,
