@@ -9,7 +9,6 @@ import {selectFutureEvents} from "../../services/slices/eventSlice.js";
 import {Bell, CalendarDays, Eye} from "lucide-react";
 import {Button} from "../../components/ui/button.tsx";
 import {useNavigate} from "react-router-dom";
-import {toast} from "../../components/ui/use-toast.tsx";
 
 const Home = () => {
     const navigate = useNavigate();
@@ -110,18 +109,6 @@ const Home = () => {
             <h1>
                 Welcome, {name}!
             </h1>
-
-            <button
-                onClick={() => {
-                    toast({
-                        title: "Uh oh! Something went wrong.",
-                        description: "There was a problem with your request, please try again.",
-                        variant: "default",
-                    });
-                }}
-            >
-                Click
-            </button>
 
 
             <div className="flex flex-row justify-start gap-8 flex-wrap md:flex-nowrap">
