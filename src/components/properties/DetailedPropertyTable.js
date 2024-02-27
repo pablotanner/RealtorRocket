@@ -115,7 +115,7 @@ const DetailedPropertyTable = ({ properties }) => {
                                         return (
                                             <DropdownMenuItem key={index} className="flex flex-row text-md gap-2" onClick={() => navigate('/rentals/' + unit?.id )}>
                                                 <LinkIcon className="w-4 h-4"/>
-                                                <span>Unit {unit?.id}</span>
+                                                <span>{unit?.unitIdentifier || ("Unit " + unit?.id)}</span>
                                             </DropdownMenuItem>
                                         )
                                     })}

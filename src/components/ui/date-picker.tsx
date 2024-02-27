@@ -68,14 +68,14 @@ export function DatePicker({value, onChange, disabled, className, allowTime, ...
                     selected={value}
                 />
 
-                <div className="flex flex-col w-full rounded-lg">
+                <div className="flex flex-col w-full rounded-lg gap-1">
                     <div className="w-full h-[1px] bg-secondary" />
                     {
                         allowTime && (
                             <>
                                 <div
                                     data-disabled={!value}
-                                    className="w-full rounded-xl select-none p-2 flex flex-row items-center gap-4 relative hover:bg-secondary/90 hover:text-primary-dark  data-[disabled='true']:hover:bg-gray-50 data-[disabled='true']:text-gray-500 data-[disabled='true']:hover:text-gray-500">
+                                    className="w-full rounded-lg select-none p-2 flex flex-row items-center gap-4 relative hover:bg-secondary/90 hover:text-primary-dark  data-[disabled='true']:hover:bg-gray-50 data-[disabled='true']:text-gray-500 data-[disabled='true']:hover:text-gray-500">
                                     <Clock className="h-4 w-4 absolute" />
                                     <input
                                         type={"time"}
@@ -106,7 +106,7 @@ export function DatePicker({value, onChange, disabled, className, allowTime, ...
                         onClick={() => {
                             onChange(null)
                         }}
-                        className="w-full rounded-xl p-2 flex flex-row items-center gap-4 relative cursor-pointer hover:bg-secondary hover:text-red-500">
+                        className="w-full rounded-lg p-2 flex flex-row items-center gap-4 relative cursor-pointer hover:bg-secondary hover:text-red-500">
                         <Trash className="h-4 w-4" />
                         Reset
 
