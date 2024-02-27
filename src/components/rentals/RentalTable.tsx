@@ -24,15 +24,15 @@ import {useSelector} from "react-redux";
 const SendToUnit = ({unit}) => {
     const navigate = useNavigate()
 
-
     return (
-        <div className="capitalize whitespace-nowrap flex  flex-row text-off-black font-600 bg-white w-fit p-2 py-1 rounded-full shadow-sm hover:bg-gray-50 cursor-pointer border-2 border-gray-100"
-             onClick={() => navigate(`/rentals/${unit.id}`)}
-
+        <Button
+            className="pl-0 text-gray-900 group"
+            variant="link"
+            onClick={() => navigate(`/rentals/${unit.id}`)}
         >
-            <LinkIcon className="w-4 h-4 mr-2" />
-            View Unit
-        </div>
+            <LinkIcon className="w-4 h-4 mr-1 transform transition-transform duration-300 group-hover:rotate-[180deg]" />
+            {unit?.unitIdentifier || `Unit ${unit?.id}`}
+        </Button>
     )
 }
 
