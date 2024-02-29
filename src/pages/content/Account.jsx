@@ -7,7 +7,7 @@ import {useNavigate} from "react-router-dom";
 
 const Account = (props) => {
     const navigate = useNavigate();
-    const user = props?.data?.data;
+    const user = {...props?.data?.data}
     const selectedTab = location.pathname === '/account' ? 'account' : 'settings';
 
 

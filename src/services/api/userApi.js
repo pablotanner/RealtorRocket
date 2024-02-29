@@ -45,7 +45,8 @@ export const userApi = authApi.injectEndpoints({
                             variant: "error",
                         });
                     });
-            }
+            },
+            invalidatesTags: ['User'],
         }),
 
         deleteUser: build.mutation({

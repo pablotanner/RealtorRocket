@@ -66,3 +66,20 @@ export const tenantSchema = z.object({
     leaseId: zodNumberInputPipe(z.string().or(z.null()).or(z.number())),
     unitId: zodNumberInputPipe(z.string().or(z.null()).or(z.number())),
 })
+
+export const userSchema = z.object({
+    firstName: zodStringPipe(z.string({errorMap: () => ({message: 'Please enter a first name'})})),
+    lastName: zodStringPipe(z.string({errorMap: () => ({message: 'Please enter a last name'})})),
+    email: zodStringPipe(z.string().email({errorMap: () => ({message: 'Please enter a valid email'})})),
+    phone: zodStringPipe(z.string().or(z.null())),
+    dob: zodDateInputPipe(z.string({errorMap: () => ({message: 'Please enter a valid date.'})})),
+    bio: zodStringPipe(z.string().or(z.null())),
+    company: zodStringPipe(z.string().or(z.null())),
+    title: zodStringPipe(z.string().or(z.null())),
+    website: zodStringPipe(z.string().url({errorMap: () => ({message: 'Please enter a valid URL'})}).or(z.null())),
+    street: zodStringPipe(z.string().or(z.null())),
+    city: zodStringPipe(z.string().or(z.null())),
+    state: zodStringPipe(z.string().or(z.null())),
+    zip: zodStringPipe(z.string().or(z.null())),
+    country: zodStringPipe(z.string().or(z.null())),
+})

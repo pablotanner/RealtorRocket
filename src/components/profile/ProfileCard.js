@@ -3,27 +3,36 @@ import {Avatar, AvatarFallback, AvatarImage} from "../ui/avatar.tsx";
 import {Button} from "../ui/button.tsx";
 import {SendIcon} from "lucide-react";
 
-const ProfileCard = ({ user }) => {
+const ProfileCard = (props) => {
+
     return (
         <Card className="shadow-xl basis-[200px]">
             <CardHeader className="flex items-center">
                 <Avatar className="w-32 h-32">
-                    <AvatarImage src={user?.picture} alt="avatar" />
+                    <AvatarImage src={props?.picture} alt="avatar" />
                     <AvatarFallback>
-                        {((user?.firstName?.[0] || "") + ((user?.lastName?.[0]) || "")) || "?"}
+                        {((props?.firstName?.[0] || "") + ((props?.lastName?.[0]) || "")) || "?"}
                     </AvatarFallback>
                 </Avatar>
-                {user?.title}
+                {props?.title}
                 <CardTitle className="whitespace-nowrap w-[300px] text-center overflow-hidden overflow-ellipsis">
-                    {user?.firstName} {user?.lastName}
+                    {props?.firstName} {props?.lastName}
                 </CardTitle>
-                {user?.company}
+                {props?.company}
                 <CardDescription className="text-blue-400 underline">
-                    {user?.website}
+                    {props?.website}
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                {user?.bio}
+                <p className="p-1 border-2 border-gray-100 rounded-lg" hidden={!props?.bio || !props?.bio?.length}>
+                    {props?.bio}
+                </p>
+
+                <p>
+                    {props?.email}
+                </p>
+
+
             </CardContent>
 
             <CardFooter>

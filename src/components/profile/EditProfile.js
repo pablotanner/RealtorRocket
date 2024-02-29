@@ -1,7 +1,7 @@
 import {useSelector} from "react-redux";
-import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "../ui/form.tsx";
+import {Form, FormControl, FormField, FormGroup, FormItem, FormLabel, FormMessage, FormValue} from "../ui/form.tsx";
 import {z} from "zod";
-import {useForm} from "react-hook-form";
+import {useForm, useWatch} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Input} from "../ui/input.tsx";
 import {Button} from "../ui/button.tsx";
@@ -10,68 +10,55 @@ import {Textarea} from "../ui/textarea.tsx";
 import {useUpdateUserMutation} from "../../services/api/userApi.js";
 import {useEffect, useState} from "react";
 import ProfileCard from "./ProfileCard.js";
+import {dateParser, zodStringPipe} from "../../utils/formatters.js";
+import {userSchema} from "../../utils/formSchemas.js";
+import {RealEstateType} from "../../utils/magicNumbers.js";
 
 const titles = ['-','Mr', 'Mrs', 'Ms', 'Dr', 'Prof'];
 
-const EditProfile = () => {
-    const userData = useSelector(state => state.authSlice.userInfo);
+const EditProfile = ({user}) => {
 
     // Add a loading state to prevent the form from rendering before the user data is fetched
-    const [isLoading, setIsLoading] = useState(!userData);
+    const [isLoading, setIsLoading] = useState(!user);
 
 
     const [updateUser, {isLoading: isUpdating}] = useUpdateUserMutation();
 
-    const [formValues, setFormValues] = useState(userData);
-
-
-    const profileFormSchema = z.object({
-        firstName: z.string().min(1, {message: 'First name cannot be empty'}),
-        lastName: z.string().min(1, {message: 'Last name cannot be empty'}),
-        title: z.enum(titles, {message: 'Please select a valid title'}).or(z.null()).or(z.undefined()).or(z.literal('')),
-        website: z.string().url({message:"Please enter a valid URL"}).or(z.null()).or(z.undefined()).or(z.literal('')),
-        //phone: z.string().min(10, {message: 'Please enter a valid phone number'}),
-        dob: z.date().or(z.null()).or(z.undefined()),
-        bio: z.string().min(10, {message: 'Please enter a valid bio consisting of at least 10 characters'}).or(z.null()).or(z.undefined()).or(z.literal('')),
-        company: z.string().or(z.null()).or(z.undefined()).or(z.literal('')),
-    })
 
     const profileForm = useForm({
-        resolver: zodResolver(profileFormSchema),
+        resolver: zodResolver(userSchema),
         defaultValues: {
-            firstName: userData.firstName,
-            lastName: userData.lastName,
-            title: userData.title,
-            website: userData.website,
-            bio: userData.bio,
-            //phone: userData.phone || '',
-            dob: userData.dob,
-            company: userData.company,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            title: user.title,
+            website: user.website,
+            bio: user.bio,
+            phone: user.phone,
+            dob: user.dob ? new Date(user.dob) : null,
+            company: user.company,
+            street: user.street,
+            city: user.city,
+            state: user.state,
+            zip: user.zip,
+            country: user.country,
         },
     })
 
-    useEffect(() => {
-        // When userData updates and is not undefined, set loading to false
-        if (userData) {
-            setIsLoading(false);
-            profileForm.reset({
-                firstName: userData.firstName,
-                lastName: userData.lastName,
-                title: userData.title,
-                website: userData.website,
-                bio: userData.bio,
-                dob: userData.dob,
-                company: userData.company,
-            });
+    const formValues = useWatch({
+        control: profileForm.control,
+        // Watch all fields for changes
+        name: Object.keys(profileForm.formState.defaultValues),
+    })
+
+
+    const mappedValues = Object.keys(formValues).map((key,index) => {
+        return {
+            [Object.keys(profileForm.formState.defaultValues)[index]]: formValues[key]
         }
-    }, [userData, profileForm]);
-
-
-
-    useEffect(() => {
-        setFormValues(profileForm.getValues())
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[profileForm.getValues()])
+    }).reduce((acc, curr) => {
+        return {...acc, ...curr}
+    }, {})
 
 
     const onSubmit = (zodValues) => {
@@ -124,13 +111,17 @@ const EditProfile = () => {
                                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                                         <FormControl>
                                             <SelectTrigger>
-                                                <SelectValue />
+                                                <SelectValue placeholder="Select..." />
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            {titles.map((item, index) => (
-                                                <SelectItem key={index} value={item}>{item}</SelectItem>
-                                            ))}
+                                            {
+                                                titles.map((item, index) => {
+                                                    return (
+                                                        <SelectItem key={index} value={item}>{item}</SelectItem>
+                                                    )
+                                                })
+                                            }
                                         </SelectContent>
                                     </Select>
                                     <FormMessage/>
@@ -143,8 +134,8 @@ const EditProfile = () => {
                             render={({field}) => (
                                 <FormItem className="w-full">
                                     <FormLabel>Date Of Birth</FormLabel>
-                                    <FormControl>
-                                        <Input type="date" disabled {...field} />
+                                    <FormControl onChange={() => profileForm.trigger("dob")}>
+                                        <Input type="date"  {...field} />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -182,6 +173,20 @@ const EditProfile = () => {
 
                     <FormField
                         control={profileForm.control}
+                        name="phone"
+                        render={({field}) => (
+                            <FormItem className="w-full">
+                                <FormLabel>Phone</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="" {...field} />
+                                </FormControl>
+                                <FormMessage/>
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={profileForm.control}
                         name="website"
                         render={({field}) => (
                             <FormItem className="w-full">
@@ -194,12 +199,88 @@ const EditProfile = () => {
                         )}
                     />
 
+                    <FormGroup>
+                        <FormField
+                            control={profileForm.control}
+                            name="street"
+                            render={({field}) => (
+                                <FormItem className="w-full">
+                                    <FormLabel>Street</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="" {...field} />
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={profileForm.control}
+                            name="zip"
+                            render={({field}) => (
+                                <FormItem className="w-full">
+                                    <FormLabel>ZIP</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="" {...field} />
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
+
+                    </FormGroup>
+
+                    <FormGroup>
+                        <FormField
+                            control={profileForm.control}
+                            name="city"
+                            render={({field}) => (
+                                <FormItem className="w-full">
+                                    <FormLabel>City</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="" {...field} />
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={profileForm.control}
+                            name="state"
+                            render={({field}) => (
+                                <FormItem className="w-full">
+                                    <FormLabel>State</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="" {...field} />
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
+
+                    </FormGroup>
+
+                    <FormField
+                        control={profileForm.control}
+                        name="country"
+                        render={({field}) => (
+                            <FormItem className="w-full">
+                                <FormLabel>Country</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="" {...field} />
+                                </FormControl>
+                                <FormMessage/>
+                            </FormItem>
+                        )}
+                    />
+
                     <Button type="submit" variant="dark" isLoading={isUpdating}>
                         Update
                     </Button>
                 </form>
             </Form>
-            <ProfileCard user={formValues} />
+            <ProfileCard {...mappedValues} />
         </div>
     )
 }
