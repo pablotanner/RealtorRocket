@@ -24,14 +24,9 @@ const ProfileCard = (props) => {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <p className="p-1 border-2 border-gray-100 rounded-lg" hidden={!props?.bio || !props?.bio?.length}>
+                <p className="p-2 border-2 border-dotted border-gray-200 rounded-xl" hidden={!props?.bio || !props?.bio?.length}>
                     {props?.bio}
                 </p>
-
-                <p>
-                    {props?.email}
-                </p>
-
 
             </CardContent>
 
