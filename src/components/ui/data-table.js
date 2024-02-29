@@ -544,7 +544,7 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                     <ArrowLeft className="w-4 h-4 mr-1"/> Previous
                 </Button>
 
-                <p className="text-gray-600 text-md">
+                <p className="text-gray-600 text-sm white-space-nowrap md:text-md">
                     Page {page} of {table.getPageCount()}
                 </p>
 
