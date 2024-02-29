@@ -5,12 +5,12 @@ import InfoCard from "../../components/home/InfoCard.js";
 import {isAfter} from "date-fns";
 import {moneyParser} from "../../utils/formatters.js";
 import PaymentScheduleTable from "../../components/financials/PaymentScheduleTable.tsx";
-import {Tabs, TabsContent, TabsList, TabsTrigger} from "../../components/ui/tabs.tsx";
 import PaymentTable from "../../components/financials/PaymentTable.tsx";
 import {Button} from "../../components/ui/button.tsx";
 import {FilePlus2} from "lucide-react";
 import AddPayment from "../../components/payments/AddPayment.js";
 import {useState} from "react";
+import {Tabs, TabsContent, TabsItem, TabsList} from "../../components/ui/tabs-new.tsx";
 
 
 const Financials = (props) => {
@@ -58,7 +58,7 @@ const Financials = (props) => {
     }).length;
 
 
-    const Tabs = [
+    const tabs = [
         {
             title: "Payments",
             content: (
@@ -110,35 +110,27 @@ const Financials = (props) => {
                     <InfoCard title="Active Leases" number={activeLeases}   />
                 </div>
 
-                <div className="flex flex-row overflow-auto">
-                    {Tabs.map((tab, index) => {
+                <Tabs defaultValue={0}>
+                    <TabsList>
+                        {tabs.map((tab, index) => {
+                            return (
+                                <TabsItem value={index} key={index}>
+                                    {tab.title}
+                                    <div className="p-1 rounded-lg shadow-sm text-xs bg-white w-7 h-7 flex items-center justify-center border border-secondary ">
+                                        {tab.count}
+                                    </div>
+                                </TabsItem>
+                            )
+                        })}
+                    </TabsList>
+                    {tabs.map((tab, index) => {
                         return (
-                            <div
-                                data-active={currentTab === index}
-                                className="flex gap-2 items-center cursor-pointer rounded-t-md text-gray-600 font-500 px-4 py-2 border-b-2 border-transparent
-                                hover:border-gray-700
-                                transition-colors data-[active='true']:border-gray-700 data-[active='true']:text-gray-800
-                                hover:bg-secondary
-
-                                "
-                                key={index}
-                                onClick={() => setCurrentTab(index)}
-                            >
-                                {tab.title}
-                                <div className="p-1 rounded-lg shadow-sm text-xs bg-white w-7 h-7 flex items-center justify-center border border-secondary ">
-                                    {tab.count}
-                                </div>
-                            </div>
+                            <TabsContent value={index} key={index}>
+                                {tab.content}
+                            </TabsContent>
                         )
                     })}
-                </div>
-
-
-                {Tabs[currentTab].content}
-
-
-
-
+                </Tabs>
             </div>
         </>
 
