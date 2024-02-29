@@ -1,9 +1,15 @@
 import * as React from "react"
 
 import {cn} from "../../utils.ts";
+import {useEffect} from "react";
 
-const Tabs = ({ children, className, defaultValue, ...props }) => {
+const Tabs = ({ children, className, defaultValue, value, ...props }) => {
     const [selectedTabValue, setSelectedTabValue] = React.useState(defaultValue)
+
+    useEffect(() => {
+        if (value) setSelectedTabValue(value)
+    },[value])
+
 
     const injectedChildren = React.Children.map(children, (child) => {
         // @ts-expect-error it does exist
@@ -40,7 +46,7 @@ const TabsList = ({ children, className, ...props }) => {
                 // @ts-expect-error no problem
                 isActive: selectedTabValue === child.props.value,
                 // @ts-expect-error no problem
-                onClick: () => setSelectedTabValue(child.props.value),
+                handleClick: () => setSelectedTabValue(child.props.value),
             })
         }
     })
@@ -56,13 +62,18 @@ const TabsList = ({ children, className, ...props }) => {
 TabsList.displayName = "TabsList"
 
 
-const TabsItem = ({ children, className, value, ...props }) => {
-    const { isActive, onClick } = props;
+const TabsItem = ({ children, className, value, onClick, ...props }) => {
+    const { isActive, handleClick } = props;
 
     return (
         <div
             data-active={isActive}
-            onClick={onClick}
+            onClick={() => {
+                handleClick();
+                if (onClick) {
+                    onClick();
+                }
+            }}
             className={cn("flex gap-2 items-center cursor-pointer rounded-t-md text-gray-600 font-500 px-4 py-2 border-b-2 border-transparent hover:border-gray-700 transition-colors data-[active='true']:border-gray-700 data-[active='true']:text-gray-800 hover:bg-secondary"
             , className)}
             {...props}

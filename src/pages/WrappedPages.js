@@ -16,7 +16,16 @@ import TenantProfile from "./content/TenantProfile.jsx";
 import Explorer from "./content/Explorer.jsx";
 import PropertyCreation from "./content/PropertyCreation.jsx";
 import TenantCreation from "./content/TenantCreation.jsx";
+import {useGetUserQuery} from "../services/api/userApi.js";
+import Account from "./content/Account.jsx";
 
+export const AccountPage = () => {
+    return (
+        <PageWrapper query={useGetUserQuery}>
+            <Account/>
+        </PageWrapper>
+    )
+}
 export const PropertiesPage = () => {
     return (
         <PageWrapper query={useGetPropertiesQuery}>

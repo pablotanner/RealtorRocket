@@ -8,14 +8,13 @@ import {store} from "./services/store/store.js";
 import {SignUpCard} from "./components/auth/SignUpCard.tsx";
 import Navbar from "./components/nav/Navbar.jsx";
 import {TooltipProvider} from "./components/ui/tooltip.tsx";
-import Account from "./pages/Account.jsx";
 import {
     HomePage, FinancialsPage,
     PropertiesPage,
     PropertyDetailPage,
     RentalDetailPage,
     RentalsPage,
-    TenantsPage, CalendarPage, TenantProfilePage, ExplorerPage, PropertyCreationPage, TenantCreationPage
+    TenantsPage, CalendarPage, TenantProfilePage, ExplorerPage, PropertyCreationPage, TenantCreationPage, AccountPage
 } from "./pages/WrappedPages.js";
 
 
@@ -40,8 +39,8 @@ const AppContent = () => {
             <Routes>
                 <Route path="/" element={<HomePage/>} />
                 <Route path="*" element={<NotFound/>} />
-                <Route path="/account"  element={<Account/>} />
-                <Route path="/settings"  element={<Account/>} />
+                <Route path="/account"  element={<AccountPage/>} />
+                <Route path="/settings"  element={<AccountPage/>} />
                 <Route path="/properties/create" element={<PropertyCreationPage/>} />
                 <Route path="/properties/:id" element={<PropertyDetailPage/>} />
                 <Route path="/properties" element={<PropertiesPage/>} />
