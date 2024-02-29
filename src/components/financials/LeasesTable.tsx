@@ -7,6 +7,7 @@ import {DataTable} from "../ui/data-table.js";
 import {Lease} from "../../utils/classes.ts";
 import {Scroll} from "lucide-react";
 import {LeaseStatusBadge} from "../../utils/statusBadges.js";
+import {LeaseStatus} from "../../utils/magicNumbers.js";
 
 
 
@@ -142,7 +143,8 @@ const columns: ColumnDef<Lease>[] = [
         id: "status",
         header: "Status",
         meta: {
-            type: "string",
+            type: "enum",
+            options: Object.values(LeaseStatus)
         },
         cell: ({ row }) => {
             return (

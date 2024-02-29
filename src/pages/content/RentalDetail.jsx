@@ -1,4 +1,4 @@
-import {useNavigate, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import DetailedPropertyCard from "../../components/properties/DetailedPropertyCard.js";
 import RentalKeyCard from "../../components/rentals/RentalKeyCard.js";
 import {Label} from "../../components/ui/label.tsx";

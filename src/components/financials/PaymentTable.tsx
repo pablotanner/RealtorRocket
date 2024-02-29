@@ -7,6 +7,7 @@ import {RentPayment} from "../../utils/classes.ts";
 import {PaymentStatusBadge} from "../../utils/statusBadges.js";
 import {Coins, Eye} from "lucide-react";
 import ViewPayment from "../payments/ViewPayment.js"
+import {PaymentStatus} from "../../utils/magicNumbers.js";
 
 
 
@@ -87,7 +88,8 @@ const columns: ColumnDef<RentPayment>[] = [
         id: "status",
         header: "Status",
         meta: {
-            type: "string",
+            type: "enum",
+            options: Object.values(PaymentStatus),
         },
         cell: ({ row }) => {
 

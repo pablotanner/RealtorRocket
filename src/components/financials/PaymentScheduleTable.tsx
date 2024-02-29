@@ -7,6 +7,7 @@ import {LeasePaymentSchedule} from "../../utils/classes.ts";
 import {CalendarClock, Eye} from "lucide-react";
 import ViewPayment from "../payments/ViewPayment.js";
 import {PaymentStatusBadge} from "../../utils/statusBadges.js";
+import {PaymentStatus} from "../../utils/magicNumbers.js";
 
 
 const columns: ColumnDef<LeasePaymentSchedule>[] = [
@@ -70,7 +71,9 @@ const columns: ColumnDef<LeasePaymentSchedule>[] = [
         id: "status",
         header: "Status",
         meta: {
-            type: "string",
+            type: "enum",
+            options: Object.values(PaymentStatus),
+
         },
         cell: ({ row }) => {
             return (

@@ -21,6 +21,7 @@ import {Tabs, TabsContent, TabsList, TabsTrigger} from "./tabs.tsx";
 import {Checkbox} from "./checkbox.tsx";
 import {isAfter, isBefore, isSameDay} from "date-fns";
 import {cn} from "../../utils.ts";
+import {Accordion, AccordionContent, AccordionItem, AccordionTrigger} from "./accordion.tsx";
 
 
 
@@ -47,6 +48,10 @@ const FilterSymbols = {
     greaterThan: ">",
     lessThan: "<",
 }
+
+const EnumFilterOptions = [
+    {value: "equals", label: "Equals"},
+]
 
 
 const stringFilterFn = (row, columnId, filterValue, addMeta) => {
@@ -106,7 +111,21 @@ const dateFilterFn = (row, columnId, filterValue, addMeta) => {
     catch (e) {
         return false;
     }
+}
 
+const enumFilterFn = (row, columnId, filterValue, addMeta) => {
+    const value = row.getValue(columnId);
+    try {
+        switch (filterValue.type) {
+            case "equals":
+                return value.toLowerCase() === filterValue.value.toLowerCase();
+            default:
+                return true;
+        }
+    }
+    catch (e) {
+        return false;
+    }
 }
 
 
@@ -118,10 +137,85 @@ const getFilterOptions = (type) => {
             return NumberFilterOptions
         case "date":
             return DateFilterOptions
+        case "enum":
+            return EnumFilterOptions
         default:
             return []
     }
 }
+
+const FilterContent = ({column, index, tempColumnFilters, handleSelectChange, handleInputChange, filterOptions, setTempColumnFilters}) => {
+
+    const type = column?.columnDef?.meta?.type;
+
+    let content = (
+        <>
+            <select
+                value={tempColumnFilters[column.id]?.type || ""}
+                onChange={(e) => handleSelectChange(column.id, e.target.value)}
+                className="mb-2 rounded-md border border-gray-300 bg-white text-sm capitalize font-500"
+            >
+                <option value="">Select Filter</option>
+                {filterOptions[index]?.map((option) => {
+                    return (
+                        <option key={option.value} value={option.value}>
+                            {option.label}
+                        </option>
+                    );
+                })}
+            </select>
+            <Input
+                value={tempColumnFilters[column.id]?.value || ""}
+                type={column?.columnDef?.meta?.type}
+                onChange={(e) => handleInputChange(column.id, e.target.value)}
+            />
+        </>
+    )
+    if (type === "enum") {
+        const options = column?.columnDef?.meta?.options;
+
+
+        content = (
+            <select
+                value={tempColumnFilters[column.id]?.value || ""}
+                onChange={(e) => {
+                    setTempColumnFilters({
+                        ...tempColumnFilters,
+                        [column.id]: {type: "equals", value: e.target.value}
+                    });
+                }}
+                className="mb-2 rounded-md border border-gray-300 bg-white text-sm capitalize font-500"
+            >
+                <option value="">Select Filter</option>
+                {options?.map((option, index) => {
+                    return (
+                        <option key={index} value={option}>
+                            {option}
+                        </option>
+                    );
+                })}
+            </select>
+        )
+    }
+
+
+    return (
+        <>
+            {content}
+            <Button
+                variant="outline"
+                disabled={!tempColumnFilters[column.id]?.type || !tempColumnFilters[column.id]?.value}
+                onClick={() => {
+                    column.setFilterValue(tempColumnFilters[column.id]);
+                }}
+            >
+                Apply
+            </Button>
+        </>
+
+    )
+}
+
 
 
 export const DataTable = ({data: tableData, columns: tableColumns, ...props}) => {
@@ -139,6 +233,8 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                     return {...column, filterFn: numberFilterFn};
                 case "date":
                     return {...column, filterFn: dateFilterFn};
+                case "enum":
+                    return {...column, filterFn: enumFilterFn};
                 default:
                     return column;
             }
@@ -243,7 +339,6 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
     }, [tempColumnFilters]);
 
 
-
     const FilterItem = ({filter}) => {
         const column = table.getColumn(filter.id)
         const symbol = FilterSymbols[filter?.value?.type]
@@ -273,7 +368,6 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
             </div>
         )
     }
-
 
     return (
         <div className="flex flex-col gap-4">
@@ -310,7 +404,7 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                         </Button>
                     </DropdownMenuTrigger>
 
-                    <DropdownMenuContent align="end" className="min-w-[200px]">
+                    <DropdownMenuContent className="min-w-[200px]">
                         <Tabs defaultValue="columns">
                             <TabsList className="w-full">
                                 <TabsTrigger value="columns" className="w-full">
@@ -321,17 +415,18 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                                 </TabsTrigger>
                             </TabsList>
 
-                            <TabsContent value="columns" className="px-2 pb-4">
+                            <TabsContent value="columns" className="px-2 pb-2">
+                                <div className="w-full h-[1px] bg-secondary" />
                                 {table
                                     .getAllColumns()
                                     ?.filter((column) => column.getCanHide())
                                     ?.map((column) => {
                                         return (
-                                            <div key={column.id} className="flex flex-row items-center gap-1 text-sm capitalize cursor-pointer hover:bg-gray-100 rounded-md py-1"
+                                            <div key={column.id} className="flex flex-row items-center gap-1 text-sm capitalize rounded-md py-[2px]"
                                                  onClick={() => column.toggleVisibility()}>
                                                 <Checkbox
                                                     key={column.id}
-                                                    className="ml-1 capitalize"
+                                                    className="capitalize"
                                                     checked={column.getIsVisible()}
                                                 />
                                                 {getColumnName(column)}
@@ -340,54 +435,22 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                                     })}
                             </TabsContent>
 
-                            <TabsContent value="filters">
-                                {table.getAllColumns()?.filter((column) => column.getCanFilter())?.map((column, index) => {
+                            <TabsContent value="filters" className="max-h-[300px] overflow-auto">
+                                <Accordion collapsible className="px-3">
+                                    {table.getAllColumns()?.filter((column) => column.getCanFilter())?.map((column, index) => {
+                                        return (
+                                            <AccordionItem key={index} value={column?.id} className="w-[200px]">
+                                                <AccordionTrigger className="capitalize text-sm py-2 text-gray-800 font-400">
+                                                    {getColumnName(column)}
+                                                </AccordionTrigger>
+                                                <AccordionContent>
+                                                    <FilterContent column={column} index={index} filterOptions={filterOptions} tempColumnFilters={tempColumnFilters} setTempColumnFilters={setTempColumnFilters} handleInputChange={handleInputChange} handleSelectChange={handleSelectChange} />
+                                                </AccordionContent>
+                                            </AccordionItem>
+                                        )
 
-                                    return (
-                                        <div key={column.id}>
-                                            <DropdownMenuSub>
-                                                <DropdownMenuSubTrigger>
-                                                    <div className="capitalize">
-                                                        {getColumnName(column)}
-                                                    </div>
-                                                </DropdownMenuSubTrigger>
-                                                <DropdownMenuSubContent>
-                                                    <div>
-                                                        <select
-                                                            value={tempColumnFilters[column.id]?.type || ""}
-                                                            onChange={(e) => handleSelectChange(column.id, e.target.value)}
-                                                            className="w-full mb-2 p-2 rounded-md border border-gray-300 bg-white text-sm capitalize font-500"
-                                                        >
-                                                            <option value="">Select Filter</option>
-                                                            {filterOptions[index]?.map((option) => {
-                                                                return (
-                                                                    <option key={option.value} value={option.value}>
-                                                                        {option.label}
-                                                                    </option>
-                                                                );
-                                                            })}
-                                                        </select>
-                                                    </div>
-                                                    <Input
-                                                        value={tempColumnFilters[column.id]?.value || ""}
-                                                        type={column?.columnDef?.meta?.type}
-                                                        onChange={(e) => handleInputChange(column.id, e.target.value)}
-                                                        className="mb-2"
-                                                    />
-                                                    <Button
-                                                        variant="outline"
-                                                        disabled={!tempColumnFilters[column.id]?.type || !tempColumnFilters[column.id]?.value}
-                                                        onClick={() => {
-                                                            column.setFilterValue(tempColumnFilters[column.id]);
-                                                        }}
-                                                    >
-                                                        Apply
-                                                    </Button>
-                                                </DropdownMenuSubContent>
-                                            </DropdownMenuSub>
-                                        </div>
-                                    )
-                                })}
+                                    })}
+                                </Accordion>
                             </TabsContent>
                         </Tabs>
                     </DropdownMenuContent>
