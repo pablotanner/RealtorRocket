@@ -16,7 +16,7 @@ import {
     DropdownMenuTrigger
 } from "./dropdown-menu.tsx";
 import {Button} from "./button.tsx";
-import {AlertCircle, ListFilter, MoveDown, MoveUp, X} from "lucide-react";
+import {AlertCircle, ArrowLeft, ArrowRight, ListFilter, MoveDown, MoveUp, X} from "lucide-react";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "./tabs.tsx";
 import {Checkbox} from "./checkbox.tsx";
 import {isAfter, isBefore, isSameDay} from "date-fns";
@@ -223,6 +223,8 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
         return column?.columnDef?.meta?.title || column?.columnDef?.header || column?.id || "";
     }
 
+    const [page, setPage] = useState(1)
+
     const data = useMemo(() => tableData, [tableData]);
     const columns = useMemo(() => {
         return tableColumns?.map(column => {
@@ -262,7 +264,7 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                                         column.clearSorting()
                                     }
                                 }}
-                                className="capitalize relative flex flex-row justify-start px-4 -ml-4 pr-6"
+                                className="capitalize relative flex flex-row justify-start  px-4 -ml-4 pr-6"
                             >
                                 {headerLabel}
 
@@ -305,7 +307,7 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
         onRowSelectionChange: setRowSelection,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
-        //getPaginationRowModel: getPaginationRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
         state: {
             sorting,
             columnFilters,
@@ -531,8 +533,30 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                         )
                     }
                 </TableBody>
-
             </Table>
+            <div className="w-full flex justify-between items-center">
+                <Button variant="outline" type="button" className="text-gray-700" disabled={!table.getCanPreviousPage()}
+                        onClick={() => {
+                            table.previousPage()
+                            setPage(page - 1)
+                        }}
+                >
+                    <ArrowLeft className="w-4 h-4 mr-1"/> Previous
+                </Button>
+
+                <p className="text-gray-600 text-md">
+                    Page {page} of {table.getPageCount()}
+                </p>
+
+                <Button variant="outline" type="button" className="text-gray-700" disabled={!table.getCanNextPage()}
+                        onClick={() => {
+                            table.nextPage()
+                            setPage(page + 1)
+                        }}
+                >
+                    Next <ArrowRight className="w-4 h-4 ml-1" />
+                </Button>
+            </div>
         </div>
     )
 }
