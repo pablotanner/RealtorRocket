@@ -18,6 +18,7 @@ import PropertyCreation from "./content/PropertyCreation.jsx";
 import TenantCreation from "./content/TenantCreation.jsx";
 import {useGetUserQuery} from "../services/api/userApi.js";
 import Account from "./content/Account.jsx";
+import Notifications from "./content/Notifications.jsx";
 
 export const AccountPage = () => {
     return (
@@ -123,5 +124,13 @@ export const CalendarPage = () => {
 export const ExplorerPage = () => {
     return (
         <Explorer/>
+    )
+}
+
+export const NotificationsPage = () => {
+    return (
+        <PageWrapper>
+            <Notifications/>
+        </PageWrapper>
     )
 }

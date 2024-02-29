@@ -2,20 +2,32 @@ import {BrowserRouter as Router, Routes, Route, useLocation} from "react-router-
 import NotFound from "./pages/NotFound.jsx";
 import AuthVerify from "./services/auth/AuthVerify.js";
 import LoginCard from "./components/auth/LoginCard.js";
-import {Provider} from "react-redux";
-
+import {Provider, useSelector} from "react-redux";
 import {store} from "./services/store/store.js";
 import {SignUpCard} from "./components/auth/SignUpCard.tsx";
 import Navbar from "./components/nav/Navbar.jsx";
 import {TooltipProvider} from "./components/ui/tooltip.tsx";
 import {
-    HomePage, FinancialsPage,
+    HomePage,
+    FinancialsPage,
     PropertiesPage,
     PropertyDetailPage,
     RentalDetailPage,
     RentalsPage,
-    TenantsPage, CalendarPage, TenantProfilePage, ExplorerPage, PropertyCreationPage, TenantCreationPage, AccountPage
+    TenantsPage,
+    CalendarPage,
+    TenantProfilePage,
+    ExplorerPage,
+    PropertyCreationPage,
+    TenantCreationPage,
+    AccountPage,
+    NotificationsPage
 } from "./pages/WrappedPages.js";
+import {useSocket} from "./services/hooks/useSocket.js";
+
+
+
+
 
 
 function App() {
@@ -32,6 +44,9 @@ function App() {
 const AppContent = () => {
     const location = useLocation();
     const showNavbar = location.pathname !== '/login' && location.pathname !== '/signup';
+
+    const token = useSelector(state => state.authSlice.accessToken)
+    useSocket(token);
 
     return (
         <TooltipProvider>
@@ -52,6 +67,7 @@ const AppContent = () => {
                 <Route path="/financials" element={<FinancialsPage/>} />
                 <Route path="/calendar" element={<CalendarPage/>}/>
                 <Route path="/explorer" element={<ExplorerPage/>}/>
+                <Route path="/notifications" element={<NotificationsPage/>}/>
             </Routes>
                 </Navbar>)}
             {!showNavbar && (

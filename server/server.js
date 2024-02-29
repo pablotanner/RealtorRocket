@@ -1,7 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import cron from 'node-cron';
-import prisma from './prisma.js';
+import {createServer} from "node:http"
+import {Server} from "socket.io";
 import * as authController from "./controllers/authController.js";
 import {authenticateToken} from "./controllers/authController.js";
 import * as userController from "./controllers/userController.js";
@@ -12,6 +13,10 @@ import * as leaseController from "./controllers/leaseController.js";
 import * as tenantController from "./controllers/tenantController.js";
 import {checkOverduePayments} from "./jobs/overduePayments.js";
 import * as paymentController from "./controllers/paymentController.js";
+import jwt from "jsonwebtoken";
+
+// eslint-disable-next-line no-undef
+const PORT = process.env.PORT || 3000;
 
 const app = express();
 const router = express.Router();
@@ -79,9 +84,43 @@ app.use((err, req, res, next) => {
 })
 
 
-// eslint-disable-next-line no-undef
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+const server = createServer(app );
+const io = new Server(server, {
+    cors: {
+        origin: process.env.VITE_PUBLIC_URL,
+        methods: ["GET", "POST"],
+        credentials: true
+    }
+})
+
+io.use((socket, next) => {
+    const token = socket.handshake.auth.token;
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+        if (err) {
+            return next(new Error('Authentication error'));
+        }
+        socket.user = user;
+        next();
+    });
+})
+
+io.on('connection', (socket) => {
+    console.log('A user connected');
+
+    // Handle message sending
+    socket.on('send_message', (message) => {
+        // Here, you can add additional logic, such as saving messages to your database
+        console.log(message);
+        // This emits the message to all clients, including the sender
+        io.emit('receive_message', message);
+    });
+
+    socket.on('disconnect', () => {
+        console.log('User disconnected');
+    });
+});
+
+server.listen(PORT, () => {
     console.log('App listening on port ' + PORT);
 })
 
