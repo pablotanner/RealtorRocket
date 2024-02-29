@@ -24,6 +24,8 @@ import {
     NotificationsPage
 } from "./pages/WrappedPages.js";
 import {useSocket} from "./services/hooks/useSocket.js";
+import {useState} from "react";
+import SocketContext from "./services/contexts/SocketContext.js";
 
 
 
@@ -46,38 +48,39 @@ const AppContent = () => {
     const showNavbar = location.pathname !== '/login' && location.pathname !== '/signup';
 
     const token = useSelector(state => state.authSlice.accessToken)
-    useSocket(token);
+    const socket = useSocket(token);
 
     return (
-        <TooltipProvider>
-            {showNavbar && (<Navbar>
-            <Routes>
-                <Route path="/" element={<HomePage/>} />
-                <Route path="*" element={<NotFound/>} />
-                <Route path="/account"  element={<AccountPage/>} />
-                <Route path="/settings"  element={<AccountPage/>} />
-                <Route path="/properties/create" element={<PropertyCreationPage/>} />
-                <Route path="/properties/:id" element={<PropertyDetailPage/>} />
-                <Route path="/properties" element={<PropertiesPage/>} />
-                <Route path="/tenants" element={<TenantsPage/>} />
-                <Route path="/tenants/create" element={<TenantCreationPage/>} />
-                <Route path="/tenants/:id" element={<TenantProfilePage/>} />
-                <Route path="/rentals" element={<RentalsPage/>}/>
-                <Route path="/rentals/:id" element={<RentalDetailPage/>} />
-                <Route path="/financials" element={<FinancialsPage/>} />
-                <Route path="/calendar" element={<CalendarPage/>}/>
-                <Route path="/explorer" element={<ExplorerPage/>}/>
-                <Route path="/notifications" element={<NotificationsPage/>}/>
-            </Routes>
+        <SocketContext.Provider value={socket}>
+            <TooltipProvider>
+                {showNavbar && (<Navbar>
+                    <Routes>
+                        <Route path="/" element={<HomePage/>} />
+                        <Route path="*" element={<NotFound/>} />
+                        <Route path="/account"  element={<AccountPage/>} />
+                        <Route path="/settings"  element={<AccountPage/>} />
+                        <Route path="/properties/create" element={<PropertyCreationPage/>} />
+                        <Route path="/properties/:id" element={<PropertyDetailPage/>} />
+                        <Route path="/properties" element={<PropertiesPage/>} />
+                        <Route path="/tenants" element={<TenantsPage/>} />
+                        <Route path="/tenants/create" element={<TenantCreationPage/>} />
+                        <Route path="/tenants/:id" element={<TenantProfilePage/>} />
+                        <Route path="/rentals" element={<RentalsPage/>}/>
+                        <Route path="/rentals/:id" element={<RentalDetailPage/>} />
+                        <Route path="/financials" element={<FinancialsPage/>} />
+                        <Route path="/calendar" element={<CalendarPage/>}/>
+                        <Route path="/explorer" element={<ExplorerPage/>}/>
+                        <Route path="/notifications" element={<NotificationsPage/>}/>
+                    </Routes>
                 </Navbar>)}
-            {!showNavbar && (
-                <Routes>
-                    <Route path="/login" element={<LoginCard/>} />
-                    <Route path="/signup" element={<SignUpCard/>}/>
-                </Routes>
+                {!showNavbar && (
+                    <Routes>
+                        <Route path="/login" element={<LoginCard/>} />
+                        <Route path="/signup" element={<SignUpCard/>}/>
+                    </Routes>
                 )}
-        </TooltipProvider>
-
+            </TooltipProvider>
+        </SocketContext.Provider>
     )
 }
 

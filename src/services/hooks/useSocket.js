@@ -1,19 +1,37 @@
 
 import io from "socket.io-client";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
+import {useDispatch} from "react-redux";
+import {addMessage} from "../slices/messageSlice.js";
 
 const SOCKET_URL = import.meta.env.VITE_API_URL;
 
 
 export function useSocket(token) {
+    const [socket, setSocket] = useState(null);
+    const dispatch = useDispatch();
+
     useEffect(() => {
-        const socket = io(SOCKET_URL, {auth: {token}, withCredentials: true});
+        // Initialize the Socket.IO client with the token
+        const newSocket = io(SOCKET_URL, {
+            auth: {
+                token: token,
+            },
+        });
+        setSocket(newSocket);
 
-        socket.on('connect', () => {
-            console.log('Connected to server');
-        })
+        newSocket.on("connect", () => {
+            console.log("Connected to socket");
+        });
 
-        return () => socket.disconnect();
-    }, [token])
+        newSocket.on('receive_message', (newMessage) => {
+            dispatch(addMessage(newMessage));
+        });
 
+
+        return () => newSocket.disconnect();
+
+    }, [token]);
+
+    return socket;
 }

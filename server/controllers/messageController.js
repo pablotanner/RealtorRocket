@@ -1,5 +1,34 @@
 import prisma from '../prisma.js';
 
+export async function createMessage(message) {
+    try {
+        const newMessage = await prisma.message.create({
+            data: {
+                subject: message.subject,
+                content: message.content,
+                sender: {
+                    connect: {
+                        id: message.senderId,
+                    }
+                },
+                receiver: {
+                    connect: {
+                        id: message.receiverId,
+                    }
+                }
+            },
+        });
+
+        return newMessage;
+    }
+    catch (error) {
+        console.log(error)
+        return null;
+    }
+}
+
+/*
+
 
 export async function createMessage(req, res) {
     try {
@@ -25,9 +54,12 @@ export async function createMessage(req, res) {
         res.status(200).json({data: newMessage });
     }
     catch (error) {
+        console.log(error)
         res.status(500).json({ message: "Error creating message" });
     }
 }
+ */
+
 
 export async function getMessages(req, res) {
     try {
@@ -46,10 +78,10 @@ export async function getMessages(req, res) {
         });
 
         // return sent and received messages in separate objects
-        const sentMessages = messages.filter(message => message.senderId === req.user.userId);
-        const receivedMessages = messages.filter(message => message.receiverId === req.user.userId);
+        //const sentMessages = messages.filter(message => message.senderId === req.user.userId);
+        //const receivedMessages = messages.filter(message => message.receiverId === req.user.userId);
 
-        res.status(200).json({data: {sent: sentMessages, received: receivedMessages} });
+        res.status(200).json({data: messages });
 
     }
     catch (error) {

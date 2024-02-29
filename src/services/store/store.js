@@ -13,6 +13,9 @@ import { leaseApi } from "../api/leaseApi.js";
 import { tenantApi } from "../api/tenantApi.js";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { financialsApi } from "../api/financialsApi.js";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { messageApi } from "../api/messageApi.js";
+
 
 import {
     leasesReducer,
@@ -23,7 +26,7 @@ import {
 } from "../slices/objectSlice.js";
 import { configureStore } from '@reduxjs/toolkit/react'
 import {eventsReducer} from "../slices/eventSlice.js";
-
+import {messagesReducer} from "../slices/messageSlice.js";
 
 
 export const store = configureStore({
@@ -36,7 +39,9 @@ export const store = configureStore({
         leases: leasesReducer,
         payments: paymentsReducer,
         tenants: tenantsReducer,
-        events: eventsReducer
+        events: eventsReducer,
+        messages: messagesReducer
+
 
     },
     middleware: (getDefaultMiddleware) =>

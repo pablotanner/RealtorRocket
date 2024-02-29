@@ -88,12 +88,14 @@ const Navbar = ({children}) => {
     const prefetchTenants = usePrefetch("getTenants")
     const prefetchLeases = usePrefetch("getLeases")
     const prefetchPayments = usePrefetch("getPayments")
+    const prefetchMessages = usePrefetch("getMessages")
 
     prefetchUser();
     prefetchProperties();
     prefetchUnits();
     prefetchTenants();
     prefetchLeases();
+    prefetchMessages();
     prefetchPayments();
 
     function getNavItems(section) {

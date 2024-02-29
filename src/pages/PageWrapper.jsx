@@ -12,6 +12,7 @@ const PageWrapper = (props) => {
 
     const [data, { isLoading, isSuccess, error}] = [result.data, { isLoading: result.isLoading, isSuccess: result.isSuccess, error: result.error}];
 
+
     if (isLoading) {
         return (
             <div className='flex space-x-2 ml-4 mt-4  bg-white h-screen'>

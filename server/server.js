@@ -14,6 +14,7 @@ import * as tenantController from "./controllers/tenantController.js";
 import {checkOverduePayments} from "./jobs/overduePayments.js";
 import * as paymentController from "./controllers/paymentController.js";
 import jwt from "jsonwebtoken";
+import {createMessage} from "./controllers/messageController.js";
 
 // eslint-disable-next-line no-undef
 const PORT = process.env.PORT || 3000;
@@ -92,30 +93,50 @@ const io = new Server(server, {
         credentials: true
     }
 })
+const userSocketIds = {};
+
 
 io.use((socket, next) => {
     const token = socket.handshake.auth.token;
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
         if (err) {
             return next(new Error('Authentication error'));
         }
         socket.user = user;
+        userSocketIds[user.userId] = socket.id;
         next();
     });
 })
 
 io.on('connection', (socket) => {
     console.log('A user connected');
-
     // Handle message sending
     socket.on('send_message', (message) => {
+        const {subject, content, receiverId} = message;
+
+        const messageData = {
+            subject: subject,
+            content: content,
+            senderId: socket.user.userId,
+            receiverId: receiverId
+        }
+
         // Here, you can add additional logic, such as saving messages to your database
-        console.log(message);
-        // This emits the message to all clients, including the sender
-        io.emit('receive_message', message);
+        createMessage(messageData).then((response) => {
+            const receiverSocketId = userSocketIds[receiverId];
+            // Send the message to the receiver
+            io.to(receiverSocketId).emit('receive_message', response);
+            // Send the message to the sender
+            io.to(socket.id).emit('receive_message', response);
+        }).catch((error) => {
+            console.log('Error sending message', error);
+        })
     });
 
     socket.on('disconnect', () => {
+        if (socket.user && socket.user.userId) {
+            delete userSocketIds[socket.user.userId];
+        }
         console.log('User disconnected');
     });
 });

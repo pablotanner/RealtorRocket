@@ -19,6 +19,7 @@ import TenantCreation from "./content/TenantCreation.jsx";
 import {useGetUserQuery} from "../services/api/userApi.js";
 import Account from "./content/Account.jsx";
 import Notifications from "./content/Notifications.jsx";
+import {useGetMessagesQuery} from "../services/api/messageApi.js";
 
 export const AccountPage = () => {
     return (
@@ -129,7 +130,7 @@ export const ExplorerPage = () => {
 
 export const NotificationsPage = () => {
     return (
-        <PageWrapper>
+        <PageWrapper query={useGetMessagesQuery}>
             <Notifications/>
         </PageWrapper>
     )
