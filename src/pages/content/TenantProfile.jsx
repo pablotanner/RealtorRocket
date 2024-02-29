@@ -11,7 +11,7 @@ import {Button} from "../../components/ui/button.tsx";
 import {FilePlus2, PencilIcon, SendIcon} from "lucide-react";
 import {Badge} from "../../components/ui/badge.tsx";
 import {dateParser} from "../../utils/formatters.js";
-import {Tabs, TabsContent, TabsList, TabsTrigger} from "../../components/ui/tabs.tsx";
+import {Tabs, TabsContent, TabsList, TabsItem} from "../../components/ui/tabs-new.tsx";
 import EditTenant from "../../components/tenants/EditTenant.js";
 import LeaseHistory from "../../components/leases/LeaseHistory.tsx";
 import AddLease from "../../components/leases/AddLease.js";
@@ -49,6 +49,37 @@ const TenantProfile = (props) => {
         return information.join(" | ")
 
     }
+
+    const tabs = [
+        {
+            id: "information",
+            title: "Information",
+            content: <EditTenant tenant={tenant} />
+        },
+        {
+            id: "leases",
+            title: "Lease History",
+            content: (<LeaseHistory leases={leases} >
+                <AddLease
+                    open={showLeaseModal}
+                    onOpenChange={() => setShowLeaseModal(!showLeaseModal)}
+                    tenant={tenant}
+                >
+                    <Button className="self-end justify-end" variant="outline" type="button">
+                        <FilePlus2 className="w-4 h-4 mr-2" />
+                        Add Lease
+                    </Button>
+                </AddLease>
+            </LeaseHistory>)
+        },
+        {
+            id: "requests",
+            title: "Maintenance Requests",
+            content: (<h3>
+                Maintenance Requests
+            </h3>)
+        }
+    ]
 
 
     return (
@@ -117,38 +148,26 @@ const TenantProfile = (props) => {
                 </div>
             </div>
 
-            <div className="mt-[200px] bg-white border-t-2 pt-4 border-secondary">
-                <Tabs defaultValue="information" className="p-2 border-secondary border-2 rounded-lg overflow-auto">
-                    <TabsList className="mr-1">
-                        <TabsTrigger value="information">Information</TabsTrigger>
-                        <TabsTrigger value="leases">Lease History</TabsTrigger>
-                        <TabsTrigger value="requests">Maintenance Requests</TabsTrigger>
+            <div className="mt-[200px] border-t-2 pt-4 border-secondary">
+                <Tabs defaultValue={tabs[0].id}>
+                    <TabsList >
+                        {tabs.map((tab, index) => {
+                            return (
+                                <TabsItem value={tab.id} key={index}>
+                                    {tab.title}
+                                </TabsItem>
+                            )})
+                        }
                     </TabsList>
-                    <TabsContent value="information" >
-                        <h1>Tenant Information</h1>
-                        <EditTenant tenant={tenant} />
-                    </TabsContent>
-                    <TabsContent value="leases">
-                        <LeaseHistory leases={leases} >
-                            <AddLease
-                                open={showLeaseModal}
-                                onOpenChange={() => setShowLeaseModal(!showLeaseModal)}
-                                tenant={tenant}
-                            >
-                                <Button className="self-end justify-end" variant="outline" type="button">
-                                    <FilePlus2 className="w-4 h-4 mr-2" />
-                                    Add Lease
-                                </Button>
-                            </AddLease>
-                        </LeaseHistory>
-                    </TabsContent>
-                    <TabsContent value="requests">
-                        <h1>
-                            Maintenance Requests
-                        </h1>
-                        No maintenance requests
-                    </TabsContent>
+                    {tabs.map((tab, index) => {
+                        return (
+                            <TabsContent value={tab.id} key={index}>
+                                {tab.content}
+                            </TabsContent>
+                        )
+                    })}
                 </Tabs>
+
             </div>
 
 
