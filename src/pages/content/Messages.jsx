@@ -19,13 +19,14 @@ import {
 const Messages = () => {
     const socket = useContext(SocketContext)
     const {data: user} = useGetUserQuery();
-    const messages = useSelector(state => selectAllMessages(state))
 
     const messagesByChat = useSelector(state => selectGroupedMessages(state))
 
 
 
     const [receiverId, setReceiverId] = useState(null);
+
+    const [receiver, setReceiver] = useState(null);
 
     const [content, setContent] = useState('');
 
@@ -61,18 +62,22 @@ const Messages = () => {
                 <ChatList>
                     {Object.keys(messagesByChat).map((chatKey) => {
                         const chat = messagesByChat[chatKey];
-                        const otherUser = chat[0].senderId === user.id ? chat[0].receiver : chat[0].sender;
 
+                        const otherUser = chat[0].senderId === user.data?.id ? chat[0].receiver : chat[0].sender;
                         return (
                             <ChatListItem
                                 key={chatKey}
                                 user={otherUser}
+                                active={receiverId === otherUser.id}
+                                lastMessage={chat && chat?.length > 0 ? chat[0].content.text : null}
                                 onClick={() => {
                                     if (receiverId === otherUser.id) {
                                         setReceiverId(null)
+                                        setReceiver(null)
                                     }
                                     else {
                                         setReceiverId(otherUser.id)
+                                        setReceiver(otherUser)
                                     }
                                 }}
                             />
@@ -82,22 +87,24 @@ const Messages = () => {
 
                 <ChatContainer hidden={!receiverId}>
                     <ChatHeader>
-                        <h2>Chat with {receiverId}</h2>
+                        <p className="text-lg font-500">
+                            {receiver?.firstName} {receiver?.lastName}
+                        </p>
                     </ChatHeader>
                     <MessageList>
-                        {Object.keys(messagesByChat).map((chatKey)=> {
-                            if (chatKey?.includes(receiverId)) {
-                                return messagesByChat[chatKey].map((message) => {
-                                    const isSender = message?.senderId === user.data?.id;
+                        {Object.keys(messagesByChat).map((chatKey) => {
+                            const chat = messagesByChat[chatKey];
+                            const otherUser = chat[0].senderId === user.data?.id ? chat[0].receiver : chat[0].sender;
+                            if (receiverId === otherUser.id) {
+                                return chat.map((message, index) => {
                                     return (
                                         <Message
-                                            key={message.id}
-                                            isSender={isSender}
+                                            key={index}
+                                            isSender={message.senderId === user.data?.id}
                                             message={message}
                                         />
                                     )
-                                }
-                                )
+                                })
                             }
                         })}
                     </MessageList>
