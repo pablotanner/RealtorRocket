@@ -45,13 +45,8 @@ const TenantTable = ({tenants}) => {
                             <UserRound className="w-4 h-4 "/>
                             View Profile
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="flex flex-row text-sm gap-2" disabled>
-                            <Pencil className="w-4 h-4"/>
-                            Edit
-                        </DropdownMenuItem>
                     </DropdownMenuGroup>
 
-                    <DropdownMenuSeparator />
                     <DropdownMenuSeparator />
 
                     <DropdownMenuGroup>
