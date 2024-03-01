@@ -1,5 +1,5 @@
 import {Input} from "../../components/ui/input.tsx";
-import {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {Button} from "../../components/ui/button.tsx";
 import SocketContext from "../../services/contexts/SocketContext.js";
 import {useGetUserQuery} from "../../services/api/userApi.js";
@@ -14,7 +14,10 @@ import {
     MessageInput,
     MessageList
 } from "../../components/ui/chat.tsx";
-import {ChevronLeft} from "lucide-react";
+import {ChevronLeft, Image, SendHorizonal} from "lucide-react";
+import {Avatar, AvatarFallback} from "../../components/ui/avatar.tsx";
+import {Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger} from "../../components/ui/dialog.tsx";
+import {FormDescription, FormLabel} from "../../components/ui/form.tsx";
 
 
 const Messages = () => {
@@ -26,20 +29,36 @@ const Messages = () => {
 
     const [receiver, setReceiver] = useState(null);
 
-    const [content, setContent] = useState("");
+    const [textContent, setTextContent] = useState("");
+
+    const [imageUrl, setImageUrl] = useState("");
 
 
-    console.log(messagesByChat)
-
-    const sendMessage = () => {
+    const sendMessage = (type) => {
+        if ((!textContent?.length && type === "text") || (!imageUrl && type === "image") || !receiver || !user.data?.id) {
+            return;
+        }
         try{
-            const message = {
-                type: "text",
-                content: {
-                    text: content,
-                },
-                receiverId: Number(41),
+            let content;
+
+            if (type === "text") {
+                content = {
+                    text: textContent,
+                }
+            } else if (type === "image") {
+                content = {
+                    imageUrl: imageUrl,
+                }
+            } else {
+                console.error("Invalid message type")
+                return;
             }
+            const message = {
+                type: type,
+                content: content,
+                receiverId: Number(receiver?.id),
+            }
+            console.log(message)
             if (socket) {
                 socket.emit("send_message", message)
 
@@ -54,16 +73,19 @@ const Messages = () => {
                     receiver: receiver
                 }
 
+
                 dispatch(addMessage(messageData))
             } else {
                 console.error("Socket not connected")
             }
-            setContent("")
+            setTextContent("")
+            setImageUrl("")
         }
         catch (e) {
-            //pass
+            console.log(e)
         }
     }
+
 
 
 
@@ -99,16 +121,30 @@ const Messages = () => {
                 </ChatList>
 
                 <ChatContainer hidden={!receiver}>
-                    <ChatHeader className="flex items-center gap-4">
+                    <ChatHeader className="flex items-center gap-2">
                         <div className="md:hidden p-1 border border-secondary rounded-full text-gray-500 hover:bg-secondary cursor-pointer"
                              onClick={() => setReceiver(null)}
                         >
                             <ChevronLeft className="w-5 h-5"/>
                         </div>
 
-                        <p className="text-lg font-500">
-                            {receiver?.firstName} {receiver?.lastName}
-                        </p>
+                        <Avatar className="w-10 h-10 rounded-full">
+                            <AvatarFallback className="rounded-none text-sm text-gray-500" >
+                                {receiver?.firstName?.charAt(0)}{receiver?.lastName?.charAt(0)}
+                            </AvatarFallback>
+                        </Avatar>
+
+                        <div className="flex flex-col">
+                            <p className="text-lg font-500">
+                                {receiver?.firstName} {receiver?.lastName}
+                            </p>
+                            <p hidden={user?.data?.id !== receiver?.id} className="text-gray-500 text-sm">
+                                You
+                            </p>
+                        </div>
+
+
+
                     </ChatHeader>
                     <MessageList>
                         {Object.keys(messagesByChat).map((chatKey) => {
@@ -129,10 +165,58 @@ const Messages = () => {
                     </MessageList>
                     <MessageInput>
                         <Input
-                            value={content}
-                            onChange={(e) => setContent(e.target.value)}
+                            value={textContent}
+                            onChange={(e) => setTextContent(e.target.value)}
+                            placeholder="Message"
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    sendMessage("text")
+                                }
+                            }}
                         />
-                        <Button onClick={sendMessage}>Send</Button>
+                        <Button
+                            variant="dark"
+                            onClick={() => sendMessage("text")}
+                        >
+                            <SendHorizonal className="w-5 h-5"/>
+                        </Button>
+
+                        <Dialog>
+                            <DialogTrigger asChild>
+                                <Button
+                                    variant="ghost"
+                                    className="p-4 ml-0"
+                                >
+                                    <Image className="w-5 h-5"/>
+                                </Button>
+                            </DialogTrigger>
+                            <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle>
+                                        Send Image
+                                    </DialogTitle>
+                                </DialogHeader>
+
+                                <div className="flex flex-col gap-1">
+                                    <p className="text-gray-700">
+                                        Image URL
+                                    </p>
+                                    <Input
+                                        value={imageUrl}
+                                        onChange={(e) => setImageUrl(e.target.value)}
+                                        placeholder="Image URL"
+                                    />
+                                    <p className="text-gray-500">
+                                        Enter the URL of the image you want to send
+                                    </p>
+                                </div>
+                                <Button
+                                    variant="dark"
+                                    onClick={() => sendMessage("image")}
+                                > Send Image
+                                </Button>
+                            </DialogContent>
+                        </Dialog>
                     </MessageInput>
                 </ChatContainer>
             </div>

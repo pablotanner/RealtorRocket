@@ -8,7 +8,7 @@ import {User} from "../../utils/classes.ts";
 
 const ChatContainer = ({className, children, ...props}) => {
     return (
-        <div className={cn("w-full border border-secondary relative", className)}
+        <div className={cn("w-full border-2 border-secondary rounded-sm relative", className)}
              {...props}
         >
             {children}
@@ -19,7 +19,7 @@ const ChatContainer = ({className, children, ...props}) => {
 
 const ChatHeader = ({className, children, ...props}) => {
     return (
-        <div className={cn("w-full p-4 border-b border-secondary", className)}
+        <div className={cn("w-full p-4 border-b-2 border-secondary", className)}
              {...props}
         >
             {children}
@@ -44,7 +44,7 @@ const Message = ({className, children, message, isSender, ...props}) => {
             case "text":
                 return <p>{message.content?.text}</p>
             case "image":
-                return <img src={message.content?.imageUrl} alt="image"/>
+                return <img src={message.content?.imageUrl} alt="image" className="rounded-lg"/>
             default:
                 return <p>Unknown Content</p>
         }
@@ -83,7 +83,7 @@ const Message = ({className, children, message, isSender, ...props}) => {
 
 const MessageInput = ({className, children, ...props}) => {
     return (
-        <div {...props}>
+        <div className={cn("flex flex-row gap-2 p-2", className)} {...props}>
             {children}
         </div>
     )
