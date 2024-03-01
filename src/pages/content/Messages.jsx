@@ -5,6 +5,15 @@ import SocketContext from "../../services/contexts/SocketContext.js";
 import {useGetUserQuery} from "../../services/api/userApi.js";
 import {useSelector} from "react-redux";
 import {selectAllMessages, selectGroupedMessages} from "../../services/slices/messageSlice.js";
+import {
+    ChatContainer,
+    ChatHeader,
+    ChatList,
+    ChatListItem,
+    Message,
+    MessageInput,
+    MessageList
+} from "../../components/ui/chat.tsx";
 
 
 const Messages = () => {
@@ -15,21 +24,8 @@ const Messages = () => {
     const messagesByChat = useSelector(state => selectGroupedMessages(state))
 
 
-    const MessageRenderer = ({message}) => {
-        switch (message?.type.toLowerCase()) {
-            case "text":
-                return <p>{message.content?.text}</p>
-            case "image":
-                return <img src={message.content?.imageUrl} alt="image"/>
-            default:
-                return <p>Unknown Content</p>
-        }
-    }
 
-
-
-
-    const [receiverId, setReceiverId] = useState('');
+    const [receiverId, setReceiverId] = useState(null);
 
     const [content, setContent] = useState('');
 
@@ -56,31 +52,64 @@ const Messages = () => {
     }
 
 
+
     return (
         <div>
             <h1>Messages</h1>
 
-            <div className="flex flex-col gap-2">
-                Your ID is: {user?.data.id}
-                <Input type="text" placeholder="ReceiverID" value={receiverId} onChange={(e) => setReceiverId(e.target.value)} />
-                <Input type="text" placeholder="Content" value={content} onChange={(e) => setContent(e.target.value)} />
-                <Button onClick={sendMessage} variant="gradient">
-                    Send
-                </Button>
+            <div className="flex gap-2">
+                <ChatList>
+                    {Object.keys(messagesByChat).map((chatKey) => {
+                        const chat = messagesByChat[chatKey];
+                        const otherUser = chat[0].senderId === user.id ? chat[0].receiver : chat[0].sender;
+
+                        return (
+                            <ChatListItem
+                                key={chatKey}
+                                user={otherUser}
+                                onClick={() => {
+                                    if (receiverId === otherUser.id) {
+                                        setReceiverId(null)
+                                    }
+                                    else {
+                                        setReceiverId(otherUser.id)
+                                    }
+                                }}
+                            />
+                        )
+                    })}
+                </ChatList>
+
+                <ChatContainer hidden={!receiverId}>
+                    <ChatHeader>
+                        <h2>Chat with {receiverId}</h2>
+                    </ChatHeader>
+                    <MessageList>
+                        {Object.keys(messagesByChat).map((chatKey)=> {
+                            if (chatKey?.includes(receiverId)) {
+                                return messagesByChat[chatKey].map((message) => {
+                                    const isSender = message?.senderId === user.data?.id;
+                                    return (
+                                        <Message
+                                            key={message.id}
+                                            isSender={isSender}
+                                            message={message}
+                                        />
+                                    )
+                                }
+                                )
+                            }
+                        })}
+                    </MessageList>
+                    <MessageInput>
+                        <Input
+                            value={content}
+                            onChange={(e) => setContent(e.target.value)}
+                        />
+                        <Button onClick={sendMessage}>Send</Button>
+                    </MessageInput>
+                </ChatContainer>
             </div>
-
-            {messages.map((message, index) => {
-                return (
-                    <div key={index}>
-                        <div className="flex flex-row justify-between">
-                            <p>From: {message.senderId}</p>
-                            <p>To: {message.receiverId}</p>
-                        </div>
-                        <MessageRenderer message={message}/>
-                    </div>
-                )
-            })}
-
         </div>
     )
 }
