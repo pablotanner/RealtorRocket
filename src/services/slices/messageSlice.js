@@ -1,4 +1,4 @@
-import {createEntityAdapter, createSlice} from "@reduxjs/toolkit";
+import {createEntityAdapter, createSelector, createSlice} from "@reduxjs/toolkit";
 import {authApi} from "../api/authApi.js";
 import {moneyParser} from "../../utils/formatters.js";
 
@@ -51,3 +51,28 @@ export const {
     removeManyMessages,
     updateManyMessages,
 } = messageSlice.actions;
+
+
+
+
+// Returns an object where all messages are grouped by userId (where the receiverId or senderId is the userId)
+export const selectMessagesByUser = createSelector(
+    selectAllMessages,
+    (messages) => {
+        if (!messages || messages.length === 0) {
+            return {}
+        }
+        const messagesByUser = {};
+        messages.forEach((message) => {
+            if (!messagesByUser[message.receiverId]) {
+                messagesByUser[message.receiverId] = [];
+            }
+            if (!messagesByUser[message.senderId]) {
+                messagesByUser[message.senderId] = [];
+            }
+            messagesByUser[message.receiverId].push(message);
+            messagesByUser[message.senderId].push(message);
+        })
+        return messagesByUser;
+    }
+)

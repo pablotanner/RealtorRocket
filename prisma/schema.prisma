@@ -541,14 +541,15 @@ model Document {
 
 model Message {
   id         Int      @id @default(autoincrement())
-  content    String   @map("content")
-  subject    String   @map("subject")
+  content    Json     @map("content")
+  type       String   @map("type") // TEXT, IMAGE, VIDEO, AUDIO, FILE
   timestamp  DateTime @default(now()) @map("time_stamp") @db.Timestamptz(6)
   senderId   Int
   receiverId Int
   sender     User     @relation("sender", fields: [senderId], references: [id])
   receiver   User     @relation("receiver", fields: [receiverId], references: [id])
 
+  @@index([senderId, receiverId, timestamp], name: "idx_message_conversation_timestamp")
   @@map("message")
 }
 

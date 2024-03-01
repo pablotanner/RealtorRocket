@@ -112,10 +112,10 @@ io.on('connection', (socket) => {
     console.log('A user connected');
     // Handle message sending
     socket.on('send_message', (message) => {
-        const {subject, content, receiverId} = message;
+        const {type, content, receiverId} = message;
 
         const messageData = {
-            subject: subject,
+            type: type,
             content: content,
             senderId: socket.user.userId,
             receiverId: receiverId

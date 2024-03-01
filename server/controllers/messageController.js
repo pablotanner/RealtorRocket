@@ -4,7 +4,7 @@ export async function createMessage(message) {
     try {
         const newMessage = await prisma.message.create({
             data: {
-                subject: message.subject,
+                type: message.type,
                 content: message.content,
                 sender: {
                     connect: {
@@ -76,10 +76,6 @@ export async function getMessages(req, res) {
             },
 
         });
-
-        // return sent and received messages in separate objects
-        //const sentMessages = messages.filter(message => message.senderId === req.user.userId);
-        //const receivedMessages = messages.filter(message => message.receiverId === req.user.userId);
 
         res.status(200).json({data: messages });
 

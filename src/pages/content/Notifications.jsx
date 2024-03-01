@@ -2,18 +2,17 @@ import {Input} from "../../components/ui/input.tsx";
 import {useContext, useEffect, useState} from "react";
 import {Button} from "../../components/ui/button.tsx";
 import SocketContext from "../../services/contexts/SocketContext.js";
-import {useCreateMessageMutation} from "../../services/api/messageApi.js";
 import {useGetUserQuery} from "../../services/api/userApi.js";
 import {useSelector} from "react-redux";
-import {selectAllMessages} from "../../services/slices/messageSlice.js";
+import {selectAllMessages, selectMessagesByUser} from "../../services/slices/messageSlice.js";
 
 
 const Notifications = () => {
     const socket = useContext(SocketContext)
     const {data: user} = useGetUserQuery();
+    const messages = useSelector(state => selectAllMessages(state))
 
-
-    const previousMessages = useSelector(state => selectAllMessages(state))
+    const messagesByReceiver = useSelector(state => selectMessagesByUser(state))
 
     const [receiverId, setReceiverId] = useState('');
 
@@ -68,7 +67,7 @@ const Notifications = () => {
                 </Button>
             </div>
 
-            {previousMessages.map((message, index) => {
+            {messages.map((message, index) => {
                 return (
                     <div key={index}>
                         <div className="flex flex-row justify-between">
