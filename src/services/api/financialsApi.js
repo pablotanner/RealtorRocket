@@ -52,10 +52,59 @@ export const financialsApi = authApi.injectEndpoints({
             },
             invalidatesTags: ['Payments']
         }),
+        updatePayment: build.mutation({
+            query: ({id, body}) => ({
+                url: `/payments/${id}`,
+                method: 'PUT',
+                body
+            }),
+            async onQueryStarted(arg, { queryFulfilled }) {
+                queryFulfilled
+                    .then(() => {
+                        toast({
+                            title: "Success",
+                            description: "Payment updated successfully",
+                            variant: "success",
+                        });
+                    })
+                    .catch(() => {
+                        toast({
+                            title: "Uh oh! Something went wrong.",
+                            description: "There was a problem with your request.",
+                            variant: "error",
+                        });
+                    })
+            },
+            invalidatesTags: ['Payments']
+        }),
+        deletePayment: build.mutation({
+            query: (id) => ({
+                url: `/payments/${id}`,
+                method: 'DELETE',
+            }),
+            async onQueryStarted(arg, { queryFulfilled }) {
+                queryFulfilled
+                    .then(() => {
+                        toast({
+                            title: "Success",
+                            description: "Payment deleted successfully",
+                            variant: "success",
+                        });
+                    })
+                    .catch(() => {
+                        toast({
+                            title: "Uh oh! Something went wrong.",
+                            description: "There was a problem with your request.",
+                            variant: "error",
+                        });
+                    })
+            },
+            invalidatesTags: ['Payments']
+        }),
     }),
     overrideExisting: false,
 })
 
-export const {useGetPaymentSchedule, useGetPaymentsQuery, useCreatePaymentMutation} = financialsApi;
+export const {useGetPaymentSchedule, useGetPaymentsQuery, useCreatePaymentMutation, useUpdatePaymentMutation, useDeletePaymentMutation} = financialsApi;
 
 

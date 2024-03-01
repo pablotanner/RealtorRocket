@@ -44,12 +44,17 @@ const Financials = (props) => {
     const rentDue = paymentSchedules.reduce((acc, scheduledPayment) => {
         if (scheduledPayment.status !== "PAID") {
             return acc + scheduledPayment?.amountDue || 0;
+        } else {
+            return acc;
         }
     }, 0) || 0;
 
     const rentPaid = payments.reduce((acc, payment) => {
         if (payment.status === "PAID") {
             return acc + payment?.amount || 0;
+        }
+        else {
+            return acc;
         }
     }, 0) || 0;
 
@@ -105,7 +110,7 @@ const Financials = (props) => {
                 This page offers an overview of the financials for either a single property or all properties, depending on your selection.
 
                 <div className="flex flex-row flex-wrap gap-4">
-                    <InfoCard title="Rent Due (this month)" number={moneyParser(rentDue)}  />
+                    <InfoCard title="Rent Due" number={moneyParser(rentDue)}  />
                     <InfoCard title="Rent Paid" number={moneyParser(rentPaid)}  />
                     <InfoCard title="Active Leases" number={activeLeases}   />
                 </div>

@@ -19,7 +19,8 @@ const Tenants = (props) => {
             <h1>
                 Tenants
             </h1>
-            <div className="flex flex-row items-center gap-4 flex-wrap sm:flex-nowrap justify-between">
+
+            <div className="flex flex-row items-center gap-4 flex-wrap sm:flex-nowrap justify-between sm:-mt-2">
                 The table below shows all your tenants. To view a tenant's profile page, click on their profile picture.
 
                 <Button variant="gradient" className="w-fit"

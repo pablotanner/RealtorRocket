@@ -83,3 +83,13 @@ export const userSchema = z.object({
     zip: zodStringPipe(z.string().or(z.null())),
     country: zodStringPipe(z.string().or(z.null())),
 })
+
+
+export const paymentSchema = z.object({
+    amount: zodNumberInputPipe(z.string({errorMap: () => ({message: 'Please enter the payment amount'})}).or(z.number())),
+    date: zodDateInputPipe(z.string({errorMap: () => ({message: 'Please enter a valid date'})})),
+    status: zodStringPipe(z.string({errorMap: () => ({message: 'Please select a status'})})),
+    notes: zodStringPipe(z.string().or(z.null())),
+    paymentMethod: zodStringPipe(z.string().or(z.null())),
+    leaseId: zodNumberInputPipe(z.string({errorMap: () => ({message: 'Please select a lease'})}).or(z.number())),
+})

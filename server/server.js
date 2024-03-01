@@ -72,6 +72,8 @@ router.put('/tenants/:id', authenticateToken, tenantController.updateTenant)
 // Payments
 router.post('/payments', authenticateToken, paymentController.createPayment)
 router.get('/payments', authenticateToken, paymentController.getPayments)
+router.put('/payments/:id', authenticateToken, paymentController.updatePayment)
+router.delete('/payments/:id', authenticateToken, paymentController.deletePayment)
 
 
 //Jobs

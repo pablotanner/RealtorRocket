@@ -10,6 +10,13 @@ const ViewPayment = ({payment, ...props}) => {
 
     const lease = useSelector(state => selectLeaseById(state, payment?.leaseId))
 
+    const getTenantName = () => {
+        if (lease.tenant) {
+            return `${lease.tenant.firstName} ${lease.tenant.lastName}`
+        }
+        return "-"
+    }
+
     const paymentEntries = [
         {
             label: "Amount",
@@ -49,7 +56,7 @@ const ViewPayment = ({payment, ...props}) => {
         },
         {
             label: "Tenant",
-            value: `${lease.tenant?.firstName} ${lease?.tenant?.lastName}`
+            value: getTenantName()
         }
     ]
 

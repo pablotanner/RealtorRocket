@@ -622,7 +622,7 @@ model RentPayment {
   notes         String?
   paymentMethod String?        @map("payment_method")
 
-  submittedBy    String?   @map("submitted_by") // UserId of the user who submitted the payment
+  submittedBy    Int       @map("submitted_by") // UserId of the user who submitted the payment
   submissionDate DateTime? @map("submission_date")
   approvalDate   DateTime? @map("approval_date")
 

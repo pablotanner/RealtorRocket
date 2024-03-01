@@ -60,13 +60,14 @@ export const propertyApi = authApi.injectEndpoints({
                         toast({
                             title: "Success",
                             description: "Property deleted successfully",
+                            variant: "success",
                         });
                     })
                     .catch(() => {
                         toast({
                             title: "Uh oh! Something went wrong.",
                             description: "There was a problem with your request.",
-                            variant: "destructive",
+                            variant: "error",
                         });
                     })
             },
