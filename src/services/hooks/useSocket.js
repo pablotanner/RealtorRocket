@@ -25,6 +25,10 @@ export function useSocket(token) {
         });
 
         newSocket.on('receive_message', (newMessage) => {
+            // If message is from the user to the user, don't add it to state (its handled in the chat component)
+            if (newMessage.senderId === newMessage.receiverId) {
+                return;
+            }
             dispatch(addMessage(newMessage));
         });
 

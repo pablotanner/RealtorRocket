@@ -3,8 +3,8 @@ import {useContext, useEffect, useState} from "react";
 import {Button} from "../../components/ui/button.tsx";
 import SocketContext from "../../services/contexts/SocketContext.js";
 import {useGetUserQuery} from "../../services/api/userApi.js";
-import {useSelector} from "react-redux";
-import {selectAllMessages, selectGroupedMessages} from "../../services/slices/messageSlice.js";
+import {useDispatch, useSelector} from "react-redux";
+import {addMessage, selectAllMessages, selectGroupedMessages} from "../../services/slices/messageSlice.js";
 import {
     ChatContainer,
     ChatHeader,
@@ -14,23 +14,22 @@ import {
     MessageInput,
     MessageList
 } from "../../components/ui/chat.tsx";
+import {ChevronLeft} from "lucide-react";
 
 
 const Messages = () => {
     const socket = useContext(SocketContext)
     const {data: user} = useGetUserQuery();
+    const dispatch = useDispatch();
 
     const messagesByChat = useSelector(state => selectGroupedMessages(state))
 
-
-
-    const [receiverId, setReceiverId] = useState(null);
-
     const [receiver, setReceiver] = useState(null);
 
-    const [content, setContent] = useState('');
+    const [content, setContent] = useState("");
 
 
+    console.log(messagesByChat)
 
     const sendMessage = () => {
         try{
@@ -39,13 +38,27 @@ const Messages = () => {
                 content: {
                     text: content,
                 },
-                receiverId: Number(receiverId),
+                receiverId: Number(41),
             }
             if (socket) {
                 socket.emit("send_message", message)
+
+                const messageData = {
+                    id: Math.random(),
+                    type: message.type,
+                    content: message.content,
+                    senderId: user.data?.id,
+                    receiverId: message.receiverId,
+                    sender: user?.data,
+                    timestamp: new Date().toISOString(),
+                    receiver: receiver
+                }
+
+                dispatch(addMessage(messageData))
             } else {
                 console.error("Socket not connected")
             }
+            setContent("")
         }
         catch (e) {
             //pass
@@ -55,11 +68,13 @@ const Messages = () => {
 
 
     return (
-        <div>
+        <div className="h-[95vh]">
             <h1>Messages</h1>
 
             <div className="flex gap-2">
-                <ChatList>
+                <ChatList
+                    data-chatOpen={receiver ? "true" : "false"}
+                    className="data-[chatOpen='true']:hidden md:data-[chatOpen='true']:flex w-full md:w-auto">
                     {Object.keys(messagesByChat).map((chatKey) => {
                         const chat = messagesByChat[chatKey];
 
@@ -68,15 +83,13 @@ const Messages = () => {
                             <ChatListItem
                                 key={chatKey}
                                 user={otherUser}
-                                active={receiverId === otherUser.id}
-                                lastMessage={chat && chat?.length > 0 ? chat[0].content.text : null}
+                                active={receiver?.id === otherUser.id}
+                                lastMessage={chat && chat?.length > 0 ? chat[0] : null}
                                 onClick={() => {
-                                    if (receiverId === otherUser.id) {
-                                        setReceiverId(null)
+                                    if (receiver?.id === otherUser.id) {
                                         setReceiver(null)
                                     }
                                     else {
-                                        setReceiverId(otherUser.id)
                                         setReceiver(otherUser)
                                     }
                                 }}
@@ -85,8 +98,14 @@ const Messages = () => {
                     })}
                 </ChatList>
 
-                <ChatContainer hidden={!receiverId}>
-                    <ChatHeader>
+                <ChatContainer hidden={!receiver}>
+                    <ChatHeader className="flex items-center gap-4">
+                        <div className="md:hidden p-1 border border-secondary rounded-full text-gray-500 hover:bg-secondary cursor-pointer"
+                             onClick={() => setReceiver(null)}
+                        >
+                            <ChevronLeft className="w-5 h-5"/>
+                        </div>
+
                         <p className="text-lg font-500">
                             {receiver?.firstName} {receiver?.lastName}
                         </p>
@@ -94,8 +113,8 @@ const Messages = () => {
                     <MessageList>
                         {Object.keys(messagesByChat).map((chatKey) => {
                             const chat = messagesByChat[chatKey];
-                            const otherUser = chat[0].senderId === user.data?.id ? chat[0].receiver : chat[0].sender;
-                            if (receiverId === otherUser.id) {
+                            const otherUser = chat[0].senderId === user.data?.id ? chat[0]?.receiver : chat[0].sender;
+                            if (receiver?.id === otherUser.id) {
                                 return chat.map((message, index) => {
                                     return (
                                         <Message

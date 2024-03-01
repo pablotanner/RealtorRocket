@@ -127,7 +127,7 @@ io.on('connection', (socket) => {
             // Send the message to the receiver
             io.to(receiverSocketId).emit('receive_message', response);
             // Send the message to the sender
-            io.to(socket.id).emit('receive_message', response);
+            //io.to(socket.id).emit('receive_message', response);
         }).catch((error) => {
             console.log('Error sending message', error);
         })

@@ -1,12 +1,14 @@
 import {Avatar, AvatarFallback, AvatarImage} from "./avatar.tsx";
 import {cn} from "../../utils.ts";
-import {format} from "date-fns";
+import {format, formatDistanceToNow} from "date-fns";
 import {dateParser} from "../../utils/formatters.js";
+import React from "react";
+import {User} from "../../utils/classes.ts";
 
 
 const ChatContainer = ({className, children, ...props}) => {
     return (
-        <div className={cn("w-full h-screen border border-secondary relative", className)}
+        <div className={cn("w-full border border-secondary relative", className)}
              {...props}
         >
             {children}
@@ -28,7 +30,7 @@ const ChatHeader = ({className, children, ...props}) => {
 const MessageList = ({className, children, ...props}) => {
     return (
             <div
-                className={cn("flex flex-col-reverse gap-8 p-4 overflow-auto", className)}
+                className={cn("flex flex-col-reverse gap-8 p-4 overflow-auto max-h-[50vh]", className)}
                 {...props}
             >
                 {children}
@@ -38,7 +40,7 @@ const MessageList = ({className, children, ...props}) => {
 
 const Message = ({className, children, message, isSender, ...props}) => {
     const MessageRenderer = ({message}) => {
-        switch (message?.type.toLowerCase()) {
+        switch (message?.type?.toLowerCase()) {
             case "text":
                 return <p>{message.content?.text}</p>
             case "image":
@@ -59,18 +61,17 @@ const Message = ({className, children, message, isSender, ...props}) => {
         }
     }
 
-
     return (
         <div {...props} className={cn(isSender ? "ml-auto" : "mr-auto")}>
-            <div className={cn("p-2 rounded-lg mb-1", isSender ? 'bg-blue-500 text-white' : 'bg-gray-300 text-black', className)}>
+            <div className={cn("p-2 rounded-lg mb-1 text-sm md:text-md", isSender ? 'bg-blue-500 text-white' : 'bg-secondary text-black', className)}>
                 <MessageRenderer message={message}/>
             </div>
-            <div className={cn("flex items-center gap-2", isSender ? "float-end" : "float-start")}>
+            <div className={cn("flex flex-row items-center gap-2", isSender ? "float-end" : "float-start flex-row-reverse")}>
                 <p className="text-gray-500">
                     {getMessageTime(message)}
                 </p>
 
-                <Avatar className="w-6 h-6 rounded-full">
+                <Avatar className="w-7 h-7 rounded-full">
                     <AvatarFallback className="rounded-none text-sm text-gray-500" >
                         {message?.sender?.firstName?.charAt(0)}{message?.sender?.lastName?.charAt(0)}
                     </AvatarFallback>
@@ -103,21 +104,45 @@ const ChatList = ({className, children, ...props}) => {
 const ChatListItem = ({className, children, ...props}) => {
     const {user, active, lastMessage} = props
 
+
+    let lastMessageTime: string, lastMessageText: string | undefined = undefined;
+
+    if (lastMessage) {
+        // if lastMessageTime is less than 1 minute, show "just now"
+        lastMessageTime = formatDistanceToNow(new Date(lastMessage?.timestamp), {addSuffix: true})
+        if (lastMessageTime === "less than a minute ago") {
+            lastMessageTime = "now"
+        }
+        lastMessageText = lastMessage?.content?.text
+
+        if (!lastMessageText) {
+            lastMessageText = lastMessage?.type === "image" ? "Image" : "No messages"
+        }
+
+        if (lastMessageText?.length > 25) {
+            lastMessageText = lastMessageText?.substring(0, 25) + "..."
+        }
+    }
+
     return (
         <div
             data-active={active}
-            className={cn("flex flex-row items-center min-w-[250px] data-[active='true']:bg-secondary/80 whitespace-nowrap gap-2 cursor-pointer px-2 py-1 hover:bg-secondary rounded-md", className)}
+            className={cn("flex flex-row justify-start items-center min-w-[250px] data-[active='true']:bg-secondary/80 whitespace-nowrap gap-2 cursor-pointer px-2 py-1 hover:bg-secondary rounded-md", className)}
              {...props}
         >
-            <Avatar className="w-10 h-10 rounded-full">
-                <AvatarFallback className="rounded-none text-lg" >
+            <Avatar className="w-12 h-12 rounded-full">
+                <AvatarFallback className="rounded-none text-xl" >
                     {user?.firstName?.charAt(0)}{user?.lastName?.charAt(0)}
                 </AvatarFallback>
             </Avatar>
-            <div>
-                <p className="font-500">{user?.firstName} {user?.lastName}</p>
+            <div className="w-full flex flex-col">
+                <div className="flex items-center justify-between w-full">
+                    <p className="font-500 text-sm">{user?.firstName} {user?.lastName}</p>
+                    {lastMessageTime && <p className="text-gray-400 text-xs max-w-[50%] text-ellipsis text-wrap text-right">{lastMessageTime}</p>}
+                </div>
 
-                {lastMessage && <p className="text-gray-500 text-sm">{lastMessage}</p>}
+                {lastMessageText && <p className="text-gray-500 text-xs">{lastMessageText}</p>}
+
             </div>
 
         </div>
