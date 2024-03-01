@@ -9,7 +9,7 @@ import {
     CalendarIcon,
     CircleDollarSignIcon,
     DrillIcon,
-    HomeIcon,
+    HomeIcon, MessageCircleMoreIcon,
     UserIcon
 } from "lucide-react";
 import { useSelector} from "react-redux";
@@ -19,56 +19,48 @@ const items = [
     {
         title: 'Home',
         url: '/',
-        label: 'Home Page',
         icon: <HomeIcon/>,
         section: "MENU"
     },
     {
         title: 'Properties',
         url: '/properties',
-        label: 'Your Properties',
         icon: <Building2/>,
         section: "MENU"
     },
     {
         title: 'Rentals',
         url: '/rentals',
-        label: 'Your Rental Properties',
         icon: <BuildingIcon/>,
         section: "MENU"
     },
     {
         title: 'Financials',
         url: '/financials',
-        label: 'Your Financial Data',
         icon: <CircleDollarSignIcon/>,
         section: "MENU"
     },
     {
         title: 'Tenants',
         url: '/tenants',
-        label: 'Your Tenants',
         icon: <UserIcon/>,
         section: "MENU"
     },
     {
         title: 'Maintenance',
         url: '/maintenance',
-        label: 'Your Maintenance Reports',
         icon: <DrillIcon/>,
         section: "MENU"
     },
     {
-        title: 'Notifications',
-        url: '/notifications',
-        label: 'Your Notifications',
-        icon: <BellIcon/>,
+        title: 'Messages',
+        url: '/messages',
+        icon: <MessageCircleMoreIcon/>,
         section: "PERSONAL"
     },
     {
         title: 'Calendar',
         url: '/calendar',
-        label: 'Your Events and Appointments',
         icon: <CalendarIcon/>,
         section: "PERSONAL"
     }

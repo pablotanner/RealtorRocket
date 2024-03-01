@@ -17,6 +17,10 @@ export async function createMessage(message) {
                     }
                 }
             },
+            include: {
+                sender: true,
+                receiver: true,
+            }
         });
 
         return newMessage;
@@ -74,6 +78,10 @@ export async function getMessages(req, res) {
                     }
                 ]
             },
+            include: {
+                sender: true,
+                receiver: true,
+            }
 
         });
 

@@ -54,25 +54,17 @@ export const {
 
 
 
-
-// Returns an object where all messages are grouped by userId (where the receiverId or senderId is the userId)
-export const selectMessagesByUser = createSelector(
+export const selectGroupedMessages = createSelector(
     selectAllMessages,
     (messages) => {
-        if (!messages || messages.length === 0) {
-            return {}
-        }
-        const messagesByUser = {};
+        const chats = {};
         messages.forEach((message) => {
-            if (!messagesByUser[message.receiverId]) {
-                messagesByUser[message.receiverId] = [];
+            const participantKey = [message.senderId, message.receiverId].sort().join('-');
+            if (!chats[participantKey]) {
+                chats[participantKey] = [];
             }
-            if (!messagesByUser[message.senderId]) {
-                messagesByUser[message.senderId] = [];
-            }
-            messagesByUser[message.receiverId].push(message);
-            messagesByUser[message.senderId].push(message);
-        })
-        return messagesByUser;
+            chats[participantKey].push(message);
+        });
+        return chats;
     }
 )
