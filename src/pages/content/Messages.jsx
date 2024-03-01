@@ -90,7 +90,7 @@ const Messages = () => {
 
 
     return (
-        <div className="h-[95vh]">
+        <div className="h-[95vh] flex flex-col gap-2">
             <h1>Messages</h1>
 
             <div className="flex gap-2">

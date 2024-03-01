@@ -30,7 +30,7 @@ const ChatHeader = ({className, children, ...props}) => {
 const MessageList = ({className, children, ...props}) => {
     return (
             <div
-                className={cn("flex flex-col-reverse gap-8 p-4 overflow-auto max-h-[50vh]", className)}
+                className={cn("flex flex-col-reverse gap-8 p-6 overflow-auto max-h-[50vh]", className)}
                 {...props}
             >
                 {children}
@@ -63,7 +63,7 @@ const Message = ({className, children, message, isSender, ...props}) => {
 
     return (
         <div {...props} className={cn(isSender ? "ml-auto" : "mr-auto")}>
-            <div className={cn("p-2 rounded-lg mb-1 text-sm md:text-md", isSender ? 'bg-blue-500 text-white' : 'bg-secondary text-black', className)}>
+            <div className={cn("p-2 rounded-lg mb-1 text-sm md:text-md", isSender ? 'bg-blue-500 text-white' : 'bg-secondary text-black', message.type === "image" ? "p-0" : "", className)}>
                 <MessageRenderer message={message}/>
             </div>
             <div className={cn("flex flex-row items-center gap-2", isSender ? "float-end" : "float-start flex-row-reverse")}>
@@ -127,7 +127,7 @@ const ChatListItem = ({className, children, ...props}) => {
     return (
         <div
             data-active={active}
-            className={cn("flex flex-row justify-start items-center min-w-[250px] data-[active='true']:bg-secondary/80 whitespace-nowrap gap-2 cursor-pointer px-2 py-1 hover:bg-secondary rounded-md", className)}
+            className={cn("flex flex-row justify-start items-center min-w-[275px] data-[active='true']:bg-secondary/80 whitespace-nowrap gap-2 cursor-pointer px-2 py-1 hover:bg-secondary rounded-md", className)}
              {...props}
         >
             <Avatar className="w-12 h-12 rounded-full">
