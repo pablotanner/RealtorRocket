@@ -75,6 +75,10 @@ router.get('/payments', authenticateToken, paymentController.getPayments)
 router.put('/payments/:id', authenticateToken, paymentController.updatePayment)
 router.delete('/payments/:id', authenticateToken, paymentController.deletePayment)
 
+// Lease Payment Schedules
+router.put('/payment-schedules/:id', authenticateToken, paymentController.updatePaymentSchedule)
+router.delete('/payment-schedules/:id', authenticateToken, paymentController.deletePaymentSchedule)
+
 
 //Jobs
 //      Schedule the job to run daily at 00:00 (midnight)

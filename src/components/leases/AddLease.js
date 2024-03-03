@@ -1,7 +1,15 @@
 import {z} from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger} from "../ui/dialog.tsx";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogIcon,
+    DialogTitle,
+    DialogTrigger
+} from "../ui/dialog.tsx";
 import {Form, FormControl, FormField, FormGroup, FormItem, FormLabel, FormMessage} from "../ui/form.tsx";
 import {Input} from "../ui/input.tsx";
 import RentalSelection from "../comboboxes/RentalSelection.js";
@@ -9,7 +17,7 @@ import {useGetUnitsQuery} from "../../services/api/unitApi.js";
 import TenantSelection from "../comboboxes/TenantSelection.js";
 import {useGetTenantsQuery} from "../../services/api/tenantApi.js";
 import {Button} from "../ui/button.tsx";
-import {PlusIcon} from "lucide-react";
+import {FilePlus2, PlusIcon} from "lucide-react";
 import {zodDateInputPipe, zodNumberInputPipe, zodStringPipe} from "../../utils/formatters.js";
 import {useCreateLeaseMutation} from "../../services/api/leaseApi.js";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../ui/select.tsx";
@@ -66,9 +74,15 @@ const AddLease = ({unit, tenant, ...props}) => {
             </DialogTrigger>
             <DialogContent >
                 <DialogHeader>
+                    <DialogIcon>
+                        <FilePlus2 className="h-6 w-6"/>
+                    </DialogIcon>
                     <DialogTitle>
                         Add Lease
                     </DialogTitle>
+                    <DialogDescription>
+                        Fill out the form to add a new lease.
+                    </DialogDescription>
                 </DialogHeader>
                 <Form {...leaseForm}>
                     <form

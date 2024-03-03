@@ -93,3 +93,10 @@ export const paymentSchema = z.object({
     paymentMethod: zodStringPipe(z.string().or(z.null())),
     leaseId: zodNumberInputPipe(z.string({errorMap: () => ({message: 'Please select a lease'})}).or(z.number())),
 })
+
+export const leasePaymentScheduleSchema = z.object({
+    dueDate: zodDateInputPipe(z.string({errorMap: () => ({message: 'Please enter a valid date'})})),
+    amountDue: zodNumberInputPipe(z.string({errorMap: () => ({message: 'Please enter the payment amount'})}).or(z.number())),
+    status: zodStringPipe(z.string({errorMap: () => ({message: 'Please select a status'})})),
+    leaseId: zodNumberInputPipe(z.string({errorMap: () => ({message: 'Please select a lease'})}).or(z.number())),
+})

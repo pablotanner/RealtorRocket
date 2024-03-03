@@ -4,11 +4,169 @@ import {
 import {dateParser, moneyParser} from "../../utils/formatters.js";
 import {DataTable} from "../ui/data-table.js";
 import {LeasePaymentSchedule} from "../../utils/classes.ts";
-import {CalendarClock, Eye} from "lucide-react";
+import {CalendarClock, Coins, Eye, MoreHorizontal, Pencil, Trash2} from "lucide-react";
 import ViewPayment from "../payments/ViewPayment.js";
 import {PaymentStatusBadge} from "../../utils/statusBadges.js";
 import {PaymentStatus} from "../../utils/magicNumbers.js";
+import {useState} from "react";
+import {
+    useDeletePaymentMutation,
+    useDeletePaymentScheduleMutation,
+    useUpdatePaymentMutation, useUpdatePaymentScheduleMutation
+} from "../../services/api/financialsApi.js";
+import {useForm} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {leasePaymentScheduleSchema, paymentSchema} from "../../utils/formSchemas.js";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem, DropdownMenuSeparator,
+    DropdownMenuTrigger
+} from "../ui/dropdown-menu.tsx";
+import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogIcon, DialogTitle} from "../ui/dialog.tsx";
+import {Form, FormControl, FormField, FormGroup, FormItem, FormLabel, FormMessage} from "../ui/form.tsx";
+import {Input} from "../ui/input.tsx";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../ui/select.tsx";
+import {Button} from "../ui/button.tsx";
 
+const PaymentScheduleActions = ({ paymentSchedule }) => {
+    const [modalOpen, setModalOpen] = useState(false)
+
+    const [updatePaymentSchedule, {isLoading: isUpdating}] = useUpdatePaymentScheduleMutation()
+    const [deletePaymentSchedule] = useDeletePaymentScheduleMutation()
+
+    const paymentForm = useForm({
+        resolver: zodResolver(leasePaymentScheduleSchema),
+        defaultValues:{
+            ...paymentSchedule,
+            dueDate: new Date(paymentSchedule?.dueDate)
+        }
+    })
+
+    const handleSubmit = (data) => {
+        updatePaymentSchedule({id: paymentSchedule?.id, body: data}).then((res) => {
+            if (res.error) return
+            setModalOpen(false)
+        })
+    }
+
+    return (
+        <DropdownMenu>
+            <Dialog open={modalOpen} onOpenChange={() => setModalOpen(!modalOpen)} >
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogIcon>
+                            <CalendarClock className="w-6 h-6"/>
+                        </DialogIcon>
+                        <DialogTitle>
+                            Edit Planned Payment
+                        </DialogTitle>
+                        <DialogDescription>
+                            Update the details of this planned payment.
+                        </DialogDescription>
+                    </DialogHeader>
+
+                    <Form {...paymentForm}>
+                        <form onSubmit={paymentForm.handleSubmit(handleSubmit)} className="flex flex-col gap-2">
+
+                            <FormGroup useFlex>
+                                <FormField
+                                    control={paymentForm.control}
+                                    name="amountDue"
+                                    render={({field}) => (
+                                        <FormItem  >
+                                            <FormLabel>Amount Due</FormLabel>
+                                            <FormControl>
+                                                <Input type="number" {...field}  />
+                                            </FormControl>
+                                            <FormMessage/>
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <FormField
+                                    control={paymentForm.control}
+                                    name="dueDate"
+                                    render={({field}) => (
+                                        <FormItem  >
+                                            <FormLabel>Due Date</FormLabel>
+                                            <FormControl>
+                                                <Input type="date" {...field} />
+                                            </FormControl>
+                                            <FormMessage/>
+                                        </FormItem>
+                                    )}
+                                />
+                            </FormGroup>
+
+                            <FormField
+                                control={paymentForm.control}
+                                name="status"
+                                render={({field}) => (
+                                    <FormItem  >
+                                        <FormLabel>Status</FormLabel>
+                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select..." />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {
+                                                    Object.keys(PaymentStatus).map((status, index) => {
+                                                        return (
+                                                            <SelectItem key={index} value={status}>{PaymentStatus[status]}</SelectItem>
+                                                        )
+                                                    })
+                                                }
+                                            </SelectContent>
+                                        </Select>
+                                        <FormMessage/>
+                                    </FormItem>
+                                )}
+                            />
+
+                            <div className="w-full flex flex-row gap-2 justify-between mt-2">
+                                <Button variant="outline" type="reset" onClick={() => setModalOpen(false)}
+                                        disabled={isUpdating} className="w-full">
+                                    Cancel
+                                </Button>
+                                <Button variant="gradient" type="submit" isLoading={isUpdating} disabled={isUpdating} className="w-full">
+                                    Save Changes
+                                </Button>
+                            </div>
+
+                        </form>
+                    </Form>
+                </DialogContent>
+            </Dialog>
+            <DropdownMenuTrigger asChild className="cursor-pointer">
+                <MoreHorizontal className="h-5 w-5 ml-3"/>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-[150px]">
+                <DropdownMenuGroup>
+                    <DropdownMenuItem className="flex flex-row text-sm gap-2" onClick={() => setModalOpen(true)}>
+                        <Pencil className="w-4 h-4"/>
+                        Edit
+                    </DropdownMenuItem>
+                </DropdownMenuGroup>
+
+                <DropdownMenuSeparator />
+
+                <DropdownMenuGroup>
+                    <DropdownMenuItem className="flex flex-row text-sm gap-2 text-red-500"
+                                      onClick={() => deletePaymentSchedule(paymentSchedule?.id)}
+                    >
+                        <Trash2 className="w-4 h-4"/>
+                        Delete
+                    </DropdownMenuItem>
+                </DropdownMenuGroup>
+
+            </DropdownMenuContent>
+        </DropdownMenu>
+    )
+}
 
 const columns: ColumnDef<LeasePaymentSchedule>[] = [
     {
@@ -121,6 +279,17 @@ const columns: ColumnDef<LeasePaymentSchedule>[] = [
         accessorFn: (row) => row?.lease?.tenantId,
         enableSorting: true,
     },
+    {
+        id: "actions",
+        header: "Actions",
+        enableHiding: false,
+        cell: ({ row }) => {
+            const paymentSchedule = row.original
+            return (
+                <PaymentScheduleActions paymentSchedule={paymentSchedule}/>
+            )
+        },
+    },
 ]
 
 const PaymentScheduleTable = ({ paymentSchedules }) => {
@@ -131,8 +300,8 @@ const PaymentScheduleTable = ({ paymentSchedules }) => {
                 data={paymentSchedules}
                 columns={columns}
                 defaultSort={{id: "dueDate", desc: false}}
-                title="Planned Payments"
-                subtitle="These are the planned payments (payment deadlines) created for your leases."
+                title="Rent Schedule"
+                subtitle="This table shows all expected lease payments and keeps track of their payment status."
                 icon={<CalendarClock className={"w-5 h-5"} />} />
 
         </div>

@@ -1,7 +1,16 @@
-import {Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger} from "../ui/dialog.tsx";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogIcon,
+    DialogTitle,
+    DialogTrigger
+} from "../ui/dialog.tsx";
 import {dateParser, moneyParser} from "../../utils/formatters.js";
 import {useSelector} from "react-redux";
 import {selectLeaseById} from "../../services/slices/objectSlice.js";
+import {Coins, Calendar, CalendarClock} from "lucide-react";
 
 
 const ViewPayment = ({payment, ...props}) => {
@@ -84,6 +93,8 @@ const ViewPayment = ({payment, ...props}) => {
     ]
 
     const entries = payment.dueDate ? paymentScheduleEntries : paymentEntries;
+    const title = payment.dueDate ? "View Planned Payment" : "View Payment"
+    const description = payment.dueDate ? "The details of the payment schedule are displayed below." : "The details of the payment are displayed below."
 
     return (
         <Dialog>
@@ -92,28 +103,32 @@ const ViewPayment = ({payment, ...props}) => {
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
+                    <DialogIcon>
+                        {payment.dueDate ? <CalendarClock className="w-6 h-6"/> : <Coins className="w-6 h-6"/>}
+                    </DialogIcon>
                     <DialogTitle>
-                        View Payment
+                        {title}
                     </DialogTitle>
+                    <DialogDescription>
+                        {description}
+                    </DialogDescription>
                 </DialogHeader>
                 <div>
                     {entries.map((entry, index) => (
-                        <div key={index} className="flex flex-row justify-between">
-                            <p className="text-gray-600 font-400">
-                                {entry.label}
-                            </p>
-                            <p className="max-w-[50%]">
-                                {entry.value || "-"}
-                            </p>
-                        </div>
+                            <div key={index} className="flex flex-row justify-between">
+                                <p className="text-gray-600 font-400">
+                                    {entry.label}
+                                </p>
+                                <p className="max-w-[50%]">
+                                    {entry.value || "-"}
+                                </p>
+                            </div>
                         )
                     )}
                 </div>
             </DialogContent>
         </Dialog>
     )
-
-
 }
 
 

@@ -84,14 +84,14 @@ const FormItem = React.forwardRef<
 })
 FormItem.displayName = "FormItem"
 
+interface FormGroupAttributes extends React.HTMLAttributes<HTMLDivElement> {
+  useFlex?: boolean;
+}
 const FormGroup = React.forwardRef<
     HTMLDivElement,
-    React.HTMLAttributes<HTMLDivElement>
-    >(({ className, ...props }, ref) => {
-
-  // eslint-disable-next-line react/prop-types
-  // @ts-expect-error we use custom prop eslint-disable-next-line react/prop-types
-      if (props?.useFlex) {
+    FormGroupAttributes
+    >(({ className, useFlex, ...props }, ref) => {
+      if (useFlex) {
         return (
             <div ref={ref} className={cn(`flex flex-col sm:flex-row gap-4 `, className)} {...props} />
         )

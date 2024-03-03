@@ -101,10 +101,59 @@ export const financialsApi = authApi.injectEndpoints({
             },
             invalidatesTags: ['Payments']
         }),
+        updatePaymentSchedule: build.mutation({
+            query: ({id, body}) => ({
+                url: `/payment-schedules/${id}`,
+                method: 'PUT',
+                body
+            }),
+            async onQueryStarted(arg, { queryFulfilled }) {
+                queryFulfilled
+                    .then(() => {
+                        toast({
+                            title: "Success",
+                            description: "Planned Payment updated successfully",
+                            variant: "success",
+                        });
+                    })
+                    .catch(() => {
+                        toast({
+                            title: "Uh oh! Something went wrong.",
+                            description: "There was a problem with your request.",
+                            variant: "error",
+                        });
+                    })
+            },
+            invalidatesTags: ['Leases']
+        }),
+        deletePaymentSchedule: build.mutation({
+            query: (id) => ({
+                url: `/payment-schedules/${id}`,
+                method: 'DELETE',
+            }),
+            async onQueryStarted(arg, { queryFulfilled }) {
+                queryFulfilled
+                    .then(() => {
+                        toast({
+                            title: "Success",
+                            description: "Planned Payment deleted successfully",
+                            variant: "success",
+                        });
+                    })
+                    .catch(() => {
+                        toast({
+                            title: "Uh oh! Something went wrong.",
+                            description: "There was a problem with your request.",
+                            variant: "error",
+                        });
+                    })
+            },
+            invalidatesTags: ['Leases']
+        }),
     }),
     overrideExisting: false,
 })
 
-export const {useGetPaymentSchedule, useGetPaymentsQuery, useCreatePaymentMutation, useUpdatePaymentMutation, useDeletePaymentMutation} = financialsApi;
+export const {useGetPaymentSchedule, useGetPaymentsQuery, useDeletePaymentScheduleMutation, useUpdatePaymentScheduleMutation, useCreatePaymentMutation, useUpdatePaymentMutation, useDeletePaymentMutation} = financialsApi;
 
 

@@ -16,7 +16,14 @@ import {
     DropdownMenuTrigger
 } from "../ui/dropdown-menu.tsx";
 import {useDeletePaymentMutation, useUpdatePaymentMutation} from "../../services/api/financialsApi.js";
-import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger} from "../ui/dialog.tsx";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogIcon,
+    DialogTitle,
+} from "../ui/dialog.tsx";
 import {useState} from "react";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
@@ -54,9 +61,9 @@ const PaymentActions = ({ payment }) => {
             <Dialog open={modalOpen} onOpenChange={() => setModalOpen(!modalOpen)} >
                 <DialogContent>
                     <DialogHeader>
-                        <div className="p-2 border border-secondary rounded-lg w-fit shadow-sm mb-2">
-                            <Coins className="w-5 h-5"/>
-                        </div>
+                        <DialogIcon>
+                            <Coins className="w-6 h-6"/>
+                        </DialogIcon>
                         <DialogTitle>
                             Edit Payment
                         </DialogTitle>
@@ -76,7 +83,7 @@ const PaymentActions = ({ payment }) => {
                                         <FormItem  >
                                             <FormLabel>Amount</FormLabel>
                                             <FormControl>
-                                                <Input {...field} type="number" />
+                                                <Input type="number" {...field}  />
                                             </FormControl>
                                             <FormMessage/>
                                         </FormItem>
@@ -361,7 +368,7 @@ const PaymentTable = ({ payments, ...props }) => {
                 columns={columns}
                 defaultSort={{id: "paymentDate", desc: false}}
                 title="Payments"
-                subtitle="These are all payments created by your tenants or yourself."
+                subtitle="This table records the payments made by tenants."
                 icon={<Coins className={"w-5 h-5"} />}
             >
                 {props.children}

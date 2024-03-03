@@ -1,7 +1,15 @@
 import {z} from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger} from "../ui/dialog.tsx";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogIcon,
+    DialogTitle,
+    DialogTrigger
+} from "../ui/dialog.tsx";
 import {Form, FormControl, FormField, FormGroup, FormItem, FormLabel, FormMessage} from "../ui/form.tsx";
 import {Input} from "../ui/input.tsx";
 import RentalSelection from "../comboboxes/RentalSelection.js";
@@ -9,7 +17,7 @@ import {useGetUnitsQuery} from "../../services/api/unitApi.js";
 import TenantSelection from "../comboboxes/TenantSelection.js";
 import {useGetTenantsQuery} from "../../services/api/tenantApi.js";
 import {Button} from "../ui/button.tsx";
-import {PlusIcon} from "lucide-react";
+import {Coins, PlusIcon} from "lucide-react";
 import {zodDateInputPipe, zodNumberInputPipe, zodStringPipe} from "../../utils/formatters.js";
 import {useCreateLeaseMutation, useGetLeasesQuery} from "../../services/api/leaseApi.js";
 import {DatePicker} from "../ui/date-picker.tsx";
@@ -68,9 +76,15 @@ const AddPayment = ({...props}) => {
             </DialogTrigger>
             <DialogContent >
                 <DialogHeader>
+                    <DialogIcon>
+                        <Coins className="w-6 h-6"/>
+                    </DialogIcon>
                     <DialogTitle>
-                        Add Payment
+                       Add Payment
                     </DialogTitle>
+                    <DialogDescription>
+                        Add a new payment to the system.
+                    </DialogDescription>
                 </DialogHeader>
                 <Form {...paymentForm}>
                     <form

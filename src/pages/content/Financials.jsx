@@ -83,7 +83,7 @@ const Financials = (props) => {
             count: payments?.length
         },
         {
-            title: "Payment Schedule",
+            title: "Rent Schedule",
             content: <PaymentScheduleTable paymentSchedules={paymentSchedules} />,
             count: paymentSchedules?.length
         },

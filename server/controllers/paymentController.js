@@ -78,7 +78,6 @@ export async function getPayments(req, res) {
 
 export async function updatePayment(req, res) {
     try {
-        console.log(req.params, req.body)
         const { id } = req.params;
         const paymentData = req.body;
 
@@ -152,5 +151,83 @@ export async function deletePayment(req, res) {
     catch (error) {
         console.log(error);
         res.status(500).json({ message: "Error deleting payment" });
+    }
+}
+
+export async function updatePaymentSchedule(req, res){
+    try {
+        const { id } = req.params;
+        const paymentScheduleData = req.body;
+
+        const paymentSchedule = await prisma.leasePaymentSchedule.findUnique({
+            where: {
+                id: Number(id)
+            },
+            include: {
+                lease: {
+                    include: {
+                        realtor: true
+                    }
+                }
+            }
+        });
+
+        // Make sure that either lease or submitter is user
+        if (paymentSchedule.lease.realtor.userId !== req.user.userId) {
+            res.status(403).json({ message: "Unauthorized to update payment" });
+            return;
+        }
+
+        const updatedPaymentSchedule = await prisma.leasePaymentSchedule.update({
+            where: {
+                id: Number(id)
+            },
+            data: {
+                ...paymentScheduleData
+            }
+        });
+
+        res.status(200).json({data: updatedPaymentSchedule });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error updating payment schedule" });
+    }
+}
+
+export async function deletePaymentSchedule(req, res) {
+    try {
+        const { id } = req.params;
+
+        const paymentSchedule = await prisma.leasePaymentSchedule.findUnique({
+            where: {
+                id: Number(id)
+            },
+            include: {
+                lease: {
+                    include: {
+                        realtor: true
+                    }
+                }
+            }
+        });
+
+        // Make sure that either lease or submitter is user
+        if (paymentSchedule.lease.realtor.userId !== req.user.userId) {
+            res.status(403).json({ message: "Unauthorized to delete payment" });
+            return;
+        }
+
+        await prisma.leasePaymentSchedule.delete({
+            where: {
+                id: Number(id)
+            }
+        });
+
+        res.status(200).json({ message: "Payment Schedule deleted" });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error deleting payment schedule" });
     }
 }
