@@ -6,8 +6,8 @@ import {DataTable} from "../ui/data-table.js";
 import {LeasePaymentSchedule} from "../../utils/classes.ts";
 import {CalendarClock, Coins, Eye, MoreHorizontal, Pencil, Trash2} from "lucide-react";
 import ViewPayment from "../payments/ViewPayment.js";
-import {PaymentStatusBadge} from "../../utils/statusBadges.js";
-import {PaymentStatus} from "../../utils/magicNumbers.js";
+import {PaymentScheduleStatusBadge, PaymentStatusBadge} from "../../utils/statusBadges.js";
+import {PaymentScheduleStatus, PaymentStatus} from "../../utils/magicNumbers.js";
 import {useState} from "react";
 import {
     useDeletePaymentMutation,
@@ -114,9 +114,9 @@ const PaymentScheduleActions = ({ paymentSchedule }) => {
                                             </FormControl>
                                             <SelectContent>
                                                 {
-                                                    Object.keys(PaymentStatus).map((status, index) => {
+                                                    Object.keys(PaymentScheduleStatus).map((status, index) => {
                                                         return (
-                                                            <SelectItem key={index} value={status}>{PaymentStatus[status]}</SelectItem>
+                                                            <SelectItem key={index} value={status}>{PaymentScheduleStatus[status]}</SelectItem>
                                                         )
                                                     })
                                                 }
@@ -230,12 +230,12 @@ const columns: ColumnDef<LeasePaymentSchedule>[] = [
         header: "Status",
         meta: {
             type: "enum",
-            options: Object.values(PaymentStatus),
+            options: Object.values(PaymentScheduleStatus),
 
         },
         cell: ({ row }) => {
             return (
-                <PaymentStatusBadge status={row?.original?.status} />
+                <PaymentScheduleStatusBadge status={row?.original?.status} />
             )
         },
         accessorFn: (row) => row?.status,

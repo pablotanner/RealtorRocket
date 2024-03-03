@@ -130,6 +130,13 @@ const Home = () => {
                 <p className="text-gray-600 font-400 text-sm">
                     Newest Tenants
                 </p>
+                {
+                    mostRecentTenants?.length === 0 && (
+                        <div className="text-sm">
+                            You have no tenants yet
+                        </div>
+                    )
+                }
                 {mostRecentTenants?.map((tenant, index) => {
                     return (
                         <div key={index} className="flex flex-row items-center gap-2 hover:bg-secondary/40 p-1 rounded-sm select-none cursor-pointer"

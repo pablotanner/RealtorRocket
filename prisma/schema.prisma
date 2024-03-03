@@ -173,11 +173,18 @@ enum PaymentFrequency {
 
 enum PaymentStatus {
   PENDING
+  REPORTED
   PAID
-  LATE
-  OVERDUE
   CANCELLED
   REJECTED
+}
+
+enum PaymentScheduleStatus {
+  SCHEDULED
+  PARTIALLY_PAID
+  PAID
+  OVERDUE
+  WAIVED
 }
 
 model User {
@@ -489,12 +496,12 @@ model Lease {
 }
 
 model LeasePaymentSchedule {
-  id        Int           @id @default(autoincrement())
+  id        Int                   @id @default(autoincrement())
   dueDate   DateTime // When the payment for this period is due
   amountDue Float // Amount due for this period
-  status    PaymentStatus @default(PENDING) // PENDING, PAID, PARTIAL, OVERDUE
-  lease     Lease         @relation(fields: [leaseId], references: [id])
-  leaseId   Int           @map("lease_id")
+  status    PaymentScheduleStatus @default(SCHEDULED)
+  lease     Lease                 @relation(fields: [leaseId], references: [id])
+  leaseId   Int                   @map("lease_id")
 
   @@map("lease_payment_schedules")
 }

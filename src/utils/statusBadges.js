@@ -1,7 +1,8 @@
 import {Badge} from "../components/ui/badge.tsx";
-import {AlarmClockIcon, AlarmClockOffIcon, Ban, CheckIcon, Dot, XIcon} from "lucide-react";
-import {FaCheck} from "react-icons/fa6";
+import {AlarmClockIcon, AlarmClockOffIcon, Ban, CheckIcon, Dot, FlagIcon, XIcon} from "lucide-react";
+import {FaCheck, FaHandshake} from "react-icons/fa6";
 import {cn} from "../utils.ts";
+import {PaymentScheduleStatus} from "./magicNumbers.js";
 
 export const LeaseStatusBadge = ({ status }) => {
     if (!status) return null
@@ -73,17 +74,15 @@ export const PaymentStatusBadge = ({ status }) => {
     const statusVariant = {
         pending: 'warning',
         paid: 'positive',
-        late: 'negative',
-        overdue: 'negative',
+        reported: 'blue',
         cancelled: 'neutral',
         rejected: 'pink',
     }
 
     const statusIcon = {
         pending: <AlarmClockIcon className="w-3 h-3 mr-[4px]"/>,
+        reported: <FlagIcon className="w-3 h-3 mr-[4px]"/>,
         paid: <FaCheck className="w-3 h-3 mr-[4px] text-green-600"/>,
-        late: <AlarmClockOffIcon className="w-3 h-3 mr-[4px] "/>,
-        overdue:  <AlarmClockOffIcon className="w-3 h-3 mr-[4px]"/>,
         cancelled: <XIcon className="w-3 h-3 mr-[2px]"/>,
         rejected: <Ban className="w-3 h-3 mr-[4px] text-pink-400"/>,
     }
@@ -92,6 +91,36 @@ export const PaymentStatusBadge = ({ status }) => {
         <Badge variant={statusVariant[lowerStatus]}>
             {statusIcon[lowerStatus]}
             {lowerStatus}
+        </Badge>
+    )
+}
+
+export const PaymentScheduleStatusBadge = ({ status }) => {
+    if (!status) return null
+
+    const lowerStatus = status.toLowerCase()
+
+    const statusVariant = {
+        scheduled: 'neutral',
+        paid: 'positive',
+        partially_paid: 'positive',
+        overdue: 'negative',
+        waived: 'blue',
+    }
+
+    const statusIcon = {
+        scheduled: <AlarmClockIcon className="w-3 h-3 mr-[4px]"/>,
+        paid: <FaCheck className="w-3 h-3 mr-[4px] text-green-600"/>,
+        partially_paid: <CheckIcon className="w-3 h-3 mr-[4px] text-green-600"/>,
+        overdue:  <AlarmClockOffIcon className="w-3 h-3 mr-[4px]"/>,
+        waived: <FaHandshake className="w-3 h-3 mr-[4px]"/>,
+
+    }
+
+    return (
+        <Badge variant={statusVariant[lowerStatus]}>
+            {statusIcon[lowerStatus]}
+            {PaymentScheduleStatus[status]}
         </Badge>
     )
 }

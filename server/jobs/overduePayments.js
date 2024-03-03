@@ -11,7 +11,7 @@ export async function checkOverduePayments() {
           lt: now,
         },
         AND: {
-          status: "PENDING"
+          status: "SCHEDULED"
         }
       }
     });

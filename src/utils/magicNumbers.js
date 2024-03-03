@@ -39,10 +39,17 @@ export const ListingStatus = {
 export const PaymentStatus = {
     "PAID": "Paid",
     "PENDING": "Pending",
-    "LATE": "Late",
-    "OVERDUE": "Overdue",
+    "REPORTED": "Reported",
     "CANCELLED": "Cancelled",
     "REJECTED": "Rejected",
+}
+
+export const PaymentScheduleStatus = {
+    "SCHEDULED": "Scheduled",
+    "PAID": "Paid",
+    "PARTIALLY_PAID": "Partially Paid",
+    "OVERDUE": "Overdue",
+    "WAIVED": "Waived",
 }
 
 export const PaymentFrequency = {

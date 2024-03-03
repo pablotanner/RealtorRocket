@@ -27,7 +27,7 @@ export async function createPayment(req, res) {
         const newPayment = await prisma.rentPayment.create({
             data: {
                 ...paymentData,
-                submittedBy: String(req.user.userId),
+                submittedBy: req.user.userId,
                 submissionDate: new Date(),
                 approvalDate: approvalDate,
                 lease: {

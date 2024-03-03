@@ -225,7 +225,7 @@ const DetailedPropertyTable = ({ properties }) => {
         return (
             <div className="flex flex-col gap-1 ">
                 {/*<Header/>*/}
-                <p className="text-gray-800 font-500 w-full p-2 ">
+                <p className="text-gray-700 font-400 w-full ">
                     No properties found.
                 </p>
             </div>
