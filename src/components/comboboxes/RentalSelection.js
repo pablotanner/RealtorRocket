@@ -18,8 +18,33 @@ const RentalSelection = ({onSelect, selected, units, ...props}) => {
     }, [selected])
 
 
-    if (!units) {
-        return null
+    if (props?.isLoading){
+        return (
+            <Button
+                variant="outline"
+                role="combobox"
+                aria-expanded={open}
+                className="w-[200px] justify-between capitalize"
+                disabled
+            >
+                Loading Units...
+                <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            </Button>
+        )
+    }
+    else if ((!units || !units?.length) && !props?.isLoading){
+        return (
+            <Button
+                variant="outline"
+                role="combobox"
+                aria-expanded={open}
+                className="w-[200px] justify-between capitalize"
+                disabled
+            >
+                No Units Available
+                <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            </Button>
+        )
     }
     return (
         <Popover open={open} onOpenChange={setOpen}>

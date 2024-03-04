@@ -5,6 +5,8 @@ export async function createPayment(req, res) {
     try {
         const { leaseId, tenantId } = req.body;
         const paymentData = req.body;
+        const newLeasePaymentSchedule = req.body.leasePaymentSchedule;
+        delete paymentData.leasePaymentSchedule;
         delete paymentData.leaseId;
         delete paymentData.tenantId;
 
@@ -42,6 +44,45 @@ export async function createPayment(req, res) {
                     }
                  */
             }});
+
+        if (newLeasePaymentSchedule) {
+            const paymentSchedule = await prisma.leasePaymentSchedule.findUnique({
+                where: {
+                    id: Number(newLeasePaymentSchedule.id),
+                },
+                include: {
+                    lease: {
+                        include: {
+                            realtor: true
+                        }
+                    }
+                }
+            });
+
+            if (paymentSchedule.lease.realtor.userId !== req.user.userId) {
+                res.status(403).json({ message: "Unauthorized to update payment" });
+                return;
+            }
+
+            const updatedSchedule = await prisma.leasePaymentSchedule.update({
+                where: {
+                    id: newLeasePaymentSchedule.id
+                },
+                data: {
+                    status: newLeasePaymentSchedule.status,
+                    amountDue: newLeasePaymentSchedule.amountDue
+                }
+            });
+
+            if (updatedSchedule && newPayment) {
+                res.status(200).json({data: newPayment });
+                return;
+            }
+            else {
+                res.status(500).json({ message: "Error creating payment" });
+                return;
+            }
+        }
 
         res.status(200).json({data: newPayment });
     }

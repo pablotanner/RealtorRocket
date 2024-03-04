@@ -32,6 +32,10 @@ import {PaymentStatus} from "../../utils/magicNumbers.js";
 import {Checkbox} from "../ui/checkbox.tsx";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "../ui/tooltip.tsx";
 import {AiOutlineQuestionCircle} from "react-icons/ai";
+import {getNextScheduledPayment, getScheduledPaymentStatus} from "../../utils/financials.js";
+import {useState} from "react";
+import {PaymentScheduleStatusBadge} from "../../utils/statusBadges.js";
+import {cn} from "../../utils.ts";
 
 
 const AddPayment = ({...props}) => {
@@ -48,7 +52,10 @@ const AddPayment = ({...props}) => {
         paymentMethod: zodStringPipe(z.string().or(z.null())),
         //tenantId: z.number({errorMap: () => ({message: 'Please select a tenant.'})}),
         leaseId: zodNumberInputPipe(z.number({errorMap: () => ({message: 'Please select a lease.'})})),
+        updatePaymentSchedule: z.boolean()
     })
+
+    const [selectedLease, setSelectedLease] = useState(null)
 
     const paymentForm = useForm({
         resolver: zodResolver(paymentFormSchema),
@@ -59,12 +66,24 @@ const AddPayment = ({...props}) => {
             notes: null,
             paymentMethod: null,
             leaseId: null,
-            updatePaymentSchedule: true,
+            updatePaymentSchedule: false,
             //tenantId: tenant?.id,
         },
     })
     const onSubmit = (data) => {
-        createPayment(data).then((res) => {
+        const body = {...data};
+        delete body.updatePaymentSchedule;
+
+        if (selectedLease?.paymentSchedule?.length && data.status === "PAID" && data.updatePaymentSchedule) {
+            const nextPayment = getNextScheduledPayment(selectedLease)
+            body.leasePaymentSchedule = {
+                id: nextPayment?.id,
+                amountDue: nextPayment?.amountDue - data.amount,
+                status: getScheduledPaymentStatus(nextPayment, data.amount)
+            }
+        }
+
+        createPayment(body).then((res) => {
             if (res.error) {
                 console.log(res.error)
             }
@@ -73,6 +92,63 @@ const AddPayment = ({...props}) => {
                 paymentForm.reset();
             }
         })
+    }
+
+    const PaymentScheduleUpdate = () => {
+        const nextPayment = getNextScheduledPayment(selectedLease)
+        const amount = paymentForm.watch("amount")
+        const updatePaymentSchedule = paymentForm.watch("updatePaymentSchedule")
+        const paymentStatus = paymentForm.watch("status")
+
+        if (!nextPayment || !amount || !selectedLease || !updatePaymentSchedule || paymentStatus !== "PAID" ) return null;
+
+        return (
+            <div className="p-2 border border-primary-dark rounded-md flex flex-col gap-1">
+                <div className="flex flex-col">
+                    <p className="text-sm text-gray-800 font-500">
+                        Rent Schedule Update
+                    </p>
+                    <p className="text-sm text-gray-600 font-400">
+                        Based on your changes, the next scheduled payment (ID: {nextPayment?.id}) for this lease will be updated as follows:
+                    </p>
+                </div>
+                <div className="grid grid-cols-3">
+                    <div className="text-sm flex flex-col gap-1">
+                        <p className="text-gray-800 font-500 opacity-0">
+                            Value
+                        </p>
+                        <p className="text-gray-800 font-500">
+                            Amount Due
+                        </p>
+                        <p className="text-gray-800 font-500">
+                            Status
+                        </p>
+                    </div>
+                    <div  className="text-sm flex flex-col gap-1">
+                        <p className="text-gray-800 font-500">
+                            Before
+                        </p>
+                        <p className="text-gray-800 font-400">
+                            {nextPayment.amountDue}
+                        </p>
+                        <p className="text-gray-800 font-400">
+                            <PaymentScheduleStatusBadge status={nextPayment.status}/>
+                        </p>
+                    </div>
+                    <div className="text-sm flex flex-col gap-1">
+                        <p className="text-gray-800 font-500">
+                            After
+                        </p>
+                        <p className={cn("text-gray-800 font-400", (nextPayment.amountDue - amount) < 0 && "text-red-500" )}>
+                            {nextPayment.amountDue - amount}
+                        </p>
+                        <p className="text-gray-800 font-400">
+                            <PaymentScheduleStatusBadge status={getScheduledPaymentStatus(nextPayment, amount)}/>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        )
     }
 
     return (
@@ -100,13 +176,18 @@ const AddPayment = ({...props}) => {
                         <FormGroup asFlex>
                             <FormField
                                 control={paymentForm.control}
-                                name="date"
+                                name="leaseId"
                                 render={({field}) => (
-                                    <FormItem >
-                                        <FormLabel>Payment Date*</FormLabel>
-                                        <FormControl>
-                                            <Input {...field} defaultValue="09:00" type="datetime-local"/>
-
+                                    <FormItem>
+                                        <FormLabel>Lease *</FormLabel>
+                                        <FormControl >
+                                            <LeaseSelection onSelect={(leaseId) => {
+                                                paymentForm.setValue('leaseId', leaseId)
+                                                setSelectedLease(leases?.data?.find((lease) => lease.id === leaseId))
+                                                paymentForm.trigger('leaseId')
+                                            }} selected={Number(paymentForm.getValues("leaseId"))} leases={leases?.data}
+                                                            className="w-full"
+                                            />
                                         </FormControl>
                                         <FormMessage/>
                                     </FormItem>
@@ -119,7 +200,7 @@ const AddPayment = ({...props}) => {
                                 name="amount"
                                 render={({field}) => (
                                     <FormItem >
-                                        <FormLabel>Amount*</FormLabel>
+                                        <FormLabel>Amount *</FormLabel>
                                         <FormControl>
                                             <Input type="currency" placeholder="2000" {...field} />
                                         </FormControl>
@@ -176,52 +257,50 @@ const AddPayment = ({...props}) => {
                         </FormGroup>
 
 
+                        <FormGroup>
+                            <FormField
+                                control={paymentForm.control}
+                                name="notes"
+                                render={({field}) => (
+                                    <FormItem >
+                                        <FormLabel>Notes</FormLabel>
+                                        <FormControl>
+                                            <Input type="text" placeholder="Any relevant notes go here" {...field} />
+                                        </FormControl>
+                                        <FormMessage/>
+                                    </FormItem>
+                                )}
+                            />
 
-                        <FormField
-                            control={paymentForm.control}
-                            name="notes"
-                            render={({field}) => (
-                                <FormItem >
-                                    <FormLabel>Notes</FormLabel>
-                                    <FormControl>
-                                        <Input type="text" placeholder="Any relevant notes go here" {...field} />
-                                    </FormControl>
-                                    <FormMessage/>
-                                </FormItem>
-                            )}
-                        />
+                            <FormField
+                                control={paymentForm.control}
+                                name="date"
+                                render={({field}) => (
+                                    <FormItem >
+                                        <FormLabel>Payment Date *</FormLabel>
+                                        <FormControl>
+                                            <Input {...field} defaultValue="09:00" type="datetime-local"/>
+
+                                        </FormControl>
+                                        <FormMessage/>
+                                    </FormItem>
+                                )}
+                            />
 
 
-                        <FormField
-                            control={paymentForm.control}
-                            name="leaseId"
-                            render={({field}) => (
-                                <FormItem className="flex flex-col" >
-                                    <FormLabel>Lease *</FormLabel>
-                                    <FormControl >
-                                        <LeaseSelection onSelect={(leaseId) => {
-                                            paymentForm.setValue('leaseId', leaseId)
-                                            paymentForm.trigger('leaseId')
-                                        }} selected={Number(paymentForm.getValues("leaseId"))} leases={leases?.data}
-                                                         className="w-full"
-                                        />
-                                    </FormControl>
-                                    <FormMessage/>
-                                </FormItem>
-                            )}
-                        />
-
+                        </FormGroup>
+                        
                         <FormField
                             control={paymentForm.control}
                             name="updatePaymentSchedule"
                             render={({field}) => (
                                 <FormItem className="flex flex-row items-start gap-2 space-y-0 mt-2 ">
-                                    <Checkbox className="" checked={paymentForm.watch("updatePaymentSchedule")} onClick={() => {
+                                    <Checkbox title={!selectedLease?.paymentSchedule?.length || paymentForm.watch("status") !== "PAID" ? "Please select a lease with a Lease Schedule and set the Payment Status to 'Paid' to use this." : ""} disabled={!selectedLease?.paymentSchedule?.length || paymentForm.watch("status") !== "PAID"} className="" checked={paymentForm.watch("updatePaymentSchedule")} onClick={() => {
                                         paymentForm.setValue('updatePaymentSchedule', !paymentForm.watch("updatePaymentSchedule"))
                                     }}  {...field} />
                                     <div className="flex flex-col gap-1">
                                         <FormLabel className="flex flex-row items-center">
-                                            Mark as Lease Payment
+                                            Update Payment Schedule
                                             <TooltipProvider>
                                                 <Tooltip>
                                                     <TooltipTrigger asChild>
@@ -230,8 +309,11 @@ const AddPayment = ({...props}) => {
                                                         </div>
                                                     </TooltipTrigger>
                                                     <TooltipContent className="max-w-xs md:max-w-md lg:max-w-lg text-wrap">
-                                                        <p>
+                                                        <p hidden>
                                                             When checked, this payment will be applied towards the next scheduled lease payment, reducing the amount due. If the payment covers the full amount, the scheduled payment will be marked as 'Paid.'
+                                                        </p>
+                                                        <p>
+                                                            This requires that the lease has a payment schedule and that the payment status is set to 'Paid.'
                                                         </p>
                                                     </TooltipContent>
                                                 </Tooltip>
@@ -247,6 +329,8 @@ const AddPayment = ({...props}) => {
                                 </FormItem>
                             )}
                         />
+
+                        <PaymentScheduleUpdate/>
 
 
 
