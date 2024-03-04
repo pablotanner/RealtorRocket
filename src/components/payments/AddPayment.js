@@ -12,15 +12,10 @@ import {
 } from "../ui/dialog.tsx";
 import {Form, FormControl, FormField, FormGroup, FormItem, FormLabel, FormMessage} from "../ui/form.tsx";
 import {Input} from "../ui/input.tsx";
-import RentalSelection from "../comboboxes/RentalSelection.js";
-import {useGetUnitsQuery} from "../../services/api/unitApi.js";
-import TenantSelection from "../comboboxes/TenantSelection.js";
-import {useGetTenantsQuery} from "../../services/api/tenantApi.js";
 import {Button} from "../ui/button.tsx";
 import {Coins, PlusIcon} from "lucide-react";
 import {zodDateInputPipe, zodNumberInputPipe, zodStringPipe} from "../../utils/formatters.js";
-import {useCreateLeaseMutation, useGetLeasesQuery} from "../../services/api/leaseApi.js";
-import {DatePicker} from "../ui/date-picker.tsx";
+import { useGetLeasesQuery} from "../../services/api/leaseApi.js";
 import {useCreatePaymentMutation} from "../../services/api/financialsApi.js";
 import LeaseSelection from "../comboboxes/LeaseSelection.js";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../ui/select.tsx";
@@ -35,7 +30,7 @@ const AddPayment = ({...props}) => {
 
     const paymentFormSchema = z.object({
         date: zodDateInputPipe(z.string({errorMap: () => ({message: 'Please enter a valid date.'})})),
-        amount: zodNumberInputPipe(z.number({errorMap: () => ({message: 'Please enter a valid number.'})})),
+        amount:  zodNumberInputPipe(z.number({errorMap: () => ({message: 'Please enter a valid number.'})})),
         notes: zodStringPipe(z.string().or(z.null())),
         status: zodStringPipe(z.string({errorMap: () => ({message: 'Please select a valid status'})})),
         paymentMethod: zodStringPipe(z.string().or(z.null())),
@@ -55,8 +50,6 @@ const AddPayment = ({...props}) => {
             //tenantId: tenant?.id,
         },
     })
-
-
     const onSubmit = (data) => {
         createPayment(data).then((res) => {
             if (res.error) {
@@ -91,7 +84,7 @@ const AddPayment = ({...props}) => {
                         onSubmit={paymentForm.handleSubmit(onSubmit)}
                         className="flex flex-col gap-2"
                     >
-
+                        <FormGroup asFlex>
                             <FormField
                                 control={paymentForm.control}
                                 name="date"
@@ -114,46 +107,68 @@ const AddPayment = ({...props}) => {
                             />
 
 
-                        <FormField
-                            control={paymentForm.control}
-                            name="amount"
-                            render={({field}) => (
-                                <FormItem >
-                                    <FormLabel>Amount*</FormLabel>
-                                    <FormControl>
-                                        <Input type="number" placeholder="2000" {...field} />
-                                    </FormControl>
-                                    <FormMessage/>
-                                </FormItem>
-                            )}
-                        />
-
-                        <FormField
-                            control={paymentForm.control}
-                            name="status"
-                            render={({field}) => (
-                                <FormItem >
-                                    <FormLabel>Status</FormLabel>
-                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormField
+                                control={paymentForm.control}
+                                name="amount"
+                                render={({field}) => (
+                                    <FormItem >
+                                        <FormLabel>Amount*</FormLabel>
                                         <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Select the Payment Status" />
-                                            </SelectTrigger>
+                                            <Input type="currency" placeholder="2000" {...field} />
                                         </FormControl>
-                                        <SelectContent>
-                                            {
-                                                Object.keys(PaymentStatus).map((status, index) => {
-                                                    return (
-                                                        <SelectItem key={index} value={status}>{PaymentStatus[status]}</SelectItem>
-                                                    )
-                                                })
-                                            }
-                                        </SelectContent>
-                                    </Select>
-                                    <FormMessage/>
-                                </FormItem>
-                            )}
-                        />
+                                        <FormMessage/>
+                                    </FormItem>
+                                )}
+                            />
+
+                        </FormGroup>
+
+
+
+                        <FormGroup asFlex>
+                            <FormField
+                                control={paymentForm.control}
+                                name="status"
+                                render={({field}) => (
+                                    <FormItem >
+                                        <FormLabel>Status</FormLabel>
+                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select the Payment Status" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {
+                                                    Object.keys(PaymentStatus).map((status, index) => {
+                                                        return (
+                                                            <SelectItem key={index} value={status}>{PaymentStatus[status]}</SelectItem>
+                                                        )
+                                                    })
+                                                }
+                                            </SelectContent>
+                                        </Select>
+                                        <FormMessage/>
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={paymentForm.control}
+                                name="paymentMethod"
+                                render={({field}) => (
+                                    <FormItem >
+                                        <FormLabel>Payment Method</FormLabel>
+                                        <FormControl>
+                                            <Input type="text" placeholder="Credit Card" {...field} />
+                                        </FormControl>
+                                        <FormMessage/>
+                                    </FormItem>
+                                )}
+                            />
+                        </FormGroup>
+
+
 
                         <FormField
                             control={paymentForm.control}
@@ -169,19 +184,6 @@ const AddPayment = ({...props}) => {
                             )}
                         />
 
-                        <FormField
-                            control={paymentForm.control}
-                            name="paymentMethod"
-                            render={({field}) => (
-                                <FormItem >
-                                    <FormLabel>Payment Method</FormLabel>
-                                    <FormControl>
-                                        <Input type="text" placeholder="Credit Card" {...field} />
-                                    </FormControl>
-                                    <FormMessage/>
-                                </FormItem>
-                            )}
-                        />
 
                         <FormField
                             control={paymentForm.control}

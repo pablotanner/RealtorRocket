@@ -5,6 +5,16 @@ import {MdApartment} from "react-icons/md";
 import {LiaBuilding} from "react-icons/lia";
 import {HiOutlineHomeModern} from "react-icons/hi2";
 
+export const CurrencySymbol = {
+    "USD": "$",
+    "EUR": "€",
+    "GBP": "£",
+    "JPY": "¥",
+    "AUD": "A$",
+    "CAD": "C$",
+    "CHF": "Fr",
+    "CNY": "¥",
+}
 
 export const RentalStatus = {
     "RENTED": "Rented",
