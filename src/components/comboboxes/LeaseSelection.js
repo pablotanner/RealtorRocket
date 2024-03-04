@@ -56,7 +56,7 @@ const LeaseSelection = ({onSelect, selected, leases, isLoading, ...props}) => {
             </PopoverTrigger>
             <PopoverContent className="w-[200px] p-0" noPortal>
                 <Command>
-                    <CommandInput placeholder="Search Unit" />
+                    <CommandInput placeholder="Search Lease" />
                     <CommandList>
                         <CommandEmpty>No Lease found.</CommandEmpty>
                         <CommandGroup>

@@ -32,6 +32,7 @@ import {Form, FormControl, FormField, FormGroup, FormItem, FormLabel, FormMessag
 import {Input} from "../ui/input.tsx";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../ui/select.tsx";
 import {Button} from "../ui/button.tsx";
+import {Checkbox} from "../ui/checkbox.tsx";
 
 
 
@@ -161,7 +162,6 @@ const PaymentActions = ({ payment }) => {
                                     </FormItem>
                                 )}
                             />
-
                             <div className="w-full flex flex-row gap-2 justify-between mt-2">
                                 <Button variant="outline" type="reset" onClick={() => {
                                     setModalOpen(false)

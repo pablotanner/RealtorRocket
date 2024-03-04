@@ -10,7 +10,16 @@ import {
     DialogTitle,
     DialogTrigger
 } from "../ui/dialog.tsx";
-import {Form, FormControl, FormField, FormGroup, FormItem, FormLabel, FormMessage} from "../ui/form.tsx";
+import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormGroup,
+    FormItem,
+    FormLabel,
+    FormMessage
+} from "../ui/form.tsx";
 import {Input} from "../ui/input.tsx";
 import {Button} from "../ui/button.tsx";
 import {Coins, PlusIcon} from "lucide-react";
@@ -20,6 +29,9 @@ import {useCreatePaymentMutation} from "../../services/api/financialsApi.js";
 import LeaseSelection from "../comboboxes/LeaseSelection.js";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../ui/select.tsx";
 import {PaymentStatus} from "../../utils/magicNumbers.js";
+import {Checkbox} from "../ui/checkbox.tsx";
+import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "../ui/tooltip.tsx";
+import {AiOutlineQuestionCircle} from "react-icons/ai";
 
 
 const AddPayment = ({...props}) => {
@@ -47,6 +59,7 @@ const AddPayment = ({...props}) => {
             notes: null,
             paymentMethod: null,
             leaseId: null,
+            updatePaymentSchedule: true,
             //tenantId: tenant?.id,
         },
     })
@@ -92,12 +105,6 @@ const AddPayment = ({...props}) => {
                                     <FormItem >
                                         <FormLabel>Payment Date*</FormLabel>
                                         <FormControl>
-                                            {/*
-                                            <DatePicker initialStartDate={new Date()} onChange={(date) => {
-                                                leaseForm.setValue('startDate', date)
-                                                leaseForm.trigger('startDate')
-                                            }}/>
-                                            */}
                                             <Input {...field} defaultValue="09:00" type="datetime-local"/>
 
                                         </FormControl>
@@ -190,7 +197,7 @@ const AddPayment = ({...props}) => {
                             name="leaseId"
                             render={({field}) => (
                                 <FormItem className="flex flex-col" >
-                                    <FormLabel>Lease*</FormLabel>
+                                    <FormLabel>Lease *</FormLabel>
                                     <FormControl >
                                         <LeaseSelection onSelect={(leaseId) => {
                                             paymentForm.setValue('leaseId', leaseId)
@@ -200,6 +207,43 @@ const AddPayment = ({...props}) => {
                                         />
                                     </FormControl>
                                     <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={paymentForm.control}
+                            name="updatePaymentSchedule"
+                            render={({field}) => (
+                                <FormItem className="flex flex-row items-start gap-2 space-y-0 mt-2 ">
+                                    <Checkbox className="" checked={paymentForm.watch("updatePaymentSchedule")} onClick={() => {
+                                        paymentForm.setValue('updatePaymentSchedule', !paymentForm.watch("updatePaymentSchedule"))
+                                    }}  {...field} />
+                                    <div className="flex flex-col gap-1">
+                                        <FormLabel className="flex flex-row items-center">
+                                            Mark as Lease Payment
+                                            <TooltipProvider>
+                                                <Tooltip>
+                                                    <TooltipTrigger asChild>
+                                                        <div className="ml-1 cursor-pointer">
+                                                            <AiOutlineQuestionCircle className="w-4 h-4 text-gray-800"/>
+                                                        </div>
+                                                    </TooltipTrigger>
+                                                    <TooltipContent className="max-w-xs md:max-w-md lg:max-w-lg text-wrap">
+                                                        <p>
+                                                            When checked, this payment will be applied towards the next scheduled lease payment, reducing the amount due. If the payment covers the full amount, the scheduled payment will be marked as 'Paid.'
+                                                        </p>
+                                                    </TooltipContent>
+                                                </Tooltip>
+
+                                            </TooltipProvider>
+                                        </FormLabel>
+                                        <FormDescription>
+                                            If a planned payment exists for the selected lease, it will be updated accordingly.
+                                        </FormDescription>
+                                        <FormMessage/>
+                                    </div>
+
                                 </FormItem>
                             )}
                         />
