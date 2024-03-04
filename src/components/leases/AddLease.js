@@ -135,7 +135,7 @@ const AddLease = ({unit, tenant, ...props}) => {
                                 <FormItem >
                                     <FormLabel>Rental Price*</FormLabel>
                                     <FormControl>
-                                        <Input type="number" placeholder="2000" {...field} />
+                                        <Input type="currency" placeholder="2000" {...field} />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>

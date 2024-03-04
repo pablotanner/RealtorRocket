@@ -32,7 +32,7 @@ const EditTenant = ({tenant}) => {
         phone: zodStringPipe(z.string().or(z.null())),
         civilStatus: zodStringPipe(z.string().or(z.null())),
         occupation: zodStringPipe(z.string().or(z.null())),
-        income: zodNumberInputPipe(z.number().positive('Number must be positive')).or(z.null()),
+        income: zodNumberInputPipe(z.number({errorMap: () => ({message: 'Please enter a valid number.'})}).or(z.null())),
         creditScore: zodNumberInputPipe(z.number().positive('Number must be positive')).or(z.null()),
     })
 
@@ -214,7 +214,7 @@ const EditTenant = ({tenant}) => {
                                     <FormLabel>Income</FormLabel>
                                     <FormControl>
                                         {isEditing ?
-                                            <Input {...field} placeholder="50000" type="number" />
+                                            <Input {...field} placeholder="50000" type="currency" />
                                             :
                                             <FormValue>{field.value}</FormValue>
                                         }

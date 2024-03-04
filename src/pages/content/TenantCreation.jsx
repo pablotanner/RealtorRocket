@@ -570,7 +570,7 @@ const TenantCreation = () => {
                                                     name="leases[0].unitId"
                                                     render={({field}) => (
                                                         <FormItem  >
-                                                            <FormLabel>Unit</FormLabel>
+                                                            <FormLabel>Unit *</FormLabel>
                                                             <FormControl>
                                                                 {
                                                                     leaseOption === "new" ? (
@@ -659,7 +659,7 @@ const TenantCreation = () => {
                                                             <FormControl>
                                                                 {
                                                                     leaseOption === "new" ? (
-                                                                        <Input placeholder="2000"  type="number" {...field} />
+                                                                        <Input placeholder="2000"  type="currency" {...field} />
                                                                     ) : (
                                                                         <FormValue>{moneyParser(field.value)}</FormValue>
                                                                     )

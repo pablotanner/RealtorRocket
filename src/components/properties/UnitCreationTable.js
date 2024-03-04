@@ -1,5 +1,5 @@
-import {Input} from "../../ui/input.tsx";
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "../../ui/table.tsx";
+import {Input} from "../ui/input.tsx";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "../ui/table.tsx";
 import {BsThreeDots} from "react-icons/bs";
 import {
     DropdownMenu,
@@ -7,12 +7,12 @@ import {
     DropdownMenuGroup,
     DropdownMenuItem,
     DropdownMenuTrigger
-} from "../../ui/dropdown-menu.tsx";
+} from "../ui/dropdown-menu.tsx";
 import {Copy, Plus, Trash} from "lucide-react";
-import {Button} from "../../ui/button.tsx";
-import {FormControl} from "../../ui/form.tsx";
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../../ui/select.tsx";
-import {ListingStatus, RentalStatus} from "../../../utils/magicNumbers.js";
+import {Button} from "../ui/button.tsx";
+import {FormControl} from "../ui/form.tsx";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../ui/select.tsx";
+import {ListingStatus, RentalStatus} from "../../utils/magicNumbers.js";
 
 
 const UnitCreationTable = ({ units, onChange }) => {

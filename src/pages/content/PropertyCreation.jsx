@@ -32,7 +32,7 @@ import {
     DialogTitle,
     DialogTrigger
 } from "../../components/ui/dialog.tsx";
-import UnitCreationTable from "../../components/properties/PropertyCreation/UnitCreationTable.js";
+import UnitCreationTable from "../../components/properties/UnitCreationTable.js";
 import {useCreatePropertyMutation} from "../../services/api/propertyApi.js";
 import {useNavigate} from "react-router-dom";
 
@@ -336,7 +336,7 @@ const PropertyCreation = () => {
                                             <FormItem >
                                                 <FormLabel>Market Price</FormLabel>
                                                 <FormControl>
-                                                    <Input placeholder="200000" type="number" {...field} />
+                                                    <Input placeholder="200000" type="currency" {...field} />
                                                 </FormControl>
                                                 <FormMessage/>
                                             </FormItem>
@@ -583,7 +583,7 @@ const PropertyCreation = () => {
                                                         <FormItem >
                                                             <FormLabel>Rental Price</FormLabel>
                                                             <FormControl>
-                                                                <Input placeholder="2500" {...field} />
+                                                                <Input placeholder="2500" type="currency" {...field} />
                                                             </FormControl>
                                                             <FormMessage/>
                                                         </FormItem>

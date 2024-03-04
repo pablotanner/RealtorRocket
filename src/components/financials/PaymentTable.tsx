@@ -83,7 +83,7 @@ const PaymentActions = ({ payment }) => {
                                         <FormItem  >
                                             <FormLabel>Amount</FormLabel>
                                             <FormControl>
-                                                <Input type="number" {...field}  />
+                                                <Input type="currency" {...field}  />
                                             </FormControl>
                                             <FormMessage/>
                                         </FormItem>
