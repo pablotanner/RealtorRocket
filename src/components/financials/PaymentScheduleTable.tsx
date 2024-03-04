@@ -36,7 +36,7 @@ const PaymentScheduleActions = ({ paymentSchedule }) => {
     const [updatePaymentSchedule, {isLoading: isUpdating}] = useUpdatePaymentScheduleMutation()
     const [deletePaymentSchedule] = useDeletePaymentScheduleMutation()
 
-    const paymentForm = useForm({
+    const paymentScheduleForm = useForm({
         resolver: zodResolver(leasePaymentScheduleSchema),
         defaultValues:{
             ...paymentSchedule,
@@ -67,12 +67,12 @@ const PaymentScheduleActions = ({ paymentSchedule }) => {
                         </DialogDescription>
                     </DialogHeader>
 
-                    <Form {...paymentForm}>
-                        <form onSubmit={paymentForm.handleSubmit(handleSubmit)} className="flex flex-col gap-2">
+                    <Form {...paymentScheduleForm}>
+                        <form onSubmit={paymentScheduleForm.handleSubmit(handleSubmit)} className="flex flex-col gap-2">
 
                             <FormGroup useFlex>
                                 <FormField
-                                    control={paymentForm.control}
+                                    control={paymentScheduleForm.control}
                                     name="amountDue"
                                     render={({field}) => (
                                         <FormItem  >
@@ -86,7 +86,7 @@ const PaymentScheduleActions = ({ paymentSchedule }) => {
                                 />
 
                                 <FormField
-                                    control={paymentForm.control}
+                                    control={paymentScheduleForm.control}
                                     name="dueDate"
                                     render={({field}) => (
                                         <FormItem  >
@@ -101,7 +101,7 @@ const PaymentScheduleActions = ({ paymentSchedule }) => {
                             </FormGroup>
 
                             <FormField
-                                control={paymentForm.control}
+                                control={paymentScheduleForm.control}
                                 name="status"
                                 render={({field}) => (
                                     <FormItem  >
@@ -128,7 +128,10 @@ const PaymentScheduleActions = ({ paymentSchedule }) => {
                             />
 
                             <div className="w-full flex flex-row gap-2 justify-between mt-2">
-                                <Button variant="outline" type="reset" onClick={() => setModalOpen(false)}
+                                <Button variant="outline" type="reset" onClick={() => {
+                                    setModalOpen(false)
+                                    paymentScheduleForm.reset()
+                                }}
                                         disabled={isUpdating} className="w-full">
                                     Cancel
                                 </Button>

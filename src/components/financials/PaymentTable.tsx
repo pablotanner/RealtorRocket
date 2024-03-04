@@ -163,7 +163,10 @@ const PaymentActions = ({ payment }) => {
                             />
 
                             <div className="w-full flex flex-row gap-2 justify-between mt-2">
-                                <Button variant="outline" type="reset" onClick={() => setModalOpen(false)}
+                                <Button variant="outline" type="reset" onClick={() => {
+                                    setModalOpen(false)
+                                    paymentForm.reset()
+                                }}
                                         disabled={isUpdating} className="w-full">
                                     Cancel
                                 </Button>

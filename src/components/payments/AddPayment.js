@@ -211,7 +211,10 @@ const AddPayment = ({...props}) => {
 
 
                         <div className="flex justify-between gap-2 mt-4">
-                            <Button type="button" variant="outline" className="w-full" onClick={props.onOpenChange}>Cancel</Button>
+                            <Button type="button" variant="outline" className="w-full" onClick={() => {
+                                props.onOpenChange()
+                                paymentForm.reset();
+                            }}>Cancel</Button>
                             <Button type="submit" variant="gradient" className="w-full" isLoading={isCreating}
                             >
                                 <PlusIcon className="h-4 w-4 mr-2" />
