@@ -201,3 +201,40 @@ export async function updateTenant(req, res) {
         res.status(500).json({ message: "Error updating tenant" });
     }
 }
+
+export async function assignTenantToUnit(req, res) {
+    const unitId = req.params.id;
+    const tenantId = req.body.tenantId;
+
+    try {
+        const updatedTenant = await prisma.tenant.update({
+            where: {
+                id: parseInt(tenantId),
+                leases: {
+                    some: {
+                        realtor: {
+                            userId: req.user.userId
+                        }
+                    }
+                }
+            },
+            data: {
+                unit: {
+                    connect: {
+                        id: parseInt(unitId)
+                    }
+                }
+            },
+            include: {
+                leases: true,
+                unit: true
+            }
+        });
+
+        res.status(200).json({data: updatedTenant });
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json({ message: "Error updating tenant" });
+    }
+}

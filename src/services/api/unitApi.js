@@ -1,5 +1,6 @@
 import customFetchBase from "./customFetchBase.js";
 import {authApi} from "./authApi.js";
+import {toast} from "../../components/ui/use-toast.tsx";
 
 export const unitApi = authApi.injectEndpoints({
     reducerPath: 'unitApi',
@@ -19,9 +20,37 @@ export const unitApi = authApi.injectEndpoints({
             }),
             providesTags: (result, error, id) => [{ type: 'Units', id }],
         }),
+        assignTenant: build.mutation({
+            query: (data) => ({
+                url: `/units/${data.unitId}/tenant`,
+                method: 'PUT',
+                body: {
+                    tenantId: data.tenantId
+                }
+            }),
+            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                queryFulfilled
+                    .then(() => {
+
+                        toast({
+                            title: "Success",
+                            description: "Tenant assigned successfully",
+                            variant: "success",
+                        });
+                    })
+                    .catch(() => {
+                        toast({
+                            title: "Uh oh! Something went wrong.",
+                            description: "There was a problem with your request.",
+                            variant: "error",
+                        });
+                    })
+            },
+            invalidatesTags: ['Units', 'Tenants']
+        }),
     }),
     overrideExisting: false,
 })
 
 
-export const {useGetUnitsQuery, useGetUnitQuery} = unitApi;
+export const {useGetUnitsQuery, useGetUnitQuery, useAssignTenantMutation} = unitApi;

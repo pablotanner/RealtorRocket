@@ -171,10 +171,7 @@ const columns: ColumnDef<Unit>[] = [
             type: "string"
         },
         accessorFn: (row) => {
-            if (row?.leases?.length > 0 && row?.leases[0]?.tenant) {
-                return row.leases[0]?.tenant?.firstName + row.leases[0]?.tenant?.lastName
-            }
-            return undefined
+            return row?.tenant?.firstName + " " + row.tenant?.lastName
         }
 
 

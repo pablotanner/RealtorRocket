@@ -4,14 +4,23 @@ import {useNavigate} from "react-router-dom";
 import {Button} from "../../components/ui/button.tsx";
 import {Plus, PlusIcon} from "lucide-react";
 import RentalTable from "../../components/rentals/RentalTable.tsx";
-import {selectTenantByLeaseId, selectUnitsByPropertyId} from "../../services/slices/objectSlice.js";
+import {selectAllTenants, selectTenantByLeaseId, selectUnitsByPropertyId} from "../../services/slices/objectSlice.js";
 
 
 const Rentals = (props) => {
     const {propertySelection} = props;
 
     const navigate = useNavigate();
-    const units = useSelector((state) => selectUnitsByPropertyId(state, propertySelection));
+
+    const tenants = useSelector((state) => selectAllTenants(state));
+
+    const units = useSelector((state) => selectUnitsByPropertyId(state, propertySelection)).map(unit => {
+        const tenant = tenants.find(tenant => tenant.id === unit.tenantId)
+        return {
+            ...unit,
+            tenant: tenant
+        }
+    })
 
 
     if (!units || units.length === 0)  return (

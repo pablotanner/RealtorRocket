@@ -50,7 +50,7 @@ export const financialsApi = authApi.injectEndpoints({
                         });
                     })
             },
-            invalidatesTags: ['Payments']
+            invalidatesTags: ['Payments', 'Leases']
         }),
         updatePayment: build.mutation({
             query: ({id, body}) => ({

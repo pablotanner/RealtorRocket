@@ -90,7 +90,7 @@ const TenantProfile = (props) => {
                     Tenant Not Assigned To Unit
                 </AlertTitle>
                 <AlertDescription>
-                    This tenant has not been assigned to a unit and some features may not be available.
+                    This tenant has not been assigned to a unit and some features may not be available. If you wish to assign this tenant to a unit, you can do so on the rental unit page.
                 </AlertDescription>
             </Alert>
             <div className="relative w-full h-[21rem] lg:h-36 ">

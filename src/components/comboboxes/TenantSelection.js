@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Popover, PopoverContent, PopoverTrigger} from "../ui/popover.tsx";
 import {Button} from "../ui/button.tsx";
 import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList} from "../ui/command.tsx";
@@ -27,8 +27,40 @@ const TenantSelection = ({onSelect, selected, tenants, ...props}) => {
         }
     }
 
-    if (!tenants) {
-        return null
+    useEffect(() => {
+        setTenantId(selected?.id || selected)
+        setTenant(tenants?.find((tenant) => tenant.id === parseInt(selected?.id || selected)))
+    }, [selected])
+
+
+
+    if (props?.isLoading){
+        return (
+            <Button
+                variant="outline"
+                role="combobox"
+                aria-expanded={open}
+                className="w-[200px] justify-between capitalize"
+                disabled
+            >
+                Loading Tenants...
+                <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            </Button>
+        )
+    }
+    else if ((!tenants || !tenants?.length) && !props?.isLoading){
+        return (
+            <Button
+                variant="outline"
+                role="combobox"
+                aria-expanded={open}
+                className="w-[200px] justify-between capitalize"
+                disabled
+            >
+                No Tenants Available
+                <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            </Button>
+        )
     }
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -41,7 +73,7 @@ const TenantSelection = ({onSelect, selected, tenants, ...props}) => {
 
                 >
                     {tenantId
-                        ? (getName(tenants?.data?.find((tenant) => tenant.id === parseInt(tenantId))))
+                        ? (getName(tenants?.find((tenant) => tenant.id === parseInt(tenantId))))
                         : "Select Tenant..."}
                     <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
@@ -54,7 +86,7 @@ const TenantSelection = ({onSelect, selected, tenants, ...props}) => {
                         <CommandList className={"w-full"}>
                             <CommandEmpty>No Tenant found.</CommandEmpty>
                             <CommandGroup className="max-h-[300px] overflow-auto z-[100] min-w-fit">
-                                {tenants?.data?.map((tenant) => (
+                                {tenants?.map((tenant) => (
                                     <CommandItem
                                         key={tenant.id}
                                         value={tenant.id}

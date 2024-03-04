@@ -87,6 +87,7 @@ export class Unit {
     status: ListingStatus | null;
     documents: Document[];
     images: Image[];
+    tenant: Tenant | null;
     tenantId: number | null;
     maintenanceRequests: MaintenanceRequest[];
     realEstateObject: Property;
