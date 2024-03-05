@@ -44,6 +44,16 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               onChange({target: {value: value, name: name, values: values}});
 
           }
+          
+          const getPadding = (currencySymbol: string) => {
+                if (currencySymbol.length === 1) {
+                    return "px-7"
+                }
+                if (currencySymbol.length === 2) {
+                    return "px-8"
+                }
+                return "px-9"
+          }
 
           return (
               <div className="relative">
@@ -55,7 +65,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                       allowDecimals={false}
                       maxLength={10}
                       allowNegativeValue={false}
-                      className={cn(`px-${7 +currencySymbol.length}`, "flex h-10 w-full rounded-md border border-input bg-white py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50", className)}
+                      className={cn(getPadding(currencySymbol), "flex h-10 w-full rounded-md border border-input bg-white py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50", className)}
                       name={name}
                       id={id}
                       placeholder={placeholder}
