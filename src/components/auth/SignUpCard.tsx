@@ -66,9 +66,9 @@ export const SignUpCard = () => {
     })
 
     function onSubmit(data) {
-        register(data).then((res) => {
+        register(data).then((res: any) => {
             if (res.data) {
-                login({email: form.getValues('email'), password: form.getValues('password')}).then((res) => {
+                login({email: form.getValues('email'), password: form.getValues('password')}).then((res: any) => {
                     if (res.data) {
                         navigate("/")
                     }
