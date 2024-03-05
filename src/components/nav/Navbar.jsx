@@ -1,10 +1,9 @@
-import {Tooltip, TooltipContent, TooltipTrigger} from "../ui/tooltip.tsx";
 import {Button} from "../ui/button.tsx";
 import {useLocation, useNavigate} from "react-router-dom";
 import {BiSolidRocket} from "react-icons/bi";
 import Header from "./Header.jsx";
 import {
-    BellIcon, Building2,
+    Building2,
     BuildingIcon,
     CalendarIcon,
     CircleDollarSignIcon,
@@ -14,6 +13,7 @@ import {
 } from "lucide-react";
 import { useSelector} from "react-redux";
 import {usePrefetch} from "../../services/api/authApi.js"
+import {useGetUserQuery} from "../../services/api/userApi.js";
 
 const items = [
     {
@@ -72,6 +72,7 @@ const Navbar = ({children}) => {
     const navigate = useNavigate();
     const authSlice = useSelector(state => state.authSlice);
 
+    const {isLoading: userIsLoading} = useGetUserQuery();
 
     // use prefetch on user, properties API
     const prefetchProperties = usePrefetch("getProperties")
@@ -95,7 +96,7 @@ const Navbar = ({children}) => {
     }
 
     // If user is not logged in, but we are still waiting for the API (/user) to respond, show a loading spinner
-    if (!authSlice.accessToken || !authSlice.userInfo) {
+    if (!authSlice.accessToken || userIsLoading) {
         return (
             <div className="flex items-center justify-center h-screen w-screen">
                 <div className="rounded-md h-12 w-12 border-4 border-t-4 border-blue-500 animate-spin"></div>

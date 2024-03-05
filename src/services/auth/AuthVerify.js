@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {logoutUser} from "./authActions.js";
+import {setAccessToken} from "./authSlice.js";
+import {useRefreshMutation} from "../api/authApi.js";
 
 const parseJwt = (token) => {
     try {
@@ -15,17 +17,23 @@ const AuthVerify = () => {
     const accessToken = state.accessToken;
     const dispatch = useDispatch();
     const refreshToken = localStorage.getItem("refreshToken")
+    const [refresh, {isLoading: isRefreshing}] = useRefreshMutation();
 
     useEffect(() => {
         if (accessToken && refreshToken) {
             const decodedAccess = parseJwt(accessToken);
             const decodedRefresh = parseJwt(refreshToken);
 
-            //console.log(decodedAccess, decodedRefresh)
-
+            // If access token expired, refresh the token
             if (decodedAccess && decodedAccess.exp * 1000 < Date.now()) {
-                console.log('Access token expired');
-                logoutUser(state);
+                if (!isRefreshing) {
+                    refresh().then((response) => {
+                        if (!response.data || response.error) {
+                            console.log('Refresh token failed');
+                            logoutUser(state);
+                        }
+                    })
+                }
             }
 
             if (decodedRefresh && decodedRefresh.exp * 1000 < Date.now()) {

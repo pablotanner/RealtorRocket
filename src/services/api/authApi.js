@@ -59,12 +59,20 @@ export const authApi = createApi({
                 method: 'POST',
             }),
         }),
-        users: build.query({
+        refresh: build.mutation({
             query: () => ({
-                url: '/users',
-                method: 'GET',
+                url: '/refresh',
+                method: 'POST',
+                body: {
+                    refreshToken: localStorage.getItem('refreshToken'),
+                }
             }),
-        })
+            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                const { data } = await queryFulfilled;
+                dispatch(setAccessToken(data.accessToken));
+                localStorage.setItem('refreshToken', data.refreshToken)
+            }
+        }),
     }),
     tagTypes: ['User', 'Properties', 'Units', 'Tenants', 'Leases', "Payments"]
 })
