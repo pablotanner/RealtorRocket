@@ -1,5 +1,5 @@
 import * as React from "react"
-import {Calendar as CalendarIcon, ChevronDown, Clock, Trash, Trash2} from "lucide-react"
+import {Calendar as CalendarIcon, ChevronDown, ChevronLeft, ChevronRight, Clock, Trash} from "lucide-react"
 
 import {cn} from "../../utils.ts";
 import { Button } from "./button.tsx"
@@ -9,11 +9,8 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "./popover.tsx"
-import {DateRange} from "react-day-picker";
 import {dateParser, getDatePlaceholder} from "../../utils/formatters.js";
-import TimePicker from "./time-picker.tsx";
-import {Input} from "./input.tsx";
-
+import {useNavigation} from "react-day-picker"
 
 interface DatePickerProps {
     value: Date;
@@ -28,28 +25,107 @@ interface DatePickerProps {
 
 export function DatePicker({value, onChange, disabled, className, allowTime, ...props}: DatePickerProps) {
 
+    const [open, setOpen] = React.useState(false);
+
+    const displayDate = value ? dateParser(value) : getDatePlaceholder();
+
+    const Header = () => {
+        const {currentMonth, previousMonth, nextMonth, goToMonth} = useNavigation();
+
+        const year = currentMonth.getFullYear();
+
+        const formattedDefaultValue = value ? value.toISOString().split("T")[0] : null;
+
+        // Initialize the state with the provided or default formatted date
+        const [input, setInput] = React.useState(formattedDefaultValue);
+        const inputRef = React.useRef<HTMLInputElement>(null);
+
+
+        const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            // Just store the value temporarily, don't parse or send it upstream yet
+            setInput(e.target.value);
+        };
+
+        // When the input loses focus, parse and handle the complete input
+        const handleInputBlur = () => {
+            if (!inputRef.current || !input) return;
+            const date = new Date(input);
+
+            if (!isNaN(date.getTime())) {
+                onChange(date); // Update the parent component or external state
+                goToMonth(date); // Adjust displayed month in the date picker if necessary
+            }
+        };
+
+        return (
+            <div className="flex flex-col gap-2">
+                <div className="flex justify-between items-center px-2">
+                    <button
+                        type="button"
+                        className="p-[2px] bg-white flex items-center border-2 border-transparent hover:border-secondary rounded-md"
+                        onClick={() => goToMonth(previousMonth)}
+                    >
+                        <ChevronLeft className="h-5 w-5 text-gray-700" />
+                    </button>
+                    <div className="text-gray-700 font-500 text-md">
+                        {currentMonth.toLocaleString("default", {month: "long"})} {year}
+                    </div>
+                    <button
+                        type="button"
+                        className="p-[2px] bg-white flex items-center border-2 border-transparent hover:border-secondary rounded-md"
+                        onClick={() => goToMonth(nextMonth)}
+                    >
+                        <ChevronRight className="h-5 w-5 text-gray-700" />
+                    </button>
+                </div>
+
+                <div className="flex gap-2 justify-between items-center">
+
+                    <input
+                        className="flex h-10 w-full rounded-md border border-input bg-white px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        ref={inputRef}
+                        type="date"
+                        value={input}
+                        onChange={handleInputChange}
+                        onBlur={handleInputBlur}
+                    />
+
+                    <Button
+                        variant="outline"
+                        onClick={() => {
+                            onChange(new Date())
+                        }}
+                    >
+                        Today
+                    </Button>
+                </div>
+            </div>
+        )
+    }
+
     return (
-        <Popover>
+        <Popover open={open} onOpenChange={() => setOpen(!open)}>
             <PopoverTrigger asChild>
                 <Button
                     variant={"outline"}
+                    aria-expanded={open}
                     className={cn(
-                        "justify-start text-left font-500 w-full border border-input hover:border-gray-300",
+                        "justify-start text-left font-500 w-full border border-input hover:border-gray-300 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                         !(value) && "text-muted-foreground", className
                     )}
                     disabled={disabled}
                     type="button"
-                    {...props}
+                    onClick={() => setOpen(!open)}
                 >
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {value ? dateParser(value) : getDatePlaceholder()}
+                    {displayDate}
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="flex flex-col items-center justify-center" >
+            <PopoverContent className="flex flex-col items-center justify-center p-3 pb-3" >
 
                 <Calendar
                     initialFocus
-                    mode={"single"}
+                    mode="single"
                     onSelect={(date) => {
                         if (date) {
                             // Remember time
@@ -66,20 +142,28 @@ export function DatePicker({value, onChange, disabled, className, allowTime, ...
                         }
                     }}
                     selected={value}
-                />
-
+                    fixedWeeks={true}
+                    components={{
+                        Caption: Header
+                    }}
+                    />
                 <div className="flex flex-col w-full rounded-lg gap-1">
-                    <div className="w-full h-[1px] bg-secondary" />
+                    <div className="w-full h-[1px] bg-secondary mb-1" />
                     {
                         allowTime && (
                             <>
                                 <div
                                     data-disabled={!value}
-                                    className="w-full rounded-lg select-none p-2 flex flex-row items-center gap-4 relative hover:bg-secondary/90 hover:text-primary-dark  data-[disabled='true']:hover:bg-gray-50 data-[disabled='true']:text-gray-500 data-[disabled='true']:hover:text-gray-500">
-                                    <Clock className="h-4 w-4 absolute" />
+                                    className="flex flex-row items-center justify-between"
+                                >
+                                    <p className="text-md font-500">
+                                        Time
+                                    </p>
+
                                     <input
                                         type={"time"}
-                                        className="pl-6 outline-none bg-transparent w-full  select-none"
+                                        className="flex h-10 w-fit rounded-md border border-input bg-white px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+
                                         value={value ? value.toLocaleTimeString().slice(0, 5) : ""}
                                         onChange={(e) => {
                                             const time = e.target.value;
@@ -90,31 +174,40 @@ export function DatePicker({value, onChange, disabled, className, allowTime, ...
                                         }}
                                         disabled={!value}
                                     />
-                                    <ChevronDown className="h-4 w-4 absolute right-1 cursor-pointer pointer-events-none"/>
                                 </div>
 
 
-                                <div className="w-full h-[1px] bg-secondary" />
+                                <div className="w-full h-[1px] bg-secondary my-1" />
                             </>
 
                         )
                     }
 
+                    <div className="flex justify-between gap-2">
+                        <Button
+                            onClick={() => {
+                                onChange(null)
+                                setOpen(false)
+                            }}
+                            variant="outline"
+                            className="w-full"
+                        >
+                            Cancel
+                        </Button>
 
-                    <div
-                        data-disabled={!value}
-                        onClick={() => {
-                            onChange(null)
-                        }}
-                        className="w-full rounded-lg p-2 flex flex-row items-center gap-4 relative cursor-pointer hover:bg-secondary hover:text-red-500">
-                        <Trash className="h-4 w-4" />
-                        Reset
-
+                        <Button
+                            disabled={!value}
+                            onClick={() => {
+                                setOpen(false)
+                            }}
+                            className="w-full"
+                            variant="gradient"
+                        >
+                            Done
+                        </Button>
                     </div>
 
                 </div>
-
-
             </PopoverContent>
         </Popover>
     )

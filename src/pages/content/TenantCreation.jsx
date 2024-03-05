@@ -397,7 +397,7 @@ const TenantCreation = () => {
                                             <FormItem  >
                                                 <FormLabel>Income</FormLabel>
                                                 <FormControl>
-                                                    <Input placeholder="" type="number" {...field} />
+                                                    <Input placeholder="" type="currency" {...field} />
                                                 </FormControl>
                                                 <FormMessage/>
                                             </FormItem>

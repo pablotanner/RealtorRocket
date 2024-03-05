@@ -40,6 +40,7 @@ import {cn} from "../../utils.ts";
 
 const AddPayment = ({...props}) => {
 
+    const [open, setOpen] = useState(false)
     const {data: leases } = useGetLeasesQuery();
 
     const [createPayment, {isLoading: isCreating}] = useCreatePaymentMutation();
@@ -88,7 +89,7 @@ const AddPayment = ({...props}) => {
                 console.log(res.error)
             }
             else {
-                props.onOpenChange()
+                setOpen(false)
                 paymentForm.reset();
             }
         })
@@ -152,10 +153,10 @@ const AddPayment = ({...props}) => {
     }
 
     return (
-        <Dialog {...props}>
-            <DialogTrigger>
+        <Dialog {...props} onOpenChange={() => setOpen(!open)} open={open}>
+            <Button onClick={() => setOpen(!open)} variant="outline" type="button">
                 {props.children}
-            </DialogTrigger>
+            </Button>
             <DialogContent >
                 <DialogHeader>
                     <DialogIcon>
@@ -340,7 +341,7 @@ const AddPayment = ({...props}) => {
 
                         <div className="flex justify-between gap-2 mt-4">
                             <Button type="button" variant="outline" className="w-full" onClick={() => {
-                                props.onOpenChange()
+                                setOpen(false)
                                 paymentForm.reset();
                             }}>Cancel</Button>
                             <Button type="submit" variant="gradient" className="w-full" isLoading={isCreating}

@@ -69,7 +69,7 @@ const TenantSelection = ({onSelect, selected, tenants, ...props}) => {
                     variant="outline"
                     role="combobox"
                     aria-expanded={open}
-                    className={cn("w-[200px] justify-between capitalize", props.className)}
+                    className={cn("w-[200px] flex pl-3 items-center justify-between capitalize ring-offset-background  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ", props.className)}
 
                 >
                     {tenantId

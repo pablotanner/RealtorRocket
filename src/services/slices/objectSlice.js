@@ -331,10 +331,13 @@ export const selectTenantsByLeaseId = (state, leaseId) => {
     return selectAllTenants(state).filter(tenant => tenant.leaseId === leaseId);
 }
 
-export const selectLeasesByTenantId = (state, tenantId) => {
-    if (!tenantId) return [];
-    return selectAllLeases(state).filter(lease => lease.tenantId === tenantId);
-}
+
+export const selectLeasesByTenantId = createSelector(
+    [selectAllLeases, (_, tenantId) => tenantId],
+    (leases, tenantId) => {
+        return leases.filter(lease => lease.tenantId === tenantId)
+    }
+)
 
 export const selectUnitsByTenantId = (state, tenantId) => {
     if (!tenantId) return [];

@@ -71,12 +71,9 @@ const Financials = (props) => {
                     <AddPayment
                         open={showPaymentModal}
                         onOpenChange={() => setShowPaymentModal(!showPaymentModal)}
-
                     >
-                        <Button className="self-end justify-end" variant="outline" type="button">
-                            <FilePlus2 className="w-4 h-4 mr-2" />
-                            Add Payment
-                        </Button>
+                        <FilePlus2 className="w-4 h-4 mr-2" />
+                        Add Payment
                     </AddPayment>
                 </PaymentTable>
             ),
