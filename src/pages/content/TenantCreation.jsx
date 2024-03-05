@@ -1,10 +1,10 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
     AlertTriangle, Archive,
     ArrowLeft,
     ArrowRight, BadgeCheck,
     BuildingIcon,
-    Check,
+    Check, CheckCircle2,
     CrossIcon, DoorClosed,
     Home,
     Image,
@@ -53,6 +53,7 @@ import {useCreateTenantMutation} from "../../services/api/tenantApi.js";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "../../components/ui/tooltip.tsx";
 import {BiQuestionMark} from "react-icons/bi";
 import {AiOutlineQuestionCircle} from "react-icons/ai";
+import {Progress} from "../../components/ui/multi-step.js";
 
 
 const TenantCreation = () => {
@@ -117,19 +118,27 @@ const TenantCreation = () => {
     const [tabStates, setTabStates] = useState([
         {
             title: "Tenant Information",
-            status: "incomplete"
+            description: "Provide information about the tenant",
+            status: "incomplete",
+            icon: <UserSearch />
         },
         {
             title: "Lease Assignment",
-            status: "incomplete"
+            description: "Assign a lease to the tenant",
+            status: "incomplete",
+            icon: <ListIcon />
         },
         {
             title: "Unit Assignment",
-            status: "incomplete"
+            description: "Assign the tenant to a unit",
+            status: "incomplete",
+            icon: <DoorClosed />
         },
         {
             title: "Confirmation",
-            status: "incomplete"
+            description: "Review and confirm",
+            status: "incomplete",
+            icon: <CheckCircle2 />
         }
     ])
 
@@ -289,12 +298,14 @@ const TenantCreation = () => {
                 Create Tenant
             </h1>
 
-            <div className="flex flex-row justify-between overflow-auto mb-4">
-                {tabStates.map((tab, index) => {
-                    return (
-                        <StepTab title={tab.title} status={tab.status} index={index + 1} key={index}/>
-                    )
-                })}
+            <div className="w-fit md:w-full flex items-center justify-center mb-6 md:mb-16 mt-6">
+                <Progress
+                    currentStep={tab - 1}
+                    onPageNumberClick={(i) => setTab(i + 1)}
+                    disableNext={tabStates[tab -1].status !== "complete"}
+                    steps={tabStates}
+                    className={"bottom-1 left-16 md:left-0 md:right-0 md:-bottom-7 lg:-bottom-12"}
+                />
             </div>
 
             <div

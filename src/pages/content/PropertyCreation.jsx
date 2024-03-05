@@ -1,9 +1,9 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
     ArrowLeft,
-    ArrowRight, BadgeCheck,
+    ArrowRight, BadgeCheck, Building2,
     BuildingIcon,
-    Check,
+    Check, CheckCircle2,
     CrossIcon, DoorClosed,
     Home,
     Image,
@@ -35,6 +35,7 @@ import {
 import UnitCreationTable from "../../components/properties/UnitCreationTable.js";
 import {useCreatePropertyMutation} from "../../services/api/propertyApi.js";
 import {useNavigate} from "react-router-dom";
+import {Progress} from "../../components/ui/multi-step.js";
 
 
 const PropertyCreation = () => {
@@ -104,14 +105,20 @@ const PropertyCreation = () => {
     const [tabStates, setTabStates] = useState([
         {
             title: "Property Information",
+            description: "Provide basic information about the property",
+            icon: <Building2 className="w-6 h-6" />,
             status: "incomplete"
         },
         {
             title: "Unit Information",
+            description: "Enter details about the units in the property",
+            icon: <BuildingIcon className="w-6 h-6" />,
             status: "incomplete"
         },
         {
             title: "Confirmation",
+            description: "Review and confirm details",
+            icon: <CheckCircle2 className="w-6 h-6" />,
             status: "incomplete"
         }
     ])
@@ -119,7 +126,7 @@ const PropertyCreation = () => {
     useEffect(() => {
         if (propertyForm.formState.isValid){
             setTabStates(tabStates.map((tab, index) => {
-                if (index === 0){
+                if (index === 0 || index === 1){
                     return {...tab, status: "complete"}
                 }
                 return tab
@@ -127,7 +134,7 @@ const PropertyCreation = () => {
         }
         else {
             setTabStates(tabStates.map((tab, index) => {
-                if (index === 0){
+                if (index === 0 || index === 1){
                     return {...tab, status: "incomplete"}
                 }
                 return tab
@@ -163,29 +170,6 @@ const PropertyCreation = () => {
         })
     }
 
-    const StepTab = ({title, status, index}) => {
-        const isDisabled = index !== 1 && tabStates[index - 2].status !== "complete"
-
-        return (
-            <div
-                data-disabled={isDisabled}
-                data-selected={tab === index}
-                className="p-4 border-b-2 border-secondary select-none flex flex-col lg:flex-row gap-4 items-center justify-center lg:justify-start w-full hover:border-off-black cursor-pointer data-[selected='true']:border-off-black data-[disabled='true']:opacity-50 data-[disabled='true']:cursor-not-allowed data-[disabled='true']:hover:border-secondary"
-                onClick={() => !isDisabled && setTab(index)}
-            >
-                <div
-                    data-complete={status==="complete"}
-                    data-selected={tab === index}
-                    className="p-2 md:p-4 flex w-8 h-8 md:w-14 md:h-14 items-center justify-center text-md md:text-xl border border-secondary text-gray-400 rounded-lg data-[complete='true']:bg-secondary data-[selected='true']:bg-black data-[selected='true']:text-white">
-                    {status === "complete" ? <Check /> : index}
-                </div>
-
-                <div className="text-off-black font-500 text-xs md:text-sm text-center">
-                    {title}
-                </div>
-            </div>
-        )
-    }
 
     return (
         <div className="flex flex-col gap-2 relative mb-16">
@@ -193,13 +177,17 @@ const PropertyCreation = () => {
                 Create Property
             </h1>
 
-            <div className="flex flex-row justify-between overflow-auto mb-4">
-                {tabStates.map((tab, index) => {
-                    return (
-                        <StepTab title={tab.title} status={tab.status} index={index + 1} key={index}/>
-                    )
-                })}
+            <div className="w-fit md:w-full flex items-center justify-center mb-6 md:mb-16 mt-6">
+                <Progress
+                    currentStep={tab - 1}
+                    onPageNumberClick={(i) => setTab(i + 1)}
+                    steps={tabStates}
+                />
             </div>
+
+
+
+
 
             <div
                 data-selected={tab === 1}

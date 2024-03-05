@@ -1,51 +1,49 @@
 //import {Progress} from "./progress.tsx";
 import React from "react";
+import {cn} from "../../utils.ts";
+import {UserIcon} from "lucide-react";
 
-const Progress = ({ value, steps, onPageNumberClick, blockedSteps }) => {
-
-    const stepPercentage = Math.min(((value / (steps - 1)) * 100) + 15,100);
+export const Progress = ({ currentStep, steps, onPageNumberClick, className }) => {
 
     return (
-        <div className="w-full h-2 bg-gray-200 rounded-full relative">
-            <div
-                style={{ width: `${stepPercentage}%` }}
-                className="h-2 bg-primary-dark rounded-full flex"
-            />
-            {Array.from({ length: steps }).map((_, i) => (
-                <div
-                    data-filled={i <= value}
-                    key={i}
-                    data-blocked={blockedSteps[i]}
-                    style={{ left: `${(((i) / (steps - 1)) * 100)-5}%` }} // Adjusted calculation here
-                    className="absolute top-[-12px] h-[30px] text-gray-400 bg-white border-gray-200 border-2 data-[filled=true]:bg-primary-dark data-[filled=true]:text-white data-[filled=true]:border-primary-dark w-[30px] rounded-full items-center cursor-pointer justify-center flex text-sm data-[blocked=true]:bg-gray-200 X data-[blocked=true]:text-gray-400 data-[blocked=true]:border-gray-200 data-[blocked=true]:cursor-not-allowed data-[blocked=true]:hover:bg-gray-200 data-[blocked=true]:hover:text-gray-400 data-[blocked=true]:hover:border-gray-200 data-[blocked=true]:hover:cursor-not-allowed data-[blocked=false]:hover:bg-primary-dark data-[blocked=false]:hover:text-white data-[blocked=false]:hover:border-primary-dark"
-                    onClick={() => onPageNumberClick(i)}
-                >
-                    {i+1}
-                </div>
-            ))}
+        <div className="w-[90%] flex flex-col md:flex-row md:pl-16 pr-4 items-center">
+            {steps?.map((step, index) => {
+                const disabled = index > 0 && steps[index - 1].status !== "complete";
+
+                return (
+                    <>
+                        <div key={index} className="flex flex-row items-center">
+                            <div
+                                onClick={() => !disabled && onPageNumberClick(index)}
+                                className={cn("cursor-pointer flex flex-col items-center justify-start", currentStep === index ? "text-primary-dark" : "text-gray-700", disabled ? "cursor-not-allowed" : "cursor-pointer")}
+                            >
+                                <div
+                                    aria-selected={currentStep === index}
+                                    className={cn("p-3 z-10 relative border border-secondary bg-white shadow-sm rounded-md w-fit", currentStep < index ? "text-gray-500" : "text-gray-700", disabled ? "text-gray-400" : "", "aria-selected:ring-2 aria-selected:ring-primary-dark/70")}
+                                >
+                                    {step?.icon}
+
+                                    <div className={cn("absolute bottom-1 left-16 md:left-0 md:right-0 md:-bottom-7 lg:-bottom-12 leading-tight flex flex-col justify-center items-start md:items-center whitespace-pre", className)}>
+                                        <p className={cn("text-sm lg:text-sm font-500 ")}>
+                                            {step?.title}
+                                        </p>
+                                        <p  className={cn("flex md:hidden lg:flex text-xs md:text-sm font-300")}>
+                                            {step?.description}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {
+                            index < steps.length - 1 && (
+                                <div className={cn("w-[2px] md:w-full h-16 md:h-[2px] z-0", currentStep <= index ? "bg-gray-200" : "bg-gray-700")}/>
+                            )
+                        }
+                    </>
+                )
+            })}
+
         </div>
+
     );
 };
-
-const MultiStep = (props) => {
-    const childrenArray = React.Children.toArray(props.children);
-
-    // Extract the desired property from each child
-    const blockedSteps = React.Children.map(props.children, child => {
-        return child.props['data-blocked'] === true;
-    });
-
-
-
-    return (
-        <span className="w-full" {...props}>
-            <div className="px-4 py-4">
-                <Progress value={props.page} blockedSteps={blockedSteps}  steps={childrenArray.length} onPageNumberClick={props.onPageNumberClick} />
-            </div>
-            {childrenArray[props.page]}
-        </span>
-    )
-
-}
-
-export default MultiStep;
