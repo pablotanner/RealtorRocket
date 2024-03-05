@@ -118,27 +118,27 @@ const TenantCreation = () => {
     const [tabStates, setTabStates] = useState([
         {
             title: "Tenant Information",
-            description: "Provide information about the tenant",
+           // description: "Provide information about the tenant",
             status: "incomplete",
-            icon: <UserSearch />
+            //icon: <UserSearch />
         },
         {
             title: "Lease Assignment",
-            description: "Assign a lease to the tenant",
+            //description: "Assign a lease to the tenant",
             status: "incomplete",
-            icon: <ListIcon />
+            //icon: <ListIcon />
         },
         {
             title: "Unit Assignment",
-            description: "Assign the tenant to a unit",
+            //description: "Assign the tenant to a unit",
             status: "incomplete",
-            icon: <DoorClosed />
+            //icon: <DoorClosed />
         },
         {
             title: "Confirmation",
-            description: "Review and confirm",
+            //description: "Review and confirm",
             status: "incomplete",
-            icon: <CheckCircle2 />
+            //icon: <CheckCircle2 />
         }
     ])
 
@@ -281,8 +281,9 @@ const TenantCreation = () => {
                 <div
                     data-complete={status==="complete"}
                     data-selected={tab === index}
-                    className="p-2 md:p-4 flex w-8 h-8 md:w-14 md:h-14 items-center justify-center text-md md:text-xl border border-secondary text-gray-400 rounded-lg data-[complete='true']:bg-secondary data-[selected='true']:bg-black data-[selected='true']:text-white">
-                    {status === "complete" ? <Check /> : index}
+                    data-previous={tab > index}
+                    className="p-2 md:p-4 flex w-8 h-8 md:w-14 md:h-14 items-center justify-center text-md md:text-xl border border-secondary text-gray-400 rounded-lg data-[previous='true']:bg-secondary data-[selected='true']:bg-black data-[selected='true']:text-white">
+                    {index}
                 </div>
 
                 <div className="text-off-black font-500 text-xs md:text-sm text-center">
@@ -298,14 +299,12 @@ const TenantCreation = () => {
                 Create Tenant
             </h1>
 
-            <div className="w-fit md:w-full flex items-center justify-center mb-6 md:mb-16 mt-6">
-                <Progress
-                    currentStep={tab - 1}
-                    onPageNumberClick={(i) => setTab(i + 1)}
-                    disableNext={tabStates[tab -1].status !== "complete"}
-                    steps={tabStates}
-                    className={"bottom-1 left-16 md:left-0 md:right-0 md:-bottom-7 lg:-bottom-12"}
-                />
+            <div className="flex flex-row justify-between overflow-auto mb-4">
+                {tabStates.map((tab, index) => {
+                    return (
+                        <StepTab title={tab.title} status={tab.status} index={index + 1} key={index}/>
+                    )
+                })}
             </div>
 
             <div

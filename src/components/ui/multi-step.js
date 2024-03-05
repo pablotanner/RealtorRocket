@@ -3,47 +3,58 @@ import React from "react";
 import {cn} from "../../utils.ts";
 import {UserIcon} from "lucide-react";
 
-export const Progress = ({ currentStep, steps, onPageNumberClick, className }) => {
+
+
+ export const Progress = ({ currentStep, steps, onPageNumberClick }) => {
+    // Construct the gridTemplateColumns string dynamically
+    // For n steps, there are n-1 separators, leading to a pattern of "auto 1fr" repeated
+    const gridTemplateColumns = `repeat(${steps.length}, 1fr) ${steps.length > 1 ? `repeat(${steps.length - 1}, 1fr)` : ''}`;
 
     return (
-        <div className="w-[90%] flex flex-col md:flex-row md:pl-16 pr-4 items-center">
-            {steps?.map((step, index) => {
-                const disabled = index > 0 && steps[index - 1].status !== "complete";
+        <div className="flex flex-col w-full items-center">
+            <div
+                className="grid grid-flow-col items-start relative"
+                style={{ gridTemplateColumns }}
+            >
+                {steps.flatMap((step, index) => {
+                    const isCurrentStep = currentStep === index;
+                    const isDisabled = index > 0 && steps[index - 1].status !== "complete";
+                    const handleStepClick = () => !isDisabled && onPageNumberClick(index);
 
-                return (
-                    <>
-                        <div key={index} className="flex flex-row items-center">
+                    // Step with icon and title
+                    const stepContent = (
+                        <div
+                            key={`step-${index}`}
+                            onClick={handleStepClick}
+                            className={cn("cursor-pointer flex flex-col gap-1 items-center justify-start", currentStep === index ? "text-primary-dark" : "text-gray-700", currentStep < index ? "text-gray-500" : "text-gray-700", isDisabled ? "cursor-not-allowed" : "cursor-pointer", isDisabled ? "text-gray-400" : "")}
+                        >
                             <div
-                                onClick={() => !disabled && onPageNumberClick(index)}
-                                className={cn("cursor-pointer flex flex-col items-center justify-start", currentStep === index ? "text-primary-dark" : "text-gray-700", disabled ? "cursor-not-allowed" : "cursor-pointer")}
-                            >
-                                <div
-                                    aria-selected={currentStep === index}
-                                    className={cn("p-3 z-10 relative border border-secondary bg-white shadow-sm rounded-md w-fit", currentStep < index ? "text-gray-500" : "text-gray-700", disabled ? "text-gray-400" : "", "aria-selected:ring-2 aria-selected:ring-primary-dark/70")}
-                                >
-                                    {step?.icon}
-
-                                    <div className={cn("absolute bottom-1 left-16 md:left-0 md:right-0 md:-bottom-7 lg:-bottom-12 leading-tight flex flex-col justify-center items-start md:items-center whitespace-pre", className)}>
-                                        <p className={cn("text-sm lg:text-sm font-500 ")}>
-                                            {step?.title}
-                                        </p>
-                                        <p  className={cn("flex md:hidden lg:flex text-xs md:text-sm font-300")}>
-                                            {step?.description}
-                                        </p>
-                                    </div>
-                                </div>
+                                aria-selected={isCurrentStep}
+                                className={cn("p-3 z-10 relative border border-secondary bg-white shadow-sm rounded-md w-fit", currentStep < index ? "text-gray-500" : "text-gray-700", "aria-selected:ring-2 aria-selected:ring-primary-dark/70")}                            >
+                                {step.icon}
                             </div>
+                            <p className="text-sm font-500">
+                                {step.title}
+                            </p>
+                            <p className={cn("text-xs font-400 text-center", !isDisabled && "text-gray-500")}>
+                                {step.description}
+                            </p>
                         </div>
-                        {
-                            index < steps.length - 1 && (
-                                <div className={cn("w-[2px] md:w-full h-16 md:h-[2px] z-0", currentStep <= index ? "bg-gray-200" : "bg-gray-700")}/>
-                            )
-                        }
-                    </>
-                )
-            })}
+                    );
 
+                    // Separator logic for between steps
+                    const separator = index < steps.length - 1 ? (
+                        <div
+                            key={`separator-${index}`}
+                            className={`bg-gray-200 h-[2px]  mt-8 ${currentStep > index ? "bg-primary-dark" : "bg-gray-200"}`}
+                        />
+                    ) : null;
+
+                    return [stepContent, separator];
+                })}
+            </div>
         </div>
-
     );
 };
+
+
