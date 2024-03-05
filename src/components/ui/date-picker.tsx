@@ -110,7 +110,7 @@ export function DatePicker({value, onChange, disabled, className, allowTime, ...
                     variant={"outline"}
                     aria-expanded={open}
                     className={cn(
-                        "justify-start text-left font-500 w-full border border-input hover:border-gray-300 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                        "justify-start text-left font-500 w-full border border-input ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                         !(value) && "text-muted-foreground", className
                     )}
                     disabled={disabled}
