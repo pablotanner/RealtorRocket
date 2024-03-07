@@ -106,7 +106,9 @@ export async function getTenant(req, res) {
             },
             include: {
                 leases: true,
-                unit: true
+                unit: true,
+                maintenanceRequests: true,
+                rentPayments: true
             }
         });
 

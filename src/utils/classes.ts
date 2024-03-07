@@ -1,7 +1,7 @@
 import {
     AccountStatus,
     AmenitiesOnRealEstate,
-    CurrencyCode, Expense,
+    CurrencyCode,
     Image, ListingStatus, Message,
     PreferencesOnRealEstate,
     RealEstateType,
@@ -40,6 +40,18 @@ export class MaintenanceRequest {
     unitId: number | null;
     reporter: Tenant | null;
     reportId: number | null;
+}
+
+export class Expense {
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    amount: number | null;
+    currency: string | null;
+    date: Date | null;
+    status: string | null;
+
+
 }
 
 export class RentPayment {

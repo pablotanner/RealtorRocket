@@ -1,4 +1,4 @@
-import {useCallback, useMemo, useState} from "react";
+import {useCallback, useEffect, useMemo, useState} from "react";
 import {
     flexRender,
     getCoreRowModel,
@@ -371,6 +371,17 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
         )
     }
 
+    useEffect(() => {
+        // If no data or data is empty, scroll to center of table
+        if (!tableData?.length) {
+            const table = document.querySelector("table");
+            table?.scrollIntoView({behavior: "instant", block: "center", inline: "center"})
+        }
+
+
+    }, [tableData])
+
+
     return (
         <div className="flex flex-col gap-4">
             <div className="flex flex-row items-center gap-4" hidden={!props.title}>
@@ -504,7 +515,7 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                                         <h3 className="text-md text-gray-700">
                                             No Data Available
                                         </h3>
-                                        <p className="text-sm font-400 text-gray-500 max-w-[350px]">
+                                        <p className="text-sm font-400 text-gray-500 max-w-[250px] sm:max-w-[350px]">
                                             There is no data available for this table, if you believe this is an error, please contact support.
                                         </p>
                                     </div>

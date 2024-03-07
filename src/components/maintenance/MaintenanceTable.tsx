@@ -118,6 +118,7 @@ const MaintenanceTable = ({ maintenanceReports, ...props }) => {
                 title="Maintenance Reports"
                 subtitle="All maintenance reports for your properties."
                 icon={<Drill className={"w-5 h-5"} />}
+                {...props}
             >
                 {props.children}
             </DataTable>

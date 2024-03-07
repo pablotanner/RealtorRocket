@@ -18,6 +18,7 @@ import AddLease from "../../components/leases/AddLease.js";
 import {useState} from "react";
 import {Alert, AlertDescription, AlertTitle} from "../../components/ui/alert.tsx";
 import {AiFillWarning} from "react-icons/ai";
+import MaintenanceTable from "../../components/maintenance/MaintenanceTable.tsx";
 
 
 const TenantProfile = (props) => {
@@ -75,9 +76,7 @@ const TenantProfile = (props) => {
         {
             id: "requests",
             title: "Maintenance Requests",
-            content: (<h3>
-                Maintenance Requests
-            </h3>)
+            content: (<MaintenanceTable maintenanceReports={tenant?.maintenanceRequests} subtitle="These are the maintenance reports associated with this tenant."/> )
         }
     ]
 
