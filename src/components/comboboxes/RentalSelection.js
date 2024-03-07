@@ -24,7 +24,7 @@ const RentalSelection = ({onSelect, selected, units, ...props}) => {
                 variant="outline"
                 role="combobox"
                 aria-expanded={open}
-                className="w-[200px] justify-between capitalize"
+                className={cn("w-[200px] flex pl-3 items-center justify-between capitalize ring-offset-background  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ", props.className)}
                 disabled
             >
                 Loading Units...
@@ -38,7 +38,7 @@ const RentalSelection = ({onSelect, selected, units, ...props}) => {
                 variant="outline"
                 role="combobox"
                 aria-expanded={open}
-                className="w-[200px] justify-between capitalize"
+                className={cn("w-[200px] flex pl-3 items-center justify-between capitalize ring-offset-background  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ", props.className)}
                 disabled
             >
                 No Units Available

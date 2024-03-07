@@ -21,7 +21,7 @@ import {
     PropertyCreationPage,
     TenantCreationPage,
     AccountPage,
-    MessagesPage
+    MessagesPage, MaintenancePage
 } from "./pages/WrappedPages.js";
 import {useSocket} from "./services/hooks/useSocket.js";
 import {useState} from "react";
@@ -71,6 +71,7 @@ const AppContent = () => {
                         <Route path="/calendar" element={<CalendarPage/>}/>
                         <Route path="/explorer" element={<ExplorerPage/>}/>
                         <Route path="/messages" element={<MessagesPage/>}/>
+                        <Route path="/maintenance" element={<MaintenancePage/>}/>
                     </Routes>
                 </Navbar>)}
                 {!showNavbar && (

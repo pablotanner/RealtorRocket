@@ -21,6 +21,10 @@ const paymentsAdapter = createEntityAdapter({
     selectId: (payment) => payment.id,
     sortComparer: (a, b) => b.createdAt.localeCompare(a.createdAt),
 })
+const maintenanceAdapter = createEntityAdapter({
+    selectId: (maintenanceReport) => maintenanceReport.id,
+    sortComparer: (a, b) => b.createdAt.localeCompare(a.createdAt),
+})
 
 const initialState = {
     properties: propertiesAdapter.getInitialState(),
@@ -28,6 +32,7 @@ const initialState = {
     leases: leasesAdapter.getInitialState(),
     tenants: tenantsAdapter.getInitialState(),
     payments: paymentsAdapter.getInitialState(),
+    maintenance: maintenanceAdapter.getInitialState(),
 }
 
 
@@ -163,6 +168,35 @@ const paymentSlice = createSlice({
     },
 })
 
+const maintenanceSlice = createSlice({
+    name: 'maintenance',
+    initialState: initialState.maintenance,
+    reducers: {
+        maintenanceReportAdded: tenantsAdapter.addOne,
+        maintenanceReportsAdded: tenantsAdapter.addMany,
+        maintenanceReportUpdated: tenantsAdapter.updateOne,
+        maintenanceReportRemoved: tenantsAdapter.removeOne,
+    },
+    extraReducers: (builder) => {
+        builder
+            .addMatcher(
+                authApi.endpoints.getMaintenanceReports.matchFulfilled,
+                (state, action) => {
+                    maintenanceAdapter.setAll(state, action.payload.data);
+                }
+            )
+    },
+})
+
+export const {
+    maintenanceReportAdded,
+    maintenanceReportsAdded,
+    maintenanceReportUpdated,
+    maintenanceReportRemoved,
+} = maintenanceSlice.actions;
+
+export const maintenanceReducer = maintenanceSlice.reducer;
+
 export const {
     propertyAdded,
     propertiesAdded,
@@ -244,6 +278,11 @@ export const {
 } = tenantsAdapter.getSelectors((state) => state.tenants);
 
 
+export const {
+    selectAll: selectAllMaintenanceReports,
+    selectById: selectMaintenanceReportById,
+    selectIds: selectMaintenanceReportIds,
+} = maintenanceAdapter.getSelectors((state) => state.maintenance);
 
 export const selectPropertiesByPropertyId = createSelector(
     selectAllProperties,
@@ -305,6 +344,26 @@ export const selectLeasesByPropertyId = createSelector(
 
     }
 );
+
+export const selectMaintenanceReportsByPropertyId = createSelector(
+    [selectAllMaintenanceReports, selectAllUnits, (_, propertyId) => propertyId], // Pass the entire state to the selector
+    (maintenanceReports, units, propertyId) => {
+        if (!propertyId || !units) return [];
+        else if (String(propertyId).toLowerCase() === 'all') {
+            return maintenanceReports.map(maintenanceReport => {
+                return {...maintenanceReport, unit: units.find(unit => unit.id === maintenanceReport.unitId)};
+            })
+        }
+
+        const unitIds = units.filter(unit => unit.realEstateObjectId === propertyId).map(unit => unit.id);
+
+        return maintenanceReports.filter(maintenanceReport => unitIds.includes(maintenanceReport.unitId)).map(maintenanceReport => {
+            return {...maintenanceReport, unit: units.find(unit => unit.id === maintenanceReport.unitId)};
+        })
+    }
+);
+
+
 
 
 

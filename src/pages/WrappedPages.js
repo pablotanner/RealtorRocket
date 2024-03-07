@@ -20,6 +20,8 @@ import {useGetUserQuery} from "../services/api/userApi.js";
 import Account from "./content/Account.jsx";
 import Messages from "./content/Messages.jsx";
 import {useGetMessagesQuery} from "../services/api/messageApi.js";
+import MaintenanceReports from "./content/Maintenance.jsx";
+import {useGetMaintenanceReportsQuery} from "../services/api/maintenanceApi.js";
 
 export const AccountPage = () => {
     return (
@@ -132,6 +134,14 @@ export const MessagesPage = () => {
     return (
         <PageWrapper query={useGetMessagesQuery}>
             <Messages/>
+        </PageWrapper>
+    )
+}
+
+export const MaintenancePage = () => {
+    return (
+        <PageWrapper query={useGetMaintenanceReportsQuery}>
+            <MaintenanceReports/>
         </PageWrapper>
     )
 }

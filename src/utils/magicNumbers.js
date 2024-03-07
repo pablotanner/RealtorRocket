@@ -54,6 +54,21 @@ export const PaymentStatus = {
     "REJECTED": "Rejected",
 }
 
+export const MaintenanceStatus = {
+    "REPORTED": "Reported",
+    "IN_PROGRESS": "In Progress",
+    "COMPLETED": "Completed",
+    "OPEN": "Open",
+    "SCHEDULED": "Scheduled",
+}
+
+export const Priority = {
+    "LOW": "Low",
+    "MEDIUM": "Medium",
+    "HIGH": "High",
+    "CRITICAL": "Critical",
+}
+
 export const PaymentScheduleStatus = {
     "SCHEDULED": "Scheduled",
     "PAID": "Paid",

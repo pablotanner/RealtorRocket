@@ -15,6 +15,7 @@ import {checkOverduePayments} from "./jobs/overduePayments.js";
 import * as paymentController from "./controllers/paymentController.js";
 import jwt from "jsonwebtoken";
 import {createMessage} from "./controllers/messageController.js";
+import * as maintenanceController from "./controllers/maintenanceController.js";
 
 // eslint-disable-next-line no-undef
 const PORT = process.env.PORT || 3000;
@@ -80,6 +81,9 @@ router.delete('/payments/:id', authenticateToken, paymentController.deletePaymen
 router.put('/payment-schedules/:id', authenticateToken, paymentController.updatePaymentSchedule)
 router.delete('/payment-schedules/:id', authenticateToken, paymentController.deletePaymentSchedule)
 
+// Maintenance Reports
+router.get('/maintenance', authenticateToken, maintenanceController.getMaintenanceReports)
+router.post('/maintenance', authenticateToken, maintenanceController.createMaintenanceReport)
 
 //Jobs
 //      Schedule the job to run daily at 00:00 (midnight)
@@ -116,7 +120,7 @@ io.use((socket, next) => {
 })
 
 io.on('connection', (socket) => {
-    console.log('A user connected');
+    //console.log('A user connected');
     // Handle message sending
     socket.on('send_message', (message) => {
         const {type, content, receiverId} = message;
@@ -144,7 +148,7 @@ io.on('connection', (socket) => {
         if (socket.user && socket.user.userId) {
             delete userSocketIds[socket.user.userId];
         }
-        console.log('User disconnected');
+        //console.log('User disconnected');
     });
 });
 

@@ -100,3 +100,13 @@ export const leasePaymentScheduleSchema = z.object({
     status: zodStringPipe(z.string({errorMap: () => ({message: 'Please select a status'})})),
     leaseId: zodNumberInputPipe(z.string({errorMap: () => ({message: 'Please select a lease'})}).or(z.number())),
 })
+
+export const maintenanceReportSchema = z.object({
+    title: zodStringPipe(z.string({errorMap: () => ({message: 'Please enter a title'})})),
+    notes: zodStringPipe(z.string().or(z.null())),
+    status: zodStringPipe(z.string({errorMap: () => ({message: 'Please select a status'})})),
+    priority: zodStringPipe(z.string().or(z.null())),
+    category: zodStringPipe(z.string().or(z.null())),
+    reporterId: zodNumberInputPipe(z.string().or(z.null()).or(z.number())),
+    unitId: zodNumberInputPipe(z.string({errorMap: () => ({message: 'Please select a unit'})}).or(z.number())),
+})

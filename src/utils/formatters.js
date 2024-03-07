@@ -135,7 +135,7 @@ export const dateParser = (value) => {
 export function getDatePlaceholder() {
     const locale = getLang();
     if (locale === 'en-US') {
-        return 'mm-dd-yyyy';
+        return 'mm/dd/yyyy';
     }
     return 'dd.mm.yyyy';
 

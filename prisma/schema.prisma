@@ -564,32 +564,38 @@ enum Priority {
   LOW
   MEDIUM
   HIGH
+  CRITICAL
 }
 
 enum MaintenanceStatus {
+  REPORTED
   OPEN
+  SCHEDULED
   IN_PROGRESS
-  CLOSED
+  COMPLETED
 }
 
 model MaintenanceRequest {
-  id         Int      @id @default(autoincrement())
-  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  resolvedAt DateTime @map("resolved_at") @db.Timestamptz(6)
+  id         Int       @id @default(autoincrement())
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  resolvedAt DateTime? @map("resolved_at") @db.Timestamptz(6)
 
-  title       String?
-  description String?
-  status      MaintenanceStatus?
-  priority    Priority?
+  title    String
+  status   MaintenanceStatus?
+  priority Priority?
+  category String? // Maintenance type, e.g. plumbing, electrical, etc.
+  notes    String?
 
   realtor   Realtor @relation(fields: [realtorId], references: [id], onDelete: Cascade)
   realtorId Int     @map("realtor_id")
 
-  reporter   Tenant @relation(fields: [reporterId], references: [id])
-  reporterId Int    @map("reporter_id")
+  reporter   Tenant? @relation(fields: [reporterId], references: [id])
+  reporterId Int?    @map("reporter_id")
 
   unit   Unit? @relation(fields: [unitId], references: [id])
   unitId Int?  @map("unit_id")
+
+  expenses Expense[]
 
   @@map("maintenance_request")
 }
@@ -613,6 +619,9 @@ model Expense {
 
   lease   Lease? @relation(fields: [leaseId], references: [id])
   leaseId Int?   @map("lease_id")
+
+  maintenanceRequest   MaintenanceRequest? @relation(fields: [maintenanceRequestId], references: [id])
+  maintenanceRequestId Int?                @map("maintenance_request_id")
 
   @@map("expense")
 }

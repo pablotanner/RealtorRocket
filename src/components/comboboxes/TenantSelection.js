@@ -40,7 +40,7 @@ const TenantSelection = ({onSelect, selected, tenants, ...props}) => {
                 variant="outline"
                 role="combobox"
                 aria-expanded={open}
-                className="w-[200px] justify-between capitalize"
+                className="w-[200px] flex justify-between capitalize"
                 disabled
             >
                 Loading Tenants...
@@ -54,7 +54,7 @@ const TenantSelection = ({onSelect, selected, tenants, ...props}) => {
                 variant="outline"
                 role="combobox"
                 aria-expanded={open}
-                className="w-[200px] justify-between capitalize"
+                className="w-[200px] flex justify-between capitalize"
                 disabled
             >
                 No Tenants Available

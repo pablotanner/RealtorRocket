@@ -1,8 +1,8 @@
 import {
     AccountStatus,
     AmenitiesOnRealEstate,
-    CurrencyCode,
-    Image, ListingStatus, MaintenanceRequest, Message,
+    CurrencyCode, Expense,
+    Image, ListingStatus, Message,
     PreferencesOnRealEstate,
     RealEstateType,
     Realtor, UserRole,
@@ -17,6 +17,29 @@ export class LeasePaymentSchedule {
     lease: Lease;
     leaseId: number;
     status:  string;
+}
+
+export class MaintenanceRequest {
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    resolvedAt: Date | null;
+    title: string | null;
+    category: string | null;
+    status: string | null;
+    priority: string | null;
+    date: Date | null;
+    submittedBy: string | null;
+    submissionDate: Date | null;
+    approvalDate: Date | null;
+    notes: string | null;
+    realtor: Realtor;
+    expenses: Expense[];
+    realtorId: number;
+    unit: Unit | null;
+    unitId: number | null;
+    reporter: Tenant | null;
+    reportId: number | null;
 }
 
 export class RentPayment {

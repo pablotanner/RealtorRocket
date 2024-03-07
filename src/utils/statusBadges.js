@@ -2,7 +2,7 @@ import {Badge} from "../components/ui/badge.tsx";
 import {AlarmClockIcon, AlarmClockOffIcon, Ban, CheckIcon, Dot, FlagIcon, XIcon} from "lucide-react";
 import {FaCheck, FaHandshake} from "react-icons/fa6";
 import {cn} from "../utils.ts";
-import {PaymentScheduleStatus} from "./magicNumbers.js";
+import {MaintenanceStatus, PaymentScheduleStatus, Priority} from "./magicNumbers.js";
 
 export const LeaseStatusBadge = ({ status }) => {
     if (!status) return null
@@ -29,6 +29,57 @@ export const LeaseStatusBadge = ({ status }) => {
             {lowerStatus}
         </Badge>
     )
+}
+
+export const PriorityBadge = ({ priority }) => {
+    if (!priority) return null
+
+    const lowerPriority = priority.toLowerCase()
+
+    const dotColor = {
+        low: 'bg-yellow-400',
+        medium: 'bg-orange-600',
+        high: 'bg-red-500',
+        critical: 'bg-purple-600',
+    }
+
+    return (
+        <Badge variant="outline">
+            <p className={cn("inline-block w-1 h-1 rounded-full mr-1", dotColor[lowerPriority])}/>
+            {Priority[priority]}
+        </Badge>
+    )
+
+}
+
+export const MaintenanceStatusBadge = ({ status }) => {
+    if (!status) return null
+
+    const lowerStatus = status.toLowerCase()
+
+    const statusVariant = {
+        open: 'warning',
+        in_progress: 'warning',
+        completed: 'positive',
+        scheduled: 'neutral',
+        reported: 'blue',
+    }
+
+    const dotColor = {
+        open: 'bg-orange-600',
+        in_progress: 'bg-orange-600',
+        completed: 'bg-green-600',
+        scheduled: 'bg-gray-400',
+        reported: 'bg-blue-600',
+    }
+
+    return (
+        <Badge variant={statusVariant[lowerStatus]}>
+            <p className={cn("inline-block w-1 h-1 rounded-full mr-1", dotColor[lowerStatus])}/>
+            {MaintenanceStatus[status]}
+        </Badge>
+    )
+
 }
 
 export const ListingStatusBadge = ({ status }) => {
