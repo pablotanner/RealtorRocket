@@ -3,13 +3,20 @@ import {Avatar, AvatarFallback} from "../ui/avatar.tsx";
 import {Button} from "../ui/button.tsx";
 import {dateParser} from "../../utils/formatters.js";
 import {useNavigate, useParams} from "react-router-dom";
-import {Plus, UserIcon, UserRoundX} from "lucide-react";
+import {Plus, UserIcon, UserRoundX, XIcon} from "lucide-react";
 import TenantSelection from "../comboboxes/TenantSelection.js";
 import {useState} from "react";
 import {useSelector} from "react-redux";
 import {selectAllTenants} from "../../services/slices/objectSlice.js";
 import {Checkbox} from "../ui/checkbox.tsx";
 import {useAssignTenantMutation} from "../../services/api/unitApi.js";
+import {
+    AlertDialog, AlertDialogAction, AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger
+} from "../ui/alert-dialog.tsx";
 
 
 const TenantCard = ({ tenant }) => {
@@ -53,7 +60,7 @@ const TenantCard = ({ tenant }) => {
     if (!tenant) {
         return (
             <Card className="shadow-lg basis-[400px] flex-grow">
-                <CardHeader className="flex flex-col items-center pb-2">
+                <CardHeader className="flex flex-col items-center">
                     <div className="p-3 rounded-md border-2 border-secondary shadow-sm">
                         <UserRoundX className="w-6 h-6"/>
                     </div>
@@ -94,8 +101,8 @@ const TenantCard = ({ tenant }) => {
     }
 
     return (
-        <Card className="shadow-lg basis-[400px] flex-grow">
-            <CardHeader className="flex flex-col items-center gap-2">
+        <Card className="shadow-lg basis-[400px] flex-grow flex flex-col justify-center">
+            <CardHeader className="flex flex-col items-center gap-2 ">
                 <CardTitle>
                     Current Tenant
                 </CardTitle>
@@ -128,7 +135,41 @@ const TenantCard = ({ tenant }) => {
                         Send Message
                     </Button>
                 </div>
+
+                <AlertDialog>
+                    <AlertDialogTrigger>
+                        <Button variant="link" className="text-red-500">
+                            <XIcon className="w-4 h-4 mr-1"/>
+                            Remove from Unit
+                        </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>
+                                Are you sure?
+                            </AlertDialogTitle>
+                            This will remove the tenant from the unit.
+                        </AlertDialogHeader>
+
+                        <div className="w-full flex flex-row gap-2 items-center">
+                            <AlertDialogCancel className="w-full">
+                                Cancel
+                            </AlertDialogCancel>
+                            <AlertDialogAction className="w-full" onClick={() => {
+                                assignTenant({
+                                    unitId: rentalId,
+                                    tenantId: null
+                                })
+                            }}>
+                                Confirm
+                            </AlertDialogAction>
+                        </div>
+
+                    </AlertDialogContent>
+                </AlertDialog>
+
             </CardContent>
+
 
         </Card>
     )

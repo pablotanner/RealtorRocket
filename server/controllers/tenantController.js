@@ -209,6 +209,25 @@ export async function assignTenantToUnit(req, res) {
     const tenantId = req.body.tenantId;
 
     try {
+        // If tenantId null, disconnect tenant from unit
+        if (!tenantId) {
+            const unit = await prisma.unit.update({
+                where: {
+                    id: parseInt(unitId)
+                },
+                data: {
+                    tenant: {
+                        disconnect: true
+                    }
+                },
+                include: {
+                    tenant: true
+                }
+            });
+
+            return res.status(200).json({data: unit });
+        }
+
         const updatedTenant = await prisma.tenant.update({
             where: {
                 id: parseInt(tenantId),
