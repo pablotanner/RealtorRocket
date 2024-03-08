@@ -22,6 +22,7 @@ const columns: ColumnDef<Property>[] = [
                 }
                 onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
                 aria-label="Select all"
+                className="mr-3"
             />
         ),
         cell: ({ row }) => (
