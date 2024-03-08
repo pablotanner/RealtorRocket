@@ -17,7 +17,7 @@ const MaintenanceReports = (props) => {
                     Maintenance
                 </h1>
                 <div className="flex -mt-2 justify-between gap-2 items-center flex-wrap md:flex-nowrap">
-                    <p>
+                    <p className="text-gray-500">
                         This is where you can view and add maintenance reports.
                     </p>
 

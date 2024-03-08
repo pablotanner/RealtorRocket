@@ -16,7 +16,7 @@ const Explorer = () => {
                     <p>Unit {selectedUnit?.unitIdentifier || selectedUnit?.id}</p>
 
                     <p>
-                        Floor {selectedUnit?.floor || "N/A"}
+                        Floor {selectedUnit?.floor ?? "N/A"}
                     </p>
 
                     <p>

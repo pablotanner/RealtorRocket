@@ -96,7 +96,7 @@ const AddLease = ({unit, tenant, ...props}) => {
                                 name="startDate"
                                 render={({field}) => (
                                     <FormItem >
-                                        <FormLabel>Lease Start*</FormLabel>
+                                        <FormLabel>Lease Start *</FormLabel>
                                         <FormControl>
                                             {/*
                                             <DatePicker initialStartDate={new Date()} onChange={(date) => {
@@ -117,7 +117,7 @@ const AddLease = ({unit, tenant, ...props}) => {
                                 name="endDate"
                                 render={({field}) => (
                                     <FormItem >
-                                        <FormLabel>Lease End</FormLabel>
+                                        <FormLabel>Lease End *</FormLabel>
                                         <FormControl>
                                             <Input  {...field} type="datetime-local" />
                                         </FormControl>
@@ -133,7 +133,7 @@ const AddLease = ({unit, tenant, ...props}) => {
                             name="rentalPrice"
                             render={({field}) => (
                                 <FormItem >
-                                    <FormLabel>Rental Price*</FormLabel>
+                                    <FormLabel>Rental Price *</FormLabel>
                                     <FormControl>
                                         <Input type="currency" placeholder="2000" {...field} />
                                     </FormControl>
@@ -148,7 +148,7 @@ const AddLease = ({unit, tenant, ...props}) => {
                                 name="paymentFrequency"
                                 render={({field}) => (
                                     <FormItem >
-                                        <FormLabel>Payment Frequency *</FormLabel>
+                                        <FormLabel>Payment Frequency</FormLabel>
                                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                                             <FormControl>
                                                 <SelectTrigger>
@@ -175,7 +175,7 @@ const AddLease = ({unit, tenant, ...props}) => {
                                 name="status"
                                 render={({field}) => (
                                     <FormItem >
-                                        <FormLabel>Lease Status *</FormLabel>
+                                        <FormLabel>Lease Status</FormLabel>
                                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                                             <FormControl>
                                                 <SelectTrigger>
@@ -207,7 +207,7 @@ const AddLease = ({unit, tenant, ...props}) => {
                                 name="unitId"
                                 render={({field}) => (
                                     <FormItem >
-                                        <FormLabel>Unit*</FormLabel>
+                                        <FormLabel>Unit *</FormLabel>
                                         <FormControl>
                                             <RentalSelection onSelect={(unitId) => {
                                                 leaseForm.setValue('unitId', unitId)
@@ -226,7 +226,7 @@ const AddLease = ({unit, tenant, ...props}) => {
                                 name="tenantId"
                                 render={({field}) => (
                                     <FormItem >
-                                        <FormLabel>Tenant*</FormLabel>
+                                        <FormLabel>Tenant *</FormLabel>
                                         <FormControl>
                                             <TenantSelection onSelect={(tenantId) => {
                                                 leaseForm.setValue('tenantId', tenantId)

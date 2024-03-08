@@ -31,7 +31,6 @@ const TenantProfile = (props) => {
 
     const property = useSelector((state) => selectPropertyById(state, currentUnit?.realEstateObjectId));
 
-
     const leases = useSelector((state) => selectLeasesByTenantId(state, tenant?.id));
 
     const [showLeaseModal, setShowLeaseModal] = useState(false);

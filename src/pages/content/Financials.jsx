@@ -16,7 +16,7 @@ import {Tabs, TabsContent, TabsItem, TabsList} from "../../components/ui/tabs-ne
 const Financials = (props) => {
     const {propertySelection} = props;
 
-    const [currentTab, setCurrentTab] = useState(0);
+
 
     const [showPaymentModal, setShowPaymentModal] = useState(false);
 
@@ -104,7 +104,9 @@ const Financials = (props) => {
             </h1>
 
             <div className="flex flex-col gap-4">
-                This page offers an overview of the financials for either a single property or all properties, depending on your selection.
+                <p className={"text-gray-500"}>
+                    This page offers an overview of the financials for either a single property or all properties, depending on your selection.
+                </p>
 
                 <div className="flex flex-row flex-wrap gap-4">
                     <InfoCard title="Rent Due" number={moneyParser(rentDue)}  />

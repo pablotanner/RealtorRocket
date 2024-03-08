@@ -59,7 +59,7 @@ const Properties = (props) => {
             <h1>
                 Properties
             </h1>
-            <div className="text-md mb-2">
+            <div className="text-md mb-2 text-gray-500">
                 These are your properties, for more information such as the units of each property, click on the property.
             </div>
 
