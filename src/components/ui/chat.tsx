@@ -8,7 +8,7 @@ import {User} from "../../utils/classes.ts";
 
 const ChatContainer = ({className, children, ...props}) => {
     return (
-        <div className={cn("w-full border-2 border-secondary rounded-sm relative", className)}
+        <div className={cn("w-full border-2 border-border rounded-sm relative", className)}
              {...props}
         >
             {children}
@@ -19,7 +19,7 @@ const ChatContainer = ({className, children, ...props}) => {
 
 const ChatHeader = ({className, children, ...props}) => {
     return (
-        <div className={cn("w-full p-4 border-b-2 border-secondary", className)}
+        <div className={cn("w-full p-4 border-b-2 border-border", className)}
              {...props}
         >
             {children}

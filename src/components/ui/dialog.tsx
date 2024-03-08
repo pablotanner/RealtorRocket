@@ -57,7 +57,7 @@ const DialogContent = React.forwardRef<
       {...props}
     >
       {children}
-      <DialogPrimitive.Close className="absolute right-4 p-2 border-2 border-secondary hover:border-gray-200  top-4 rounded-lg opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
+      <DialogPrimitive.Close className="absolute right-4 p-2 border-2 border-border hover:border-gray-200  top-4 rounded-lg opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
         <X className="h-4 w-4" />
         <span className="sr-only">Close</span>
       </DialogPrimitive.Close>
@@ -96,7 +96,7 @@ DialogFooter.displayName = "DialogFooter"
 
 const DialogIcon = ({className, children, ...props}: {className?: string, children: React.ReactNode}) => {
     return (
-        <div className={cn("p-3 border border-secondary rounded-lg w-fit shadow-sm mb-2", className)}
+        <div className={cn("p-3 border border-border rounded-lg w-fit shadow-sm mb-2", className)}
              {...props}
         >
             {children}
@@ -113,7 +113,7 @@ const DialogTitle = React.forwardRef<
   <DialogPrimitive.Title
     ref={ref}
     className={cn(
-      "text-lg font-semibold leading-none tracking-tight",
+      "text-lg font-500 leading-none tracking-tight",
       className
     )}
     {...props}

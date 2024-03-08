@@ -62,7 +62,7 @@ export function DatePicker({value, onChange, disabled, className, allowTime, ...
                 <div className="flex justify-between items-center px-2">
                     <button
                         type="button"
-                        className="p-[2px] bg-white flex items-center border-2 border-transparent hover:border-secondary rounded-md"
+                        className="p-[2px] bg-white flex items-center border-2 border-transparent hover:border-border rounded-md"
                         onClick={() => goToMonth(previousMonth)}
                     >
                         <ChevronLeft className="h-5 w-5 text-gray-700" />
@@ -72,7 +72,7 @@ export function DatePicker({value, onChange, disabled, className, allowTime, ...
                     </div>
                     <button
                         type="button"
-                        className="p-[2px] bg-white flex items-center border-2 border-transparent hover:border-secondary rounded-md"
+                        className="p-[2px] bg-white flex items-center border-2 border-transparent hover:border-border rounded-md"
                         onClick={() => goToMonth(nextMonth)}
                     >
                         <ChevronRight className="h-5 w-5 text-gray-700" />

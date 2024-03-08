@@ -58,7 +58,7 @@ const LoginCard = () => {
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-white rounded-xl shadow-inner">
-            <Card className="bg-white border-input shadow-2xl text-off-black flex w-fit flex-col p-5">
+            <Card className="bg-white border-border shadow-2xl text-off-black flex w-fit flex-col p-5">
                 <CardHeader className="flex justify-center items-center py-10">
                     <AiFillRocket className="w-12 h-12"/>
                     <h1 className="text-3xl">Welcome Back!</h1>

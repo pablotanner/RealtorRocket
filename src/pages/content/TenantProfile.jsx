@@ -93,7 +93,7 @@ const TenantProfile = (props) => {
             </Alert>
             <div className="relative w-full h-[21rem] lg:h-36 ">
                 <Image src={currentUnit?.images[0]?.imageUrl || property?.images[0]?.imageUrl} alt="House" className="w-full h-64 object-cover absolute z-10 rounded-sm"/>
-                <div className="absolute min-w-fit z-20 left-0 right-0 top-36 lg:top-32 m-4 bg-white p-4 rounded-lg border-2 border-secondary flex flex-col items-center lg:items-start lg:flex-row gap-x-8 gap-y-2 shadow-md ">
+                <div className="absolute min-w-fit z-20 left-0 right-0 top-36 lg:top-32 m-4 bg-white p-4 rounded-lg border-2 border-border flex flex-col items-center lg:items-start lg:flex-row gap-x-8 gap-y-2 shadow-md ">
                     <Avatar className="w-36 h-36 -top-12 rounded-lg border-white border-[5px] shadow-md">
                         <AvatarImage src={tenant?.profileImageUrl} alt="Tenant" className="rounded-none" />
                         <AvatarFallback className="rounded-none text-2xl" >
@@ -146,7 +146,7 @@ const TenantProfile = (props) => {
                 </div>
             </div>
 
-            <div className="mt-[200px] border-t-2 pt-4 border-secondary">
+            <div className="mt-[200px] border-t-2 pt-4 border-border">
                 <Tabs defaultValue={tabs[0].id}>
                     <TabsList >
                         {tabs.map((tab, index) => {

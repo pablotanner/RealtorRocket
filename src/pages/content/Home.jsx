@@ -49,9 +49,9 @@ const Home = () => {
     const Notifications = () => {
 
         return (
-            <div className="bg-white px-4 py-4 border-2 border-secondary rounded-lg flex-grow">
+            <div className="bg-white px-4 py-4 border-2 border-border rounded-lg flex-grow">
                 <div className="text-lg font-500 mb-2 text-off-black flex flex-row gap-2 items-center">
-                    <span className="rounded-full bg-white border-2 border-secondary flex items-center justify-center p-2">
+                    <span className="rounded-full bg-white border-2 border-border flex items-center justify-center p-2">
                         <Bell className="w-6 h-6 text-off-black"/>
                     </span>
                     Your Notifications
@@ -95,7 +95,7 @@ const Home = () => {
                 {upcomingEvents?.map((event, index) => {
                     return (
                         <div key={index} className="flex flex-row items-center gap-2">
-                            <div className="p-2 rounded-full border-2 border-secondary flex items-center justify-center">
+                            <div className="p-2 rounded-full border-2 border-border flex items-center justify-center">
                                 {icons[event?.category?.toLowerCase()]}
                             </div>
                             <div>
@@ -186,7 +186,7 @@ const Home = () => {
                             number={properties?.data?.length}
                             link="/properties"
                         >
-                            <div className="p-2 border-2 border-secondary rounded-lg shadow-sm">
+                            <div className="p-2 border-2 border-border rounded-lg shadow-sm">
                                 <Building2 className="w-5 h-5"/>
                             </div>
                         </InfoCard>
@@ -195,7 +195,7 @@ const Home = () => {
                             number={units?.data?.length}
                             link="/rentals"
                         >
-                            <div className="p-2 border-2 border-secondary rounded-lg shadow-sm">
+                            <div className="p-2 border-2 border-border rounded-lg shadow-sm">
                                 <BuildingIcon className="w-5 h-5"/>
                             </div>
                         </InfoCard>
@@ -204,7 +204,7 @@ const Home = () => {
                             number={tenants?.data?.length}
                             link="/tenants"
                         >
-                            <div className="p-2 border-2 border-secondary rounded-lg shadow-sm">
+                            <div className="p-2 border-2 border-border rounded-lg shadow-sm">
                                 <UserIcon className="w-5 h-5"/>
                             </div>
                         </InfoCard>
@@ -213,23 +213,10 @@ const Home = () => {
                             number={payments?.data?.length}
                             link="/financials"
                         >
-                            <div className="p-2 border-2 border-secondary rounded-lg shadow-sm">
+                            <div className="p-2 border-2 border-border rounded-lg shadow-sm">
                                 <CoinsIcon className="w-5 h-5"/>
                             </div>
                         </InfoCard>
-                        {
-                            /*
-                            <InfoCard
-                            title="Maintenance Reports"
-                            number="0"
-                            link="/maintenance"
-                        >
-                            <div className="p-2 border-2 border-secondary rounded-lg shadow-sm">
-                                <DrillIcon className="w-5 h-5"/>
-                            </div>
-                        </InfoCard>
-                             */
-                        }
 
                     </div>
 
@@ -240,7 +227,7 @@ const Home = () => {
                             </h3>
                             <div className="w-full h-[2px] bg-secondary"/>
                             <div className="flex flex-row flex-wrap gap-x-6 gap-y-2">
-                                <div className="flex flex-row gap-2 items-center flex-grow bg-white border-2 border-secondary p-3 rounded-lg hover:bg-secondary select-none cursor-pointer"
+                                <div className="flex flex-row gap-2 items-center flex-grow bg-white border-2 border-border p-3 rounded-lg hover:bg-secondary select-none cursor-pointer"
                                      onClick={() => navigate(`/properties/create`)}
 
                                 >
@@ -256,7 +243,7 @@ const Home = () => {
                                         </p>
                                     </div>
                                 </div>
-                                <div className="flex flex-row gap-2 items-center flex-grow bg-white border-2 border-secondary p-3 rounded-lg hover:bg-secondary select-none cursor-pointer"
+                                <div className="flex flex-row gap-2 items-center flex-grow bg-white border-2 border-border p-3 rounded-lg hover:bg-secondary select-none cursor-pointer"
                                      onClick={() => navigate(`/tenants/create`)}
 
                                 >

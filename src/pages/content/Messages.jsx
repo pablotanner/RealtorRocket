@@ -122,7 +122,7 @@ const Messages = () => {
 
                 <ChatContainer hidden={!receiver}>
                     <ChatHeader className="flex items-center gap-2">
-                        <div className="md:hidden p-1 border border-secondary rounded-full text-gray-500 hover:bg-secondary cursor-pointer"
+                        <div className="md:hidden p-1 border border-border rounded-full text-gray-500 hover:bg-secondary cursor-pointer"
                              onClick={() => setReceiver(null)}
                         >
                             <ChevronLeft className="w-5 h-5"/>

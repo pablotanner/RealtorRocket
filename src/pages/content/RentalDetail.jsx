@@ -45,8 +45,8 @@ const RentalDetail = (props) => {
 
 
                 <div className="flex flex-row gap-8 w-full">
-                    <div className="hidden xs:flex flex-row border-2 h-fit border-secondary rounded-xl flex-grow justify-around">
-                        <div className="flex flex-col gap-1 border-secondary p-3 ">
+                    <div className="hidden xs:flex flex-row border-2 h-fit border-border rounded-xl flex-grow justify-around">
+                        <div className="flex flex-col gap-1 border-border p-3 ">
                             <Label className="font-500 text-gray-500 text-md">
                                 Bedroom
                             </Label>
@@ -56,7 +56,7 @@ const RentalDetail = (props) => {
                             </div>
                         </div>
 
-                        <div className="flex flex-col gap-1 p-3 border-l-2 border-secondary ">
+                        <div className="flex flex-col gap-1 p-3 border-l-2 border-border ">
                             <Label className="font-500 text-gray-500 text-md">
                                 Bathroom
                             </Label>
@@ -66,7 +66,7 @@ const RentalDetail = (props) => {
                             </div>
                         </div>
 
-                        <div className="flex flex-col gap-1 p-3 border-l-2 border-secondary">
+                        <div className="flex flex-col gap-1 p-3 border-l-2 border-border">
                             <Label className="font-500 text-gray-500 text-md">
                                 Unit Size
                             </Label>
@@ -76,7 +76,7 @@ const RentalDetail = (props) => {
                             </div>
                         </div>
 
-                        <div className="hidden sm:flex flex-col gap-1 p-3 border-l-2 border-secondary">
+                        <div className="hidden sm:flex flex-col gap-1 p-3 border-l-2 border-border">
                             <Label className="font-500 text-gray-500 text-md">
                                 Garages
                             </Label>
@@ -90,7 +90,7 @@ const RentalDetail = (props) => {
 
                 </div>
 
-                <div className="p-4 rounded-lg bg-white flex-grow w-fit flex-shrink shadow-lg border-secondary border-2 overflow-auto" >
+                <div className="p-4 rounded-lg bg-white flex-grow w-fit flex-shrink shadow-lg border-border border-2 overflow-auto" >
                     <LeaseHistory leases={data?.data?.leases}>
                         <AddLease
                             open={showLeaseModal}

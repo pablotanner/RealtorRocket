@@ -118,7 +118,7 @@ const Navbar = ({children}) => {
     const NavBar = () => {
         return (
             <div
-                className={"h-full flex flex-col justify-between z-10 border-r-2 border-secondary w-16 md:w-56 bg-white rounded-lg fixed "}
+                className={"h-full flex flex-col justify-between z-10 border-r-2 border-border w-16 md:w-56 bg-white rounded-lg fixed "}
             >
                 <div>
                     <h3 className="text-primary-dark font-600 flex flex-row justify-center md:justify-start items-center gap-x-1 pt-4 pb-2 ml-0 md:ml-4 md:pl-2 md:mr-2 text-lg whitespace-nowrap">
@@ -178,7 +178,7 @@ const Navbar = ({children}) => {
             <NavBar/>
             <main className={"pl-[4.25rem] md:pl-[14.75rem] min-h-screen w-full"}>
                 <Header/>
-                <div className="p-4 bg-white rounded-lg border-secondary border-2">
+                <div className="p-4 bg-white rounded-lg border-border border-2">
                     {children}
                 </div>
             </main>

@@ -271,7 +271,7 @@ const TenantCreation = () => {
             <div
                 data-disabled={isDisabled}
                 data-selected={tab === index}
-                className="p-4 border-b-2 border-secondary select-none flex flex-col lg:flex-row gap-4 items-center justify-center lg:justify-start w-full hover:border-off-black cursor-pointer data-[selected='true']:border-off-black data-[disabled='true']:opacity-50 data-[disabled='true']:cursor-not-allowed data-[disabled='true']:hover:border-secondary"
+                className="p-4 border-b-2 border-border select-none flex flex-col lg:flex-row gap-4 items-center justify-center lg:justify-start w-full hover:border-off-black cursor-pointer data-[selected='true']:border-off-black data-[disabled='true']:opacity-50 data-[disabled='true']:cursor-not-allowed data-[disabled='true']:hover:border-border"
                 onClick={() => {
                     if (isDisabled) return
                     setTab(index);
@@ -282,7 +282,7 @@ const TenantCreation = () => {
                     data-complete={status==="complete"}
                     data-selected={tab === index}
                     data-previous={tab > index}
-                    className="p-2 md:p-4 flex w-8 h-8 md:w-14 md:h-14 items-center justify-center text-md md:text-xl border border-secondary text-gray-400 rounded-lg data-[previous='true']:bg-secondary data-[selected='true']:bg-black data-[selected='true']:text-white">
+                    className="p-2 md:p-4 flex w-8 h-8 md:w-14 md:h-14 items-center justify-center text-md md:text-xl border border-border text-gray-400 rounded-lg data-[previous='true']:bg-secondary data-[selected='true']:bg-black data-[selected='true']:text-white">
                     {index}
                 </div>
 
@@ -314,7 +314,7 @@ const TenantCreation = () => {
                     <form  onSubmit={tenantForm.handleSubmit(onSubmit)} className="flex flex-col flex-wrap gap-4">
 
                         <Card>
-                            <CardHeader className="border-b-2 text-lg font-500 border-secondary p-4 flex flex-row items-center gap-2">
+                            <CardHeader className="border-b-2 text-lg font-500 border-border p-4 flex flex-row items-center gap-2">
                                 <Info/>
                                 Tenant Information
                             </CardHeader>
@@ -461,7 +461,7 @@ const TenantCreation = () => {
                           className="flex flex-col flex-wrap gap-4 overflow-auto">
 
                         <Card>
-                            <CardHeader className="border-b-2 text-lg font-500 border-secondary p-4 flex flex-row items-center gap-2">
+                            <CardHeader className="border-b-2 text-lg font-500 border-border p-4 flex flex-row items-center gap-2">
                                 <ListIcon/>
                                 Lease Assignment
                             </CardHeader>
@@ -472,7 +472,7 @@ const TenantCreation = () => {
                                         <div
                                             key={index}
                                             data-active={option.value === leaseOption}
-                                            className="rounded-lg flex-shrink relative border-secondary border-2 shadow-md p-4 flex bg-secondary/20 items-center justify-center cursor-pointer data-[active=true]:bg-gradient-to-br from-indigo-50 to-white data-[active=true]:text-indigo-600 data-[active=true]:border-primary-dark"
+                                            className="rounded-lg flex-shrink relative border-border border-2 shadow-md p-4 flex bg-secondary/20 items-center justify-center cursor-pointer data-[active=true]:bg-gradient-to-br from-indigo-50 to-white data-[active=true]:text-indigo-600 data-[active=true]:border-primary-dark"
                                             onClick={() => {
                                                 if (leaseOption === option.value) return
 
@@ -486,7 +486,7 @@ const TenantCreation = () => {
                                         }
                                         >
                                             <div className="text-xl font-600 flex flex-col gap-3">
-                                                <div className="p-2 bg-white border border-secondary rounded-lg w-fit shadow-sm">
+                                                <div className="p-2 bg-white border border-border rounded-lg w-fit shadow-sm">
                                                     {option.icon}
                                                 </div>
 
@@ -513,7 +513,7 @@ const TenantCreation = () => {
 
 
                         <Card className="">
-                            <CardHeader className="border-b-2 text-lg font-500 border-secondary p-4 flex flex-row items-center gap-2">
+                            <CardHeader className="border-b-2 text-lg font-500 border-border p-4 flex flex-row items-center gap-2">
                                 {
                                     leaseOption === "new" ? <Plus className="w-6 h-6" /> : <Archive className="w-6 h-6" />
                                 }
@@ -806,7 +806,7 @@ const TenantCreation = () => {
                     <form className="flex flex-col flex-wrap gap-4 overflow-auto">
 
                         <Card>
-                            <CardHeader className="border-b-2 text-lg font-500 border-secondary p-4 flex flex-row items-center gap-2">
+                            <CardHeader className="border-b-2 text-lg font-500 border-border p-4 flex flex-row items-center gap-2">
                                 <UserSearch/>
                                 Unit Assignment
                                     <TooltipProvider>
@@ -915,7 +915,7 @@ const TenantCreation = () => {
                 className=" data-[selected='false']:hidden">
 
                 <Card>
-                    <CardHeader className="border-b-2 text-lg font-500 border-secondary p-4 flex flex-row items-center gap-2">
+                    <CardHeader className="border-b-2 text-lg font-500 border-border p-4 flex flex-row items-center gap-2">
                         <BadgeCheck/>
                         Confirmation
                     </CardHeader>
@@ -987,7 +987,7 @@ const TenantCreation = () => {
             </div>
 
 
-            <div className="fixed bottom-0 left-0 z-20 w-full flex flex-row bg-white px-6 h-16 items-center border-y-2 border-secondary justify-between">
+            <div className="fixed bottom-0 left-0 z-20 w-full flex flex-row bg-white px-6 h-16 items-center border-y-2 border-border justify-between">
                 <Button
                     variant="outline"
                     disabled={tab === 1}

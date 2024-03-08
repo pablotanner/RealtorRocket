@@ -197,7 +197,7 @@ const TenantTable = ({tenants}) => {
                 return (
                     <Link id={mostRecentUnit.id} type={"unit"}  />
                 )
-                
+
             },
             meta: {
                 type: "string"

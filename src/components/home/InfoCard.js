@@ -14,7 +14,7 @@ const InfoCard = ({title, number, link, ...props}) => {
                 <CardTitle className="text-md text-gray-800 font-500 whitespace-nowrap">
                     {title}
                 </CardTitle>
-                <div className="cursor-pointer rounded-full hover:bg-background-gray-darker p-2" onClick={() => navigate(link)} hidden={!link}>
+                <div className="cursor-pointer rounded-full hover:bg-border p-2" onClick={() => navigate(link)} hidden={!link}>
                     <ArrowRightIcon className="w-6 h-6 text-gray-800"/>
                 </div>
             </CardHeader>

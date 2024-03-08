@@ -21,12 +21,12 @@ const Header = () => {
 
     return (
         <div className="border-b-secondary border-b-2">
-        <div className="flex flex-row mb-1 md:mb-3  justify-between items-center gap-x-2 p-2 md:p-4 bg-white rounded-lg border-2 border-secondary border-t-0">
+        <div className="flex flex-row mb-1 md:mb-3  justify-between items-center gap-x-2 p-2 md:p-4 bg-white rounded-lg border-2 border-border border-t-0">
             <PropertySelection/>
 
             <div className="flex flex-row gap-2 items-center">
 
-                <div className="flex flex-row items-center gap-2 p-2 h-fit rounded-lg border border-secondary cursor-pointer hover:border-gray-200 text-off-black font-500"
+                <div className="flex flex-row items-center gap-2 p-2 h-fit rounded-lg border border-border cursor-pointer hover:border-gray-200 text-off-black font-500"
                      onClick={() => navigate("/explorer")}
                 >
                     <Compass className="h-5 w-5"/>

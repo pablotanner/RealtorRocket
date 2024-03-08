@@ -364,7 +364,7 @@ const columns: ColumnDef<RentPayment>[] = [
 const PaymentTable = ({ payments, ...props }) => {
 
     return (
-        <div className={"border-2 border-secondary p-4 rounded-lg"}>
+        <div className={"border-2 border-border p-4 rounded-lg"}>
             <DataTable
                 data={payments}
                 columns={columns}

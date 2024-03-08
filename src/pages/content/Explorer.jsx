@@ -9,7 +9,7 @@ const Explorer = () => {
             <h1>Explorer</h1>
             <div className="flex flex-row justify-between gap-6 flex-wrap">
                 <StreetMap selected={selectedUnit} onSelect={setSelectedUnit}/>
-                <div className="basis-32 flex-grow p-2 border border-secondary min-w-fit shadow-md rounded-lg" hidden={!selectedUnit}>
+                <div className="basis-32 flex-grow p-2 border border-border min-w-fit shadow-md rounded-lg" hidden={!selectedUnit}>
                     <h2 className="whitespace-nowrap">
                         Unit Details
                     </h2>

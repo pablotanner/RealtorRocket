@@ -297,7 +297,7 @@ const columns: ColumnDef<LeasePaymentSchedule>[] = [
 const PaymentScheduleTable = ({ paymentSchedules }) => {
 
     return (
-        <div className={"border-2 border-secondary p-4 rounded-lg"}>
+        <div className={"border-2 border-border p-4 rounded-lg"}>
             <DataTable
                 data={paymentSchedules}
                 columns={columns}

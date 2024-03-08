@@ -30,7 +30,7 @@ import {UserIcon} from "lucide-react";
                         >
                             <div
                                 aria-selected={isCurrentStep}
-                                className={cn("p-3 z-10 relative border border-secondary bg-white shadow-sm rounded-md w-fit", currentStep < index ? "text-gray-500" : "text-gray-700", "aria-selected:ring-2 aria-selected:ring-primary-dark/70")}                            >
+                                className={cn("p-3 z-10 relative border border-border bg-white shadow-sm rounded-md w-fit", currentStep < index ? "text-gray-500" : "text-gray-700", "aria-selected:ring-2 aria-selected:ring-primary-dark/70")}                            >
                                 {step.icon}
                             </div>
                             <p className="text-sm font-500">

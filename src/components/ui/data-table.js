@@ -385,7 +385,7 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
     return (
         <div className="flex flex-col gap-4">
             <div className="flex flex-row items-center gap-4" hidden={!props.title}>
-                <div className="p-2 border border-secondary rounded-lg text-primary-dark shadow-md" hidden={!props.icon}>
+                <div className="p-2 border border-border rounded-lg text-primary-dark shadow-md" hidden={!props.icon}>
                     {props.icon}
                 </div>
                 <div>
@@ -405,7 +405,7 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                         onChange={(e) => {
                             table.setGlobalFilter(e.target.value)
                         }}
-                        className="pl-10 text-sm bg-inherit rounded-md border-2 border-secondary"
+                        className="pl-10 text-sm bg-inherit rounded-md border-2 border-border"
                     />
                 </div>
 

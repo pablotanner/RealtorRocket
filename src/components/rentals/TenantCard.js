@@ -61,7 +61,7 @@ const TenantCard = ({ tenant }) => {
         return (
             <Card className="shadow-lg basis-[400px] flex-grow">
                 <CardHeader className="flex flex-col items-center">
-                    <div className="p-3 rounded-md border-2 border-secondary shadow-sm">
+                    <div className="p-3 rounded-md border-2 border-border shadow-sm">
                         <UserRoundX className="w-6 h-6"/>
                     </div>
                     <CardTitle>
