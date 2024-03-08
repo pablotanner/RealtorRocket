@@ -364,6 +364,36 @@ export const selectMaintenanceReportsByPropertyId = createSelector(
 );
 
 
+export const selectObjectById = createSelector(
+[selectAllProperties, selectAllUnits, selectAllLeases, selectAllTenants, selectAllPayments, selectAllMaintenanceReports, (_, id, type) => [id, type]],
+    (properties, units, leases, tenants, payments, maintenanceReports, data) => {
+        try {
+            const id = data[0];
+            const type = data[1];
+            if (!id) return null;
+            switch (type) {
+                case 'property':
+                    return properties.find(property => property.id === id);
+                case 'unit':
+                    return units.find(unit => unit.id === id);
+                case 'lease':
+                    return leases.find(lease => lease.id === id);
+                case 'tenant':
+                    return tenants.find(tenant => tenant.id === id);
+                case 'payment':
+                    return payments.find(payment => payment.id === id);
+                case 'maintenanceReport':
+                    return maintenanceReports.find(maintenanceReport => maintenanceReport.id === id);
+                default:
+                    return null;
+            }
+        } catch (e) {
+            return null;
+        }
+    }
+)
+
+
 
 
 

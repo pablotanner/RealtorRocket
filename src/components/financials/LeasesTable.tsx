@@ -8,6 +8,7 @@ import {Lease} from "../../utils/classes.ts";
 import {Scroll} from "lucide-react";
 import {LeaseStatusBadge} from "../../utils/statusBadges.js";
 import {LeaseStatus} from "../../utils/magicNumbers.js";
+import Link from "../general/Link.tsx";
 
 
 
@@ -52,9 +53,9 @@ const columns: ColumnDef<Lease>[] = [
         id: "tenant",
         header: "Tenant",
         cell: ({ row }) => {
-            if (row?.original?.tenant) {
+            if (row?.original?.tenantId) {
                 return (
-                    <div className="capitalize font-500">{row?.original?.tenant?.firstName} {row?.original?.tenant?.lastName}</div>
+                    <Link id={row.original.tenantId} type={"tenant"} />
                 )
             }
             else {
@@ -122,9 +123,9 @@ const columns: ColumnDef<Lease>[] = [
         id: "unit",
         header: "Unit",
         cell: ({ row }) => {
-            if (row?.original?.unit) {
+            if (row?.original?.unitId) {
                 return (
-                    <div className="capitalize">{row?.original?.unit?.unitIdentifier}</div>
+                    <Link id={row.original.unitId} type={"unit"}  />
                 )
             }
             else {

@@ -7,6 +7,7 @@ import {MaintenanceRequest} from "../../utils/classes.ts";
 import {Drill} from "lucide-react";
 import {MaintenanceStatus, Priority} from "../../utils/magicNumbers";
 import {MaintenanceStatusBadge, PriorityBadge} from "../../utils/statusBadges";
+import Link from "../general/Link.tsx";
 
 
 const columns: ColumnDef<MaintenanceRequest>[] = [
@@ -76,11 +77,11 @@ const columns: ColumnDef<MaintenanceRequest>[] = [
         cell: ({ row }) => {
             const unit = row.original?.unit;
 
-            if (!unit) return "No Unit"
+            if (!unit) return <p className="text-red-600/90">
+                No Unit
+            </p>
             return (
-                <div>
-                    {unit?.unitIdentifier}
-                </div>
+                <Link id={unit.id} type={"unit"}  />
             )
         },
         meta: {

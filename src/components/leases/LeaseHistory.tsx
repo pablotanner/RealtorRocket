@@ -2,44 +2,16 @@ import {dateParser, moneyParser} from "../../utils/formatters.js";
 import {DataTable} from "../ui/data-table.js";
 import {ColumnDef} from "@tanstack/react-table";
 import {Lease} from "../../utils/classes.ts";
-import {FilePlus2, Link, LinkIcon, Scroll} from "lucide-react";
-import {useLocation, useNavigate} from "react-router-dom";
-import {selectUnitById} from "../../services/slices/objectSlice.js";
-import {useSelector} from "react-redux";
-import {LeaseStatus, PaymentFrequency} from "../../utils/magicNumbers.js";
+import { Scroll} from "lucide-react";
+import {PaymentFrequency} from "../../utils/magicNumbers.js";
 import {LeaseStatusBadge} from "../../utils/statusBadges.js";
-import {Button} from "../ui/button.tsx";
+import Link from "../general/Link.tsx";
 
-
-const UnitLink = ({unitId}) => {
-
-    const navigate = useNavigate();
-
-
-    const unit = useSelector(state => selectUnitById(state, unitId))
-
-    if (!unit) return null;
-
-    return (
-        <Button
-            className="pl-0 text-gray-900 group"
-            variant="link"
-            onClick={() => navigate(`/rentals/${unit.id}`)}
-        >
-            <LinkIcon className="w-4 h-4 mr-1 transform transition-transform duration-300 group-hover:rotate-[180deg]" />
-            {unit?.unitIdentifier || `Unit ${unit?.id}`}
-        </Button>
-    )
-}
 
 
 
 
 const LeaseHistory = ({leases, ...props}) => {
-
-    //const location = useLocation();
-    //const isRentalPage = location.pathname.includes("rentals");
-
 
     const columns: ColumnDef<Lease>[] = [
         {
@@ -51,7 +23,7 @@ const LeaseHistory = ({leases, ...props}) => {
             cell: ({ row }) => {
 
                 return (
-                    <UnitLink unitId={row?.original?.unitId} />
+                    <Link id={row.original.unitId} type={"unit"}  />
                 )
             },
             accessorFn: (row) => row?.startDate || undefined,

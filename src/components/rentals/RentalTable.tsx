@@ -20,48 +20,8 @@ import {DataTable} from "../ui/data-table.js";
 import {selectTenantById} from "../../services/slices/objectSlice.js";
 import {useSelector} from "react-redux";
 import {ListingStatusBadge} from "../../utils/statusBadges.js";
+import Link from "../general/Link.tsx";
 
-
-const SendToUnit = ({unit}) => {
-    const navigate = useNavigate()
-
-    return (
-        <Button
-            className="pl-0 text-gray-900 group"
-            variant="link"
-            onClick={() => navigate(`/rentals/${unit.id}`)}
-        >
-            <LinkIcon className="w-4 h-4 mr-1 transform transition-transform duration-300 group-hover:rotate-[180deg]" />
-            {unit?.unitIdentifier || `Unit ${unit?.id}`}
-        </Button>
-    )
-}
-
-const SendToTenant = ({tenantId}) => {
-    const navigate = useNavigate()
-
-    const tenant = useSelector(state => selectTenantById(state, tenantId))
-
-    if (!tenant) {
-        return (
-            <div className="bg-primary-dark whitespace-nowrap items-center w-fit text-white p-2 flex flex-row rounded-2xl cursor-pointer hover:bg-primary-dark/70 transition-all ease-in">
-                No Tenant
-            </div>
-        )
-    }
-
-    return (
-        <Button
-            className="pl-0 text-gray-900 group"
-            variant="link"
-            onClick={() => navigate(`/tenants/${tenant.id}`)}
-        >
-            <LinkIcon className="w-4 h-4 mr-1 transform transition-transform duration-300 group-hover:rotate-[180deg]" />
-            {tenant?.firstName} {tenant?.lastName}
-        </Button>
-    )
-
-}
 
 
 const RentalTableDropdown = ({unit}) => {
@@ -77,12 +37,6 @@ const RentalTableDropdown = ({unit}) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuItem
-                    onClick={() => navigator.clipboard.writeText(String(unit.id))}
-                >
-                    Copy ID
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
                 <DropdownMenuItem
                     onClick={() => navigate(`/properties/${unit.realEstateObjectId}`)}
                 >View Property</DropdownMenuItem>
@@ -106,7 +60,7 @@ const columns: ColumnDef<Unit>[] = [
         header: "Unit Identifier",
         cell: ({ row })=> {
             return (
-                <SendToUnit unit={row.original} />
+                <Link id={row.original.id} type={"unit"}  />
             )
         },
         meta: {
@@ -128,7 +82,7 @@ const columns: ColumnDef<Unit>[] = [
         cell: ({ row }) => {
             const property = row?.original?.realEstateObject;
             return (
-            <div className="capitalize font-500">
+            <div className="capitalize font-400">
                 {property?.title}
             </div>
             )
@@ -160,7 +114,7 @@ const columns: ColumnDef<Unit>[] = [
             if (row?.original?.tenantId) {
                 // Tenant name
                 return (
-                    <SendToTenant tenantId={row.original?.tenantId} />
+                    <Link id={row.original.tenantId} type={"tenant"} />
                 )
             }
             return (

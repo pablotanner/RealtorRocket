@@ -29,6 +29,7 @@ import {Form, FormControl, FormField, FormGroup, FormItem, FormLabel, FormMessag
 import {Input} from "../ui/input.tsx";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../ui/select.tsx";
 import {Button} from "../ui/button.tsx";
+import Link from "../general/Link.tsx";
 
 const PaymentScheduleActions = ({ paymentSchedule }) => {
     const [modalOpen, setModalOpen] = useState(false)
@@ -271,9 +272,7 @@ const columns: ColumnDef<LeasePaymentSchedule>[] = [
 
             if (!tenant) return "No Tenant"
             return (
-                <div>
-                    {tenant?.firstName} {tenant?.lastName}
-                </div>
+                <Link id={tenant?.id} type={"tenant"} />
             )
         },
         meta: {

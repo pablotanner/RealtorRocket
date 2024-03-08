@@ -33,6 +33,7 @@ import {Input} from "../ui/input.tsx";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../ui/select.tsx";
 import {Button} from "../ui/button.tsx";
 import {Checkbox} from "../ui/checkbox.tsx";
+import Link from "../general/Link.tsx";
 
 
 
@@ -338,9 +339,7 @@ const columns: ColumnDef<RentPayment>[] = [
 
             if (!tenant) return "No Tenant"
             return (
-                <div>
-                    {tenant?.firstName} {tenant?.lastName}
-                </div>
+                <Link id={tenant?.id} type={"tenant"}  />
             )
         },
         meta: {

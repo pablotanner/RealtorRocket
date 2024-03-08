@@ -20,6 +20,7 @@ import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "../ui/to
 import {Badge} from "../ui/badge.tsx";
 import {useDeleteTenantMutation} from "../../services/api/tenantApi.js";
 import {isAfter, isBefore} from "date-fns";
+import Link from "../general/Link.tsx";
 
 
 const TenantTable = ({tenants}) => {
@@ -188,23 +189,15 @@ const TenantTable = ({tenants}) => {
                     mostRecentUnit = null;
                 }
 
-
-                return (
-                    <div className="flex flex-col justify-center">
-
-                        {
-                            mostRecentUnit ? (
-                                <p className="font-500 text-md text-gray-800" >
-                                    {mostRecentUnit?.unitIdentifier}
-                                </p>
-                            ) : (
-                                <p className="font-300 text-md text-gray-500">
-                                    No Unit
-                                </p>
-                            )
-                        }
-                    </div>
+                if (!mostRecentUnit) return (
+                    <p className="font-300 text-md text-gray-500">
+                        No Unit
+                    </p>
                 )
+                return (
+                    <Link id={mostRecentUnit.id} type={"unit"}  />
+                )
+                
             },
             meta: {
                 type: "string"
