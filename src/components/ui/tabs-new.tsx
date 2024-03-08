@@ -2,6 +2,7 @@ import * as React from "react"
 
 import {cn} from "../../utils.ts";
 import {useEffect} from "react";
+import {Select, SelectContent, SelectItem, SelectTrigger} from "./select.tsx";
 
 const Tabs = ({ children, className, defaultValue, value, ...props }) => {
     const [selectedTabValue, setSelectedTabValue] = React.useState(defaultValue)
@@ -18,6 +19,7 @@ const Tabs = ({ children, className, defaultValue, value, ...props }) => {
                 // @ts-expect-error no problem
                 selectedTabValue,
                 setSelectedTabValue,
+                defaultValue
             })
         }
         // @ts-expect-error it does exist
@@ -37,7 +39,7 @@ Tabs.displayName = "Tabs"
 
 
 const TabsList = ({ children, className, ...props }) => {
-    const { selectedTabValue, setSelectedTabValue } = props;
+    const { selectedTabValue, setSelectedTabValue, defaultValue } = props;
 
     const injectedChildren = React.Children.map(children, (child) => {
         // @ts-expect-error it does exist
@@ -50,11 +52,24 @@ const TabsList = ({ children, className, ...props }) => {
             })
         }
     })
-
     return (
-        <div className={cn("flex flex-row overflow-auto", className)} {...props}>
-            {injectedChildren}
-        </div>
+        <>
+            <Select onValueChange={setSelectedTabValue} defaultValue={defaultValue ?? injectedChildren[0].props.value}>
+                <SelectTrigger className={cn("flex flex-row gap-2 sm:hidden", className)} {...props}>
+                    {(injectedChildren.find((child) => child.props.isActive) || injectedChildren[0]).props.children}
+                </SelectTrigger>
+                <SelectContent>
+                    {injectedChildren.map((child, index) => {
+                        return <SelectItem value={child.props.value} key={index}>{child.props.children}</SelectItem>
+                    })}
+                </SelectContent>
+            </Select>
+
+            <div className={cn("hidden sm:flex flex-row overflow-auto", className)} {...props}>
+                {injectedChildren}
+            </div>
+        </>
+
     )
 }
 
@@ -62,7 +77,7 @@ const TabsList = ({ children, className, ...props }) => {
 TabsList.displayName = "TabsList"
 
 
-const TabsItem = ({ children, className, value, onClick, ...props }) => {
+const TabsItem = ({children, className, value, onClick, ...props }) => {
     const { isActive, handleClick } = props;
 
     return (

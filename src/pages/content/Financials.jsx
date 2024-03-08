@@ -119,10 +119,13 @@ const Financials = (props) => {
                         {tabs.map((tab, index) => {
                             return (
                                 <TabsItem value={index} key={index}>
-                                    {tab.title}
-                                    <div className="p-1 rounded-lg shadow-sm text-xs bg-white w-7 h-7 flex items-center justify-center border border-secondary ">
-                                        {tab.count}
+                                    <div className="flex justify-start gap-2 items-center">
+                                        {tab.title}
+                                        <div className="p-1 rounded-lg shadow-sm text-xs bg-white w-7 h-7 flex items-center justify-center border border-secondary ">
+                                            {tab.count}
+                                        </div>
                                     </div>
+
                                 </TabsItem>
                             )
                         })}
