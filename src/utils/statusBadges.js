@@ -1,5 +1,15 @@
 import {Badge} from "../components/ui/badge.tsx";
-import {AlarmClockIcon, AlarmClockOffIcon, Ban, CheckIcon, Dot, FlagIcon, XIcon} from "lucide-react";
+import {
+    AlarmClockIcon,
+    AlarmClockOffIcon,
+    Ban,
+    CheckIcon,
+    ChevronDown,
+    ChevronRight, ChevronsUp, ChevronUp,
+    Dot,
+    FlagIcon,
+    XIcon
+} from "lucide-react";
 import {FaCheck, FaHandshake} from "react-icons/fa6";
 import {cn} from "../utils.ts";
 import {MaintenanceStatus, PaymentScheduleStatus, Priority} from "./magicNumbers.js";
@@ -36,18 +46,21 @@ export const PriorityBadge = ({ priority }) => {
 
     const lowerPriority = priority.toLowerCase()
 
-    const dotColor = {
-        low: 'bg-yellow-400',
-        medium: 'bg-orange-600',
-        high: 'bg-red-500',
-        critical: 'bg-purple-600',
+
+    const arrowClass = "w-4 h-4 mr-1";
+
+    const arrow = {
+        low: <ChevronDown className={arrowClass}/>,
+        medium: <ChevronRight className={arrowClass}/>,
+        high: <ChevronUp className={arrowClass}/>,
+        critical: <ChevronsUp className={arrowClass}/>,
     }
 
     return (
-        <Badge variant="outline">
-            <p className={cn("inline-block w-1 h-1 rounded-full mr-1", dotColor[lowerPriority])}/>
+        <div className="flex items-center">
+            {arrow[lowerPriority]}
             {Priority[priority]}
-        </Badge>
+        </div>
     )
 
 }
