@@ -57,16 +57,16 @@ const svgFill = {
 }
 
 const svgStroke = {
-    default: "fill-primary-darkest stroke-primary-darkest",
-    light: "fill-primary-darker stroke-primary-darker",
-    dark: "fill-black stroke-black",
+    default: "fill-primary stroke-primary",
+    light: "fill-primary stroke-primary",
+    dark: "fill-background-light stroke-background-light",
     destructive: "fill-rose-800 stroke-rose-800",
     outline: "fill-gray-100 stroke-gray-100",
     "outline-dark": "fill-foreground stroke-foreground",
-    "outline-primary": "fill-primary-dark stroke-primary-dark",
+    "outline-primary": "fill-primary stroke-primary",
     secondary: "fill-foreground stroke-foreground",
     ghost: "stroke-white",
-    gradient: "fill-primary-darkest",
+    gradient: "fill-primary",
     link: " ",
 }
 

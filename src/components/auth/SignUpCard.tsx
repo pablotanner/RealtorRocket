@@ -84,12 +84,12 @@ export const SignUpCard = () => {
     }
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-white rounded-xl shadow-inner">
-            <Card className="bg-white border-border shadow-2xl text-off-black flex w-fit flex-col p-5">
+        <div className="flex justify-center items-center min-h-screen rounded-xl shadow-inner">
+            <Card className=" shadow-2xl flex w-fit flex-col p-5">
                 <CardHeader className="flex justify-center items-center py-10">
                     <AiFillRocket className="w-12 h-12"/>
                     <h1 className="text-3xl">Welcome!</h1>
-                    <p>
+                    <p className="text-muted-foreground">
                         Please enter your details to sign up.
                     </p>
                 </CardHeader>

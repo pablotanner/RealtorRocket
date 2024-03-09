@@ -229,7 +229,7 @@ const TenantTable = ({tenants}) => {
                                 </TooltipContent>
                             </Tooltip>
                         </TooltipProvider>
-                        <Button variant="indigo" size="md">
+                        <Button variant="default" size="md">
                             <Send className="mr-2 w-3 h-3"/>
                             Contact
                         </Button>
