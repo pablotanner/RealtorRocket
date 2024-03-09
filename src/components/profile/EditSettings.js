@@ -34,7 +34,7 @@ const EditSettings = () => {
     const { setTheme } = useTheme()
 
     // Get current theme
-    const current = localStorage.getItem("vite-ui-theme");
+    const currentTheme = localStorage.getItem("vite-ui-theme");
 
     const [updateSettings, {isLoading, isError, error, isSuccess}] = useUpdateUserMutation();
 
@@ -59,38 +59,85 @@ const EditSettings = () => {
         updateSettings(data);
     }
 
-    const Themes = {
-        light: {
+
+    const themes = [
+        {
             label: "Light",
             icon: <Sun/>,
             value: "light"
         },
-        dark: {
+        {
             label: "Dark",
             icon: <Moon/>,
             value: "dark"
         },
-        system: {
+        {
             label: "System",
             icon: <ComputerIcon/>,
             value: "system"
         }
-    }
+    ]
 
     return (
         <div className="mt-2 w-[100%]">
             <div>
-                <p className="text-foreground text-sm">
-                    Theme
+                <p className="text-muted-foreground text-sm">
+                    Appearance
                 </p>
 
-                <div className="flex flex-row gap-2 p-1">
-                    {Object.entries(Themes).map(([key, value]) => (
-                        <Button key={key} variant="link" className={cn("pl-0 text-primary", current === value.value && "underline")} onClick={() => setTheme(value.value)}>
-                            {value.icon}
-                            {value.label}
-                        </Button>
-                    ))}
+                <div className="flex flex-row gap-4 p-1">
+
+
+                    {themes.map((theme, index) => {
+
+                        if (theme.value === "system") {
+                            return (
+                                <div key={index} className="flex flex-col gap-2">
+                                    <div
+                                        className={cn("w-16 h-16 cursor-pointer flex outline-4 outline-foreground hover:outline rounded-lg",  currentTheme === theme.value && " outline rounded-lg ")}
+                                        onClick={() => setTheme(theme.value)}
+                                    >
+                                        <div className="h-full w-full bg-gray-50 rounded-l-lg p-1 border-2 border-gray-50 border-r-0">
+                                            <p className="font-500 text-lg text-black">
+                                                Aa
+                                            </p>
+                                        </div>
+                                        <div className="h-full w-full bg-gray-800 rounded-r-lg p-1 border-2 border-black border-l-0">
+                                            <p className="font-500 text-lg text-white">
+                                                Aa
+                                            </p>
+                                        </div>
+
+
+                                    </div>
+                                    <p className="text-foreground font-500">
+                                        {theme.label}
+                                    </p>
+                                </div>
+                            )
+                        }
+
+                        return (
+                            (
+                                <div key={index} className="flex flex-col gap-2">
+                                    <div
+                                        className={cn("p-2 cursor-pointer rounded-lg w-16 h-16 border-2 outline-4 outline-foreground hover:outline", theme.value === "light" && "bg-gray-50 border-gray-100 text-black", theme.value === "dark" && "bg-gray-900 text-white border-gray-800", currentTheme === theme.value && " outline")}
+                                        onClick={() => setTheme(theme.value)}
+                                    >
+
+                                        <p className="font-500 text-lg">
+                                            Aa
+                                        </p>
+
+                                    </div>
+                                    <p className="text-foreground font-500">
+                                        {theme.label}
+                                    </p>
+                                </div>
+
+                            )
+                        )
+                    })}
                 </div>
             </div>
 
