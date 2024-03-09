@@ -5,7 +5,7 @@ import {cn} from "../../utils.ts";
 
 
 const labelVariants = cva(
-  "text-sm font-400 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+  "text-sm font-400 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-muted-foreground"
 )
 
 const Label = React.forwardRef<

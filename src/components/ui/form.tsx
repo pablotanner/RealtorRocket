@@ -135,7 +135,7 @@ const FormValue = React.forwardRef<
         <span
         ref={ref}
         id={formItemId}
-        className={cn("text-sm text-muted-foreground", className)}
+        className={cn("text-sm text-foreground", className)}
         {...props}
         >
           {props.children || "N/A"}

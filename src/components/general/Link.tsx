@@ -42,7 +42,7 @@ const Link = ({type, id, ...props}) => {
 
     return (
         <Button
-            className="pl-0 text-gray-900 group"
+            className="pl-0 text-foreground group"
             variant="link"
             onClick={() => navigate(link)}
         >

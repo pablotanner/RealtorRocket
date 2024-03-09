@@ -11,7 +11,7 @@ const buttonVariants = cva(
       variant: {
           default: "bg-primary text-primary-foreground hover:bg-primary/70",
           light: "bg-secondary text-primary-darker hover:bg-secondary/70",
-          tab: "bg-gray-100 text-gray-500 hover:bg-gray-200 data-[active=true]:bg-white data-[active=true]:text-gray-900 data-[active=true]:shadow-md",
+          tab: "bg-background text-muted-foreground hover:bg-input data-[active=true]:bg-background-light data-[active=true]:text-foreground data-[active=true]:shadow-md",
           dark: "bg-foreground text-white hover:bg-zinc-700",
           destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
           outline: "border border-border border-2 text-foreground bg-transparent hover:border-gray-200 hover:text-accent-foreground",
@@ -19,7 +19,7 @@ const buttonVariants = cva(
           "outline-primary": "border border-primary-dark border-2 text-foreground bg-transparent hover:bg-white/80 hover:text-accent-foreground",
           secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
           ghost: "text-foreground hover:bg-accent hover:text-accent-foreground",
-          table: "bg-transparent font-500 text-[#475467] hover:bg-gray-200/80",
+          table: "bg-transparent font-500 text-muted-foreground hover:bg-input",
           gradient: "bg-gradient-to-r from-primary to-primary-dark hover:from-primary/80 hover:to-primary-dark/80 text-white",
           link: "text-primary underline-offset-4 hover:underline",
           "nav-button": "text-muted-foreground bg-inherit justify-start hover:bg-secondary hover:text-foreground font-500",

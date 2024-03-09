@@ -121,7 +121,7 @@ const Financials = (props) => {
                                 <TabsItem value={index} key={index}>
                                     <div className="flex justify-start gap-2 items-center">
                                         {tab.title}
-                                        <div className="p-1 rounded-lg shadow-sm text-xs bg-white w-7 h-7 flex items-center justify-center border border-border ">
+                                        <div className="p-1 rounded-lg shadow-sm text-xs bg-background-light w-7 h-7 flex items-center justify-center border border-border ">
                                             {tab.count}
                                         </div>
                                     </div>

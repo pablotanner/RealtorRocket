@@ -15,6 +15,9 @@ import {
 } from "../ui/alert-dialog.tsx";
 import {Input} from "../ui/input.tsx";
 import {Label} from "../ui/label.tsx";
+import {ComputerIcon, Moon, Sun} from "lucide-react";
+import {useTheme} from "../../services/contexts/ThemeContext.tsx";
+import {cn} from "../../utils.ts";
 
 const currencies = [
     "USD",
@@ -27,6 +30,11 @@ const currencies = [
 
 const EditSettings = () => {
     const userData = useSelector(state => state.authSlice.userInfo);
+
+    const { setTheme } = useTheme()
+
+    // Get current theme
+    const current = localStorage.getItem("vite-ui-theme");
 
     const [updateSettings, {isLoading, isError, error, isSuccess}] = useUpdateUserMutation();
 
@@ -51,8 +59,41 @@ const EditSettings = () => {
         updateSettings(data);
     }
 
+    const Themes = {
+        light: {
+            label: "Light",
+            icon: <Sun/>,
+            value: "light"
+        },
+        dark: {
+            label: "Dark",
+            icon: <Moon/>,
+            value: "dark"
+        },
+        system: {
+            label: "System",
+            icon: <ComputerIcon/>,
+            value: "system"
+        }
+    }
+
     return (
         <div className="mt-2 w-[100%]">
+            <div>
+                <p className="text-foreground text-sm">
+                    Theme
+                </p>
+
+                <div className="flex flex-row gap-2 p-1">
+                    {Object.entries(Themes).map(([key, value]) => (
+                        <Button key={key} variant="link" className={cn("pl-0 text-primary", current === value.value && "underline")} onClick={() => setTheme(value.value)}>
+                            {value.icon}
+                            {value.label}
+                        </Button>
+                    ))}
+                </div>
+            </div>
+
             <Form {...settingsForm}>
                 <form onSubmit={settingsForm.handleSubmit(onSubmit)} className="flex flex-col gap-y-3 w-[100%] ">
                     <FormField

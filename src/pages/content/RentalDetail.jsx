@@ -47,41 +47,41 @@ const RentalDetail = (props) => {
                 <div className="flex flex-row gap-8 w-full">
                     <div className="hidden xs:flex flex-row border-2 h-fit border-border rounded-xl flex-grow justify-around">
                         <div className="flex flex-col gap-1 border-border p-3 ">
-                            <Label className="font-500 text-gray-500 text-md">
+                            <Label className="font-500 text-muted-foreground text-md">
                                 Bedroom
                             </Label>
-                            <div className="flex flex-row gap-3 text-off-black font-600">
-                                <BedIcon size={24} className="text-gray-500"/>
+                            <div className="flex flex-row gap-3 text-foreground font-600">
+                                <BedIcon size={24} className="text-muted-foreground"/>
                                 {numberToLiteral(data?.data?.numOfBedrooms)}
                             </div>
                         </div>
 
                         <div className="flex flex-col gap-1 p-3 border-l-2 border-border ">
-                            <Label className="font-500 text-gray-500 text-md">
+                            <Label className="font-500 text-muted-foreground text-md">
                                 Bathroom
                             </Label>
-                            <div className="flex flex-row gap-3 text-off-black font-600 ">
-                                <BathIcon size={24} className="text-gray-500"/>
+                            <div className="flex flex-row gap-3 text-foreground font-600 ">
+                                <BathIcon size={24} className="text-muted-foreground"/>
                                 {numberToLiteral(data?.data?.numOfBathrooms)}
                             </div>
                         </div>
 
                         <div className="flex flex-col gap-1 p-3 border-l-2 border-border">
-                            <Label className="font-500 text-gray-500 text-md">
+                            <Label className="font-500 text-muted-foreground text-md">
                                 Unit Size
                             </Label>
-                            <div className="flex flex-row gap-3 text-off-black font-600">
-                                <LandPlot size={24} className="text-gray-500"/>
+                            <div className="flex flex-row gap-3 text-foreground font-600">
+                                <LandPlot size={24} className="text-muted-foreground"/>
                                 {!data?.data?.unitSize ? "N/A" : (data?.data?.unitSize + " sqm")}
                             </div>
                         </div>
 
                         <div className="hidden sm:flex flex-col gap-1 p-3 border-l-2 border-border">
-                            <Label className="font-500 text-gray-500 text-md">
+                            <Label className="font-500 text-muted-foreground text-md">
                                 Garages
                             </Label>
-                            <div className="flex flex-row gap-3 text-off-black font-600">
-                                <CarFront size={24} className="text-gray-500"/>
+                            <div className="flex flex-row gap-3 text-foreground font-600">
+                                <CarFront size={24} className="text-muted-foreground"/>
                                 {data?.data?.garages || "N/A"}
                             </div>
                         </div>
@@ -90,7 +90,7 @@ const RentalDetail = (props) => {
 
                 </div>
 
-                <div className="p-4 rounded-lg bg-white flex-grow w-fit flex-shrink shadow-lg border-border border-2 overflow-auto" >
+                <div className="p-4 rounded-lg bg-background-light flex-grow w-fit flex-shrink shadow-lg border-border border-2 overflow-auto" >
                     <LeaseHistory leases={data?.data?.leases}>
                         <AddLease
                             open={showLeaseModal}

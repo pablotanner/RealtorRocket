@@ -89,20 +89,20 @@ const Home = () => {
 
         return (
             <div className="flex flex-col justify-between gap-1">
-                <p className="text-gray-600 font-400 text-sm">
+                <p className="text-foreground font-400 text-sm">
                     Upcoming Events
                 </p>
                 {upcomingEvents?.map((event, index) => {
                     return (
                         <div key={index} className="flex flex-row items-center gap-2">
-                            <div className="p-2 rounded-full border-2 border-border flex items-center justify-center">
+                            <div className="p-2 bg-muted text-muted-foreground rounded-full border-2 border-border flex items-center justify-center">
                                 {icons[event?.category?.toLowerCase()]}
                             </div>
                             <div>
-                                <p className="text-sm text-gray-700 font-500">
+                                <p className="text-sm text-muted-foreground font-400">
                                     {event?.title}
                                 </p>
-                                <p  className="text-sm text-gray-700 font-300">
+                                <p  className="text-sm text-muted-foreground font-300">
                                     {dateParser(event?.date)}
                                 </p>
 
@@ -127,7 +127,7 @@ const Home = () => {
 
         return (
             <div className="flex flex-col gap-2 whitespace-nowrap">
-                <p className="text-gray-600 font-400 text-sm">
+                <p className="text-foreground font-400 text-sm">
                     Newest Tenants
                 </p>
                 {
@@ -150,10 +150,10 @@ const Home = () => {
                             </Avatar>
 
                             <div>
-                                <p className="text-sm text-gray-700 font-500">
+                                <p className="text-sm text-muted-foreground font-500">
                                     {tenant?.firstName} {tenant?.lastName}
                                 </p>
-                                <p  className="text-sm text-gray-700 font-300">
+                                <p  className="text-sm text-muted-foreground font-300">
                                     Created on {dateParser(tenant?.createdAt)}
                                 </p>
 
@@ -222,39 +222,39 @@ const Home = () => {
 
                     <div className="flex flex-col gap-3">
                         <div className="flex flex-col gap-3">
-                            <h3 className="text-gray-800 font-500 text-lg md:text-md">
+                            <h3 className="text-muted-foreground font-500 text-lg md:text-md">
                                 Quick Actions
                             </h3>
                             <div className="w-full h-[2px] bg-secondary"/>
                             <div className="flex flex-row flex-wrap gap-x-6 gap-y-2">
-                                <div className="flex flex-row gap-2 items-center flex-grow bg-white border-2 border-border p-3 rounded-lg hover:bg-secondary select-none cursor-pointer"
+                                <div className="flex flex-row gap-2 items-center flex-grow bg-background-light border-2 border-border p-3 rounded-lg hover:bg-secondary select-none cursor-pointer"
                                      onClick={() => navigate(`/properties/create`)}
 
                                 >
-                                    <div className="p-2 rounded-lg text-white bg-primary-dark">
+                                    <div className="p-2 rounded-lg bg-primary text-primary-foreground">
                                         <Building2 className="w-5 h-5"/>
                                     </div>
                                     <div>
-                                        <p className="font-500 text-gray-700">
+                                        <p className="font-500 text-foreground">
                                             Create new Property
                                         </p>
-                                        <p  className="font-400 text-gray-500 text-sm">
+                                        <p  className="font-400 text-muted-foreground text-sm">
                                             Add a new property including units
                                         </p>
                                     </div>
                                 </div>
-                                <div className="flex flex-row gap-2 items-center flex-grow bg-white border-2 border-border p-3 rounded-lg hover:bg-secondary select-none cursor-pointer"
+                                <div className="flex flex-row gap-2 items-center flex-grow bg-background-light border-2 border-border p-3 rounded-lg hover:bg-secondary select-none cursor-pointer"
                                      onClick={() => navigate(`/tenants/create`)}
 
                                 >
-                                    <div className="p-2 rounded-lg text-white bg-primary-dark">
+                                    <div className="p-2 rounded-lg bg-primary text-primary-foreground">
                                         <UserIcon className="w-5 h-5"/>
                                     </div>
                                     <div>
-                                        <p className="font-500 text-gray-700">
+                                        <p className="font-500 text-foreground">
                                             Create new Tenant
                                         </p>
-                                        <p  className="font-400 text-gray-500 text-sm">
+                                        <p  className="font-400 text-muted-foreground text-sm">
                                             Add a new tenant to a unit
                                         </p>
                                     </div>
@@ -265,7 +265,7 @@ const Home = () => {
 
 
                         <div className="flex flex-col gap-3">
-                            <h3 className="text-gray-800 font-500 text-lg md:text-md">
+                            <h3 className="text-muted-foreground font-500 text-lg md:text-md">
                                 Your Properties
                             </h3>
                             <div className="w-full h-[2px] bg-secondary"/>
@@ -276,7 +276,7 @@ const Home = () => {
                     </div>
                 </div>
 
-                <div className="w-full h-[2px] bg-secondary sm:hidden"/>
+                <div className="w-full h-[2px] bg-border sm:hidden"/>
 
 
                 <div className="h-full flex flex-row md:flex-col justify-between gap-4 flex-grow flex-wrap ">

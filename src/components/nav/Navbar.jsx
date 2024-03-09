@@ -118,12 +118,12 @@ const Navbar = ({children}) => {
     const NavBar = () => {
         return (
             <div
-                className={"h-full flex flex-col justify-between z-10 border-r-2 border-border w-16 md:w-56 bg-white rounded-lg fixed "}
+                className={"h-full flex flex-col justify-between z-10 border-r-2 border-border w-16 md:w-56 bg-background-light rounded-lg fixed "}
             >
                 <div>
-                    <h3 className="text-primary-dark font-600 flex flex-row justify-center md:justify-start items-center gap-x-1 pt-4 pb-2 ml-0 md:ml-4 md:pl-2 md:mr-2 text-lg whitespace-nowrap">
+                    <h3 className="text-primary font-600 flex flex-row justify-center md:justify-start items-center gap-x-1 pt-4 pb-2 ml-0 md:ml-4 md:pl-2 md:mr-2 text-lg whitespace-nowrap">
                         <BiSolidRocket className="w-6 h-6 flex justify-center"/>
-                        <p className="hidden md:flex text-gray-900 ">Realtor Rocket</p>
+                        <p className="hidden md:flex text-card-foreground ">Realtor Rocket</p>
                     </h3>
                     <nav
                         className="hidden md:flex flex-col mt-5 gap-y-2">
@@ -174,11 +174,11 @@ const Navbar = ({children}) => {
     }
 
     return (
-        <div className="flex min-w-[375px]">
+        <div className="flex min-w-[375px] bg-background">
             <NavBar/>
             <main className={"pl-[4.25rem] md:pl-[14.75rem] min-h-screen w-full"}>
                 <Header/>
-                <div className="p-4 bg-white rounded-lg border-border border-2">
+                <div className="p-4 bg-background-light rounded-lg border-border border-2">
                     {children}
                 </div>
             </main>

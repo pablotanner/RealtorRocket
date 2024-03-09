@@ -20,27 +20,26 @@ const Header = () => {
     const navigate = useNavigate();
 
     return (
-        <div className="border-b-secondary border-b-2">
-        <div className="flex flex-row mb-1 md:mb-3  justify-between items-center gap-x-2 p-2 md:p-4 bg-white rounded-lg border-2 border-border border-t-0">
+        <div className="flex flex-row mb-1 md:mb-3  justify-between items-center gap-x-2 p-2 md:p-4 bg-background-light rounded-lg border-2 border-border border-t-0">
             <PropertySelection/>
 
             <div className="flex flex-row gap-2 items-center">
 
-                <div className="flex flex-row items-center gap-2 p-2 h-fit rounded-lg border border-border cursor-pointer hover:border-gray-200 text-off-black font-500"
+                <div className="flex flex-row items-center gap-2 p-2 h-fit rounded-lg border border-border cursor-pointer hover:border-gray-200 text-foreground font-500"
                      onClick={() => navigate("/explorer")}
                 >
                     <Compass className="h-5 w-5"/>
                 </div>
 
                 <DropdownMenu>
-                    <DropdownMenuTrigger className="flex flex-row items-center cursor-pointer bg-white hover:bg-gray-50 p-1 px-2 rounded-full">
+                    <DropdownMenuTrigger className="flex flex-row items-center cursor-pointer bg-background-light hover:bg-secondary p-1 px-2 rounded-full">
                         <Avatar>
                             <AvatarImage src={userProfile?.picture} alt="avatar" />
                             <AvatarFallback>
                                 {(userProfile?.firstName?.[0] + userProfile?.lastName?.[0]) || "?"}
                             </AvatarFallback>
                         </Avatar>
-                        <p className="hidden xs:flex items-center ml-2 font-500 whitespace-nowrap">
+                        <p className="hidden xs:flex items-center text-foreground ml-2 font-500 whitespace-nowrap">
                             {userProfile?.firstName} {userProfile?.lastName}
                         </p>
                     </DropdownMenuTrigger>
@@ -68,7 +67,6 @@ const Header = () => {
 
 
 
-        </div>
         </div>
     )
 }

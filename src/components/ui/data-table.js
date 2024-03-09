@@ -153,7 +153,7 @@ const FilterContent = ({column, index, tempColumnFilters, handleSelectChange, ha
             <select
                 value={tempColumnFilters[column.id]?.type || ""}
                 onChange={(e) => handleSelectChange(column.id, e.target.value)}
-                className="mb-2 rounded-md border border-gray-300 bg-white text-sm capitalize font-500"
+                className="mb-2 rounded-md border border-input bg-background-light text-foreground text-sm capitalize font-500"
             >
                 <option value="">Select Filter</option>
                 {filterOptions[index]?.map((option) => {
@@ -184,7 +184,7 @@ const FilterContent = ({column, index, tempColumnFilters, handleSelectChange, ha
                         [column.id]: {type: "equals", value: e.target.value}
                     });
                 }}
-                className="mb-2 rounded-md border border-gray-300 bg-white text-sm capitalize font-500"
+                className="mb-2 rounded-md border border-input bg-background-light text-foreground text-sm capitalize font-500"
             >
                 <option value="">Select Filter</option>
                 {options?.map((option, index) => {
@@ -347,13 +347,13 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
 
 
         return (
-            <div className="rounded-xl bg-indigo-300 p-2">
+            <div className="rounded-xl bg-primary/80 p-2">
                 <div className="flex flex-row items-center gap-2">
-                    <div className="text-sm capitalize text-off-black flex flex-row gap-1 items-center">
+                    <div className="text-sm capitalize text-white flex flex-row gap-1 items-center">
                         <p>
                             {getColumnName(column)}
                         </p>
-                        <p className="font-600 text-gray-700">
+                        <p className="font-600 text-gray-100">
                             {symbol}
                         </p>
                         <p>
@@ -392,20 +392,20 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                     <h3>
                         {props.title}
                     </h3>
-                    <p className="text-[#475467] text-sm">
+                    <p className="text-muted-foreground text-sm">
                         {props.subtitle}
                     </p>
                 </div>
             </div>
             <div className="flex flex-row gap-2 flex-wrap">
-                <div className="relative flex bg-white rounded-md items-center max-w-sm">
-                    <FaMagnifyingGlass className="absolute top-3 left-3 h-4 w-4 text-off-black" />
+                <div className="relative flex bg-background-light rounded-md items-center max-w-sm">
+                    <FaMagnifyingGlass className="absolute top-3 left-3 h-4 w-4 text-muted-foreground" />
                     <Input
                         placeholder="Search..."
                         onChange={(e) => {
                             table.setGlobalFilter(e.target.value)
                         }}
-                        className="pl-10 text-sm bg-inherit rounded-md border-2 border-border"
+                        className="pl-10 text-sm bg-inherit text-foreground rounded-md border-2 border-border"
                     />
                 </div>
 
@@ -453,7 +453,7 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                                     {table.getAllColumns()?.filter((column) => column.getCanFilter())?.map((column, index) => {
                                         return (
                                             <AccordionItem key={index} value={column?.id} className="w-[200px]">
-                                                <AccordionTrigger className="capitalize text-sm py-2 text-gray-800 font-400">
+                                                <AccordionTrigger className="capitalize text-sm py-2 text-foreground font-400">
                                                     {getColumnName(column)}
                                                 </AccordionTrigger>
                                                 <AccordionContent>
@@ -489,7 +489,7 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
 
                                     return (
                                         <TableHead key={header.id} colSpan={header.colSpan} scope="col"
-                                                   className={cn(sticky && "sticky w-fit bg-[#F9FAFB] z-30")}
+                                                   className={cn(sticky && "sticky w-fit bg-secondary z-30")}
                                         >
                                             {header.isPlaceholder ? null : (
                                                 flexRender(
@@ -509,13 +509,13 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                             <TableRow>
                                 <TableCell colSpan={table?.getAllColumns()?.length}>
                                     <div className="flex flex-col items-center gap-1 text-center">
-                                        <div className="p-3 bg-red-200/40 rounded-full">
+                                        <div className="p-3 bg-gray-500/20 rounded-full">
                                             <AlertCircle className="w-5 h-5 text-red-600" />
                                         </div>
-                                        <h3 className="text-md text-gray-700">
+                                        <h3 className="text-md text-foreground">
                                             No Data Available
                                         </h3>
-                                        <p className="text-sm font-400 text-gray-500 max-w-[250px] sm:max-w-[350px]">
+                                        <p className="text-sm font-400 text-muted-foreground max-w-[250px] sm:max-w-[350px]">
                                             There is no data available for this table, if you believe this is an error, please contact support.
                                         </p>
                                     </div>
@@ -529,7 +529,7 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                                             const sticky = cell?.column?.columnDef?.meta?.sticky;
                                             return (
                                                 <TableCell key={cell.id}
-                                                           className={cn(sticky && "sticky w-fit items-center bg-[#F9FAFB] z-20", sticky === "left" && "left-0", sticky === "right" && "-right-2")}
+                                                           className={cn(sticky && "sticky w-fit items-center bg-secondary z-20", sticky === "left" && "left-0", sticky === "right" && "-right-2")}
                                                 >
                                                     {flexRender(
                                                         cell.column.columnDef.cell,
@@ -546,7 +546,7 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                 </TableBody>
             </Table>
             <div className="w-full flex justify-between items-center">
-                <Button variant="outline" type="button" className="text-gray-700" disabled={!table.getCanPreviousPage()}
+                <Button variant="outline" type="button" className="text-foreground" disabled={!table.getCanPreviousPage()}
                         onClick={() => {
                             table.previousPage()
                             setPage(page - 1)
@@ -555,11 +555,11 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                     <ArrowLeft className="w-4 h-4 mr-1"/> Previous
                 </Button>
 
-                <p className="text-gray-600 text-sm white-space-nowrap md:text-md">
+                <p className="text-muted-foreground text-sm white-space-nowrap md:text-md">
                     Page {page} of {table.getPageCount()}
                 </p>
 
-                <Button variant="outline" type="button" className="text-gray-700" disabled={!table.getCanNextPage()}
+                <Button variant="outline" type="button" className="text-foreground" disabled={!table.getCanNextPage()}
                         onClick={() => {
                             table.nextPage()
                             setPage(page + 1)

@@ -16,6 +16,7 @@ import {RealEstateType} from "../../utils/magicNumbers.js";
 import {useDeletePropertyMutation} from "../../services/api/propertyApi.js";
 
 import {Image} from "../ui/image.tsx"
+import {cn} from "../../utils.ts";
 
 const DetailedPropertyTable = ({ properties }) => {
     const navigate = useNavigate()
@@ -54,26 +55,26 @@ const DetailedPropertyTable = ({ properties }) => {
             <div className="flex flex-row gap-2 items-center">
                 <div className="flex flex-row gap-2">
                     <div className="flex flex-col gap-2">
-                        <p className="text-gray-500">
+                        <p className="text-foreground">
                             Occupancy
                         </p>
-                        <p className="text-gray-800">
+                        <p className="text-muted-foreground">
                             {percentOccupied}%
                         </p>
                     </div>
                     <div className="flex flex-col gap-2">
-                        <p className="text-gray-500">
+                        <p className="text-foreground">
                             Occupied
                         </p>
-                        <p className="text-gray-800">
+                        <p className="text-muted-foreground">
                             {occupiedUnits}
                         </p>
                     </div>
                     <div className="flex flex-col gap-2">
-                        <p className="text-gray-500">
+                        <p className="text-foreground">
                             Vacant
                         </p>
-                        <p className="text-gray-800">
+                        <p className="text-muted-foreground">
                             {vacantUnits}
                         </p>
                     </div>
@@ -86,7 +87,7 @@ const DetailedPropertyTable = ({ properties }) => {
         return (
             <DropdownMenu>
                 <DropdownMenuTrigger asChild className="cursor-pointer">
-                    <MoreHorizontal className="h-6 w-6"/>
+                    <MoreHorizontal className="h-6 w-6 text-foreground"/>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-[200px]">
                     <DropdownMenuGroup>
@@ -145,7 +146,7 @@ const DetailedPropertyTable = ({ properties }) => {
 
     const Header = () => {
         return (
-            <div style={{gridTemplateColumns: "minmax(250px,400px) 1fr 1fr 1fr 50px" }} className="bg-white rounded-2xl border-gray-100 border-2 p-4 w-full grid grid-cols-5 gap-8 overflow-x-auto font-500 text-gray-800 h-fit">
+            <div style={{gridTemplateColumns: "minmax(250px,400px) 1fr 1fr 1fr 50px" }} className="bg-background-light rounded-2xl border-gray-100 border-2 p-4 w-full grid grid-cols-5 gap-8 overflow-x-auto font-500 text-gray-800 h-fit">
                 <div className="flex flex-row gap-4 w-full items-center">
                     Property
                 </div>
@@ -167,23 +168,23 @@ const DetailedPropertyTable = ({ properties }) => {
 
     const PropertyRow = ({ property }) => {
         return (
-            <div style={{gridTemplateColumns: "minmax(250px,30%) 1fr 1fr 1fr 50px" }} className="bg-white rounded-2xl border-border border-2 p-4 w-full grid grid-cols-5 gap-8 overflow-auto h-[150px] hover:bg-gray-50 min-h-fit">
+            <div style={{gridTemplateColumns: "minmax(250px,30%) 1fr 1fr 1fr 50px" }} className="bg-background-light rounded-2xl border-border border-2 p-4 w-full grid grid-cols-5 gap-8 overflow-auto h-[150px] hover:bg-secondary min-h-fit">
                 <div className="flex flex-row gap-4 w-full items-center">
                     <Image src={property?.images[0].imageUrl} className="w-20 h-20 object-cover rounded-sm hover:opacity-75 cursor-pointer"
                          onClick={() => navigate(`/properties/${property?.id}`)} alt="Property Image"
                     />
                     <div className="flex flex-col justify-start overflow-hidden">
-                        <p className="font-500 text-off-black text-[2vh] md:text-md overflow-hidden">
+                        <p className="font-500 text-foreground text-[2vh] md:text-md overflow-hidden">
                             {property?.title}
                         </p>
-                        <p className="text-gray-500 text-sm">
+                        <p className="text-muted-foreground text-sm">
                             {RealEstateType[property.realEstateType]}
                         </p>
                     </div>
                 </div>
 
 
-                <div className="flex flex-row items-center text-sm overflow-hidden">
+                <div className="flex flex-row items-center text-muted-foreground text-sm overflow-hidden">
                     {getLocation(property)}
                 </div>
 
@@ -197,11 +198,10 @@ const DetailedPropertyTable = ({ properties }) => {
                                 return null
                             }
                             return (
-                                <div key={index} className="flex flex-col gap-2 bg-indigo-100 whitespace-nowrap font-400 text-white h-fit p-1 rounded-md hover:bg-indigo-200 cursor-pointer"
+                                <div key={index} className={cn("flex flex-col gap-2 bg-primary/90 whitespace-nowrap font-400 h-fit p-1 rounded-md hover:opacity-90 cursor-pointer", index===2 ? "flex items-center justify-center bg-input" : "flex-row")}
                                      onClick={() => navigate('/rentals/' + unit?.id)}
-                                     style={index===2 ? {backgroundColor: "rgba(0, 0, 0, 0.1)"} : {}}
                                 >
-                                    <p className="text-gray-800 text-center">
+                                    <p className={cn("text-center text-white", index === 2 && "text-muted-foreground")}>
                                         {index === 2 ? (property?.units?.length - index) + " more"  : unitLabel}
                                     </p>
                                 </div>
@@ -225,7 +225,7 @@ const DetailedPropertyTable = ({ properties }) => {
         return (
             <div className="flex flex-col gap-1 ">
                 {/*<Header/>*/}
-                <p className="text-gray-700 font-400 w-full ">
+                <p className="text-muted font-400 w-full ">
                     No properties found.
                 </p>
             </div>

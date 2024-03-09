@@ -89,7 +89,7 @@ const TabsItem = ({children, className, value, onClick, ...props }) => {
                     onClick();
                 }
             }}
-            className={cn("flex gap-2 items-center cursor-pointer rounded-t-md text-gray-600 font-500 px-4 py-2 border-b-2 border-transparent hover:border-gray-700 transition-colors data-[active='true']:border-gray-700 data-[active='true']:text-gray-800 hover:bg-secondary"
+            className={cn("flex gap-2 items-center cursor-pointer rounded-t-md text-muted-foreground font-500 px-4 py-2 border-b-2 border-transparent hover:muted-foreground transition-colors data-[active='true']:border-foreground data-[active='true']:text-foreground hover:bg-secondary"
             , className)}
             {...props}
         >

@@ -5,36 +5,26 @@
 @tailwind utilities;
 
 
-body {
-  /*background-image: linear-gradient(to top left, #4a044e 10%, #2e1065 30%, #064e3b 90%);*/
-  /*background-image: linear-gradient(to bottom right, #e6efff 20%, #e9f7ff 40%, #ffffff 90%);*/
-  background-color: #F4F4F4; /*#FAFBFC*/
-}
-
-html,
-body {
-
-}
 
 h1 {
     font-size: 1.75rem;
     line-height: 2.5rem;
     font-weight: 500;
-    color: var(--foreground);
+    @apply text-foreground;
 }
 
 h2 {
     font-size: 1.5rem;
     line-height: 2rem;
     font-weight: 500;
-    color: var(--foreground);
+    @apply text-foreground;
 }
 
 h3 {
     font-size: 1.25rem;
     line-height: 1.75rem;
     font-weight: 500;
-    color: var(--foreground);
+    @apply text-foreground;
 }
 
 select {
@@ -42,9 +32,9 @@ select {
     @apply w-full;
     @apply px-2;
     @apply py-2;
+    @apply text-foreground;
     @apply text-base;
-    @apply text-gray-700;
-    @apply bg-white;
+    @apply bg-background-light;
     @apply border;
     @apply border-input;
     @apply rounded-md;
@@ -83,6 +73,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 @layer base {
     :root {
         --background: 0 0% 96%;
+        --background-light: 0 0% 100%;
         --foreground: 240 10% 3.9%;
         --card: 0 0% 100%;
         --card-foreground: 240 10% 3.9%;
@@ -116,13 +107,14 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     }
 
     .dark {
-        --background: 240 10% 3.9%;
+        --background: 224 71.4% 4.1%;
+        --background-light: 224 71.4% 5.1%;
         --foreground: 0 0% 98%;
         --card: 240 10% 3.9%;
         --card-foreground: 0 0% 98%;
-        --popover: 240 10% 3.9%;
+        --popover: 224 71.4% 5.1%;
         --popover-foreground: 0 0% 98%;
-        --primary: 0 0% 98%;
+        --primary: 221.2 83.2% 53.3%;
         --primary-foreground: 240 5.9% 10%;
         --secondary: 240 3.7% 15.9%;
         --secondary-foreground: 0 0% 98%;
@@ -135,6 +127,16 @@ input[type="time"]::-webkit-calendar-picker-indicator {
         --border: 240 3.7% 15.9%;
         --input: 240 3.7% 15.9%;
         --ring: 240 4.9% 83.9%;
+
+        --off-black: #1e1e1e;
+
+        /*React Toastify*/
+        --toastify-color-success: #2ecc71;
+        --toastify-color-error: #e74c3c;
+        --toastify-color-info: #3498db;
+
+        --toastify-font-family: 'Roboto', sans-serif;
+
     }
 
 }

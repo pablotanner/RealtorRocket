@@ -24,8 +24,8 @@ import {
     MessagesPage, MaintenancePage
 } from "./pages/WrappedPages.js";
 import {useSocket} from "./services/hooks/useSocket.js";
-import {useState} from "react";
 import SocketContext from "./services/contexts/SocketContext.js";
+import {ThemeProvider} from "./services/contexts/ThemeContext.tsx";
 
 
 
@@ -34,12 +34,15 @@ import SocketContext from "./services/contexts/SocketContext.js";
 
 function App() {
     return (
-        <Provider store={store}>
-            <Router>
-                <AppContent/>
-            </Router>
-            <AuthVerify/>
-        </Provider>
+        <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+            <Provider store={store}>
+                <Router>
+                    <AppContent/>
+                </Router>
+                <AuthVerify/>
+            </Provider>
+        </ThemeProvider>
+
     )
 }
 

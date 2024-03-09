@@ -62,27 +62,27 @@ export function DatePicker({value, onChange, disabled, className, allowTime, ...
                 <div className="flex justify-between items-center px-2">
                     <button
                         type="button"
-                        className="p-[2px] bg-white flex items-center border-2 border-transparent hover:border-border rounded-md"
+                        className="p-[2px] bg-background-light flex items-center border-2 border-transparent hover:border-border rounded-md"
                         onClick={() => goToMonth(previousMonth)}
                     >
-                        <ChevronLeft className="h-5 w-5 text-gray-700" />
+                        <ChevronLeft className="h-5 w-5 text-muted-foreground" />
                     </button>
-                    <div className="text-gray-700 font-500 text-md">
+                    <div className="text-muted-foreground font-500 text-md">
                         {currentMonth.toLocaleString("default", {month: "long"})} {year}
                     </div>
                     <button
                         type="button"
-                        className="p-[2px] bg-white flex items-center border-2 border-transparent hover:border-border rounded-md"
+                        className="p-[2px] bg-background-light flex items-center border-2 border-transparent hover:border-border rounded-md"
                         onClick={() => goToMonth(nextMonth)}
                     >
-                        <ChevronRight className="h-5 w-5 text-gray-700" />
+                        <ChevronRight className="h-5 w-5 text-muted-foreground" />
                     </button>
                 </div>
 
                 <div className="flex gap-2 justify-between items-center">
 
                     <input
-                        className="flex h-10 w-full rounded-md border border-input bg-white px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="flex h-10 w-full rounded-md border border-input bg-background-light px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                         ref={inputRef}
                         type="date"
                         value={input}
@@ -162,22 +162,24 @@ export function DatePicker({value, onChange, disabled, className, allowTime, ...
 
                                     <input
                                         type={"time"}
-                                        className="flex h-10 w-fit rounded-md border border-input bg-white px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                        className="flex h-10 w-fit rounded-md border border-input bg-background-light px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-20"
 
                                         value={value ? value.toLocaleTimeString().slice(0, 5) : ""}
                                         onChange={(e) => {
                                             const time = e.target.value;
                                             const timeDate = new Date(value as Date);
+
                                             timeDate.setHours(parseInt(time.split(":")[0]));
                                             timeDate.setMinutes(parseInt(time.split(":")[1]));
                                             onChange(timeDate);
                                         }}
-                                        disabled={!value}
+                                        //disabled={!value}
+                                        disabled
                                     />
                                 </div>
 
 
-                                <div className="w-full h-[1px] bg-secondary my-1" />
+                                <div className="w-full h-[1px] bg-border my-1" />
                             </>
 
                         )
