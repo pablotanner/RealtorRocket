@@ -11,8 +11,8 @@ const Building = ({ property,  selectedUnit, onSelectUnit }) => {
 
     return (
         <div className="bg-secondary p-2 flex flex-col justify-end pb-1 w-[200px] flex-shrink-0">
-            <p className="text-lg font-500">{property?.title}</p>
-            <p className="text-sm">
+            <p className="text-lg font-500 text-foreground">{property?.title}</p>
+            <p className="text-sm text-muted-foreground">
                 {property?.street} {property?.city}
             </p>
             <div className="">

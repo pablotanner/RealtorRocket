@@ -144,7 +144,7 @@ const EditSettings = () => {
                     <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
                         <AlertDialogAction
-                            className="bg-red-600 hover:bg-red-400"
+                            className="bg-red-600 hover:bg-red-400 text-white"
                             disabled={deleteConfirmation !== "DELETE"}
                             isLoading={isDeleting}
                             onClick={() => deleteUser()}

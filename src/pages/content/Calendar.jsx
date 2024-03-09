@@ -91,7 +91,7 @@ const Calendar = () => {
         upcomingEvents.length = 3;
 
         return (
-                <ul className="flex flex-col gap-1">
+                <ul className="flex flex-col gap-1 text-muted-foreground">
                     {upcomingEvents.map((event, index) => {
                         return (
                             <li key={index} className="flex flex-row gap-2 ml-5 ">
@@ -108,7 +108,7 @@ const Calendar = () => {
         return (
             <div>
                 <h3>Events in Selected Week</h3>
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2 text-muted-foreground">
                     {[...eventsInRange].sort((a, b) => isAfter(new Date(a.date), new Date(b.date))).map((event, index) => <Event key={index} type={event.category} {...event} />)}
 
                     {eventsInRange.length === 0 && <div>No Events.</div>}
@@ -130,9 +130,9 @@ const Calendar = () => {
             <div className="flex flex-row gap-2 min-w-fit flex-wrap">
 
                 <div className="flex flex-col gap-2 w-fit">
-                    <div className="text-xl">
+                    <div className="text-xl text-muted-foreground">
                         Week
-                        <p className="text-sm">
+                        <p className="text-sm ">
                             {dayRange.from.toLocaleDateString()} - {dayRange.to.toLocaleDateString()}
                         </p>
                     </div>
@@ -155,7 +155,7 @@ const Calendar = () => {
                         <AccordionItem value="categories" open>
                             <AccordionTrigger>Categories</AccordionTrigger>
                             <AccordionContent className="max-w-fit">
-                                <div className="capitalize text-gray-800 font-300 flex flex-col">
+                                <div className="capitalize text-foreground ml-4 font-400 flex flex-col">
                                     <div className="flex flex-row items-center gap-2">
                                         <div className="w-1 h-1 bg-red-500 rounded-full"/>
                                         Maintenance

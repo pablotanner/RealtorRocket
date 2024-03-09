@@ -63,16 +63,16 @@ const Message = ({className, children, message, isSender, ...props}) => {
 
     return (
         <div {...props} className={cn(isSender ? "ml-auto" : "mr-auto")}>
-            <div className={cn("p-2 rounded-lg mb-1 text-sm md:text-md", isSender ? 'bg-blue-500 text-white' : 'bg-secondary text-black', message.type === "image" ? "p-0" : "", className)}>
+            <div className={cn("p-2 rounded-lg mb-1 text-sm md:text-md", isSender ? 'bg-blue-500 text-white' : 'bg-secondary text-foreground', message.type === "image" ? "p-0" : "", className)}>
                 <MessageRenderer message={message}/>
             </div>
             <div className={cn("flex flex-row items-center gap-2", isSender ? "float-end" : "float-start flex-row-reverse")}>
-                <p className="text-gray-500">
+                <p className="text-muted-foreground">
                     {getMessageTime(message)}
                 </p>
 
                 <Avatar className="w-7 h-7 rounded-full">
-                    <AvatarFallback className="rounded-none text-sm text-gray-500" >
+                    <AvatarFallback className="rounded-none text-sm text-muted-foreground" >
                         {message?.sender?.firstName?.charAt(0)}{message?.sender?.lastName?.charAt(0)}
                     </AvatarFallback>
                 </Avatar>
@@ -137,11 +137,11 @@ const ChatListItem = ({className, children, ...props}) => {
             </Avatar>
             <div className="w-full flex flex-col">
                 <div className="flex items-center justify-between w-full">
-                    <p className="font-500 text-sm">{user?.firstName} {user?.lastName}</p>
-                    {lastMessageTime && <p className="text-gray-400 text-xs max-w-[50%] text-ellipsis text-wrap text-right">{lastMessageTime}</p>}
+                    <p className="font-500 text-sm text-foreground">{user?.firstName} {user?.lastName}</p>
+                    {lastMessageTime && <p className="text-muted-foreground text-xs max-w-[50%] text-ellipsis text-wrap text-right">{lastMessageTime}</p>}
                 </div>
 
-                {lastMessageText && <p className="text-gray-500 text-xs">{lastMessageText}</p>}
+                {lastMessageText && <p className="text-muted-foreground text-xs">{lastMessageText}</p>}
 
             </div>
 

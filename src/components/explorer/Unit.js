@@ -85,7 +85,7 @@ const Unit = ({ unit, selectedUnit, onSelectUnit }) => {
             {
                 currentTenant &&
                 (
-                    <div className="text-md w-full h-full px-2 items-center justify-start flex flex-row font-500"
+                    <div className="text-md w-full h-full px-2 items-center justify-start flex flex-row font-500 text-foreground"
                     >
                         {currentTenant?.firstName + " " + currentTenant?.lastName}
                     </div>

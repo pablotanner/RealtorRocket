@@ -271,7 +271,7 @@ const TenantCreation = () => {
             <div
                 data-disabled={isDisabled}
                 data-selected={tab === index}
-                className="p-4 border-b-2 border-border select-none flex flex-col lg:flex-row gap-4 items-center justify-center lg:justify-start w-full hover:border-off-black cursor-pointer data-[selected='true']:border-off-black data-[disabled='true']:opacity-50 data-[disabled='true']:cursor-not-allowed data-[disabled='true']:hover:border-border"
+                className="p-4 border-b-2 border-border select-none flex flex-col lg:flex-row gap-4 items-center justify-center lg:justify-start w-full hover:border-foreground cursor-pointer data-[selected='true']:border-foreground data-[disabled='true']:opacity-50 data-[disabled='true']:cursor-not-allowed data-[disabled='true']:hover:border-border"
                 onClick={() => {
                     if (isDisabled) return
                     setTab(index);
@@ -282,11 +282,11 @@ const TenantCreation = () => {
                     data-complete={status==="complete"}
                     data-selected={tab === index}
                     data-previous={tab > index}
-                    className="p-2 md:p-4 flex w-8 h-8 md:w-14 md:h-14 items-center justify-center text-md md:text-xl border border-border text-gray-400 rounded-lg data-[previous='true']:bg-secondary data-[selected='true']:bg-black data-[selected='true']:text-white">
+                    className="p-2 md:p-4 flex w-8 h-8 md:w-14 md:h-14 items-center justify-center text-md md:text-xl border border-border text-gray-200 rounded-lg data-[previous='true']:bg-gray-900 data-[selected='true']:bg-black data-[selected='true']:text-white">
                     {index}
                 </div>
 
-                <div className="text-off-black font-500 text-xs md:text-sm text-center">
+                <div className="text-foreground font-500 text-xs md:text-sm text-center">
                     {title}
                 </div>
             </div>
@@ -472,7 +472,7 @@ const TenantCreation = () => {
                                         <div
                                             key={index}
                                             data-active={option.value === leaseOption}
-                                            className="rounded-lg flex-shrink relative border-border border-2 shadow-md p-4 flex bg-secondary/20 items-center justify-center cursor-pointer data-[active=true]:bg-gradient-to-br from-indigo-50 to-white data-[active=true]:text-indigo-600 data-[active=true]:border-primary-dark"
+                                            className="rounded-lg flex-shrink relative border-border border-2 shadow-md p-4 flex items-center justify-center cursor-pointer data-[active=true]:bg-gradient-to-br from-primary-accent to-background-light data-[active=true]:text-primary data-[active=true]:border-primary"
                                             onClick={() => {
                                                 if (leaseOption === option.value) return
 
@@ -486,19 +486,19 @@ const TenantCreation = () => {
                                         }
                                         >
                                             <div className="text-xl font-600 flex flex-col gap-3">
-                                                <div className="p-2 bg-white border border-border rounded-lg w-fit shadow-sm">
+                                                <div className="p-2 bg-background-light border border-border rounded-lg w-fit shadow-sm">
                                                     {option.icon}
                                                 </div>
 
                                                 {option.title}
                                                 <p
                                                     data-active={option.value === leaseOption}
-                                                    className="text-xs md:text-sm lg:text-md font-400 data-[active='true']:text-indigo-500"
+                                                    className="text-xs md:text-sm lg:text-md font-400 data-[active='true']:text-primary/80"
                                                 >
                                                     {option.description}
                                                 </p>
 
-                                                <div className="absolute -top-3 border-2 border-white -right-3 p-1 bg-indigo-500 rounded-full"
+                                                <div className="absolute -top-3 border-2 border-background-light -right-3 p-1 bg-primary rounded-full"
                                                      hidden={leaseOption !== option.value}>
                                                     <Check className="text-white w-4 h-4"/>
                                                 </div>
@@ -925,20 +925,20 @@ const TenantCreation = () => {
 
                         <div className="grid grid-cols-2">
                             <div className="">
-                                <p className="font-400 text-gray-500">
+                                <p className="font-400 text-muted-foreground">
                                     Tenant Name
                                 </p>
-                                <p className="font-500 text-off-black text-lg">
+                                <p className="font-500 text-foreground text-lg">
                                     {tenantForm.getValues("firstName")} {tenantForm.getValues("lastName")}
                                 </p>
                             </div>
 
 
                             <div className="">
-                                <p className="font-400 text-gray-500">
+                                <p className="font-400 text-muted-foreground">
                                     Lease Assignment
                                 </p>
-                                <p className="font-500 text-off-black text-lg">
+                                <p className="font-500 text-foreground text-lg">
                                     {leaseOption === "new" ? "New Lease" : "Existing Lease"}
                                 </p>
                             </div>
@@ -946,20 +946,20 @@ const TenantCreation = () => {
 
                         <div className="grid grid-cols-2">
                             <div className="">
-                                <p className="font-400 text-gray-500">
+                                <p className="font-400 text-muted-foreground">
                                     Lease Dates
                                 </p>
-                                <p className="font-500 text-off-black text-lg">
+                                <p className="font-500 text-foreground text-lg">
                                     {dateParser(tenantForm.getValues("leases[0].startDate"))} - {dateParser(tenantForm.getValues("leases[0].endDate"))}
                                 </p>
                             </div>
 
 
                             <div className="">
-                                <p className="font-400 text-gray-500">
+                                <p className="font-400 text-muted-foreground">
                                     Payment Frequency
                                 </p>
-                                <p className="font-500 text-off-black text-lg">
+                                <p className="font-500 text-foreground text-lg">
                                     {PaymentFrequency[tenantForm.getValues("leases[0].paymentFrequency")]}
                                 </p>
                             </div>
@@ -968,10 +968,10 @@ const TenantCreation = () => {
 
                         <div className="grid grid-cols-1">
                             <div className="">
-                                <p className="font-400 text-gray-500">
+                                <p className="font-400 text-muted-foreground">
                                     Unit Assignment
                                 </p>
-                                <p className="font-500 text-off-black text-lg">
+                                <p className="font-500 text-foreground text-lg">
                                     {selectedUnit ? selectedUnit.unitIdentifier : "N/A"}
                                 </p>
                             </div>
@@ -987,7 +987,7 @@ const TenantCreation = () => {
             </div>
 
 
-            <div className="fixed bottom-0 left-0 z-20 w-full flex flex-row bg-white px-6 h-16 items-center border-y-2 border-border justify-between">
+            <div className="fixed bottom-0 left-0 z-20 w-full flex flex-row bg-background-light px-6 h-16 items-center border-y-2 border-border justify-between">
                 <Button
                     variant="outline"
                     disabled={tab === 1}
@@ -1004,7 +1004,7 @@ const TenantCreation = () => {
                 </Button>
                 <Button
                     type={tab === 4 ? "submit" : "button"}
-                    variant="dark"
+                    variant="outline"
                     isLoading={isCreating}
                     onClick={() => {
                     tenantForm.trigger(["firstName", "lastName", "email", "phone", "occupation", "income"])

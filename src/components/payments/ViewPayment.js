@@ -116,10 +116,10 @@ const ViewPayment = ({payment, ...props}) => {
                 <div>
                     {entries.map((entry, index) => (
                             <div key={index} className="flex flex-row justify-between">
-                                <p className="text-gray-600 font-400">
+                                <p className="text-foreground font-400">
                                     {entry.label}
                                 </p>
-                                <p className="max-w-[50%]">
+                                <p className="max-w-[50%] text-muted-foreground">
                                     {entry.value || "-"}
                                 </p>
                             </div>

@@ -232,11 +232,11 @@ const PropertyCreation = () => {
                                         <div
                                             key={index}
                                             data-active={option.value === unitMultiplicity}
-                                            className="rounded-lg flex-shrink relative border-border border-2 shadow-md p-4 flex bg-secondary/20 items-center justify-center cursor-pointer data-[active=true]:bg-gradient-to-br from-indigo-50 to-white data-[active=true]:text-indigo-600 data-[active=true]:border-primary-dark"
+                                            className="rounded-lg flex-shrink relative border-border border-2 shadow-md p-4 flex bg-secondary/20 items-center justify-center cursor-pointer data-[active=true]:bg-gradient-to-br from-primary-accent to-background-light data-[active=true]:text-primary data-[active=true]:border-primary"
                                             onClick={() => setUnitMultiplicity(option.value)}
                                         >
                                             <div className="text-xl font-600 flex flex-col gap-3">
-                                                <div className="p-2 bg-white border border-border rounded-lg w-fit shadow-sm">
+                                                <div className="p-2 bg-background-light border border-border rounded-lg w-fit shadow-sm">
                                                     {option.icon}
                                                 </div>
 
@@ -806,7 +806,7 @@ const PropertyCreation = () => {
 
                         <div className="grid grid-cols-2">
                             <div className="">
-                                <p className="font-500 text-gray-400">
+                                <p className="font-500 text-muted-foreground">
                                     Title
                                 </p>
                                 <p className="font-500 text-foreground text-lg">
@@ -815,7 +815,7 @@ const PropertyCreation = () => {
                             </div>
 
                             <div className="">
-                                <p className="font-500 text-gray-400">
+                                <p className="font-500 text-muted-foreground">
                                     Type
                                 </p>
                                 <p className="flex flex-row items-center font-500 text-foreground text-lg">
@@ -827,7 +827,7 @@ const PropertyCreation = () => {
 
                         <div className="grid grid-cols-2">
                             <div className="">
-                                <p className="font-500 text-gray-400">
+                                <p className="font-500 text-muted-foreground">
                                     Description
                                 </p>
                                 <p className="font-500 text-foreground text-lg">
@@ -855,7 +855,7 @@ const PropertyCreation = () => {
             </div>
 
 
-            <div className="fixed bottom-0 left-0 z-50 w-full flex flex-row bg-white px-6 h-16 items-center border-y-2 border-border justify-between">
+            <div className="fixed bottom-0 left-0 z-20 w-full flex flex-row bg-background-light px-6 h-16 items-center border-y-2 border-border justify-between">
                 <Button
                     variant="outline"
                     disabled={tab === 1}
@@ -872,7 +872,7 @@ const PropertyCreation = () => {
                 </Button>
                 <Button
                     type={tab === 3 ? "submit" : "button"}
-                    variant="dark"
+                    variant="outline"
                     isLoading={isCreating}
                     onClick={() => {
                     propertyForm.trigger();

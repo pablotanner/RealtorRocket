@@ -122,23 +122,23 @@ const Messages = () => {
 
                 <ChatContainer hidden={!receiver}>
                     <ChatHeader className="flex items-center gap-2">
-                        <div className="md:hidden p-1 border border-border rounded-full text-gray-500 hover:bg-secondary cursor-pointer"
+                        <div className="md:hidden p-1 border border-border rounded-full text-muted-foreground hover:bg-secondary cursor-pointer"
                              onClick={() => setReceiver(null)}
                         >
                             <ChevronLeft className="w-5 h-5"/>
                         </div>
 
                         <Avatar className="w-10 h-10 rounded-full">
-                            <AvatarFallback className="rounded-none text-sm text-gray-500" >
+                            <AvatarFallback className="rounded-none text-sm " >
                                 {receiver?.firstName?.charAt(0)}{receiver?.lastName?.charAt(0)}
                             </AvatarFallback>
                         </Avatar>
 
                         <div className="flex flex-col">
-                            <p className="text-lg font-500">
+                            <p className="text-lg font-500 text-foreground" >
                                 {receiver?.firstName} {receiver?.lastName}
                             </p>
-                            <p hidden={user?.data?.id !== receiver?.id} className="text-gray-500 text-sm">
+                            <p hidden={user?.data?.id !== receiver?.id} className="text-muted-foreground text-sm">
                                 You
                             </p>
                         </div>
@@ -198,20 +198,17 @@ const Messages = () => {
                                 </DialogHeader>
 
                                 <div className="flex flex-col gap-1">
-                                    <p className="text-gray-700">
-                                        Image URL
-                                    </p>
                                     <Input
                                         value={imageUrl}
                                         onChange={(e) => setImageUrl(e.target.value)}
                                         placeholder="Image URL"
                                     />
-                                    <p className="text-gray-500">
+                                    <p className="text-muted-foreground text-sm">
                                         Enter the URL of the image you want to send
                                     </p>
                                 </div>
                                 <Button
-                                    variant="dark"
+                                    variant="outline"
                                     onClick={() => sendMessage("image")}
                                 > Send Image
                                 </Button>

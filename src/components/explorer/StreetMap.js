@@ -9,7 +9,7 @@ const StreetMap = ({selected, onSelect}) => {
     }
 
     return (
-        <div className="bg-white flex overflow-auto basis-[70%] flex-grow" >
+        <div className="bg-background-light flex overflow-auto basis-[70%] flex-grow" >
 
             <div className="flex flex-row w-full gap-12 justify-start items-end">
                 {properties.data.map((property, index) => (

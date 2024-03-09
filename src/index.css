@@ -5,6 +5,9 @@
 @tailwind utilities;
 
 
+body {
+    @apply bg-background;
+}
 
 h1 {
     font-size: 1.75rem;
@@ -81,6 +84,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
         --popover-foreground: 240 10% 3.9%;
         --primary: 221.2 83.2% 53.3%;
         --primary-foreground: 0 0% 98%;
+        --primary-accent:226 100% 94%;
         --secondary: 240 4.8% 95.9%;
         --secondary-foreground: 240 5.9% 10%;
         --muted: 240 4.8% 95.9%;
@@ -115,7 +119,8 @@ input[type="time"]::-webkit-calendar-picker-indicator {
         --popover: 224 71.4% 5.1%;
         --popover-foreground: 0 0% 98%;
         --primary: 221.2 83.2% 53.3%;
-        --primary-foreground: 240 5.9% 10%;
+        --primary-foreground:0 0% 98%;
+        --primary-accent:226 100% 8.7%;
         --secondary: 240 3.7% 15.9%;
         --secondary-foreground: 0 0% 98%;
         --muted: 240 3.7% 15.9%;

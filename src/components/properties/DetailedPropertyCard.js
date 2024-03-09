@@ -71,25 +71,25 @@ const DetailedPropertyCard = ({ property }) => {
 
                 <div className="px-4 pt-3 flex flex-col gap-2">
                     <div className="flex justify-between flex-row items-center gap-2 flex-wrap">
-                        <div className="text-2xl text-off-black font-500">
+                        <div className="text-2xl text-foreground font-500">
                             {property?.title}
                         </div>
-                        <div className="text-gray-900 font-300 mt-1">
+                        <div className="text-muted-foreground font-300 mt-1">
                             {RealEstateType[property?.realEstateType]}
                         </div>
                     </div>
 
-                    <div className="text-lg text-gray-600 font-400 flex flex-row items-center gap-2">
+                    <div className="text-lg text-muted-foreground font-400 flex flex-row items-center gap-2">
                         {propertyUnits()}
                         <span className="p-2 bg-primary-dark rounded-full hover:bg-primary/80 cursor-pointer"
-                              onClick={() => navigate(`/properties/${property.id}`)}
+                              onClick={() => navigate(`/properties/${property?.id}`)}
                         >
                             <LinkIcon className="w-4 h-4 text-white"/>
                         </span>
 
                     </div>
 
-                    <div className="text-md text-gray-400 font-400">
+                    <div className="text-md text-muted-foreground font-300">
                         {displayedData()} <br/>
                         {getLocation()}
                     </div>

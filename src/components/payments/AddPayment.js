@@ -106,44 +106,44 @@ const AddPayment = ({...props}) => {
         return (
             <div className="p-2 border border-primary-dark rounded-md flex flex-col gap-1">
                 <div className="flex flex-col">
-                    <p className="text-sm text-gray-800 font-500">
+                    <p className="text-sm text-foreground font-500">
                         Rent Schedule Update
                     </p>
-                    <p className="text-sm text-gray-600 font-400">
+                    <p className="text-sm text-muted-foreground font-400">
                         Based on your changes, the next scheduled payment (ID: {nextPayment?.id}) for this lease will be updated as follows:
                     </p>
                 </div>
                 <div className="grid grid-cols-3">
                     <div className="text-sm flex flex-col gap-1">
-                        <p className="text-gray-800 font-500 opacity-0">
+                        <p className="text-foreground font-500 opacity-0">
                             Value
                         </p>
-                        <p className="text-gray-800 font-500">
+                        <p className="text-foreground font-500">
                             Amount Due
                         </p>
-                        <p className="text-gray-800 font-500">
+                        <p className="text-foreground font-500">
                             Status
                         </p>
                     </div>
                     <div  className="text-sm flex flex-col gap-1">
-                        <p className="text-gray-800 font-500">
+                        <p className="text-foreground font-500">
                             Before
                         </p>
-                        <p className="text-gray-800 font-400">
+                        <p className="text-muted-foreground font-400">
                             {nextPayment.amountDue}
                         </p>
-                        <p className="text-gray-800 font-400">
+                        <p className="text-foreground font-400">
                             <PaymentScheduleStatusBadge status={nextPayment.status}/>
                         </p>
                     </div>
                     <div className="text-sm flex flex-col gap-1">
-                        <p className="text-gray-800 font-500">
+                        <p className="text-foreground font-500">
                             After
                         </p>
-                        <p className={cn("text-gray-800 font-400", (nextPayment.amountDue - amount) < 0 && "text-red-500" )}>
+                        <p className={cn("text-muted-foreground font-400", (nextPayment.amountDue - amount) < 0 && "text-red-500" )}>
                             {nextPayment.amountDue - amount}
                         </p>
-                        <p className="text-gray-800 font-400">
+                        <p className="text-foreground font-400">
                             <PaymentScheduleStatusBadge status={getScheduledPaymentStatus(nextPayment, amount)}/>
                         </p>
                     </div>

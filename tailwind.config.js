@@ -47,6 +47,7 @@ module.exports = {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+          accent: "hsl(var(--primary-accent))",
         },
         "off-black": "var(--off-black)",
         "primary-dark": "hsl(var(--primary))",

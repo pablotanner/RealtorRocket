@@ -99,7 +99,7 @@ const TenantTable = ({tenants}) => {
 
                 return (
                     <div className="flex flex-row items-center gap-2">
-                        <Avatar className="cursor-pointer hover:border-2 hover:border-indigo-500" onClick={() => navigate("/tenants/" + tenant?.id)}>
+                        <Avatar className="cursor-pointer hover:border-2 hover:border-primary" onClick={() => navigate("/tenants/" + tenant?.id)}>
                             <AvatarFallback>{tenant?.firstName[0]?.toUpperCase()}{tenant?.lastName[0]?.toUpperCase()}</AvatarFallback>
                         </Avatar>
                         <div className="flex flex-col">
