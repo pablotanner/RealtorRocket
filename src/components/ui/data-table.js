@@ -153,7 +153,7 @@ const FilterContent = ({column, index, tempColumnFilters, handleSelectChange, ha
             <select
                 value={tempColumnFilters[column.id]?.type || ""}
                 onChange={(e) => handleSelectChange(column.id, e.target.value)}
-                className="mb-2 rounded-md border border-input bg-background-light text-foreground text-sm capitalize font-500"
+                className="rounded-md border border-input bg-background-light text-foreground text-sm capitalize font-500"
             >
                 <option value="">Select Filter</option>
                 {filterOptions[index]?.map((option) => {
@@ -168,12 +168,12 @@ const FilterContent = ({column, index, tempColumnFilters, handleSelectChange, ha
                 value={tempColumnFilters[column.id]?.value || ""}
                 type={column?.columnDef?.meta?.type}
                 onChange={(e) => handleInputChange(column.id, e.target.value)}
+                className="w-fit"
             />
         </>
     )
     if (type === "enum") {
         const options = column?.columnDef?.meta?.options;
-
 
         content = (
             <select
@@ -184,7 +184,7 @@ const FilterContent = ({column, index, tempColumnFilters, handleSelectChange, ha
                         [column.id]: {type: "equals", value: e.target.value}
                     });
                 }}
-                className="mb-2 rounded-md border border-input bg-background-light text-foreground text-sm capitalize font-500"
+                className="rounded-md border border-input bg-background-light text-foreground text-sm capitalize font-500"
             >
                 <option value="">Select Filter</option>
                 {options?.map((option, index) => {
@@ -200,10 +200,11 @@ const FilterContent = ({column, index, tempColumnFilters, handleSelectChange, ha
 
 
     return (
-        <>
+        <div className="flex flex-col gap-2 items-center justify-start">
             {content}
             <Button
                 variant="outline"
+                className="w-full"
                 disabled={!tempColumnFilters[column.id]?.type || !tempColumnFilters[column.id]?.value}
                 onClick={() => {
                     column.setFilterValue(tempColumnFilters[column.id]);
@@ -211,7 +212,7 @@ const FilterContent = ({column, index, tempColumnFilters, handleSelectChange, ha
             >
                 Apply
             </Button>
-        </>
+        </div>
 
     )
 }
@@ -347,9 +348,8 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
 
 
         return (
-            <div className="rounded-xl bg-primary/80 p-2">
-                <div className="flex flex-row items-center gap-2">
-                    <div className="text-sm capitalize text-white flex flex-row gap-1 items-center">
+
+            <div className="text-sm rounded-xl bg-primary p-2 px-3 capitalize text-white flex flex-row gap-1 items-center">
                         <p>
                             {getColumnName(column)}
                         </p>
@@ -366,8 +366,6 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                            }}
                         />
                     </div>
-                </div>
-            </div>
         )
     }
 
@@ -417,7 +415,7 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                         </Button>
                     </DropdownMenuTrigger>
 
-                    <DropdownMenuContent className="min-w-[200px]">
+                    <DropdownMenuContent className="w-[250px]">
                         <Tabs defaultValue="columns">
                             <TabsList className="w-full">
                                 <TabsTrigger value="columns" className="w-full">
@@ -448,11 +446,11 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                                     })}
                             </TabsContent>
 
-                            <TabsContent value="filters" className="max-h-[300px] overflow-auto">
-                                <Accordion collapsible className="px-3">
+                            <TabsContent value="filters" className="max-h-[300px] overflow-auto overflow-x-hidden">
+                                <Accordion collapsible>
                                     {table.getAllColumns()?.filter((column) => column.getCanFilter())?.map((column, index) => {
                                         return (
-                                            <AccordionItem key={index} value={column?.id} className="w-[200px]">
+                                            <AccordionItem key={index} value={column?.id} className="w-full">
                                                 <AccordionTrigger className="capitalize text-sm py-2 text-foreground font-400">
                                                     {getColumnName(column)}
                                                 </AccordionTrigger>

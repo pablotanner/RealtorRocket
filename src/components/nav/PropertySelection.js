@@ -74,7 +74,7 @@ const PropertySelection = () => {
 
         <DropdownMenu>
             <DropdownMenuTrigger hidden={!property}>
-                <MoreVertical className="w-5 h-5 cursor-pointer"/>
+                <MoreVertical className="w-5 h-5 cursor-pointer text-foreground"/>
             </DropdownMenuTrigger>
             <DropdownMenuContent hidden={!property}>
                 <DropdownMenuItem
@@ -98,7 +98,7 @@ const PropertySelection = () => {
                     <DialogHeader>
                         <h3 className="text-lg font-600">{property?.title}</h3>
                     </DialogHeader>
-                    <div>
+                    <div className="text-muted-foreground">
                         <p>{RealEstateType[property?.realEstateType]}</p>
                         <p>{property?.units?.length} Unit(s)</p>
                         <p>Created on {dateParser(property?.createdAt)}</p>
