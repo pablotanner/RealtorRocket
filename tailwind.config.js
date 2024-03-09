@@ -6,6 +6,7 @@ module.exports = {
     './app/**/*.{js,jsx,vue,ts,tsx}',
     './src/**/*.{js,jsx,vue,ts,tsx}',
   ],
+  darkMode: "class",
   prefix: "",
   theme: {
     fontWeight: {
