@@ -1,4 +1,3 @@
-import {useState} from "react";
 import EditSettings from "../../components/profile/EditSettings.js";
 import EditProfile from "../../components/profile/EditProfile.js";
 import {Tabs, TabsContent, TabsItem, TabsList} from "../../components/ui/tabs-new.tsx";
@@ -37,7 +36,7 @@ const Account = (props) => {
 
     return (
         <div>
-            <Tabs value={selectedTab}>
+            <Tabs value={selectedTab} defaultValue={selectedTab}>
                 <TabsList>
                     {tabs.map((tab, index) => (
                         <TabsItem
