@@ -32,8 +32,8 @@ import {Form, FormControl, FormField, FormGroup, FormItem, FormLabel, FormMessag
 import {Input} from "../ui/input.tsx";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../ui/select.tsx";
 import {Button} from "../ui/button.tsx";
-import {Checkbox} from "../ui/checkbox.tsx";
 import Link from "../general/Link.tsx";
+import {Textarea} from "../ui/textarea.tsx";
 
 
 
@@ -157,7 +157,7 @@ const PaymentActions = ({ payment }) => {
                                     <FormItem  >
                                         <FormLabel>Notes</FormLabel>
                                         <FormControl>
-                                            <Input {...field} />
+                                            <Textarea className="resize-none"  {...field} />
                                         </FormControl>
                                         <FormMessage/>
                                     </FormItem>

@@ -507,7 +507,7 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                             <TableRow>
                                 <TableCell colSpan={table?.getAllColumns()?.length}>
                                     <div className="flex flex-col items-center gap-1 text-center">
-                                        <div className="p-3 bg-gray-500/20 rounded-full">
+                                        <div className="p-3 bg-red-600/20 rounded-full">
                                             <AlertCircle className="w-5 h-5 text-red-600" />
                                         </div>
                                         <h3 className="text-md text-foreground">
