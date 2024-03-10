@@ -18,6 +18,8 @@ import {useState} from "react";
 import {Save} from "lucide-react";
 import {CivilStatus} from "../../utils/magicNumbers.js";
 import {useUpdateTenantMutation} from "../../services/api/tenantApi.js";
+import {tenantSchema} from "../../utils/formSchemas.js";
+import {isValidPhoneNumber} from "react-phone-number-input";
 
 const EditTenant = ({tenant}) => {
     const [isEditing, setIsEditing] = useState(false);
@@ -29,7 +31,7 @@ const EditTenant = ({tenant}) => {
         firstName: zodStringPipe(z.string({errorMap: () => ({message: 'First name is required.'})})),
         lastName: zodStringPipe(z.string({errorMap: () => ({message: 'Last name is required.'})})),
         email: zodStringPipe(z.string().email().or(z.null())),
-        phone: zodStringPipe(z.string().or(z.null())),
+        phone: zodStringPipe(z.string().refine(isValidPhoneNumber, { message: "Invalid phone number" }).or(z.null())),
         civilStatus: zodStringPipe(z.string().or(z.null())),
         occupation: zodStringPipe(z.string().or(z.null())),
         income: zodNumberInputPipe(z.number({errorMap: () => ({message: 'Please enter a valid number.'})}).or(z.null())),
@@ -39,14 +41,7 @@ const EditTenant = ({tenant}) => {
     const tenantProfileForm = useForm({
         resolver: zodResolver(tenantProfileSchema),
         defaultValues: {
-            firstName: tenant?.firstName || null,
-            lastName: tenant?.lastName || null,
-            email: tenant?.email || null,
-            phone: tenant?.phone || null,
-            civilStatus: tenant?.civilStatus || null,
-            occupation: tenant?.occupation || null,
-            income: tenant?.income || null,
-            creditScore: tenant?.creditScore || null,
+            ...tenant,
         },
     })
 
@@ -152,7 +147,7 @@ const EditTenant = ({tenant}) => {
                                 <FormLabel>Phone</FormLabel>
                                 <FormControl>
                                     {isEditing ?
-                                        <Input {...field} />
+                                        <Input {...field} type="phone" />
                                         :
                                         <FormValue>{field.value}</FormValue>
                                     }
@@ -196,7 +191,7 @@ const EditTenant = ({tenant}) => {
                                                 ))}
                                             </select>
                                             :
-                                            <FormValue>{field.value}</FormValue>
+                                            <FormValue>{CivilStatus[field.value]}</FormValue>
                                         }
                                     </FormControl>
                                     <FormMessage/>

@@ -6,6 +6,7 @@ import {useSelector} from "react-redux";
 import {CurrencySymbol} from "../../utils/magicNumbers.js";
 import {getLang} from "../../utils/formatters.js";
 import CurrencyInput  from "react-currency-input-field";
+import {PhoneInput} from "./phone-input.tsx";
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {}
@@ -28,6 +29,15 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                   <DatePicker value={value} onChange={onChange} allowTime={type === "datetime-local"} {...rest}  />
 
               </>
+          )
+      }
+      else if (type === "phone") {
+          return (
+              <>
+                  {/* @ts-expect-error silence */}
+                  <PhoneInput {...props} />
+              </>
+
           )
       }
 

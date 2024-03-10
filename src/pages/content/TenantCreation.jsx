@@ -375,7 +375,7 @@ const TenantCreation = () => {
                                             <FormItem  >
                                                 <FormLabel>Phone</FormLabel>
                                                 <FormControl>
-                                                    <Input placeholder="" {...field} />
+                                                    <Input placeholder="" type="phone" {...field} />
                                                 </FormControl>
                                                 <FormMessage/>
                                             </FormItem>

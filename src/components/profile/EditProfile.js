@@ -178,7 +178,7 @@ const EditProfile = ({user}) => {
                             <FormItem className="w-full">
                                 <FormLabel>Phone</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="" {...field} />
+                                    <Input type="phone" {...field} />
                                 </FormControl>
                                 <FormMessage/>
                             </FormItem>

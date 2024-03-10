@@ -1,5 +1,6 @@
 import {z} from "zod";
 import {zodDateInputPipe, zodNumberInputPipe, zodStringPipe} from "./formatters.js";
+import {isValidPhoneNumber} from "react-phone-number-input";
 
 
 export const propertySchema = z.object({
@@ -62,7 +63,7 @@ export const tenantSchema = z.object({
     firstName: zodStringPipe(z.string({errorMap: () => ({message: 'Please enter a first name'})})),
     lastName: zodStringPipe(z.string({errorMap: () => ({message: 'Please enter a last name'})})),
     email: zodStringPipe(z.string().or(z.null())),
-    phone: zodStringPipe(z.string().or(z.null())),
+    phone: zodStringPipe(z.string().refine(isValidPhoneNumber, { message: "Invalid phone number" }).or(z.null())),
     civilStatus: zodStringPipe(z.string().or(z.null())),
     occupation: zodStringPipe(z.string().or(z.null())),
     income: zodNumberInputPipe(z.string().or(z.null()).or(z.number())),
@@ -84,7 +85,7 @@ export const userSchema = z.object({
     firstName: zodStringPipe(z.string({errorMap: () => ({message: 'Please enter a first name'})})),
     lastName: zodStringPipe(z.string({errorMap: () => ({message: 'Please enter a last name'})})),
     email: zodStringPipe(z.string().email({errorMap: () => ({message: 'Please enter a valid email'})})),
-    phone: zodStringPipe(z.string().or(z.null())),
+    phone: zodStringPipe(z.string().refine(isValidPhoneNumber, { message: "Invalid phone number" }).or(z.null())),
     dob: zodDateInputPipe(z.string({errorMap: () => ({message: 'Please enter a valid date.'})})),
     bio: zodStringPipe(z.string().or(z.null())),
     company: zodStringPipe(z.string().or(z.null())),

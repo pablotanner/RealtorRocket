@@ -306,7 +306,7 @@ const AddPayment = ({...props}) => {
                                                 <Tooltip>
                                                     <TooltipTrigger asChild>
                                                         <div className="ml-1 cursor-pointer">
-                                                            <AiOutlineQuestionCircle className="w-4 h-4 text-gray-800"/>
+                                                            <AiOutlineQuestionCircle className="w-4 h-4 text-muted-foreground"/>
                                                         </div>
                                                     </TooltipTrigger>
                                                     <TooltipContent className="max-w-xs md:max-w-md lg:max-w-lg text-wrap">
