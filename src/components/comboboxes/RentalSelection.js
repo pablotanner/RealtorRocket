@@ -62,7 +62,7 @@ const RentalSelection = ({onSelect, selected, units, ...props}) => {
                     <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[300px] p-0" noPortal>
+            <PopoverContent className="w-[300px] p-0" noPortal side="top">
                 <Command >
                     <CommandInput placeholder="Search Unit" />
 

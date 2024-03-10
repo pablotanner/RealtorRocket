@@ -44,8 +44,8 @@ const Properties = (props) => {
                 <Button variant="gradient" className="w-fit"
                         onClick={() => navigate("/properties/create")}
                 >
-                    <Plus size={24} className="mr-2"/>
-                   Create Property
+                    <Plus size={18} className="mr-1"/>
+                   Add Property
                 </Button>
 
             </div>

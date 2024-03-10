@@ -62,7 +62,7 @@ const AddMaintenanceReport = (props) => {
 
     return (
         <Dialog {...props} onOpenChange={() => setOpen(!open)} open={open}>
-            <Button onClick={() => setOpen(!open)} variant="outline" type="button">
+            <Button onClick={() => setOpen(!open)} variant="gradient" type="button">
                 {props.children}
             </Button>
             <DialogContent>

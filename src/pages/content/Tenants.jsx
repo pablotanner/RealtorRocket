@@ -28,8 +28,8 @@ const Tenants = (props) => {
                 <Button variant="gradient" className="w-fit"
                         onClick={() => navigate("/tenants/create")}
                 >
-                    <Plus size={24} className="mr-2"/>
-                    Create Tenant
+                    <Plus size={18} className="mr-1"/>
+                    Add Tenant
                 </Button>
             </div>
 

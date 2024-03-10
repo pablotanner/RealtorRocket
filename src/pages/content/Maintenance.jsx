@@ -1,6 +1,6 @@
 import MaintenanceTable from "../../components/maintenance/MaintenanceTable.tsx";
 import AddMaintenanceReport from "../../components/maintenance/AddMaintenanceReport.js";
-import {Drill} from "lucide-react";
+import {Drill, Plus} from "lucide-react";
 import {selectMaintenanceReportsByPropertyId} from "../../services/slices/objectSlice.js";
 import {useSelector} from "react-redux";
 
@@ -22,7 +22,7 @@ const MaintenanceReports = (props) => {
                     </p>
 
                     <AddMaintenanceReport>
-                        <Drill className="w-5 h-5 mr-2"/>
+                        <Plus size={18} className="mr-1"/>
                         Report Maintenance
                     </AddMaintenanceReport>
                 </div>
