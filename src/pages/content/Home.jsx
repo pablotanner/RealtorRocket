@@ -186,7 +186,7 @@ const Home = () => {
                             number={properties?.data?.length}
                             link="/properties"
                         >
-                            <div className="p-2 border-2 border-border rounded-lg shadow-sm">
+                            <div className="p-2 border border-border rounded-lg shadow-sm">
                                 <Building2 className="w-5 h-5"/>
                             </div>
                         </InfoCard>
@@ -195,7 +195,7 @@ const Home = () => {
                             number={units?.data?.length}
                             link="/rentals"
                         >
-                            <div className="p-2 border-2 border-border rounded-lg shadow-sm">
+                            <div className="p-2 border border-border rounded-lg shadow-sm">
                                 <BuildingIcon className="w-5 h-5"/>
                             </div>
                         </InfoCard>
@@ -204,7 +204,7 @@ const Home = () => {
                             number={tenants?.data?.length}
                             link="/tenants"
                         >
-                            <div className="p-2 border-2 border-border rounded-lg shadow-sm">
+                            <div className="p-2 border border-border rounded-lg shadow-sm">
                                 <UserIcon className="w-5 h-5"/>
                             </div>
                         </InfoCard>
@@ -213,7 +213,7 @@ const Home = () => {
                             number={payments?.data?.length}
                             link="/financials"
                         >
-                            <div className="p-2 border-2 border-border rounded-lg shadow-sm">
+                            <div className="p-2 border border-border rounded-lg shadow-sm">
                                 <CoinsIcon className="w-5 h-5"/>
                             </div>
                         </InfoCard>
