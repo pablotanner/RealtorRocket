@@ -5,12 +5,56 @@ import {Checkbox} from "../ui/checkbox.tsx";
 import {dateParser, moneyParser} from "../../utils/formatters.js";
 import {DataTable} from "../ui/data-table.js";
 import {Lease} from "../../utils/classes.ts";
-import {Scroll} from "lucide-react";
+import {MoreHorizontal, Pencil, Scroll, Trash2} from "lucide-react";
 import {LeaseStatusBadge} from "../../utils/statusBadges.js";
 import {LeaseStatus} from "../../utils/magicNumbers.js";
 import Link from "../general/Link.tsx";
+import {useState} from "react";
+import {useDeleteLeaseMutation} from "../../services/api/leaseApi";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem, DropdownMenuSeparator,
+    DropdownMenuTrigger
+} from "../ui/dropdown-menu.tsx";
+import EditLease from "../leases/EditLease";
 
 
+const LeaseActions = ({lease}) => {
+    const [modalOpen, setModalOpen] = useState(false)
+
+    const [deleteLease] = useDeleteLeaseMutation();
+
+    return (
+        <DropdownMenu>
+            <EditLease lease={lease} open={modalOpen} setIsOpen={setModalOpen} />
+            <DropdownMenuTrigger asChild className="cursor-pointer">
+                <MoreHorizontal className="h-5 w-5 ml-3"/>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+                <DropdownMenuGroup>
+                    <DropdownMenuItem onClick={() => setModalOpen(true)}>
+                        <Pencil className="w-4 h-4 mr-2"/>
+                        Edit
+                    </DropdownMenuItem>
+                </DropdownMenuGroup>
+
+                <DropdownMenuSeparator/>
+
+                <DropdownMenuGroup>
+                    <DropdownMenuItem className="flex flex-row text-sm text-red-500"
+                                      onClick={() => deleteLease(lease?.id)}
+                    >
+                        <Trash2 className="w-4 h-4 mr-2"/>
+                        Delete Lease
+                    </DropdownMenuItem>
+                </DropdownMenuGroup>
+            </DropdownMenuContent>
+        </DropdownMenu>
+
+    )
+}
 
 
 const columns: ColumnDef<Lease>[] = [
@@ -203,42 +247,17 @@ const columns: ColumnDef<Lease>[] = [
         accessorFn: (row) => row?.specialTerms || "",
         enableSorting: true,
     },
-    /*
     {
-        id: "totalRentDue",
-        header: "Total Rent Due",
-        meta: {
-            type: "number",
-        },
+        id: "actions",
+        header: "Actions",
+        enableHiding: false,
         cell: ({ row }) => {
+            const lease = row.original
             return (
-                <div className="capitalize">
-                    {moneyParser(row?.original?.totalRentDue)}
-                </div>
+                <LeaseActions lease={lease}/>
             )
         },
-        accessorFn: (row) => row?.totalRentDue || "",
-        enableSorting: true,
-
     },
-    {
-        id: "totalRentPaid",
-        header: "Total Rent Paid",
-        meta: {
-            type: "number",
-        },
-        cell: ({ row }) => {
-            return (
-                <div className="capitalize">
-                    {moneyParser(row?.original?.rentPaid)}
-                </div>
-            )
-        },
-        accessorFn: (row) => row?.rentPaid || "",
-        enableSorting: true,
-
-    },
-     */
 
 
 ]

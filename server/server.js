@@ -63,6 +63,8 @@ router.put('/units/:id/tenant', authenticateToken, tenantController.assignTenant
 // Leases
 router.get('/leases', authenticateToken, leaseController.getLeases)
 router.get('/leases/:id', authenticateToken, leaseController.getLease)
+router.patch('/leases/:id', authenticateToken, leaseController.updateLease)
+router.delete('/leases/:id', authenticateToken, leaseController.deleteLease)
 router.post('/leases', authenticateToken, leaseController.createLease)
 
 // Tenants

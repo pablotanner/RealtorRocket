@@ -61,11 +61,67 @@ export const leaseApi = authApi.injectEndpoints({
                         });
                     })
             },
-        })
+        }),
+        updateLease: build.mutation({
+            query: (data) => {
+                const id = data.id;
+                const body = {...data};
+                delete body.id;
+                return {
+                    url: `/leases/${id}`,
+                    method: 'PATCH',
+                    body
+                }
+            },
+            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                queryFulfilled
+                    .then(() => {
+
+                        toast({
+                            title: "Success",
+                            description: "Lease updated successfully",
+                            variant: "success",
+                        });
+                    })
+                    .catch(() => {
+                        toast({
+                            title: "Uh oh! Something went wrong.",
+                            description: "There was a problem with your request.",
+                            variant: "error",
+                        });
+                    })
+            },
+            invalidatesTags: ['Leases']
+        }),
+        deleteLease: build.mutation({
+            query: (id) => ({
+                url: `/leases/${id}`,
+                method: 'DELETE',
+            }),
+            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                queryFulfilled
+                    .then(() => {
+
+                        toast({
+                            title: "Success",
+                            description: "Lease deleted successfully",
+                            variant: "success",
+                        });
+                    })
+                    .catch(() => {
+                        toast({
+                            title: "Uh oh! Something went wrong.",
+                            description: "There was a problem with your request.",
+                            variant: "error",
+                        });
+                    })
+            },
+            invalidatesTags: ['Leases']
+        }),
     }),
     overrideExisting: false,
 })
 
-export const {useGetLeasesQuery, useGetLeaseQuery, useCreateLeaseMutation} = leaseApi;
+export const {useGetLeasesQuery, useGetLeaseQuery, useUpdateLeaseMutation, useDeleteLeaseMutation, useCreateLeaseMutation} = leaseApi;
 
 

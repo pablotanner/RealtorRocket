@@ -82,3 +82,45 @@ export async function createLease(req, res) {
         res.status(500).json({ message: "Error creating lease" });
     }
 }
+
+export async function updateLease(req, res) {
+    try {
+        const lease = await prisma.lease.update({
+            where: {
+                id: parseInt(req.params.id),
+                realtor: {
+                    userId: req.user.userId
+                }
+            },
+            data: req.body,
+            include: {
+                tenant: true,
+                unit: true,
+                paymentSchedule: true
+            }
+        });
+
+        res.status(200).json({data: lease });
+    }
+    catch (error) {
+        res.status(500).json({ message: "Error updating lease" });
+    }
+}
+
+export async function deleteLease(req, res) {
+    try {
+        const lease = await prisma.lease.delete({
+            where: {
+                id: parseInt(req.params.id),
+                realtor: {
+                    userId: req.user.userId
+                }
+            }
+        });
+
+        res.status(200).json({data: lease });
+    }
+    catch (error) {
+        res.status(500).json({ message: "Error deleting lease" });
+    }
+}

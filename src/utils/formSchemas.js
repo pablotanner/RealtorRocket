@@ -45,6 +45,18 @@ export const unitSchema = z.object({
     rentalPrice:zodNumberInputPipe(z.string().or(z.null()).or(z.number())),
 })
 
+export const leaseSchema = z.object({
+    startDate: zodDateInputPipe(z.string({errorMap: () => ({message: 'Please enter a valid date.'})})),
+    endDate: zodDateInputPipe(z.string({errorMap: () => ({message: 'Please enter a valid date.'})})),
+    rentalPrice:zodNumberInputPipe(z.string().or(z.null()).or(z.number())),
+    paymentFrequency: zodStringPipe(z.string({errorMap: () => ({message: 'Please select a payment frequency'})})),
+    status: zodStringPipe(z.string({errorMap: () => ({message: 'Please select a status'})})),
+    notes: zodStringPipe(z.string().or(z.null())),
+    unitId: zodNumberInputPipe(z.string({errorMap: () => ({message: 'Please select a unit'})}).or(z.number())),
+    specialTerms: zodStringPipe(z.string().or(z.null())),
+    tenantId: zodNumberInputPipe(z.string().or(z.null()).or(z.number())),
+})
+
 
 export const tenantSchema = z.object({
     firstName: zodStringPipe(z.string({errorMap: () => ({message: 'Please enter a first name'})})),

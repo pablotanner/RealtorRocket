@@ -28,7 +28,7 @@ import {Button} from "../ui/button.tsx";
 import {useUpdateUnitMutation} from "../../services/api/unitApi.js";
 
 
-const EditRentalUnit = ({unit, open, onOpenChange, ...props}) => {
+const EditRentalUnit = ({unit, open, setOpen, ...props}) => {
 
     const rentalForm = useForm({
         resolver: zodResolver(unitSchema),
@@ -56,7 +56,7 @@ const EditRentalUnit = ({unit, open, onOpenChange, ...props}) => {
             if (res.error) {
                 console.log(res.error)
             } else {
-                onOpenChange(false)
+                setOpen(false)
                 // Update the form with the new data
                 rentalForm.reset(body)
             }
@@ -64,7 +64,7 @@ const EditRentalUnit = ({unit, open, onOpenChange, ...props}) => {
     }
 
     return (
-        <Dialog open={open} onOpenChange={() => onOpenChange(!open)}>
+        <Dialog open={open} onOpenChange={() => setOpen(!open)}>
             <DialogContent>
                 <DialogHeader>
                     <DialogIcon>
@@ -88,7 +88,7 @@ const EditRentalUnit = ({unit, open, onOpenChange, ...props}) => {
                                 <FormItem>
                                     <FormLabel>Unit Identifier *</FormLabel>
                                     <FormControl>
-                                        <Input type="unitIdentifier" {...field}  />
+                                        <Input {...field}  />
                                     </FormControl>
                                     <FormMessage/>
                                     <FormDescription>
@@ -106,7 +106,7 @@ const EditRentalUnit = ({unit, open, onOpenChange, ...props}) => {
                                     <FormItem>
                                         <FormLabel>Unit Number</FormLabel>
                                         <FormControl>
-                                            <Input type="unitNumber" placeholder="3A" {...field}  />
+                                            <Input placeholder="3A" {...field}  />
                                         </FormControl>
                                         <FormMessage/>
                                     </FormItem>
@@ -265,7 +265,7 @@ const EditRentalUnit = ({unit, open, onOpenChange, ...props}) => {
 
                         <div className="w-full flex flex-row gap-2 justify-between mt-2">
                             <Button variant="outline" type="reset" onClick={() => {
-                                onOpenChange(false)
+                                setOpen(false)
                                 rentalForm.reset()
                             }}
                                     disabled={isUpdating}

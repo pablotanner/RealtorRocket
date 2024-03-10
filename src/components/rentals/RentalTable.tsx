@@ -28,7 +28,7 @@ const RentalTableDropdown = ({unit}) => {
 
     return (
         <DropdownMenu>
-            <EditRentalUnit unit={unit} open={modalOpen} onOpenChange={() => setModalOpen(!modalOpen)} />
+            <EditRentalUnit unit={unit} open={modalOpen} setOpen={() => setModalOpen(!modalOpen)} />
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="h-8 w-8 p-0">
                     <span className="sr-only">Open menu</span>
