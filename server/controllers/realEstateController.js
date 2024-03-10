@@ -208,3 +208,45 @@ export async function getUnit(req, res) {
     }
 }
 
+export async function updateUnit(req, res) {
+    try {
+        const unit = await prisma.unit.findUnique({
+            where: {
+                id: parseInt(req.params.id),
+                realEstateObject: {
+                    realtor: {
+                        userId: req.user.userId
+                    }
+                }
+            }
+        })
+
+        if (!unit) {
+            return res.status(404).json({ message: "Unit not found" });
+        }
+
+        const updatedUnit = await prisma.unit.update({
+            where: {
+                id: parseInt(req.params.id),
+            },
+            data: req.body,
+            include: {
+                realEstateObject: true,
+                images: true,
+                leases: {
+                    orderBy: {
+                        createdAt: "desc"
+                    }
+                }
+            }
+        });
+
+        res.status(200).json({data: updatedUnit });
+
+
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json({ message: "Error updating unit" });
+    }
+}

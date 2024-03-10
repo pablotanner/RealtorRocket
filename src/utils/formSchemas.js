@@ -32,6 +32,7 @@ export const propertySchema = z.object({
 
 
 export const unitSchema = z.object({
+    unitIdentifier: zodStringPipe(z.string({errorMap: () => ({message: 'The unit identifier is required'})})),
     unitNumber: zodStringPipe(z.string().or(z.null())),
     floor: zodNumberInputPipe(z.string().or(z.null()).or(z.number())),
     unitSize: zodNumberInputPipe(z.string().or(z.null()).or(z.number())),

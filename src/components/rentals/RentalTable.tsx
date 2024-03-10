@@ -1,34 +1,34 @@
 import {
     ColumnDef,
-    ColumnFiltersState, flexRender,
-    getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel,
-    SortingState,
-    useReactTable,
-    VisibilityState
 } from "@tanstack/react-table";
-import {DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuCheckboxItem} from "../ui/dropdown-menu.tsx";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuLabel,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+    DropdownMenuSeparator
+} from "../ui/dropdown-menu.tsx";
 import {Button} from "../ui/button.tsx";
-import {ArrowUpDown, ChevronDown, LinkIcon, MoreHorizontal} from "lucide-react";
-import {useState} from "react";
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "../ui/table.tsx";
-import {Input} from "../ui/input.tsx";
-import {FaMagnifyingGlass} from "react-icons/fa6";
+import {MoreHorizontal, Pencil} from "lucide-react";
 import {useNavigate} from "react-router-dom";
 import {dateParser, moneyParser} from "../../utils/formatters.js";
 import {Unit} from "../../utils/classes.ts";
 import {DataTable} from "../ui/data-table.js";
-import {selectTenantById} from "../../services/slices/objectSlice.js";
-import {useSelector} from "react-redux";
 import {ListingStatusBadge} from "../../utils/statusBadges.js";
 import Link from "../general/Link.tsx";
+import EditRentalUnit from "./EditRentalUnit";
+import {useState} from "react";
 
 
 
 const RentalTableDropdown = ({unit}) => {
     const navigate = useNavigate()
+    const [modalOpen, setModalOpen] = useState(false)
 
     return (
         <DropdownMenu>
+            <EditRentalUnit unit={unit} open={modalOpen} onOpenChange={() => setModalOpen(!modalOpen)} />
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="h-8 w-8 p-0">
                     <span className="sr-only">Open menu</span>
@@ -37,6 +37,12 @@ const RentalTableDropdown = ({unit}) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                <DropdownMenuItem onClick={() => setModalOpen(true)}>
+                    <Pencil className="h-4 w-4 mr-2" />
+                    Edit
+                </DropdownMenuItem>
+                <DropdownMenuSeparator/>
+
                 <DropdownMenuItem
                     onClick={() => navigate(`/properties/${unit.realEstateObjectId}`)}
                 >View Property</DropdownMenuItem>

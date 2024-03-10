@@ -57,6 +57,7 @@ router.delete('/properties/:id', authenticateToken, realEstateController.deleteP
 // Units / Rentals
 router.get('/units', authenticateToken, realEstateController.getUnits)
 router.get('/units/:id', authenticateToken, realEstateController.getUnit)
+router.patch('/units/:id', authenticateToken, realEstateController.updateUnit)
 router.put('/units/:id/tenant', authenticateToken, tenantController.assignTenantToUnit)
 
 // Leases
