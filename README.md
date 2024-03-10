@@ -1,3 +1,3 @@
-Real Estate Portfolio Management Software built using Vite+React (frontend), Express.js, Prisma and PostgreSQL (backend). 
+Real Estate Management Software built using Vite+React (frontend), Express.js, Prisma and PostgreSQL (backend). 
 
-Features will include Real Estate Management, tenant management (notifications/messaging, review tenant applications, ... ), various Real estate analysis tools, maintenance report  handling (creation by tenants, review by realtor/landlord), also calendar to keep track of events such as maintenance deadline or contract dates.
+Features include management of properties, units, payments, leases, lease schedules, tenants, maintenance, event/calendar planning (e.g. maintenance schedules), and tenant communication.
