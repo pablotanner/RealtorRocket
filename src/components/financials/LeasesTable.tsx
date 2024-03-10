@@ -108,7 +108,7 @@ const columns: ColumnDef<Lease>[] = [
                 )
             }
         },
-        accessorFn: (row) => (row?.tenant?.firstName + row?.tenant?.lastName) || "",
+        accessorFn: (row) => (row?.tenant?.firstName + " " + row?.tenant?.lastName) || "",
         meta: {
             type: "string",
         },
