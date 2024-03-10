@@ -100,13 +100,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
         --off-black: #1e1e1e;
 
-        /*React Toastify*/
-        --toastify-color-success: #2ecc71;
-        --toastify-color-error: #e74c3c;
-        --toastify-color-info: #3498db;
-
-        --toastify-font-family: 'Roboto', sans-serif;
-
 
     }
 
@@ -134,13 +127,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
         --ring: 240 4.9% 83.9%;
 
         --off-black: #1e1e1e;
-
-        /*React Toastify*/
-        --toastify-color-success: #2ecc71;
-        --toastify-color-error: #e74c3c;
-        --toastify-color-info: #3498db;
-
-        --toastify-font-family: 'Roboto', sans-serif;
 
     }
 
