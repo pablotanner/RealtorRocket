@@ -155,7 +155,7 @@ const TenantTable = ({tenants}) => {
                         <div className="flex flex-col">
                             <p className="font-400 text-md ">
                                 {
-                                    activeLeases.length ? `${activeLeases.length} Active Leases` : "No Active Lease"
+                                    activeLeases.length ? `${activeLeases.length} Active Lease${activeLeases.length > 1 ? 's' : ''}` : "No Active Lease"
                                 }
                             </p>
                             <p className="font-300 text-gray-500 text-sm">
