@@ -111,7 +111,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
         --card-foreground: 0 0% 98%;
         --popover: 224 71.4% 5.1%;
         --popover-foreground: 0 0% 98%;
-        /*--primary: 221.2 83.2% 53.3%;*/
+        --primary: 221.2 83.2% 43.3%;
         /*--primary-foreground:0 0% 98%;*/
         /*--primary-accent:226 100% 8.7%;*/
         --secondary: 240 3.7% 15.9%;
