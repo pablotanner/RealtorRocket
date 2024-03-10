@@ -141,6 +141,8 @@ const EditSettings = () => {
                 </div>
             </div>
 
+            <div className="w-full h-[2px] bg-border my-4"/>
+
             <Form {...settingsForm}>
                 <form onSubmit={settingsForm.handleSubmit(onSubmit)} className="flex flex-col gap-y-3 w-[100%] ">
                     <FormField
