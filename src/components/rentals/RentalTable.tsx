@@ -10,7 +10,7 @@ import {
     DropdownMenuSeparator
 } from "../ui/dropdown-menu.tsx";
 import {Button} from "../ui/button.tsx";
-import {MoreHorizontal, Pencil} from "lucide-react";
+import {Building2, MoreHorizontal, Pencil} from "lucide-react";
 import {useNavigate} from "react-router-dom";
 import {dateParser, moneyParser} from "../../utils/formatters.js";
 import {Unit} from "../../utils/classes.ts";
@@ -45,12 +45,9 @@ const RentalTableDropdown = ({unit}) => {
 
                 <DropdownMenuItem
                     onClick={() => navigate(`/properties/${unit.realEstateObjectId}`)}
-                >View Property</DropdownMenuItem>
-                <DropdownMenuItem
-                    // Switch to tenant id
-                    onClick={() => navigate(`/rentals/${unit.id}`)}
                 >
-                    View Rental
+                    <Building2 className="h-4 w-4 mr-2" />
+                    View Property
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
