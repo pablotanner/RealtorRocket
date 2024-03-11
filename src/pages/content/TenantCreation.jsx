@@ -205,7 +205,8 @@ const TenantCreation = () => {
 
 
     useEffect(() => {
-        if (tenantForm.formState.isValid && tenantForm.getValues("unitId") !== ""){
+        //if (tenantForm.formState.isValid && tenantForm.getValues("unitId") !== ""){
+        if (tenantForm.formState.isValid){
             setTabStatus(3, "complete")
         }
         else{

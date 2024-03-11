@@ -78,7 +78,7 @@ export const tenantSchema = z.object({
         unitId: zodNumberInputPipe(z.string({errorMap: () => ({message: 'Please select a unit'})}).or(z.number())),
     })),
     leaseId: zodNumberInputPipe(z.string().or(z.null()).or(z.number())),
-    unitId: zodNumberInputPipe(z.string().or(z.null()).or(z.number())),
+    unitId: zodNumberInputPipe(z.string().or(z.null()).or(z.number()).or(z.null())),
 })
 
 export const userSchema = z.object({
