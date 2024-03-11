@@ -74,7 +74,6 @@ const AddPayment = ({...props}) => {
     const onSubmit = (data) => {
         const body = {...data};
         delete body.updatePaymentSchedule;
-
         if (selectedLease?.paymentSchedule?.length && data.status === "PAID" && data.updatePaymentSchedule) {
             const nextPayment = getNextScheduledPayment(selectedLease)
             body.leasePaymentSchedule = {

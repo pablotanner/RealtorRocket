@@ -1,12 +1,13 @@
 import * as React from "react"
 
 import {cn} from "../../utils.ts";
-import {DatePicker} from "./date-picker.tsx";
 import {useSelector} from "react-redux";
 import {CurrencySymbol} from "../../utils/magicNumbers.js";
 import {getLang} from "../../utils/formatters.js";
 import CurrencyInput  from "react-currency-input-field";
 import {PhoneInput} from "./phone-input.tsx";
+import {DateTimePicker} from "./date-time-picker.tsx";
+import {getLocalTimeZone} from "@internationalized/date";
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {}
@@ -20,14 +21,25 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       const locale = getLang();
 
 
-      if (type === "date" || type === "datetime-local") {
-          const {value, onChange,  ...rest} = props;
+      if (type === "date" || type === "datetime-local" ) {
+          const {onChange, value, ...rest} = props;
+          let date = null;
+
+          // if props.value is string, convert it to Date
+          if (value && typeof value === "string") {
+              date = new Date(value);
+              const timezoneOffsetMinutes = date.getTimezoneOffset();
+              date = new Date(date.getTime() + timezoneOffsetMinutes * 60 * 1000);
+          } else {
+              date = value;
+          }
+
+          const granularity = type === "date" ? "day" : "minute";
 
           return (
               <>
                   {/* @ts-expect-error silence */}
-                  <DatePicker value={value} onChange={onChange} allowTime={type === "datetime-local"} {...rest}  />
-
+                  <DateTimePicker jsDate={date} granularity={granularity} onJsDateChange={onChange}  />
               </>
           )
       }

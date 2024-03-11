@@ -47,7 +47,6 @@ const PaymentActions = ({ payment }) => {
         resolver: zodResolver(paymentSchema),
         defaultValues:{
             ...payment,
-            date: new Date(payment?.date)
         }
     })
 
@@ -99,7 +98,7 @@ const PaymentActions = ({ payment }) => {
                                         <FormItem  >
                                             <FormLabel>Date</FormLabel>
                                             <FormControl>
-                                                <Input type="date" {...field} />
+                                                <Input type="datetime-local" {...field} />
                                             </FormControl>
                                             <FormMessage/>
                                         </FormItem>

@@ -1,14 +1,17 @@
 import EditSettings from "../../components/profile/EditSettings.js";
 import EditProfile from "../../components/profile/EditProfile.js";
 import {Tabs, TabsContent, TabsItem, TabsList} from "../../components/ui/tabs-new.tsx";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {CircleUser, Settings, Settings2} from "lucide-react";
+import {useState} from "react";
 
 
 const Account = (props) => {
     const navigate = useNavigate();
     const user = {...props?.data?.data}
-    const selectedTab = location.pathname === '/account' ? 'account' : 'settings';
+    const location = useLocation();
+
+    const [selectedTab, setSelectedTab] = useState( location.pathname === '/account' ? 'account' : 'settings');
 
 
     const tabs = [
@@ -36,7 +39,7 @@ const Account = (props) => {
 
     return (
         <div>
-            <Tabs value={selectedTab} defaultValue={selectedTab}>
+            <Tabs value={selectedTab} defaultValue={location.pathname === '/account' ? 'account' : 'settings'} >
                 <TabsList>
                     {tabs.map((tab, index) => (
                         <TabsItem

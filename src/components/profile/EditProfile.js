@@ -35,7 +35,7 @@ const EditProfile = ({user}) => {
             website: user.website,
             bio: user.bio,
             phone: user.phone,
-            dob: user.dob ? new Date(user.dob) : null,
+            dob: user.dob,
             company: user.company,
             street: user.street,
             city: user.city,
@@ -134,7 +134,7 @@ const EditProfile = ({user}) => {
                             render={({field}) => (
                                 <FormItem className="w-full">
                                     <FormLabel>Date Of Birth</FormLabel>
-                                    <FormControl onChange={() => profileForm.trigger("dob")}>
+                                    <FormControl>
                                         <Input type="date"  {...field} />
                                     </FormControl>
                                     <FormMessage/>
