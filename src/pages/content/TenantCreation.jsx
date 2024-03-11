@@ -198,7 +198,8 @@ const TenantCreation = () => {
     const formValues = useWatch({
             control: tenantForm.control,
             name: ["firstName", "lastName", "email", "phone", "occupation", "civilStatus", "income", "leases[0].startDate", "leases[0].endDate", "leases[0].rentalPrice", "leases[0].paymentFrequency", "leases[0].status"]
-        }
+
+    }
     )
 
 
@@ -239,6 +240,26 @@ const TenantCreation = () => {
         }
 
     }, [formValues, tenantForm.formState.isValid, tenantForm.getValues("unitId"), leaseOption])
+
+
+    const leaseStartDate = useWatch({
+        control: tenantForm.control,
+        name: "leases[0].startDate"
+    })
+
+    const leaseEndDate = useWatch({
+        control: tenantForm.control,
+        name: "leases[0].endDate"
+    })
+
+
+    useEffect(() => {
+        tenantForm.trigger(["leases[0].startDate"])
+    }, [leaseStartDate]);
+
+    useEffect(() => {
+        tenantForm.trigger(["leases[0].endDate"])
+    }, [leaseEndDate]);
 
 
     const onSubmit = (data) => {
@@ -622,7 +643,7 @@ const TenantCreation = () => {
                                                     render={({field}) => (
                                                         <FormItem  >
                                                             <FormLabel>Start Date *</FormLabel>
-                                                            <FormControl onChange={() => tenantForm.trigger("leases[0].startDate")}>
+                                                            <FormControl>
                                                                 {
                                                                     leaseOption === "new" ? (
                                                                         <Input type="date"  {...field} />
@@ -642,7 +663,7 @@ const TenantCreation = () => {
                                                     render={({field}) => (
                                                         <FormItem  >
                                                             <FormLabel>End Date *</FormLabel>
-                                                            <FormControl onChange={() => tenantForm.trigger("leases[0].endDate")}>
+                                                            <FormControl>
                                                                 {
                                                                     leaseOption === "new" ? (
                                                                         <Input type="date"  {...field} />

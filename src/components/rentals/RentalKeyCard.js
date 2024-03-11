@@ -12,7 +12,7 @@ const RentalKeyCard = ({unit, isSingleUnit}) => {
                     <Label className="text-sm font-600 text-foreground">
                         Unit Identifier
                     </Label>
-                    <h3 className="text-2xl text-gray-400">
+                    <h3 className="text-2xl text-muted-foreground">
                         {unit?.unitIdentifier || "N/A"}
                     </h3>
                 </div>}

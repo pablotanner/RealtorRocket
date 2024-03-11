@@ -123,7 +123,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
         --border: 240 3.7% 15.9%;
         --input: 240 3.7% 15.9%;
         --ring: 240 4.9% 83.9%;
-        
+
         scrollbar-color:  hsl(240 3.7% 35.9%) hsl(224 71.4% 5.1%);
 
     }
