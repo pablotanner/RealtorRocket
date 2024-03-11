@@ -19,22 +19,33 @@ import {
     DropdownMenuTrigger
 } from "../ui/dropdown-menu.tsx";
 import EditLease from "../leases/EditLease";
+import DeleteDialog from "../general/DeleteDialog";
 
 
 const LeaseActions = ({lease}) => {
-    const [modalOpen, setModalOpen] = useState(false)
-
+    const [editModalOpen, setEditModalOpen] = useState(false)
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false)
     const [deleteLease] = useDeleteLeaseMutation();
 
     return (
         <DropdownMenu>
-            <EditLease lease={lease} open={modalOpen} setIsOpen={setModalOpen} />
+            <EditLease lease={lease} open={editModalOpen} setIsOpen={setEditModalOpen} />
+
+            <DeleteDialog
+                open={deleteModalOpen}
+                setOpen={setDeleteModalOpen}
+                title="Delete Lease"
+                content="Are you sure you want to delete this lease? This action cannot be undone."
+                onConfirm={() => deleteLease(lease?.id)}
+            />
+
+
             <DropdownMenuTrigger asChild className="cursor-pointer">
                 <MoreHorizontal className="h-5 w-5 ml-3"/>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
                 <DropdownMenuGroup>
-                    <DropdownMenuItem onClick={() => setModalOpen(true)}>
+                    <DropdownMenuItem onClick={() => setEditModalOpen(true)}>
                         <Pencil className="w-4 h-4 mr-2"/>
                         Edit
                     </DropdownMenuItem>
@@ -44,7 +55,7 @@ const LeaseActions = ({lease}) => {
 
                 <DropdownMenuGroup>
                     <DropdownMenuItem className="flex flex-row text-sm text-red-500"
-                                      onClick={() => deleteLease(lease?.id)}
+                                      onClick={() => setDeleteModalOpen(true)}
                     >
                         <Trash2 className="w-4 h-4 mr-2"/>
                         Delete Lease

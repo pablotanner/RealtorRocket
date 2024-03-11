@@ -10,9 +10,8 @@ import {PaymentScheduleStatusBadge, PaymentStatusBadge} from "../../utils/status
 import {PaymentScheduleStatus, PaymentStatus} from "../../utils/magicNumbers.js";
 import {useState} from "react";
 import {
-    useDeletePaymentMutation,
     useDeletePaymentScheduleMutation,
-    useUpdatePaymentMutation, useUpdatePaymentScheduleMutation
+    useUpdatePaymentScheduleMutation
 } from "../../services/api/financialsApi.js";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
@@ -30,9 +29,11 @@ import {Input} from "../ui/input.tsx";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../ui/select.tsx";
 import {Button} from "../ui/button.tsx";
 import Link from "../general/Link.tsx";
+import DeleteDialog from "../general/DeleteDialog";
 
 const PaymentScheduleActions = ({ paymentSchedule }) => {
-    const [modalOpen, setModalOpen] = useState(false)
+    const [editModalOpen, setEditModalOpen] = useState(false)
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false)
 
     const [updatePaymentSchedule, {isLoading: isUpdating}] = useUpdatePaymentScheduleMutation()
     const [deletePaymentSchedule] = useDeletePaymentScheduleMutation()
@@ -48,13 +49,13 @@ const PaymentScheduleActions = ({ paymentSchedule }) => {
     const handleSubmit = (data) => {
         updatePaymentSchedule({id: paymentSchedule?.id, body: data}).then((res) => {
             if (res.error) return
-            setModalOpen(false)
+            setEditModalOpen(false)
         })
     }
 
     return (
         <DropdownMenu>
-            <Dialog open={modalOpen} onOpenChange={() => setModalOpen(!modalOpen)} >
+            <Dialog open={editModalOpen} onOpenChange={() => setEditModalOpen(!editModalOpen)} >
                 <DialogContent>
                     <DialogHeader>
                         <DialogIcon>
@@ -130,7 +131,7 @@ const PaymentScheduleActions = ({ paymentSchedule }) => {
 
                             <div className="w-full flex flex-row gap-2 justify-between mt-2">
                                 <Button variant="outline" type="reset" onClick={() => {
-                                    setModalOpen(false)
+                                    setEditModalOpen(false)
                                     paymentScheduleForm.reset()
                                 }}
                                         disabled={isUpdating} className="w-full">
@@ -145,12 +146,19 @@ const PaymentScheduleActions = ({ paymentSchedule }) => {
                     </Form>
                 </DialogContent>
             </Dialog>
+            <DeleteDialog
+                open={deleteModalOpen}
+                setOpen={setDeleteModalOpen}
+                title="Delete Planned Payment"
+                content="Are you sure you want to delete this planned payment? This action cannot be undone."
+                onConfirm={() => deletePaymentSchedule(paymentSchedule?.id)}
+            />
             <DropdownMenuTrigger asChild className="cursor-pointer">
                 <MoreHorizontal className="h-5 w-5 ml-3"/>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-[150px]">
                 <DropdownMenuGroup>
-                    <DropdownMenuItem className="flex flex-row text-sm gap-2" onClick={() => setModalOpen(true)}>
+                    <DropdownMenuItem className="flex flex-row text-sm gap-2" onClick={() => setEditModalOpen(true)}>
                         <Pencil className="w-4 h-4"/>
                         Edit
                     </DropdownMenuItem>
@@ -160,7 +168,7 @@ const PaymentScheduleActions = ({ paymentSchedule }) => {
 
                 <DropdownMenuGroup>
                     <DropdownMenuItem className="flex flex-row text-sm gap-2 text-red-500"
-                                      onClick={() => deletePaymentSchedule(paymentSchedule?.id)}
+                                      onClick={() => setDeleteModalOpen(true)}
                     >
                         <Trash2 className="w-4 h-4"/>
                         Delete

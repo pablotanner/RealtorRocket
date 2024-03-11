@@ -35,8 +35,7 @@ const RentalTableDropdown = ({unit}) => {
                     <MoreHorizontal className="h-4 w-4" />
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuContent>
                 <DropdownMenuItem onClick={() => setModalOpen(true)}>
                     <Pencil className="h-4 w-4 mr-2" />
                     Edit

@@ -17,10 +17,13 @@ import {useDeletePropertyMutation} from "../../services/api/propertyApi.js";
 
 import {Image} from "../ui/image.tsx"
 import {cn} from "../../utils.ts";
+import {useState} from "react";
+import DeleteDialog from "../general/DeleteDialog.js";
 
 const DetailedPropertyTable = ({ properties }) => {
     const navigate = useNavigate()
 
+    const [showConfirmation, setShowConfirmation] = useState(false)
 
     const [deleteProperty, {isLoading: isDeletingProperty}] = useDeletePropertyMutation()
 
@@ -131,7 +134,8 @@ const DetailedPropertyTable = ({ properties }) => {
 
                     <DropdownMenuGroup>
                         <DropdownMenuItem className="flex flex-row text-md gap-2 text-red-500"
-                                          onClick={() => deleteProperty(property?.id)}
+                                          //onClick={() => deleteProperty(property?.id)}
+                                            onClick={() => setShowConfirmation(true)}
                         >
                             <Trash2 className="w-4 h-4"/>
                             Delete Property
@@ -214,6 +218,10 @@ const DetailedPropertyTable = ({ properties }) => {
 
                 <div className="self-start sticky flex items-center h-full">
                     <OptionsMenu property={property}/>
+
+                    <DeleteDialog open={showConfirmation} setOpen={() => setShowConfirmation(!showConfirmation)} onConfirm={() => deleteProperty(property?.id)} title="Delete Property" content="Are you sure that you want to delete this property?"/>
+
+
                 </div>
 
             </div>
@@ -238,6 +246,7 @@ const DetailedPropertyTable = ({ properties }) => {
             {properties?.map((property, index) => {
                 return <PropertyRow key={index} property={property} />
             })}
+
         </div>
     )
 

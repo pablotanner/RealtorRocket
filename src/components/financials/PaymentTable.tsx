@@ -34,11 +34,13 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../
 import {Button} from "../ui/button.tsx";
 import Link from "../general/Link.tsx";
 import {Textarea} from "../ui/textarea.tsx";
+import DeleteDialog from "../general/DeleteDialog";
 
 
 
 const PaymentActions = ({ payment }) => {
-    const [modalOpen, setModalOpen] = useState(false)
+    const [editModalOpen, setEditModalOpen] = useState(false)
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false)
 
     const [updatePayment, {isLoading: isUpdating}] = useUpdatePaymentMutation()
     const [deletePayment] = useDeletePaymentMutation()
@@ -53,13 +55,13 @@ const PaymentActions = ({ payment }) => {
     const handleSubmit = (data) => {
         updatePayment({id: payment?.id, body: data}).then((res) => {
             if (res.error) return
-            setModalOpen(false)
+            setEditModalOpen(false)
         })
     }
 
     return (
         <DropdownMenu>
-            <Dialog open={modalOpen} onOpenChange={() => setModalOpen(!modalOpen)} >
+            <Dialog open={editModalOpen} onOpenChange={() => setEditModalOpen(!editModalOpen)} >
                 <DialogContent>
                     <DialogHeader>
                         <DialogIcon>
@@ -164,7 +166,7 @@ const PaymentActions = ({ payment }) => {
                             />
                             <div className="w-full flex flex-row gap-2 justify-between mt-2">
                                 <Button variant="outline" type="reset" onClick={() => {
-                                    setModalOpen(false)
+                                    setEditModalOpen(false)
                                     paymentForm.reset()
                                 }}
                                         disabled={isUpdating} className="w-full">
@@ -179,12 +181,21 @@ const PaymentActions = ({ payment }) => {
                     </Form>
                 </DialogContent>
             </Dialog>
+
+            <DeleteDialog
+                open={deleteModalOpen}
+                setOpen={setDeleteModalOpen}
+                title="Delete Payment"
+                content="Are you sure you want to delete this payment? This action cannot be undone."
+                onConfirm={() => deletePayment(payment?.id)}
+            />
+
             <DropdownMenuTrigger asChild className="cursor-pointer">
                 <MoreHorizontal className="h-5 w-5 ml-3"/>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-[150px]">
                 <DropdownMenuGroup>
-                    <DropdownMenuItem className="flex flex-row text-sm gap-2" onClick={() => setModalOpen(true)}>
+                    <DropdownMenuItem className="flex flex-row text-sm gap-2" onClick={() => setEditModalOpen(true)}>
                         <Pencil className="w-4 h-4"/>
                         Edit
                     </DropdownMenuItem>
@@ -194,7 +205,7 @@ const PaymentActions = ({ payment }) => {
 
                 <DropdownMenuGroup>
                     <DropdownMenuItem className="flex flex-row text-sm gap-2 text-red-500"
-                                      onClick={() => deletePayment(payment?.id)}
+                                      onClick={() => setDeleteModalOpen(true)}
                     >
                         <Trash2 className="w-4 h-4"/>
                         Delete Payment

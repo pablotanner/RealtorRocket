@@ -21,6 +21,8 @@ import {Badge} from "../ui/badge.tsx";
 import {useDeleteTenantMutation} from "../../services/api/tenantApi.js";
 import {isAfter, isBefore} from "date-fns";
 import Link from "../general/Link.tsx";
+import DeleteDialog from "../general/DeleteDialog";
+import {useState} from "react";
 
 
 const TenantTable = ({tenants}) => {
@@ -35,11 +37,23 @@ const TenantTable = ({tenants}) => {
     }
 
     const TenantOptions = ({tenant}) => {
+        const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+
+
         return (
             <DropdownMenu>
                 <DropdownMenuTrigger asChild className="cursor-pointer">
                     <MoreHorizontal className="h-5 w-5 ml-3"/>
                 </DropdownMenuTrigger>
+
+                <DeleteDialog
+                    open={deleteModalOpen}
+                    setOpen={setDeleteModalOpen}
+                    title="Delete Tenant"
+                    content="Are you sure you want to delete this tenant? This action cannot be undone."
+                    onConfirm={() => deleteTenant(tenant?.id)}
+                />
+
                 <DropdownMenuContent className="w-[150px]">
                     <DropdownMenuGroup>
                         <DropdownMenuItem className="flex flex-row text-sm gap-2" onClick={() => navigate(`/tenants/${tenant?.id}`)}>
@@ -52,7 +66,7 @@ const TenantTable = ({tenants}) => {
 
                     <DropdownMenuGroup>
                         <DropdownMenuItem className="flex flex-row text-sm gap-2 text-red-500"
-                                          onClick={() => deleteTenant(tenant?.id)}
+                                          onClick={() => setDeleteModalOpen(true)}
                         >
                             <Trash2 className="w-4 h-4"/>
                             Delete Tenant
