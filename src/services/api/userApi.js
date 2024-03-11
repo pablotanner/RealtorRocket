@@ -29,6 +29,10 @@ export const userApi = authApi.injectEndpoints({
             }),
             // API returns back the updated user, so we can use that to update the cache
             async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                toast({
+                    title: "Updating Profile...",
+                    variant: "loading",
+                })
                 queryFulfilled
                     .then((data) => {
                         dispatch(setUser(data?.data?.data));

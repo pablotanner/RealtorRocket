@@ -23,8 +23,6 @@ import DeleteDialog from "../general/DeleteDialog.js";
 const DetailedPropertyTable = ({ properties }) => {
     const navigate = useNavigate()
 
-    const [showConfirmation, setShowConfirmation] = useState(false)
-
     const [deleteProperty, {isLoading: isDeletingProperty}] = useDeletePropertyMutation()
 
 
@@ -87,11 +85,24 @@ const DetailedPropertyTable = ({ properties }) => {
     }
 
     const OptionsMenu = ({property}) => {
+        const [showConfirmation, setShowConfirmation] = useState(false)
+
         return (
             <DropdownMenu>
                 <DropdownMenuTrigger asChild className="cursor-pointer">
                     <MoreHorizontal className="h-6 w-6 text-foreground"/>
                 </DropdownMenuTrigger>
+
+
+
+                <DeleteDialog
+                    open={showConfirmation}
+                    setOpen={() => setShowConfirmation(!showConfirmation)}
+                    onConfirm={() => deleteProperty(property?.id)} title={"Delete Property"}
+                    content={"Are you sure that you want to delete the following property? " + property?.title}
+                />
+
+
                 <DropdownMenuContent className="w-[200px]">
                     <DropdownMenuGroup>
                         <DropdownMenuItem className="flex flex-row text-md gap-2" onClick={() => navigate(`/properties/${property?.id}`)}>
@@ -219,7 +230,6 @@ const DetailedPropertyTable = ({ properties }) => {
                 <div className="self-start sticky flex items-center h-full">
                     <OptionsMenu property={property}/>
 
-                    <DeleteDialog open={showConfirmation} setOpen={() => setShowConfirmation(!showConfirmation)} onConfirm={() => deleteProperty(property?.id)} title="Delete Property" content="Are you sure that you want to delete this property?"/>
 
 
                 </div>
@@ -233,7 +243,7 @@ const DetailedPropertyTable = ({ properties }) => {
         return (
             <div className="flex flex-col gap-1 ">
                 {/*<Header/>*/}
-                <p className="text-muted font-400 w-full ">
+                <p className="text-muted-foreground font-400 w-full ">
                     No properties found.
                 </p>
             </div>

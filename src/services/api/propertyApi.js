@@ -21,6 +21,10 @@ export const propertyApi = authApi.injectEndpoints({
             }),
             // API returns back the updated user, so we can use that to update the cache
             async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                toast({
+                    title: "Creating Property...",
+                    variant: "loading",
+                })
                 queryFulfilled
                     .then((data) => {
                         const unitShortCodes = data.data?.data?.units?.map(unit => unit.unitIdentifier);
@@ -55,6 +59,10 @@ export const propertyApi = authApi.injectEndpoints({
             }),
             // API returns back the updated user, so we can use that to update the cache
             async onQueryStarted(arg, { queryFulfilled }) {
+                toast({
+                    title: "Deleting Property...",
+                    variant: "loading",
+                })
                 queryFulfilled
                     .then(() => {
                         toast({

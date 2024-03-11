@@ -32,9 +32,12 @@ export const unitApi = authApi.injectEndpoints({
                 }
             },
             async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                toast({
+                    title: "Updating Unit...",
+                    variant: "loading",
+                })
                 queryFulfilled
                     .then(() => {
-
                         toast({
                             title: "Success",
                             description: "Unit updated successfully",
@@ -60,12 +63,15 @@ export const unitApi = authApi.injectEndpoints({
                 }
             }),
             async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                toast({
+                    title: "Updating Unit...",
+                    variant: "loading",
+                })
                 queryFulfilled
                     .then(() => {
-
                         toast({
                             title: "Success",
-                            description: "Tenant assigned successfully",
+                            description: "Unit updated successfully",
                             variant: "success",
                         });
                     })

@@ -34,18 +34,22 @@ export const financialsApi = authApi.injectEndpoints({
                 body
             }),
             async onQueryStarted(arg, { queryFulfilled }) {
+                toast({
+                    title: "Creating Payment...",
+                    variant: "loading",
+                })
                 queryFulfilled
                     .then(() => {
                         toast({
                             title: "Success",
-                            description: "Payment created successfully",
+                            description: "Payment created successfully.",
                             variant: "success",
                         });
                     })
                     .catch(() => {
                         toast({
                             title: "Uh oh! Something went wrong.",
-                            description: "There was a problem with your request, please try again.",
+                            description: "There was a problem with your request.",
                             variant: "error",
                         });
                     })
@@ -59,11 +63,15 @@ export const financialsApi = authApi.injectEndpoints({
                 body
             }),
             async onQueryStarted(arg, { queryFulfilled }) {
+                toast({
+                    title: "Updating Payment...",
+                    variant: "loading",
+                })
                 queryFulfilled
                     .then(() => {
                         toast({
                             title: "Success",
-                            description: "Payment updated successfully",
+                            description: "Payment updated successfully.",
                             variant: "success",
                         });
                     })
@@ -83,11 +91,15 @@ export const financialsApi = authApi.injectEndpoints({
                 method: 'DELETE',
             }),
             async onQueryStarted(arg, { queryFulfilled }) {
+                toast({
+                    title: "Deleting Payment...",
+                    variant: "loading",
+                })
                 queryFulfilled
                     .then(() => {
                         toast({
                             title: "Success",
-                            description: "Payment deleted successfully",
+                            description: "Payment deleted successfully.",
                             variant: "success",
                         });
                     })
@@ -108,11 +120,15 @@ export const financialsApi = authApi.injectEndpoints({
                 body
             }),
             async onQueryStarted(arg, { queryFulfilled }) {
+                toast({
+                    title: "Updating Payment Schedule...",
+                    variant: "loading",
+                })
                 queryFulfilled
                     .then(() => {
                         toast({
                             title: "Success",
-                            description: "Planned Payment updated successfully",
+                            description: "Payment Schedule updated successfully.",
                             variant: "success",
                         });
                     })
@@ -132,11 +148,15 @@ export const financialsApi = authApi.injectEndpoints({
                 method: 'DELETE',
             }),
             async onQueryStarted(arg, { queryFulfilled }) {
+                toast({
+                    title: "Deleting Planned Payment...",
+                    variant: "loading",
+                })
                 queryFulfilled
                     .then(() => {
                         toast({
                             title: "Success",
-                            description: "Planned Payment deleted successfully",
+                            description: "Planned Payment deleted successfully.",
                             variant: "success",
                         });
                     })

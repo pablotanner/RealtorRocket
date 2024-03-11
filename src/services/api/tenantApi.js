@@ -33,6 +33,10 @@ export const tenantApi = authApi.injectEndpoints({
                 }
             },
             async onQueryStarted(arg, { queryFulfilled }) {
+                toast({
+                    title: "Creating Tenant...",
+                    variant: "loading",
+                })
                 queryFulfilled
                     .then(() => {
                         toast({
@@ -58,6 +62,10 @@ export const tenantApi = authApi.injectEndpoints({
                 body: bodyData,
             }),
             async onQueryStarted(arg, { queryFulfilled }) {
+                toast({
+                    title: "Updating Tenant...",
+                    variant: "loading",
+                })
                 queryFulfilled
                     .then(() => {
                         toast({
@@ -82,6 +90,10 @@ export const tenantApi = authApi.injectEndpoints({
                 method: 'DELETE',
             }),
             async onQueryStarted(arg, { queryFulfilled }) {
+                toast({
+                    title: "Deleting Tenant...",
+                    variant: "loading",
+                })
                 queryFulfilled
                     .then(() => {
                         toast({

@@ -45,6 +45,10 @@ export const leaseApi = authApi.injectEndpoints({
             invalidatesTags: ['Leases', 'Units', 'Tenants'],
             // API returns back the updated user, so we can use that to update the cache
             async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                toast({
+                    title: "Creating Lease...",
+                    variant: "loading",
+                })
                 queryFulfilled
                     .then(() => {
                         toast({
@@ -74,12 +78,15 @@ export const leaseApi = authApi.injectEndpoints({
                 }
             },
             async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                toast({
+                    title: "Updating Lease...",
+                    variant: "loading",
+                })
                 queryFulfilled
                     .then(() => {
-
                         toast({
                             title: "Success",
-                            description: "Lease updated successfully",
+                            description: "Lease updated successfully.",
                             variant: "success",
                         });
                     })
@@ -99,12 +106,15 @@ export const leaseApi = authApi.injectEndpoints({
                 method: 'DELETE',
             }),
             async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                toast({
+                    title: "Deleting Lease...",
+                    variant: "loading",
+                })
                 queryFulfilled
                     .then(() => {
-
                         toast({
                             title: "Success",
-                            description: "Lease deleted successfully",
+                            description: "Lease deleted successfully.",
                             variant: "success",
                         });
                     })

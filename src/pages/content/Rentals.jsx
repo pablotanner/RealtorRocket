@@ -22,19 +22,7 @@ const Rentals = (props) => {
         }
     })
 
-
-    if (!units || units.length === 0)  return (
-        <div className="flex flex-col gap-4">
-            You don't have any rental properties yet. You can create one by adding a new property using the button below.
-            <Button variant="gradient" className="w-fit"
-                    onClick={() => navigate("/properties/create")}
-            >
-                <Plus size={24} className="mr-2"/>
-                Create Property
-            </Button>
-        </div>
-    )
-
+    
     return (
         <>
             <h1>

@@ -22,11 +22,15 @@ export const maintenanceApi = authApi.injectEndpoints({
             }),
             invalidatesTags: ['Maintenance'],
             async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                toast({
+                    title: "Creating Maintenance Report...",
+                    variant: "loading",
+                })
                 queryFulfilled
                     .then(() => {
                         toast({
                             title: "Success",
-                            description: "Maintenance report created successfully.",
+                            description: "Maintenance Report created successfully.",
                             variant: "success",
                         });
                     })
