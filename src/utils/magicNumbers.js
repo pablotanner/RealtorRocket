@@ -81,7 +81,7 @@ export const PaymentFrequency = {
     "MONTHLY": "Monthly",
     "WEEKLY": "Weekly",
     "QUARTERLY": "Quarterly",
-    "YEARLY": "Yearly",
+    "ANNUALLY": "Annually",
 }
 
 export const LeaseStatus = {

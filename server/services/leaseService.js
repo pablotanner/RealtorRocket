@@ -17,7 +17,7 @@ function calculatePaymentDates(startDate, endDate, paymentFrequency) {
             else if (paymentFrequency === "MONTHLY") {
                 currentDate.setMonth(currentDate.getMonth() + 1);
             }
-            else if (paymentFrequency === "YEARLY") {
+            else if (paymentFrequency === "ANNUALLY") {
                 currentDate.setFullYear(currentDate.getFullYear() + 1);
             }
             else if (paymentFrequency === "QUARTERLY") {
