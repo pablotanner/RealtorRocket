@@ -124,3 +124,44 @@ export async function deleteLease(req, res) {
         res.status(500).json({ message: "Error deleting lease" });
     }
 }
+
+export async function updateManyLeases(req, res) {
+    try {
+        const updatedLeases = await prisma.$transaction(req.body.map(lease => {
+            return prisma.lease.update({
+                where: {
+                    id: lease.id,
+                    realtor: {
+                        userId: req.user.userId
+                    }
+                },
+                data: lease
+            })
+        }))
+
+        res.status(200).json({data: updatedLeases });
+    }
+    catch (error) {
+        res.status(500).json({ message: "Error updating leases" });
+    }
+}
+
+export async function deleteManyLeases(req, res) {
+    try {
+        const deletedLeases = await prisma.$transaction(req.body.map(lease => {
+            return prisma.lease.delete({
+                where: {
+                    id: lease.id,
+                    realtor: {
+                        userId: req.user.userId
+                    }
+                }
+            })
+        }))
+
+        res.status(200).json({data: deletedLeases });
+    }
+    catch (error) {
+        res.status(500).json({ message: "Error deleting leases" });
+    }
+}

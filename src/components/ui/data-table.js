@@ -16,7 +16,7 @@ import {
     DropdownMenuTrigger
 } from "./dropdown-menu.tsx";
 import {Button} from "./button.tsx";
-import {AlertCircle, ArrowLeft, ArrowRight, ListFilter, MoveDown, MoveUp, X} from "lucide-react";
+import {AlertCircle, ArrowLeft, ArrowRight, ListFilter, MoveDown, MoveUp, Pencil, X} from "lucide-react";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "./tabs.tsx";
 import {Checkbox} from "./checkbox.tsx";
 import {isAfter, isBefore, isSameDay} from "date-fns";
@@ -226,7 +226,7 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
 
     const [page, setPage] = useState(1)
 
-    const data = useMemo(() => tableData, [tableData]);
+
     const columns = useMemo(() => {
         return tableColumns?.map(column => {
             switch (column.meta?.type) {
@@ -297,6 +297,16 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
     const [columnVisibility, setColumnVisibility] = useState({})
     const [rowSelection, setRowSelection] = useState({})
 
+    const data = useMemo(() => {
+        return tableData;
+
+    }, [tableData]);
+
+    useEffect(() => {
+        // if data changes, reset selected rows (so no weird behaviour if a row is deleted)
+        setRowSelection({})
+    }, [tableData?.length])
+
 
     const table = useReactTable({
         data,
@@ -316,6 +326,18 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
             rowSelection,
         },
     })
+
+
+    // If user selects a row, call the onRowSelectionChange prop
+    useEffect(() => {
+        if (props.onRowSelectionChange){
+            const actualRows = table.getSelectedRowModel().rows.map((row) => row.original)
+            props.onRowSelectionChange(actualRows)
+        }
+    }, [rowSelection])
+
+
+
 
     // Filter options for each column (depends on data type; string/number/date)
     const filterOptions = useMemo(() => {

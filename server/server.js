@@ -88,6 +88,11 @@ router.delete('/payment-schedules/:id', authenticateToken, paymentController.del
 router.get('/maintenance', authenticateToken, maintenanceController.getMaintenanceReports)
 router.post('/maintenance', authenticateToken, maintenanceController.createMaintenanceReport)
 
+// Bulk
+router.patch('/bulk/leases', authenticateToken, leaseController.updateManyLeases)
+router.delete('/bulk/leases', authenticateToken, leaseController.deleteManyLeases)
+
+
 //Jobs
 //      Schedule the job to run daily at 00:00 (midnight)
 cron.schedule('0 0 * * *', checkOverduePayments);

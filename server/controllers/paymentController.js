@@ -272,3 +272,26 @@ export async function deletePaymentSchedule(req, res) {
         res.status(500).json({ message: "Error deleting payment schedule" });
     }
 }
+
+
+// TODO: PaymentSchedules don't have creator and dont necessarily have lease, so currently impossible to connect to user
+export async function updateManyPaymentSchedules(req, res) {
+    try {
+        const updatedPaymentSchedules = prisma.$transaction(req.body.map(paymentSchedule => {
+        return prisma.leasePaymentSchedule.update({
+                where: {
+                    id: paymentSchedule.id
+                },
+                data: {
+                    ...paymentSchedule
+                }
+            });
+        }))
+
+        res.status(200).json({data: updatedPaymentSchedules });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error updating payment schedules" });
+    }
+}

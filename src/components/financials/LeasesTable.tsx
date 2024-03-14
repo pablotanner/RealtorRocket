@@ -15,11 +15,13 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuGroup,
-    DropdownMenuItem, DropdownMenuSeparator,
+    DropdownMenuItem, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger,
     DropdownMenuTrigger
 } from "../ui/dropdown-menu.tsx";
 import EditLease from "../leases/EditLease";
 import DeleteDialog from "../general/DeleteDialog";
+import {useDeleteLeasesMutation, useUpdateLeasesMutation} from "../../services/api/bulkApi";
+import {Button} from "../ui/button.tsx";
 
 
 const LeaseActions = ({lease}) => {
@@ -274,6 +276,83 @@ const columns: ColumnDef<Lease>[] = [
 ]
 
 const LeasesTable = ({ leases }) => {
+
+    const [selectedRows, setSelectedRows] = useState([])
+
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+
+    const [updateLeases] = useUpdateLeasesMutation();
+    const [deleteLeases] = useDeleteLeasesMutation();
+
+    const LeaseBulkActions = () => {
+        if (selectedRows.length === 0) {
+            return null
+        }
+
+
+        const handleDeleteLeases = () => {
+            deleteLeases(selectedRows)
+        }
+
+        const handleStatusChange = (status: string) => {
+            const body = selectedRows.map((row) => {
+                return {
+                    id: row.id,
+                    status: status
+                }
+            })
+
+            updateLeases(body);
+        }
+
+        return (
+            <DropdownMenu>
+                <DeleteDialog
+                    open={deleteModalOpen}
+                    setOpen={setDeleteModalOpen}
+                    title="Delete Leases"
+                    content={`You are about to delete ${selectedRows?.length} lease(s). Are you sure?`}
+                    onConfirm={handleDeleteLeases}
+                />
+
+                <DropdownMenuTrigger>
+                    <Button variant="outline">
+                        <Pencil className="w-4 h-4 mr-1"/> {selectedRows?.length} Selected
+                    </Button>
+                </DropdownMenuTrigger>
+
+                <DropdownMenuContent>
+                    <DropdownMenuGroup>
+                        <DropdownMenuSub>
+                            <DropdownMenuSubTrigger>
+                                Set Status
+                            </DropdownMenuSubTrigger>
+                            <DropdownMenuSubContent>
+                                {Object.keys(LeaseStatus).map((status) => (
+                                    <DropdownMenuItem key={status} onClick={() => handleStatusChange(status)}>
+                                        {LeaseStatus[status]}
+                                    </DropdownMenuItem>
+                                ))}
+                            </DropdownMenuSubContent>
+                        </DropdownMenuSub>
+                    </DropdownMenuGroup>
+
+                    <DropdownMenuSeparator/>
+
+                    <DropdownMenuGroup>
+                        <DropdownMenuItem className="flex flex-row text-sm text-red-500"
+                                          onClick={() => setDeleteModalOpen(true)}
+                        >
+                            <Trash2 className="w-4 h-4 mr-2"/>
+                            Delete Lease
+                        </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                </DropdownMenuContent>
+            </DropdownMenu>
+        )
+
+    }
+
     return (
         <div className={"border-2 border-border p-4 rounded-lg "}>
 
@@ -284,9 +363,13 @@ const LeasesTable = ({ leases }) => {
                 subtitle="These are all your leases."
                 icon={<Scroll className={"w-5 h-5"} />}
                 defaultSort={{id: "lease", desc: true}}
+                onRowSelectionChange={(selectedRows: Lease[]) => setSelectedRows(selectedRows)}
+            >
 
+                <LeaseBulkActions/>
 
-            />
+            </DataTable>
+
         </div>
 
     )
