@@ -10,10 +10,11 @@ import {
 import {dateParser, moneyParser} from "../../utils/formatters.js";
 import {useSelector} from "react-redux";
 import {selectLeaseById} from "../../services/slices/objectSlice.js";
-import {Coins, Calendar, CalendarClock} from "lucide-react";
+import {Coins, CalendarClock} from "lucide-react";
+import {cn} from "../../utils.ts";
 
 
-const ViewPayment = ({payment, ...props}) => {
+const ViewPayment = ({payment, children, ...props}) => {
 
     const userData = useSelector(state => state.authSlice.userInfo)
 
@@ -98,8 +99,8 @@ const ViewPayment = ({payment, ...props}) => {
 
     return (
         <Dialog>
-            <DialogTrigger>
-                {props.children}
+            <DialogTrigger className={cn(props.className)} {...props}>
+                {children}
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>

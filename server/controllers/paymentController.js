@@ -1,11 +1,10 @@
 import prisma from '../prisma.js';
 
-
-export async function createPayment(req, res) {
+async function createPaymentCore(data, user) {
     try {
-        const { leaseId, tenantId } = req.body;
-        const paymentData = req.body;
-        const newLeasePaymentSchedule = req.body.leasePaymentSchedule;
+        const { leaseId, tenantId } = data;
+        const paymentData = data;
+        const newLeasePaymentSchedule = paymentData.leasePaymentSchedule;
         delete paymentData.leasePaymentSchedule;
         delete paymentData.leaseId;
         delete paymentData.tenantId;
@@ -22,14 +21,14 @@ export async function createPayment(req, res) {
 
         let approvalDate;
 
-        if (lease.realtor.userId === req.user.userId) {
+        if (lease.realtor.userId === user.userId) {
             approvalDate = new Date();
         }
 
         const newPayment = await prisma.rentPayment.create({
             data: {
                 ...paymentData,
-                submittedBy: req.user.userId,
+                submittedBy: user.userId,
                 submissionDate: new Date(),
                 approvalDate: approvalDate,
                 lease: {
@@ -59,9 +58,8 @@ export async function createPayment(req, res) {
                 }
             });
 
-            if (paymentSchedule.lease.realtor.userId !== req.user.userId) {
-                res.status(403).json({ message: "Unauthorized to update payment" });
-                return;
+            if (paymentSchedule.lease.realtor.userId !== user.userId) {
+                return { status: 403, message: "Unauthorized to update payment" };
             }
 
             const updatedSchedule = await prisma.leasePaymentSchedule.update({
@@ -75,19 +73,29 @@ export async function createPayment(req, res) {
             });
 
             if (updatedSchedule && newPayment) {
-                res.status(200).json({data: newPayment });
-                return;
+                return { status: 200, data: newPayment };
             }
             else {
-                res.status(500).json({ message: "Error creating payment" });
-                return;
+                return { status: 500, message: "Error creating payment" };
             }
         }
 
-        res.status(200).json({data: newPayment });
+        return { status: 200, data: newPayment };
     }
     catch (error) {
         console.log(error)
+        return { status: 500, message: "Error creating payment" };
+    }
+
+}
+
+export async function createPayment(req, res) {
+    try {
+        const newPayment = await createPaymentCore(req.body, req.user);
+        res.status(newPayment.status).json(newPayment);
+    }
+    catch (error) {
+        console.log(error);
         res.status(500).json({ message: "Error creating payment" });
     }
 }
@@ -277,7 +285,7 @@ export async function deletePaymentSchedule(req, res) {
 // TODO: PaymentSchedules don't have creator and dont necessarily have lease, so currently impossible to connect to user
 export async function updateManyPaymentSchedules(req, res) {
     try {
-        const updatedPaymentSchedules = prisma.$transaction(req.body.map(paymentSchedule => {
+        const updatedPaymentSchedules = await prisma.$transaction(req.body.map(paymentSchedule => {
         return prisma.leasePaymentSchedule.update({
                 where: {
                     id: paymentSchedule.id
@@ -293,5 +301,48 @@ export async function updateManyPaymentSchedules(req, res) {
     catch (error) {
         console.log(error);
         res.status(500).json({ message: "Error updating payment schedules" });
+    }
+}
+
+export async function deleteManyPaymentSchedules(req, res) {
+    try {
+        const deletedPaymentSchedules = await prisma.$transaction(req.body.map(paymentSchedule => {
+            return prisma.leasePaymentSchedule.delete({
+                where: {
+                    id: paymentSchedule.id
+                }
+            });
+        }))
+
+        res.status(200).json({ data: deletedPaymentSchedules });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error deleting payment schedules" });
+    }
+}
+
+
+
+
+export async function createManyPayments(req, res) {
+    let successCount = 0;
+    const newPayments =[]
+
+    try {
+
+        for (const payment of req.body) {
+            const newPayment = await createPaymentCore(payment, req.user);
+            if (newPayment.status === 200) {
+                successCount++;
+                newPayments.push(newPayment.data);
+            }
+        }
+
+        res.status(200).json({data: newPayments, message: `${successCount} Payments created successfully`});
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({ message: `${successCount} Payment(s) created successfully, ${req.body.length - successCount} failed.`, data: newPayments });
     }
 }

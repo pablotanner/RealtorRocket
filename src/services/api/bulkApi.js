@@ -69,8 +69,102 @@ export const bulkApi = authApi.injectEndpoints({
             },
             invalidatesTags: ['Leases']
         }),
+        createPayments: build.mutation({
+            query: (body) => {
+                return {
+                    url: `/bulk/payments`,
+                    method: 'POST',
+                    body
+                }
+            },
+            async onQueryStarted(arg, { queryFulfilled }) {
+                toast({
+                    title: "Creating Payments...",
+                    variant: "loading",
+                })
+                queryFulfilled
+                    .then((data) => {
+                        toast({
+                            title: "Success",
+                            description: `${data?.data?.data?.length} Payments created successfully`,
+                            variant: "success",
+                        });
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                        toast({
+                            title: "Uh oh! Something went wrong.",
+                            description: `${error?.error?.data?.message}`,
+                            variant: "error",
+                        });
+                    })
+            },
+            invalidatesTags: ['Payments', 'Leases']
+        }),
+        updatePaymentSchedules: build.mutation({
+            query: (body) => {
+                return {
+                    url: `/bulk/payment-schedules`,
+                    method: 'PATCH',
+                    body
+                }
+            },
+            async onQueryStarted(arg, { queryFulfilled }) {
+                toast({
+                    title: "Updating Payment Schedules...",
+                    variant: "loading",
+                })
+                queryFulfilled
+                    .then((data) => {
+                        toast({
+                            title: "Success",
+                            description: `${data?.data?.data?.length} Payment Schedules updated successfully`,
+                            variant: "success",
+                        });
+                    })
+                    .catch(() => {
+                        toast({
+                            title: "Uh oh! Something went wrong.",
+                            description: "There was a problem with your request.",
+                            variant: "error",
+                        });
+                    })
+            },
+            invalidatesTags: ['Leases']
+        }),
+        deletePaymentSchedules: build.mutation({
+            query: (body) => {
+                return {
+                    url: `/bulk/payment-schedules`,
+                    method: 'DELETE',
+                    body
+                }
+            },
+            async onQueryStarted(arg, { queryFulfilled }) {
+                toast({
+                    title: "Deleting Payment Schedules...",
+                    variant: "loading",
+                })
+                queryFulfilled
+                    .then((data) => {
+                        toast({
+                            title: "Success",
+                            description: `${data?.data?.length} Payment Schedule(s) deleted successfully`,
+                            variant: "success",
+                        });
+                    })
+                    .catch(() => {
+                        toast({
+                            title: "Uh oh! Something went wrong.",
+                            description: "There was a problem with your request.",
+                            variant: "error",
+                        });
+                    })
+            },
+            invalidatesTags: ['Leases']
+        }),
     })
 })
 
 
-export const { useUpdateLeasesMutation, useDeleteLeasesMutation } = bulkApi;
+export const { useUpdateLeasesMutation, useCreatePaymentsMutation, useDeletePaymentSchedulesMutation, useUpdatePaymentSchedulesMutation, useDeleteLeasesMutation } = bulkApi;

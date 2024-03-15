@@ -4,10 +4,10 @@ import {
 import {dateParser, moneyParser} from "../../utils/formatters.js";
 import {DataTable} from "../ui/data-table.js";
 import {LeasePaymentSchedule} from "../../utils/classes.ts";
-import {CalendarClock, Coins, Eye, MoreHorizontal, Pencil, Trash2} from "lucide-react";
+import {CalendarClock, Check, Coins, Eye, MoreHorizontal, Pencil, Trash2} from "lucide-react";
 import ViewPayment from "../payments/ViewPayment.js";
 import {PaymentScheduleStatusBadge, PaymentStatusBadge} from "../../utils/statusBadges.js";
-import {PaymentScheduleStatus, PaymentStatus} from "../../utils/magicNumbers.js";
+import {LeaseStatus, PaymentScheduleStatus, PaymentStatus} from "../../utils/magicNumbers.js";
 import {useState} from "react";
 import {
     useDeletePaymentScheduleMutation,
@@ -20,7 +20,7 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuGroup,
-    DropdownMenuItem, DropdownMenuSeparator,
+    DropdownMenuItem, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger,
     DropdownMenuTrigger
 } from "../ui/dropdown-menu.tsx";
 import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogIcon, DialogTitle} from "../ui/dialog.tsx";
@@ -30,6 +30,13 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "../
 import {Button} from "../ui/button.tsx";
 import Link from "../general/Link.tsx";
 import DeleteDialog from "../general/DeleteDialog";
+import {
+    useCreatePaymentsMutation,
+    useDeleteLeasesMutation, useDeletePaymentSchedulesMutation,
+    useUpdateLeasesMutation,
+    useUpdatePaymentSchedulesMutation
+} from "../../services/api/bulkApi";
+import {Checkbox} from "../ui/checkbox.tsx";
 
 const PaymentScheduleActions = ({ paymentSchedule }) => {
     const [editModalOpen, setEditModalOpen] = useState(false)
@@ -164,6 +171,17 @@ const PaymentScheduleActions = ({ paymentSchedule }) => {
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
 
+                <DropdownMenuGroup>
+                    <DropdownMenuItem asChild className="w-full">
+                        <ViewPayment payment={paymentSchedule} className="cursor-default text-sm flex gap-2 items-center">
+                            <Eye className="w-4 h-4"/>
+                            View
+                        </ViewPayment>
+                    </DropdownMenuItem>
+
+                </DropdownMenuGroup>
+
+
                 <DropdownMenuSeparator />
 
                 <DropdownMenuGroup>
@@ -182,12 +200,24 @@ const PaymentScheduleActions = ({ paymentSchedule }) => {
 
 const columns: ColumnDef<LeasePaymentSchedule>[] = [
     {
-        id: "view",
-        header: "",
+        id: "select",
+        header: ({ table }) => (
+            <Checkbox
+                // @ts-expect-error - TS doesn't understand that we're using a custom accessor
+                checked={
+                    table.getIsAllPageRowsSelected() ||
+                    (table.getIsSomePageRowsSelected() && "indeterminate")
+                }
+                onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+                aria-label="Select all"
+            />
+        ),
         cell: ({ row }) => (
-            <ViewPayment payment={row?.original}>
-                <Eye className="w-5 h-5 hover:text-primary mt-1"/>
-            </ViewPayment>
+            <Checkbox
+                checked={row.getIsSelected()}
+                onCheckedChange={(value) => row.toggleSelected(!!value)}
+                aria-label="Select row"
+            />
         ),
         enableSorting: false,
         enableHiding: false,
@@ -302,7 +332,114 @@ const columns: ColumnDef<LeasePaymentSchedule>[] = [
     },
 ]
 
+
+const PaymentScheduleBulkActions = ({selectedRows}) => {
+
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+
+    const [createPayments] = useCreatePaymentsMutation();
+    const [updatePaymentSchedules] = useUpdatePaymentSchedulesMutation();
+    const [deletePaymentSchedules] = useDeletePaymentSchedulesMutation();
+
+    if (selectedRows?.length === 0) {
+        return null
+    }
+
+    const handleMarkAsPaid = () => {
+        const paymentsToCreate = selectedRows?.map((paymentSchedule: LeasePaymentSchedule) => {
+            return {
+                amount: paymentSchedule.amountDue,
+                date: new Date().toISOString(),
+                leaseId: paymentSchedule.leaseId,
+                status: "PAID",
+                leasePaymentSchedule: {
+                    amountDue: 0,
+                    id: paymentSchedule.id,
+                    status: "PAID"
+                },
+                notes: "Created from marking a payment schedule as paid."
+            }
+        })
+
+        createPayments(paymentsToCreate);
+
+
+    }
+
+    const handleDelete = () => {
+        deletePaymentSchedules(selectedRows);
+    }
+
+
+    const handleStatusChange = (status) => {
+        const body = selectedRows.map((row) => {
+            return {
+                id: row.id,
+                status: status
+            }
+        })
+
+        updatePaymentSchedules(body);
+    }
+
+    return (
+        <DropdownMenu>
+            <DeleteDialog
+                open={deleteModalOpen}
+                setOpen={setDeleteModalOpen}
+                title="Delete Payment Schedules"
+                content={`You are about to delete ${selectedRows?.length} payment schedule(s). Are you sure?`}
+                onConfirm={handleDelete}
+            />
+
+            <DropdownMenuTrigger className="inline-flex items-center font-600 justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border-border border-2 text-foreground bg-transparent hover:border-gray-200 hover:text-accent-foreground h-10 rounded-md px-5 py-2">
+                <Pencil className="w-4 h-4 mr-2"/> {selectedRows?.length} Selected
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent>
+                <DropdownMenuGroup>
+                    <DropdownMenuSub>
+                        <DropdownMenuSubTrigger>
+                            Set Status
+                        </DropdownMenuSubTrigger>
+                        <DropdownMenuSubContent>
+                            {Object.keys(PaymentScheduleStatus).map((status) => (
+                                <DropdownMenuItem key={status} onClick={() => handleStatusChange(status)}>
+                                    {PaymentScheduleStatus[status]}
+                                </DropdownMenuItem>
+                            ))}
+                        </DropdownMenuSubContent>
+                    </DropdownMenuSub>
+
+
+                    <DropdownMenuItem onClick={handleMarkAsPaid}>
+                        <Check className="w-4 h-4 mr-2"/>
+                        Mark as Paid
+                    </DropdownMenuItem>
+                </DropdownMenuGroup>
+
+                <DropdownMenuSeparator/>
+
+
+                <DropdownMenuGroup>
+                    <DropdownMenuItem className="flex flex-row text-sm text-red-500"
+                                      onClick={() => setDeleteModalOpen(true)}
+                    >
+                        <Trash2 className="w-4 h-4 mr-2"/>
+                        Delete
+                    </DropdownMenuItem>
+                </DropdownMenuGroup>
+            </DropdownMenuContent>
+        </DropdownMenu>
+    )
+
+}
+
+
+
 const PaymentScheduleTable = ({ paymentSchedules }) => {
+
+    const [selectedRows, setSelectedRows] = useState([])
 
     return (
         <div className={"border-2 border-border p-4 rounded-lg"}>
@@ -312,7 +449,12 @@ const PaymentScheduleTable = ({ paymentSchedules }) => {
                 defaultSort={{id: "dueDate", desc: false}}
                 title="Rent Schedule"
                 subtitle="This table shows all expected lease payments and keeps track of their payment status."
-                icon={<CalendarClock className={"w-5 h-5"} />} />
+                icon={<CalendarClock className={"w-5 h-5"} />}
+                onRowSelectionChange={(selectedRows: LeasePaymentSchedule[]) => setSelectedRows(selectedRows)}
+            >
+
+                <PaymentScheduleBulkActions selectedRows={selectedRows} />
+            </DataTable>
 
         </div>
 

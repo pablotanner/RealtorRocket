@@ -271,87 +271,86 @@ const columns: ColumnDef<Lease>[] = [
             )
         },
     },
-
-
 ]
 
-const LeasesTable = ({ leases }) => {
-
-    const [selectedRows, setSelectedRows] = useState([])
+const LeaseBulkActions = ({selectedRows}) => {
 
     const [deleteModalOpen, setDeleteModalOpen] = useState(false)
 
     const [updateLeases] = useUpdateLeasesMutation();
     const [deleteLeases] = useDeleteLeasesMutation();
 
-    const LeaseBulkActions = () => {
-        if (selectedRows.length === 0) {
-            return null
-        }
 
-
-        const handleDeleteLeases = () => {
-            deleteLeases(selectedRows)
-        }
-
-        const handleStatusChange = (status: string) => {
-            const body = selectedRows.map((row) => {
-                return {
-                    id: row.id,
-                    status: status
-                }
-            })
-
-            updateLeases(body);
-        }
-
-        return (
-            <DropdownMenu>
-                <DeleteDialog
-                    open={deleteModalOpen}
-                    setOpen={setDeleteModalOpen}
-                    title="Delete Leases"
-                    content={`You are about to delete ${selectedRows?.length} lease(s). Are you sure?`}
-                    onConfirm={handleDeleteLeases}
-                />
-
-                <DropdownMenuTrigger>
-                    <Button variant="outline">
-                        <Pencil className="w-4 h-4 mr-1"/> {selectedRows?.length} Selected
-                    </Button>
-                </DropdownMenuTrigger>
-
-                <DropdownMenuContent>
-                    <DropdownMenuGroup>
-                        <DropdownMenuSub>
-                            <DropdownMenuSubTrigger>
-                                Set Status
-                            </DropdownMenuSubTrigger>
-                            <DropdownMenuSubContent>
-                                {Object.keys(LeaseStatus).map((status) => (
-                                    <DropdownMenuItem key={status} onClick={() => handleStatusChange(status)}>
-                                        {LeaseStatus[status]}
-                                    </DropdownMenuItem>
-                                ))}
-                            </DropdownMenuSubContent>
-                        </DropdownMenuSub>
-                    </DropdownMenuGroup>
-
-                    <DropdownMenuSeparator/>
-
-                    <DropdownMenuGroup>
-                        <DropdownMenuItem className="flex flex-row text-sm text-red-500"
-                                          onClick={() => setDeleteModalOpen(true)}
-                        >
-                            <Trash2 className="w-4 h-4 mr-2"/>
-                            Delete Lease
-                        </DropdownMenuItem>
-                    </DropdownMenuGroup>
-                </DropdownMenuContent>
-            </DropdownMenu>
-        )
-
+    if (selectedRows.length === 0) {
+        return null
     }
+
+
+    const handleDeleteLeases = () => {
+        deleteLeases(selectedRows)
+    }
+
+    const handleStatusChange = (status: string) => {
+        const body = selectedRows.map((row) => {
+            return {
+                id: row.id,
+                status: status
+            }
+        })
+
+        updateLeases(body);
+    }
+
+    return (
+        <DropdownMenu>
+            <DeleteDialog
+                open={deleteModalOpen}
+                setOpen={setDeleteModalOpen}
+                title="Delete Leases"
+                content={`You are about to delete ${selectedRows?.length} lease(s). Are you sure?`}
+                onConfirm={handleDeleteLeases}
+            />
+
+            <DropdownMenuTrigger className="inline-flex items-center font-600 justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border-border border-2 text-foreground bg-transparent hover:border-gray-200 hover:text-accent-foreground h-10 rounded-md px-5 py-2">
+                <Pencil className="w-4 h-4 mr-2"/> {selectedRows?.length} Selected
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent>
+                <DropdownMenuGroup>
+                    <DropdownMenuSub>
+                        <DropdownMenuSubTrigger>
+                            Set Status
+                        </DropdownMenuSubTrigger>
+                        <DropdownMenuSubContent>
+                            {Object.keys(LeaseStatus).map((status) => (
+                                <DropdownMenuItem key={status} onClick={() => handleStatusChange(status)}>
+                                    {LeaseStatus[status]}
+                                </DropdownMenuItem>
+                            ))}
+                        </DropdownMenuSubContent>
+                    </DropdownMenuSub>
+                </DropdownMenuGroup>
+
+                <DropdownMenuSeparator/>
+
+                <DropdownMenuGroup>
+                    <DropdownMenuItem className="flex flex-row text-sm text-red-500"
+                                      onClick={() => setDeleteModalOpen(true)}
+                    >
+                        <Trash2 className="w-4 h-4 mr-2"/>
+                        Delete
+                    </DropdownMenuItem>
+                </DropdownMenuGroup>
+            </DropdownMenuContent>
+        </DropdownMenu>
+    )
+
+}
+
+
+const LeasesTable = ({ leases }) => {
+
+    const [selectedRows, setSelectedRows] = useState<Lease[]>([])
 
     return (
         <div className={"border-2 border-border p-4 rounded-lg "}>
@@ -366,7 +365,7 @@ const LeasesTable = ({ leases }) => {
                 onRowSelectionChange={(selectedRows: Lease[]) => setSelectedRows(selectedRows)}
             >
 
-                <LeaseBulkActions/>
+                <LeaseBulkActions selectedRows={selectedRows}/>
 
             </DataTable>
 
