@@ -3,16 +3,16 @@ import {
 } from "@tanstack/react-table";
 import {dateParser, moneyParser} from "../../utils/formatters.js";
 import {DataTable} from "../ui/data-table.js";
-import {RentPayment} from "../../utils/classes.ts";
+import {LeasePaymentSchedule, RentPayment} from "../../utils/classes.ts";
 import {PaymentStatusBadge} from "../../utils/statusBadges.js";
-import {Coins, Eye, MoreHorizontal, Pencil, Trash2} from "lucide-react";
+import {Check, Coins, Eye, MoreHorizontal, Pencil, Trash2} from "lucide-react";
 import ViewPayment from "../payments/ViewPayment.js"
-import {PaymentStatus} from "../../utils/magicNumbers.js";
+import {PaymentScheduleStatus, PaymentStatus} from "../../utils/magicNumbers.js";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuGroup,
-    DropdownMenuItem, DropdownMenuSeparator,
+    DropdownMenuItem, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger,
     DropdownMenuTrigger
 } from "../ui/dropdown-menu.tsx";
 import {useDeletePaymentMutation, useUpdatePaymentMutation} from "../../services/api/financialsApi.js";
@@ -35,6 +35,12 @@ import {Button} from "../ui/button.tsx";
 import Link from "../general/Link.tsx";
 import {Textarea} from "../ui/textarea.tsx";
 import DeleteDialog from "../general/DeleteDialog";
+import {Checkbox} from "../ui/checkbox.tsx";
+import {
+    useCreatePaymentsMutation,
+    useDeletePaymentSchedulesMutation, useDeletePaymentsMutation,
+    useUpdatePaymentSchedulesMutation, useUpdatePaymentsMutation
+} from "../../services/api/bulkApi";
 
 
 
@@ -199,6 +205,13 @@ const PaymentActions = ({ payment }) => {
                         <Pencil className="w-4 h-4"/>
                         Edit
                     </DropdownMenuItem>
+
+                    <DropdownMenuItem asChild className="w-full">
+                        <ViewPayment payment={payment} className="cursor-default text-sm flex gap-2 items-center">
+                            <Eye className="w-4 h-4"/>
+                            View
+                        </ViewPayment>
+                    </DropdownMenuItem>
                 </DropdownMenuGroup>
 
                 <DropdownMenuSeparator />
@@ -220,12 +233,24 @@ const PaymentActions = ({ payment }) => {
 
 const columns: ColumnDef<RentPayment>[] = [
     {
-        id: "view",
-        header: "",
+        id: "select",
+        header: ({ table }) => (
+            <Checkbox
+                // @ts-expect-error - TS doesn't understand that we're using a custom accessor
+                checked={
+                    table.getIsAllPageRowsSelected() ||
+                    (table.getIsSomePageRowsSelected() && "indeterminate")
+                }
+                onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+                aria-label="Select all"
+            />
+        ),
         cell: ({ row }) => (
-            <ViewPayment payment={row?.original}>
-               <Eye className="w-5 h-5 hover:text-primary mt-1"/>
-            </ViewPayment>
+            <Checkbox
+                checked={row.getIsSelected()}
+                onCheckedChange={(value) => row.toggleSelected(!!value)}
+                aria-label="Select row"
+            />
         ),
         enableSorting: false,
         enableHiding: false,
@@ -371,7 +396,88 @@ const columns: ColumnDef<RentPayment>[] = [
     },
 ]
 
+
+const PaymentBulkActions = ({selectedRows}) => {
+
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+
+    const [updatePayments] = useUpdatePaymentsMutation()
+    const [deletePayments] = useDeletePaymentsMutation()
+
+    if (selectedRows?.length === 0) {
+        return null
+    }
+
+
+    const handleDelete = () => {
+        deletePayments(selectedRows);
+    }
+
+
+    const handleStatusChange = (status) => {
+        const body = selectedRows.map((row) => {
+            return {
+                id: row.id,
+                status: status
+            }
+        })
+
+        updatePayments(body);
+    }
+
+    return (
+        <DropdownMenu>
+            <DeleteDialog
+                open={deleteModalOpen}
+                setOpen={setDeleteModalOpen}
+                title="Delete Payments"
+                content={`You are about to delete ${selectedRows?.length} payment(s). Are you sure?`}
+                onConfirm={handleDelete}
+            />
+
+            <DropdownMenuTrigger className="inline-flex items-center font-600 justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border-border border-2 text-foreground bg-transparent hover:border-gray-200 hover:text-accent-foreground h-10 rounded-md px-5 py-2">
+                <Pencil className="w-4 h-4 mr-2"/> {selectedRows?.length} Selected
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent>
+                <DropdownMenuGroup>
+                    <DropdownMenuSub>
+                        <DropdownMenuSubTrigger>
+                            Set Status
+                        </DropdownMenuSubTrigger>
+                        <DropdownMenuSubContent>
+                            {Object.keys(PaymentStatus).map((status) => (
+                                <DropdownMenuItem key={status} onClick={() => handleStatusChange(status)}>
+                                    {PaymentStatus[status]}
+                                </DropdownMenuItem>
+                            ))}
+                        </DropdownMenuSubContent>
+                    </DropdownMenuSub>
+
+                </DropdownMenuGroup>
+
+                <DropdownMenuSeparator/>
+
+
+                <DropdownMenuGroup>
+                    <DropdownMenuItem className="flex flex-row text-sm text-red-500"
+                                      onClick={() => setDeleteModalOpen(true)}
+                    >
+                        <Trash2 className="w-4 h-4 mr-2"/>
+                        Delete
+                    </DropdownMenuItem>
+                </DropdownMenuGroup>
+            </DropdownMenuContent>
+        </DropdownMenu>
+    )
+
+}
+
+
+
 const PaymentTable = ({ payments, ...props }) => {
+
+    const [selectedRows, setSelectedRows] = useState([])
 
     return (
         <div className={"border-2 border-border p-4 rounded-lg"}>
@@ -382,8 +488,12 @@ const PaymentTable = ({ payments, ...props }) => {
                 title="Payments"
                 subtitle="This table records the payments made by tenants."
                 icon={<Coins className={"w-5 h-5"} />}
+                onRowSelectionChange={(selectedRows: RentPayment[] ) => setSelectedRows(selectedRows)}
+
             >
                 {props.children}
+
+                <PaymentBulkActions selectedRows={selectedRows} />
             </DataTable>
 
         </div>

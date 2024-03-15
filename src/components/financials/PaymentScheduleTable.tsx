@@ -169,17 +169,15 @@ const PaymentScheduleActions = ({ paymentSchedule }) => {
                         <Pencil className="w-4 h-4"/>
                         Edit
                     </DropdownMenuItem>
-                </DropdownMenuGroup>
 
-                <DropdownMenuGroup>
                     <DropdownMenuItem asChild className="w-full">
                         <ViewPayment payment={paymentSchedule} className="cursor-default text-sm flex gap-2 items-center">
                             <Eye className="w-4 h-4"/>
                             View
                         </ViewPayment>
                     </DropdownMenuItem>
-
                 </DropdownMenuGroup>
+
 
 
                 <DropdownMenuSeparator />

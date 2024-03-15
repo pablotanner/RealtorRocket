@@ -101,6 +101,68 @@ export const bulkApi = authApi.injectEndpoints({
             },
             invalidatesTags: ['Payments', 'Leases']
         }),
+        updatePayments: build.mutation({
+            query: (body) => {
+                return {
+                    url: `/bulk/payments`,
+                    method: 'PATCH',
+                    body
+                }
+            },
+            async onQueryStarted(arg, { queryFulfilled }) {
+                toast({
+                    title: "Updating Payments...",
+                    variant: "loading",
+                })
+                queryFulfilled
+                    .then((data) => {
+                        toast({
+                            title: "Success",
+                            description: `${data?.data?.data?.length} Payments updated successfully`,
+                            variant: "success",
+                        });
+                    })
+                    .catch(() => {
+                        toast({
+                            title: "Uh oh! Something went wrong.",
+                            description: "There was a problem with your request.",
+                            variant: "error",
+                        });
+                    })
+            },
+            invalidatesTags: ['Payments', 'Leases']
+        }),
+        deletePayments: build.mutation({
+            query: (body) => {
+                return {
+                    url: `/bulk/payments`,
+                    method: 'DELETE',
+                    body
+                }
+            },
+            async onQueryStarted(arg, { queryFulfilled }) {
+                toast({
+                    title: "Deleting Payments...",
+                    variant: "loading",
+                })
+                queryFulfilled
+                    .then((data) => {
+                        toast({
+                            title: "Success",
+                            description: `${data?.data?.data?.length} Payment(s) deleted successfully`,
+                            variant: "success",
+                        });
+                    })
+                    .catch(() => {
+                        toast({
+                            title: "Uh oh! Something went wrong.",
+                            description: "There was a problem with your request.",
+                            variant: "error",
+                        });
+                    })
+            },
+            invalidatesTags: ['Payments', 'Leases']
+        }),
         updatePaymentSchedules: build.mutation({
             query: (body) => {
                 return {
@@ -167,4 +229,4 @@ export const bulkApi = authApi.injectEndpoints({
 })
 
 
-export const { useUpdateLeasesMutation, useCreatePaymentsMutation, useDeletePaymentSchedulesMutation, useUpdatePaymentSchedulesMutation, useDeleteLeasesMutation } = bulkApi;
+export const { useUpdateLeasesMutation, useCreatePaymentsMutation, useUpdatePaymentsMutation, useDeletePaymentsMutation, useDeletePaymentSchedulesMutation, useUpdatePaymentSchedulesMutation, useDeleteLeasesMutation } = bulkApi;

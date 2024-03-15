@@ -346,3 +346,42 @@ export async function createManyPayments(req, res) {
         res.status(500).json({ message: `${successCount} Payment(s) created successfully, ${req.body.length - successCount} failed.`, data: newPayments });
     }
 }
+
+export async function updateManyPayments(req, res) {
+    try {
+        const updatedPayments = await prisma.$transaction(req.body.map(payment => {
+            return prisma.rentPayment.update({
+                where: {
+                    id: payment.id
+                },
+                data: {
+                    ...payment
+                }
+            });
+        }))
+
+        res.status(200).json({data: updatedPayments });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error updating payments" });
+    }
+}
+
+export async function deleteManyPayments(req, res) {
+    try {
+        const deletedPayments = await prisma.$transaction(req.body.map(payment => {
+            return prisma.rentPayment.delete({
+                where: {
+                    id: payment.id
+                }
+            });
+        }))
+
+        res.status(200).json({ data: deletedPayments });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error deleting payments" });
+    }
+}
