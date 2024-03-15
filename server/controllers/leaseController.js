@@ -26,7 +26,9 @@ export async function getLeases(req, res) {
             include: {
                 tenant: true,
                 unit: true,
-                paymentSchedule: true
+                paymentSchedule: true,
+                rentPayments: true,
+                expenses: true
             },
             orderBy: {
                 createdAt: "desc"

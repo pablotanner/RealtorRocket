@@ -41,6 +41,7 @@ import {Checkbox} from "../ui/checkbox.tsx";
 const PaymentScheduleActions = ({ paymentSchedule }) => {
     const [editModalOpen, setEditModalOpen] = useState(false)
     const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+    const [viewModalOpen, setViewModalOpen] = useState(false)
 
     const [updatePaymentSchedule, {isLoading: isUpdating}] = useUpdatePaymentScheduleMutation()
     const [deletePaymentSchedule] = useDeletePaymentScheduleMutation()
@@ -160,21 +161,24 @@ const PaymentScheduleActions = ({ paymentSchedule }) => {
                 content="Are you sure you want to delete this planned payment? This action cannot be undone."
                 onConfirm={() => deletePaymentSchedule(paymentSchedule?.id)}
             />
+
+            {viewModalOpen && <ViewPayment open={viewModalOpen} setOpen={setViewModalOpen} payment={paymentSchedule} />}
+
+
             <DropdownMenuTrigger asChild className="cursor-pointer">
                 <MoreHorizontal className="h-5 w-5 ml-3"/>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-[150px]">
                 <DropdownMenuGroup>
+
+                    <DropdownMenuItem className="flex flex-row text-sm gap-2" onClick={() => setViewModalOpen(true)}>
+                        <Eye className="w-4 h-4"/>
+                        View
+                    </DropdownMenuItem>
+
                     <DropdownMenuItem className="flex flex-row text-sm gap-2" onClick={() => setEditModalOpen(true)}>
                         <Pencil className="w-4 h-4"/>
                         Edit
-                    </DropdownMenuItem>
-
-                    <DropdownMenuItem asChild className="w-full">
-                        <ViewPayment payment={paymentSchedule} className="cursor-default text-sm flex gap-2 items-center">
-                            <Eye className="w-4 h-4"/>
-                            View
-                        </ViewPayment>
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
 
@@ -435,7 +439,7 @@ const PaymentScheduleBulkActions = ({selectedRows}) => {
 
 
 
-const PaymentScheduleTable = ({ paymentSchedules }) => {
+const PaymentScheduleTable = ({ paymentSchedules, ...props }) => {
 
     const [selectedRows, setSelectedRows] = useState([])
 
@@ -449,6 +453,7 @@ const PaymentScheduleTable = ({ paymentSchedules }) => {
                 subtitle="This table shows all expected lease payments and keeps track of their payment status."
                 icon={<CalendarClock className={"w-5 h-5"} />}
                 onRowSelectionChange={(selectedRows: LeasePaymentSchedule[]) => setSelectedRows(selectedRows)}
+                {...props}
             >
 
                 <PaymentScheduleBulkActions selectedRows={selectedRows} />

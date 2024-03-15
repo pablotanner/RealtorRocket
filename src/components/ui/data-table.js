@@ -332,6 +332,10 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
             columnFilters,
             columnVisibility,
             rowSelection,
+            pagination: {
+                pageIndex: page - 1,
+                pageSize: props?.pageSize || 10
+            }
         },
     })
 

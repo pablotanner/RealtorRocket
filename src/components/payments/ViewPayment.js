@@ -14,7 +14,7 @@ import {Coins, CalendarClock} from "lucide-react";
 import {cn} from "../../utils.ts";
 
 
-const ViewPayment = ({payment, children, ...props}) => {
+const ViewPayment = ({payment, open, setOpen, ...props}) => {
 
     const userData = useSelector(state => state.authSlice.userInfo)
 
@@ -98,10 +98,7 @@ const ViewPayment = ({payment, children, ...props}) => {
     const description = payment.dueDate ? "The details of the payment schedule are displayed below." : "The details of the payment are displayed below."
 
     return (
-        <Dialog>
-            <DialogTrigger className={cn(props.className)} {...props}>
-                {children}
-            </DialogTrigger>
+        <Dialog open={open} onOpenChange={() => setOpen(!open)}>
             <DialogContent>
                 <DialogHeader>
                     <DialogIcon>

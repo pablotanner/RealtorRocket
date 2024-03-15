@@ -5,7 +5,7 @@ import {Checkbox} from "../ui/checkbox.tsx";
 import {dateParser, moneyParser} from "../../utils/formatters.js";
 import {DataTable} from "../ui/data-table.js";
 import {Lease} from "../../utils/classes.ts";
-import {MoreHorizontal, Pencil, Scroll, Trash2} from "lucide-react";
+import {Eye, MoreHorizontal, Pencil, Scroll, Trash2} from "lucide-react";
 import {LeaseStatusBadge} from "../../utils/statusBadges.js";
 import {LeaseStatus} from "../../utils/magicNumbers.js";
 import Link from "../general/Link.tsx";
@@ -22,11 +22,15 @@ import EditLease from "../leases/EditLease";
 import DeleteDialog from "../general/DeleteDialog";
 import {useDeleteLeasesMutation, useUpdateLeasesMutation} from "../../services/api/bulkApi";
 import {Button} from "../ui/button.tsx";
+import ViewLease from "../leases/ViewLease.js";
+
 
 
 const LeaseActions = ({lease}) => {
     const [editModalOpen, setEditModalOpen] = useState(false)
     const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+    const [viewModalOpen, setViewModalOpen] = useState(false)
+
     const [deleteLease] = useDeleteLeaseMutation();
 
     return (
@@ -41,12 +45,18 @@ const LeaseActions = ({lease}) => {
                 onConfirm={() => deleteLease(lease?.id)}
             />
 
+            {viewModalOpen && <ViewLease lease={lease} open={viewModalOpen} setOpen={setViewModalOpen} />}
 
             <DropdownMenuTrigger asChild className="cursor-pointer">
                 <MoreHorizontal className="h-5 w-5 ml-3"/>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
                 <DropdownMenuGroup>
+                    <DropdownMenuItem className="flex flex-row text-sm gap-2" onClick={() => setViewModalOpen(true)}>
+                        <Eye className="w-4 h-4"/>
+                        View
+                    </DropdownMenuItem>
+
                     <DropdownMenuItem onClick={() => setEditModalOpen(true)}>
                         <Pencil className="w-4 h-4 mr-2"/>
                         Edit

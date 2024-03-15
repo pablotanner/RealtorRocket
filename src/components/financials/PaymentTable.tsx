@@ -47,6 +47,7 @@ import {
 const PaymentActions = ({ payment }) => {
     const [editModalOpen, setEditModalOpen] = useState(false)
     const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+    const [viewModalOpen, setViewModalOpen] = useState(false)
 
     const [updatePayment, {isLoading: isUpdating}] = useUpdatePaymentMutation()
     const [deletePayment] = useDeletePaymentMutation()
@@ -196,22 +197,23 @@ const PaymentActions = ({ payment }) => {
                 onConfirm={() => deletePayment(payment?.id)}
             />
 
+            {viewModalOpen && <ViewPayment open={viewModalOpen} setOpen={setViewModalOpen} payment={payment} />}
+
             <DropdownMenuTrigger asChild className="cursor-pointer">
                 <MoreHorizontal className="h-5 w-5 ml-3"/>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-[150px]">
                 <DropdownMenuGroup>
+                    <DropdownMenuItem className="flex flex-row text-sm gap-2" onClick={() => setViewModalOpen(true)}>
+                        <Eye className="w-4 h-4"/>
+                        View
+                    </DropdownMenuItem>
+
                     <DropdownMenuItem className="flex flex-row text-sm gap-2" onClick={() => setEditModalOpen(true)}>
                         <Pencil className="w-4 h-4"/>
                         Edit
                     </DropdownMenuItem>
 
-                    <DropdownMenuItem asChild className="w-full">
-                        <ViewPayment payment={payment} className="cursor-default text-sm flex gap-2 items-center">
-                            <Eye className="w-4 h-4"/>
-                            View
-                        </ViewPayment>
-                    </DropdownMenuItem>
                 </DropdownMenuGroup>
 
                 <DropdownMenuSeparator />
@@ -489,6 +491,7 @@ const PaymentTable = ({ payments, ...props }) => {
                 subtitle="This table records the payments made by tenants."
                 icon={<Coins className={"w-5 h-5"} />}
                 onRowSelectionChange={(selectedRows: RentPayment[] ) => setSelectedRows(selectedRows)}
+                {...props}
 
             >
                 {props.children}

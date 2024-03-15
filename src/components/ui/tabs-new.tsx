@@ -54,13 +54,14 @@ const TabsList = ({ children, className, ...props }) => {
     })
     return (
         <>
-            <Select onValueChange={setSelectedTabValue} defaultValue={defaultValue ?? injectedChildren[0].props.value}>
+            <Select onValueChange={setSelectedTabValue} value={selectedTabValue ?? injectedChildren[0].props.value}>
                 <SelectTrigger className={cn("flex flex-row gap-2 sm:hidden", className)} {...props}>
                     {(injectedChildren.find((child) => child.props.isActive) || injectedChildren[0]).props.children}
                 </SelectTrigger>
                 <SelectContent>
                     {injectedChildren.map((child, index) => {
-                        return <SelectItem value={child.props.value} key={index}>{child.props.children}</SelectItem>
+                        const {children, ...rest} = child.props;
+                        return <SelectItem {...rest} key={index}>{children}</SelectItem>
                     })}
                 </SelectContent>
             </Select>
