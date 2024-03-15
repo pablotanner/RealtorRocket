@@ -298,14 +298,22 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
     const [rowSelection, setRowSelection] = useState({})
 
     const data = useMemo(() => {
+        // if data changes, reset selected rows (so no weird behaviour if a row is deleted)
+        setRowSelection({})
+
         return tableData;
 
     }, [tableData]);
 
-    useEffect(() => {
+    /*
+
+        useEffect(() => {
         // if data changes, reset selected rows (so no weird behaviour if a row is deleted)
         setRowSelection({})
     }, [tableData?.length])
+
+     */
+
 
 
     const table = useReactTable({

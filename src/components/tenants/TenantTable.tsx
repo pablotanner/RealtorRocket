@@ -81,29 +81,6 @@ const TenantTable = ({tenants}) => {
 
     const columns: ColumnDef<Tenant>[] = [
         {
-            id: "select",
-            header: ({ table }) => (
-                <Checkbox
-                    // @ts-expect-error - TS doesn't understand that we're using a custom accessor
-                    checked={
-                        table.getIsAllPageRowsSelected() ||
-                        (table.getIsSomePageRowsSelected() && "indeterminate")
-                    }
-                    onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                    aria-label="Select all"
-                />
-            ),
-            cell: ({ row }) => (
-                <Checkbox
-                    checked={row.getIsSelected()}
-                    onCheckedChange={(value) => row.toggleSelected(!!value)}
-                    aria-label="Select row"
-                />
-            ),
-            enableSorting: false,
-            enableHiding: false,
-        },
-        {
             id: "tenant",
             header: "Tenant",
             enableSorting: false,
