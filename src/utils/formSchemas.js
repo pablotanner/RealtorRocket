@@ -124,3 +124,15 @@ export const maintenanceReportSchema = z.object({
     reporterId: zodNumberInputPipe(z.string().or(z.null()).or(z.number())),
     unitId: zodNumberInputPipe(z.string({errorMap: () => ({message: 'Please select a unit'})}).or(z.number())),
 })
+
+export const expenseSchema = z.object({
+    title: zodStringPipe(z.string({errorMap: () => ({message: 'Please enter a title'})})),
+    amount: zodNumberInputPipe(z.string({errorMap: () => ({message: 'Please enter the expense amount'})}).or(z.number())),
+    date: zodDateInputPipe(z.string({errorMap: () => ({message: 'Please enter a valid date'})})),
+    notes: zodStringPipe(z.string().or(z.null())),
+    description: zodStringPipe(z.string().or(z.null())),
+    category: zodStringPipe(z.string().or(z.null())),
+    unitId: zodNumberInputPipe(z.string().or(z.null()).or(z.number())),
+    leaseId: zodNumberInputPipe(z.string().or(z.null()).or(z.number())),
+    maintenanceRequestId: zodNumberInputPipe(z.string().or(z.null()).or(z.number())),
+})

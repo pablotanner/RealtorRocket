@@ -62,7 +62,7 @@ const AddMaintenanceReport = (props) => {
 
     return (
         <Dialog {...props} onOpenChange={() => setOpen(!open)} open={open}>
-            <Button onClick={() => setOpen(!open)} variant="gradient" type="button">
+            <Button onClick={() => setOpen(!open)} variant="outline" type="button">
                 {props.children}
             </Button>
             <DialogContent>
@@ -191,7 +191,7 @@ const AddMaintenanceReport = (props) => {
                                         <RentalSelection onSelect={(unitId) => {
                                             maintenanceForm.setValue('unitId', unitId)
                                             maintenanceForm.trigger('unitId')
-                                        }} selected={Number(maintenanceForm.getValues("leaseId"))} units={units?.data}
+                                        }} selected={Number(maintenanceForm.getValues("unitId"))} units={units?.data}
                                                          className="w-full"
                                         />
                                     </FormControl>

@@ -16,6 +16,7 @@ import {Tabs, TabsContent, TabsList, TabsTrigger} from "../ui/tabs.tsx";
 import PaymentTable from "../financials/PaymentTable.tsx";
 import PaymentScheduleTable from "../financials/PaymentScheduleTable.tsx";
 import {LeaseStatus} from "../../utils/magicNumbers.js";
+import ExpensesTable from "../financials/ExpensesTable.tsx";
 
 
 const ViewLease = ({lease, open, setOpen, ...props}) => {
@@ -75,6 +76,13 @@ const ViewLease = ({lease, open, setOpen, ...props}) => {
         }
     }) || []
 
+    const expenses = lease?.expenses.map(expense => {
+        return {
+            ...expense,
+            lease: lease,
+        }
+    }) || []
+
 
     return (
         <Dialog open={open} onOpenChange={() => setOpen(!open)}>
@@ -100,6 +108,9 @@ const ViewLease = ({lease, open, setOpen, ...props}) => {
                         </TabsTrigger>
                         <TabsTrigger value={"payment-schedule"}>
                             Payment Schedule
+                        </TabsTrigger>
+                        <TabsTrigger value={"expenses"}>
+                            Expenses
                         </TabsTrigger>
                     </TabsList>
                     <TabsContent value={"information"}>
@@ -153,6 +164,9 @@ const ViewLease = ({lease, open, setOpen, ...props}) => {
                     </TabsContent>
                     <TabsContent value={"payment-schedule"}>
                         <PaymentScheduleTable paymentSchedules={paymentSchedules} pageSize={5} subtitle={""}/>
+                    </TabsContent>
+                    <TabsContent value={"expenses"}>
+                        <ExpensesTable expenses={expenses} pageSize={5} subtitle={""}/>
                     </TabsContent>
                 </Tabs>
 

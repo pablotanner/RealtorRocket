@@ -24,7 +24,8 @@ import {
     propertiesReducer,
     tenantsReducer,
     unitsReducer,
-    maintenanceReducer
+    maintenanceReducer,
+    expensesReducer
 } from "../slices/objectSlice.js";
 import { configureStore } from '@reduxjs/toolkit/react'
 import {eventsReducer} from "../slices/eventSlice.js";
@@ -43,7 +44,8 @@ export const store = configureStore({
         tenants: tenantsReducer,
         maintenance: maintenanceReducer,
         events: eventsReducer,
-        messages: messagesReducer
+        messages: messagesReducer,
+        expenses: expensesReducer
 
 
     },

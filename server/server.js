@@ -16,6 +16,7 @@ import * as paymentController from "./controllers/paymentController.js";
 import jwt from "jsonwebtoken";
 import {createMessage} from "./controllers/messageController.js";
 import * as maintenanceController from "./controllers/maintenanceController.js";
+import * as expenseController from "./controllers/expenseController.js";
 
 // eslint-disable-next-line no-undef
 const PORT = process.env.PORT || 3000;
@@ -87,6 +88,12 @@ router.delete('/payment-schedules/:id', authenticateToken, paymentController.del
 // Maintenance Reports
 router.get('/maintenance', authenticateToken, maintenanceController.getMaintenanceReports)
 router.post('/maintenance', authenticateToken, maintenanceController.createMaintenanceReport)
+
+// Expenses
+router.get('/expenses', authenticateToken, expenseController.getExpenses)
+router.post('/expenses', authenticateToken, expenseController.createExpense)
+router.delete('/expenses/:id', authenticateToken, expenseController.deleteExpense)
+
 
 // Bulk
 router.patch('/bulk/leases', authenticateToken, leaseController.updateManyLeases)

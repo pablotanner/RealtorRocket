@@ -1,6 +1,10 @@
 import LeasesTable from "../../components/financials/LeasesTable.tsx";
 import {useSelector} from "react-redux";
-import {selectLeasesByPropertyId, selectPaymentsByPropertyId} from "../../services/slices/objectSlice.js";
+import {
+    selectExpensesByPropertyId,
+    selectLeasesByPropertyId,
+    selectPaymentsByPropertyId
+} from "../../services/slices/objectSlice.js";
 import InfoCard from "../../components/home/InfoCard.js";
 import {isAfter} from "date-fns";
 import {moneyParser} from "../../utils/formatters.js";
@@ -11,11 +15,12 @@ import {FilePlus2} from "lucide-react";
 import AddPayment from "../../components/payments/AddPayment.js";
 import {useState} from "react";
 import {Tabs, TabsContent, TabsItem, TabsList} from "../../components/ui/tabs-new.tsx";
+import ExpensesTable from "../../components/financials/ExpensesTable.tsx";
+import AddExpense from "../../components/expenses/AddExpense.js";
 
 
 const Financials = (props) => {
     const {propertySelection} = props;
-
 
 
     const [showPaymentModal, setShowPaymentModal] = useState(false);
@@ -38,6 +43,8 @@ const Financials = (props) => {
             lease: leases.find(lease => lease.id === schedule.leaseId)
         }
     })
+
+    const expenses = useSelector(state => selectExpensesByPropertyId(state, propertySelection));
 
 
 
@@ -91,8 +98,10 @@ const Financials = (props) => {
         },
         {
             title: "Expenses",
-            content: "This tab will show your expenses",
-            count: 0
+            content: <ExpensesTable expenses={expenses}>
+                <AddExpense/>
+            </ExpensesTable>,
+            count: expenses?.length
         }
     ]
 

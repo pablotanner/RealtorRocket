@@ -26,6 +26,11 @@ const maintenanceAdapter = createEntityAdapter({
     sortComparer: (a, b) => b.createdAt.localeCompare(a.createdAt),
 })
 
+const expensesAdapter = createEntityAdapter({
+    selectId: (expense) => expense.id,
+    sortComparer: (a, b) => b.createdAt.localeCompare(a.createdAt),
+})
+
 const initialState = {
     properties: propertiesAdapter.getInitialState(),
     units: unitsAdapter.getInitialState(),
@@ -33,6 +38,7 @@ const initialState = {
     tenants: tenantsAdapter.getInitialState(),
     payments: paymentsAdapter.getInitialState(),
     maintenance: maintenanceAdapter.getInitialState(),
+    expenses: expensesAdapter.getInitialState(),
 }
 
 
@@ -45,6 +51,8 @@ const initialState = {
  */
 
 
+
+/** PROPERTIES */
 const propertySlice = createSlice({
     name: 'properties',
     initialState: initialState.properties,
@@ -82,6 +90,18 @@ const propertySlice = createSlice({
     },
 })
 
+
+export const {
+    propertyAdded,
+    propertiesAdded,
+    propertyUpdated,
+    propertyRemoved,
+} = propertySlice.actions;
+
+export const propertiesReducer = propertySlice.reducer;
+
+
+/** UNITS */
 const unitSlice = createSlice({
     name: 'units',
     initialState: initialState.units,
@@ -101,7 +121,18 @@ const unitSlice = createSlice({
             )
     },
 })
+export const {
+    unitAdded,
+    unitsAdded,
+    unitUpdated,
+    unitRemoved,
+} = unitSlice.actions;
 
+export const unitsReducer = unitSlice.reducer;
+
+
+
+/** LEASES */
 const leaseSlice = createSlice({
     name: 'leases',
     initialState: initialState.leases,
@@ -124,7 +155,18 @@ const leaseSlice = createSlice({
             )
     },
 })
+export const {
+    leaseAdded,
+    leasesAdded,
+    leaseUpdated,
+    leaseRemoved,
+} = leaseSlice.actions;
 
+export const leasesReducer = leaseSlice.reducer;
+
+
+
+/** TENANTS */
 const tenantSlice = createSlice({
     name: 'tenants',
     initialState: initialState.tenants,
@@ -144,7 +186,18 @@ const tenantSlice = createSlice({
             )
     },
 })
+export const {
+    tenantAdded,
+    tenantsAdded,
+    tenantUpdated,
+    tenantRemoved,
+} = tenantSlice.actions;
 
+export const tenantsReducer = tenantSlice.reducer;
+
+
+
+/** PAYMENTS */
 const paymentSlice = createSlice({
     name: 'payments',
     initialState: initialState.payments,
@@ -167,15 +220,26 @@ const paymentSlice = createSlice({
             )
     },
 })
+export const {
+    paymentAdded,
+    paymentsAdded,
+    paymentUpdated,
+    paymentRemoved,
+} = paymentSlice.actions;
 
+export const paymentsReducer = paymentSlice.reducer;
+
+
+
+/** MAINTENANCE */
 const maintenanceSlice = createSlice({
     name: 'maintenance',
     initialState: initialState.maintenance,
     reducers: {
-        maintenanceReportAdded: tenantsAdapter.addOne,
-        maintenanceReportsAdded: tenantsAdapter.addMany,
-        maintenanceReportUpdated: tenantsAdapter.updateOne,
-        maintenanceReportRemoved: tenantsAdapter.removeOne,
+        maintenanceReportAdded: maintenanceAdapter.addOne,
+        maintenanceReportsAdded: maintenanceAdapter.addMany,
+        maintenanceReportUpdated: maintenanceAdapter.updateOne,
+        maintenanceReportRemoved: maintenanceAdapter.removeOne,
     },
     extraReducers: (builder) => {
         builder
@@ -197,54 +261,43 @@ export const {
 
 export const maintenanceReducer = maintenanceSlice.reducer;
 
+
+
+/** EXPENSES */
+const expenseSlice = createSlice({
+    name: 'expenses',
+    initialState: initialState.expenses,
+    reducers: {
+        expenseAdded: expensesAdapter.addOne,
+        expensesAdded: expensesAdapter.addMany,
+        expenseUpdated: expensesAdapter.updateOne,
+        expenseRemoved: expensesAdapter.removeOne,
+    },
+    extraReducers: (builder) => {
+        builder
+            .addMatcher(
+                authApi.endpoints.getExpenses.matchFulfilled,
+                (state, action) => {
+                    expensesAdapter.setAll(state, action.payload.data);
+                }
+            )
+
+    },
+})
 export const {
-    propertyAdded,
-    propertiesAdded,
-    propertyUpdated,
-    propertyRemoved,
-} = propertySlice.actions;
+    expenseAdded,
+    expensesAdded,
+    expenseUpdated,
+    expenseRemoved,
+} = expenseSlice.actions;
 
-export const propertiesReducer = propertySlice.reducer;
-
-
-
-export const {
-    unitAdded,
-    unitsAdded,
-    unitUpdated,
-    unitRemoved,
-} = unitSlice.actions;
-
-export const unitsReducer = unitSlice.reducer;
-
-export const {
-    leaseAdded,
-    leasesAdded,
-    leaseUpdated,
-    leaseRemoved,
-} = leaseSlice.actions;
-
-export const leasesReducer = leaseSlice.reducer;
-
-export const {
-    paymentAdded,
-    paymentsAdded,
-    paymentUpdated,
-    paymentRemoved,
-} = paymentSlice.actions;
-
-export const paymentsReducer = paymentSlice.reducer;
-
-export const {
-    tenantAdded,
-    tenantsAdded,
-    tenantUpdated,
-    tenantRemoved,
-} = tenantSlice.actions;
-
-export const tenantsReducer = tenantSlice.reducer;
+export const expensesReducer = expenseSlice.reducer;
 
 
+
+
+
+/** METHODS */
 export const {
     selectAll: selectAllProperties,
     selectIds: selectPropertyIds,
@@ -263,7 +316,6 @@ export const {
     selectIds: selectLeaseIds,
 } = leasesAdapter.getSelectors((state) => state.leases);
 
-
 export const {
     selectAll: selectAllPayments,
     selectById: selectPaymentById,
@@ -277,12 +329,17 @@ export const {
     selectIds: selectTenantIds,
 } = tenantsAdapter.getSelectors((state) => state.tenants);
 
-
 export const {
     selectAll: selectAllMaintenanceReports,
     selectById: selectMaintenanceReportById,
     selectIds: selectMaintenanceReportIds,
 } = maintenanceAdapter.getSelectors((state) => state.maintenance);
+
+export const {
+    selectAll: selectAllExpenses,
+    selectById: selectExpenseById,
+    selectIds: selectExpenseIds,
+} = expensesAdapter.getSelectors((state) => state.expenses);
 
 export const selectPropertiesByPropertyId = createSelector(
     selectAllProperties,
@@ -363,6 +420,23 @@ export const selectMaintenanceReportsByPropertyId = createSelector(
     }
 );
 
+
+export const selectExpensesByPropertyId = createSelector(
+    [selectAllExpenses, selectAllUnits, (_, propertyId) => propertyId], // Pass the entire state to the selector
+    (expenses, units, propertyId) => {
+        if (!propertyId || !units) return [];
+        else if (String(propertyId).toLowerCase() === 'all') {
+            return expenses.map(expense => {
+                return {...expense, unit: units.find(unit => unit.id === expense.unitId)};
+            })
+        }
+
+        const unitIds = units.filter(unit => unit.realEstateObjectId === propertyId).map(unit => unit.id);
+
+        return expenses.filter(expense => unitIds.includes(expense.unitId)).map(expense => {
+            return {...expense, unit: units.find(unit => unit.id === expense.unitId)};
+        })
+    })
 
 export const selectObjectById = createSelector(
 [selectAllProperties, selectAllUnits, selectAllLeases, selectAllTenants, selectAllPayments, selectAllMaintenanceReports, (_, id, type) => [id, type]],

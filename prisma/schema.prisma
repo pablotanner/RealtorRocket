@@ -250,6 +250,7 @@ model Realtor {
   realEstateObjects   RealEstateObject[]
   maintenanceRequests MaintenanceRequest[]
   leases              Lease[]
+  expenses            Expense[]
 
   @@map("realtor")
 }
@@ -614,6 +615,9 @@ model Expense {
   category    String?
   status      String?
   notes       String?
+
+  realtor   Realtor @relation(fields: [realtorId], references: [id], onDelete: Cascade)
+  realtorId Int     @map("realtor_id")
 
   unit   Unit? @relation(fields: [unitId], references: [id])
   unitId Int?  @map("unit_id")

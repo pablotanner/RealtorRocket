@@ -170,10 +170,75 @@ export const financialsApi = authApi.injectEndpoints({
             },
             invalidatesTags: ['Leases']
         }),
+        getExpenses: build.query({
+            query: () => ({
+                url: `/expenses`,
+                method: 'GET',
+            }),
+            providesTags: ['Expenses']
+        }),
+        deleteExpense: build.mutation({
+            query: (id) => ({
+                url: `/expenses/${id}`,
+                method: 'DELETE',
+            }),
+            async onQueryStarted(arg, { queryFulfilled }) {
+                toast({
+                    title: "Deleting Expense...",
+                    variant: "loading",
+                })
+                await queryFulfilled
+                    .then(() => {
+                        toast({
+                            title: "Success",
+                            description: "Expense deleted successfully.",
+                            variant: "success",
+                        });
+                    })
+                    .catch(() => {
+                        toast({
+                            title: "Uh oh! Something went wrong.",
+                            description: "There was a problem with your request.",
+                            variant: "error",
+                        });
+                    })
+            },
+            invalidatesTags: ['Expenses']
+
+        }),
+        createExpense: build.mutation({
+            query: (body) => ({
+                url: `/expenses`,
+                method: 'POST',
+                body
+            }),
+            async onQueryStarted(arg, { queryFulfilled }) {
+                toast({
+                    title: "Creating Expense...",
+                    variant: "loading",
+                })
+                await queryFulfilled
+                    .then(() => {
+                        toast({
+                            title: "Success",
+                            description: "Expense created successfully.",
+                            variant: "success",
+                        });
+                    })
+                    .catch(() => {
+                        toast({
+                            title: "Uh oh! Something went wrong.",
+                            description: "There was a problem with your request.",
+                            variant: "error",
+                        });
+                    })
+            },
+            invalidatesTags: ['Expenses']
+        }),
     }),
     overrideExisting: false,
 })
 
-export const {useGetPaymentSchedule, useGetPaymentsQuery, useDeletePaymentScheduleMutation, useUpdatePaymentScheduleMutation, useCreatePaymentMutation, useUpdatePaymentMutation, useDeletePaymentMutation} = financialsApi;
+export const {useGetPaymentSchedule, useGetPaymentsQuery,useDeleteExpenseMutation, useGetExpensesQuery, useCreateExpenseMutation, useDeletePaymentScheduleMutation, useUpdatePaymentScheduleMutation, useCreatePaymentMutation, useUpdatePaymentMutation, useDeletePaymentMutation} = financialsApi;
 
 

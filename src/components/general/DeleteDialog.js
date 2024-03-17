@@ -10,6 +10,7 @@ import {Trash2} from "lucide-react";
 
 const DeleteDialog = ({ open, setOpen, onConfirm, title="Delete Confirmation", content="Are you sure that you want to delete this?"}) => {
 
+    if (!open) return null;
 
     return (
         <AlertDialog open={open} onOpenChange={() => setOpen(!open)} >

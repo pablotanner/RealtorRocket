@@ -46,12 +46,21 @@ export class Expense {
     id: number;
     createdAt: Date;
     updatedAt: Date;
+    realtor: Realtor;
+    realtorId: number;
+    title: string | null;
+    description: string | null;
+    lease: Lease | null;
+    leaseId: number | null;
+    unit: Unit | null;
+    unitId: number | null;
     amount: number | null;
     currency: string | null;
     date: Date | null;
-    status: string | null;
-
-
+    notes: string | null;
+    category: string | null;
+    maintenanceRequest: MaintenanceRequest | null;
+    maintenanceRequestId: number | null;
 }
 
 export class RentPayment {

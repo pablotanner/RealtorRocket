@@ -137,7 +137,7 @@ const TenantCard = ({ tenant }) => {
                 </div>
 
                 <AlertDialog>
-                    <AlertDialogTrigger>
+                    <AlertDialogTrigger asChild>
                         <Button variant="link" className="text-red-500">
                             <XIcon className="w-4 h-4 mr-1"/>
                             Remove from Unit

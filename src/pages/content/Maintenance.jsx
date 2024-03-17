@@ -1,6 +1,6 @@
 import MaintenanceTable from "../../components/maintenance/MaintenanceTable.tsx";
 import AddMaintenanceReport from "../../components/maintenance/AddMaintenanceReport.js";
-import {Drill, Plus} from "lucide-react";
+import {Drill, FilePlus2, Plus} from "lucide-react";
 import {selectMaintenanceReportsByPropertyId} from "../../services/slices/objectSlice.js";
 import {useSelector} from "react-redux";
 
@@ -21,16 +21,17 @@ const MaintenanceReports = (props) => {
                         This is where you can view and add maintenance reports.
                     </p>
 
-                    <AddMaintenanceReport>
-                        <Plus size={18} className="mr-1"/>
-                        Report Maintenance
-                    </AddMaintenanceReport>
                 </div>
 
             </div>
 
 
-            <MaintenanceTable maintenanceReports={maintenanceData}/>
+            <MaintenanceTable maintenanceReports={maintenanceData}>
+                <AddMaintenanceReport>
+                    <FilePlus2 size={18} className="mr-1"/>
+                    Report Maintenance
+                </AddMaintenanceReport>
+            </MaintenanceTable>
 
         </div>
     )

@@ -83,6 +83,7 @@ const Navbar = ({children}) => {
     const prefetchPayments = usePrefetch("getPayments")
     const prefetchMessages = usePrefetch("getMessages")
     const prefetchMaintenance = usePrefetch("getMaintenanceReports")
+    const prefetchExpenses = usePrefetch("getExpenses")
 
     prefetchUser();
     prefetchProperties();
@@ -92,6 +93,7 @@ const Navbar = ({children}) => {
     prefetchMessages();
     prefetchPayments();
     prefetchMaintenance();
+    prefetchExpenses();
 
     function getNavItems(section) {
         return items.filter(item => item.section === section);
