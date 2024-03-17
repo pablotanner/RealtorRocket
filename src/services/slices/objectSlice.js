@@ -438,6 +438,36 @@ export const selectExpensesByPropertyId = createSelector(
         })
     })
 
+
+export const selectMaintenanceReportsByUnitId = createSelector(
+    [selectAllMaintenanceReports, selectAllUnits, (_, unitId) => unitId], // Pass the entire state to the selector
+    (maintenanceReports, units, unitId) => {
+        if (!unitId) return [];
+        else if (String(unitId).toLowerCase() === 'all') {
+            return maintenanceReports.map(maintenanceReport => {
+                return {...maintenanceReport, unit: units.find(unit => unit.id === maintenanceReport.unitId)};
+            })
+        }
+
+        return maintenanceReports.filter(maintenanceReport => maintenanceReport.unitId === unitId).map(maintenanceReport => {
+            return {...maintenanceReport, unit: units.find(unit => unit.id === maintenanceReport.unitId)};
+        })
+    })
+
+export const selectExpensesByUnitId = createSelector(
+    [selectAllExpenses, selectAllUnits, (_, unitId) => unitId], // Pass the entire state to the selector
+    (expenses, units, unitId) => {
+        if (!unitId) return [];
+        else if (String(unitId).toLowerCase() === 'all') {
+            return expenses.map(expense => {
+                return {...expense, unit: units.find(unit => unit.id === expense.unitId)};
+            })
+        }
+
+        return expenses.filter(expense => expense.unitId === unitId).map(expense => {
+            return {...expense, unit: units.find(unit => unit.id === expense.unitId)};
+        })
+    })
 export const selectObjectById = createSelector(
 [selectAllProperties, selectAllUnits, selectAllLeases, selectAllTenants, selectAllPayments, selectAllMaintenanceReports, (_, id, type) => [id, type]],
     (properties, units, leases, tenants, payments, maintenanceReports, data) => {
@@ -519,6 +549,8 @@ export const selectPropertyByUnitId = (state, unitId) => {
     if (!unit) return null;
     return selectPropertyById(state, unit.realEstateObjectId);
 }
+
+
 
 export const selectPropertyByLeaseId = (state, leaseId) => {
     if (!leaseId) return null;

@@ -29,7 +29,7 @@ const ButtonGroupItem = ({ value, children, ...props }) => {
     return (
         <div
             data-active={value === selectedValue}
-            className={cn("p-2 h-10 border-input cursor-pointer select-none border border-r-0 data-[active='true']:bg-muted/50 hover:bg-muted/30  first:rounded-l-md last:rounded-r-md last:border-r")}
+            className={cn("p-2 h-10 border-input shadow-sm cursor-pointer select-none border border-r-0 data-[active='true']:bg-muted/50 hover:bg-muted/30  first:rounded-l-md last:rounded-r-md last:border-r")}
             onClick={() => setSelectedValue(value)}
             {...props}
 

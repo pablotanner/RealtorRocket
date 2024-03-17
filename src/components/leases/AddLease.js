@@ -69,7 +69,7 @@ const AddLease = ({unit, tenant, ...props}) => {
 
     return (
         <Dialog {...props}>
-            <DialogTrigger>
+            <DialogTrigger asChild>
                 {props.children}
             </DialogTrigger>
             <DialogContent >

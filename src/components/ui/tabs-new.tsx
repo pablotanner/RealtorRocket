@@ -38,7 +38,7 @@ const Tabs = ({ children, className, defaultValue, value, ...props }) => {
 Tabs.displayName = "Tabs"
 
 
-const TabsList = ({ children, className, ...props }) => {
+const TabsList = ({ children, className, disableSelect, ...props }) => {
     const { selectedTabValue, setSelectedTabValue, defaultValue } = props;
 
     const injectedChildren = React.Children.map(children, (child) => {
@@ -52,26 +52,37 @@ const TabsList = ({ children, className, ...props }) => {
             })
         }
     })
-    return (
-        <>
-            <Select onValueChange={setSelectedTabValue} value={selectedTabValue ?? injectedChildren[0].props.value}>
-                <SelectTrigger className={cn("flex flex-row gap-2 sm:hidden", className)} {...props}>
-                    {(injectedChildren.find((child) => child.props.isActive) || injectedChildren[0]).props.children}
-                </SelectTrigger>
-                <SelectContent>
-                    {injectedChildren.map((child, index) => {
-                        const {children, ...rest} = child.props;
-                        return <SelectItem {...rest} key={index}>{children}</SelectItem>
-                    })}
-                </SelectContent>
-            </Select>
 
-            <div className={cn("hidden sm:flex flex-row overflow-auto", className)} {...props}>
-                {injectedChildren}
-            </div>
-        </>
-
+    if (disableSelect) return (
+        <div className={cn("flex flex-row overflow-auto", className)} {...props}>
+            {injectedChildren}
+        </div>
     )
+
+    else {
+
+        return (
+            <>
+                <Select onValueChange={setSelectedTabValue} value={selectedTabValue ?? injectedChildren[0].props.value}>
+                    <SelectTrigger className={cn("flex flex-row gap-2 sm:hidden", className)} {...props}>
+                        {(injectedChildren.find((child) => child.props.isActive) || injectedChildren[0]).props.children}
+                    </SelectTrigger>
+                    <SelectContent>
+                        {injectedChildren.map((child, index) => {
+                            const {children, ...rest} = child.props;
+                            return <SelectItem {...rest} key={index}>{children}</SelectItem>
+                        })}
+                    </SelectContent>
+                </Select>
+
+                <div className={cn("hidden sm:flex flex-row overflow-auto", className)} {...props}>
+                    {injectedChildren}
+                </div>
+            </>
+
+        )
+    }
+
 }
 
 
@@ -90,7 +101,7 @@ const TabsItem = ({children, className, value, onClick, ...props }) => {
                     onClick();
                 }
             }}
-            className={cn("flex gap-2 items-center cursor-pointer rounded-t-md text-muted-foreground font-500 px-4 py-2 border-b-2 border-transparent hover:muted-foreground transition-colors data-[active='true']:border-foreground data-[active='true']:text-foreground hover:bg-secondary"
+            className={cn("flex gap-2 items-center cursor-pointer rounded-t-md text-muted-foreground font-500 px-4 py-2 border-b-2 border-transparent hover:muted-foreground transition-colors data-[active='true']:border-primary data-[active='true']:text-primary hover:bg-secondary"
             , className)}
             {...props}
         >

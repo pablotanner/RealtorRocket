@@ -137,19 +137,21 @@ const columns: ColumnDef<Unit>[] = [
         header: "Lease Start Date",
         enableSorting: true,
         cell: ({ row }) => {
-            if (row.original.leases[0]?.startDate) {
+            const leases = row.original.leases
+
+
+
+            if (leases && leases.length && leases[0].startDate) {
                 return (
                     <div>
                         {
-                            dateParser(row.original.leases[0]?.startDate)
+                            dateParser(leases[0]?.startDate)
                         }
                     </div>
                 )
             } else {
                 return (
-                    <div>
-
-                    </div>
+                    ""
                 )
             }
         },
@@ -166,19 +168,20 @@ const columns: ColumnDef<Unit>[] = [
         header: "Lease End Date",
         enableSorting: true,
         cell: ({ row }) => {
-            if (row.original.leases[0]?.endDate) {
+            const leases = row.original.leases
+
+
+            if (leases && leases.length && leases[0].endDate) {
                 return (
                     <div>
                         {
-                           dateParser(row.original.leases[0]?.endDate)
+                           dateParser(leases[0]?.endDate)
                         }
                     </div>
                 )
             } else {
                 return (
-                    <div>
-
-                    </div>
+                   ""
                 )
             }
         },
@@ -222,10 +225,10 @@ const columns: ColumnDef<Unit>[] = [
 ]
 
 // eslint-disable-next-line react/prop-types
-const RentalTable = ({ units  }) => {
+const RentalTable = ({ units, ...props  }) => {
 
     return (
-        <DataTable data={units} columns={columns} 
+        <DataTable data={units} columns={columns}  {...props}
         />
     )
 

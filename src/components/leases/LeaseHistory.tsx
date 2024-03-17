@@ -170,7 +170,7 @@ const LeaseHistory = ({leases, ...props}) => {
 
     return (
             <DataTable data={leases} columns={columns} title="Lease History" icon={<Scroll className={"w-5 h-5"} />}
-                       defaultSort={{id: "startDate", desc: true}}
+                       defaultSort={{id: "startDate", desc: true}} {...props}
             >
                 {props.children}
             </DataTable>

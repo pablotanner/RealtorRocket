@@ -31,6 +31,14 @@ h3 {
     @apply text-foreground;
 }
 
+h4 {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    font-weight: 500;
+    @apply text-foreground;
+
+}
+
 select {
     @apply block;
     @apply w-full;
