@@ -4,12 +4,12 @@ import {
 import {Checkbox} from "../ui/checkbox.tsx";
 import {dateParser, moneyParser} from "../../utils/formatters.js";
 import {DataTable} from "../ui/data-table.js";
-import {Lease} from "../../utils/classes.ts";
+import {Lease, RentPayment} from "../../utils/classes.ts";
 import {Eye, MoreHorizontal, Pencil, Scroll, Trash2} from "lucide-react";
 import {LeaseStatusBadge} from "../../utils/statusBadges.js";
 import {LeaseStatus} from "../../utils/magicNumbers.js";
 import Link from "../general/Link.tsx";
-import {useState} from "react";
+import {useMemo, useState} from "react";
 import {useDeleteLeaseMutation} from "../../services/api/leaseApi";
 import {
     DropdownMenu,
@@ -23,6 +23,8 @@ import DeleteDialog from "../general/DeleteDialog";
 import {useDeleteLeasesMutation, useUpdateLeasesMutation} from "../../services/api/bulkApi";
 import {Button} from "../ui/button.tsx";
 import ViewLease from "../leases/ViewLease.js";
+import {isWithinInterval, subDays} from "date-fns";
+import {ButtonGroup, ButtonGroupItem} from "../ui/button-group.tsx";
 
 
 
@@ -321,8 +323,10 @@ const LeaseBulkActions = ({selectedRows}) => {
                 onConfirm={handleDeleteLeases}
             />
 
-            <DropdownMenuTrigger className="inline-flex items-center font-600 justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border-border border-2 text-foreground bg-transparent hover:border-gray-200 hover:text-accent-foreground h-10 rounded-md px-5 py-2">
-                <Pencil className="w-4 h-4 mr-2"/> {selectedRows?.length} Selected
+            <DropdownMenuTrigger asChild>
+                <Button variant="outline">
+                    <Pencil className="w-4 h-4 mr-2"/> {selectedRows?.length} Selected
+                </Button>
             </DropdownMenuTrigger>
 
             <DropdownMenuContent>
@@ -362,11 +366,25 @@ const LeasesTable = ({ leases }) => {
 
     const [selectedRows, setSelectedRows] = useState<Lease[]>([])
 
+    const [selectedFilter, setSelectedFilter] = useState("active")
+
+    const filteredLeases = useMemo(() => {
+        if (selectedFilter === "all") return leases
+        if (selectedFilter === "active") {
+            return leases?.filter((lease: Lease) => lease.status === "ACTIVE")
+        }
+        if (selectedFilter === "inactive") {
+            return leases?.filter((lease: Lease) => lease.status !== "ACTIVE")
+        }
+
+    }, [selectedFilter, leases])
+
+
     return (
         <div className={"border-2 border-border p-4 rounded-lg "}>
 
             <DataTable
-                data={leases}
+                data={filteredLeases}
                 columns={columns}
                 title="Leases"
                 subtitle="These are all your leases."
@@ -374,6 +392,21 @@ const LeasesTable = ({ leases }) => {
                 defaultSort={{id: "lease", desc: true}}
                 onRowSelectionChange={(selectedRows: Lease[]) => setSelectedRows(selectedRows)}
             >
+
+                <ButtonGroup
+                    value={selectedFilter}
+                    onValueChange={(value) => setSelectedFilter(value)}
+                >
+                    <ButtonGroupItem value={"all"} >
+                        View All
+                    </ButtonGroupItem>
+                    <ButtonGroupItem value={"active"}>
+                        Active
+                    </ButtonGroupItem>
+                    <ButtonGroupItem value={"inactive"}>
+                        Inactive
+                    </ButtonGroupItem>
+                </ButtonGroup>
 
                 <LeaseBulkActions selectedRows={selectedRows}/>
 

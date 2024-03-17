@@ -24,7 +24,7 @@ import {
     DialogIcon,
     DialogTitle,
 } from "../ui/dialog.tsx";
-import {useState} from "react";
+import {useMemo, useState} from "react";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {paymentSchema} from "../../utils/formSchemas.js";
@@ -41,6 +41,8 @@ import {
     useDeletePaymentSchedulesMutation, useDeletePaymentsMutation,
     useUpdatePaymentSchedulesMutation, useUpdatePaymentsMutation
 } from "../../services/api/bulkApi";
+import {ButtonGroup, ButtonGroupItem} from "../ui/button-group.tsx";
+import {isWithinInterval, subDays} from "date-fns";
 
 
 
@@ -437,8 +439,10 @@ const PaymentBulkActions = ({selectedRows}) => {
                 onConfirm={handleDelete}
             />
 
-            <DropdownMenuTrigger className="inline-flex items-center font-600 justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border-border border-2 text-foreground bg-transparent hover:border-gray-200 hover:text-accent-foreground h-10 rounded-md px-5 py-2">
-                <Pencil className="w-4 h-4 mr-2"/> {selectedRows?.length} Selected
+            <DropdownMenuTrigger asChild>
+                <Button variant="outline">
+                    <Pencil className="w-4 h-4 mr-2"/> {selectedRows?.length} Selected
+                </Button>
             </DropdownMenuTrigger>
 
             <DropdownMenuContent>
@@ -481,10 +485,30 @@ const PaymentTable = ({ payments, ...props }) => {
 
     const [selectedRows, setSelectedRows] = useState([])
 
+    const [selectedFilter, setSelectedFilter] = useState("all")
+
+    const filteredPayments = useMemo(() => {
+        if (selectedFilter === "all") return payments
+        if (selectedFilter === "30-days") {
+            return payments?.filter((payment: RentPayment) => isWithinInterval(new Date(payment.date), {
+                start: subDays(new Date(), 30),
+                end: new Date()
+            }))
+        }
+        if (selectedFilter === "90-days") {
+            return payments?.filter((payment: RentPayment) => isWithinInterval(new Date(payment.date), {
+                start: subDays(new Date(), 90),
+                end: new Date()
+            }))
+        }
+
+    }, [selectedFilter, payments])
+
+
     return (
         <div className={"border-2 border-border p-4 rounded-lg"}>
             <DataTable
-                data={payments}
+                data={filteredPayments}
                 columns={columns}
                 defaultSort={{id: "submissionDate", desc: true}}
                 title="Payments"
@@ -494,6 +518,22 @@ const PaymentTable = ({ payments, ...props }) => {
                 {...props}
 
             >
+
+                <ButtonGroup
+                    value={selectedFilter}
+                    onValueChange={(value) => setSelectedFilter(value)}
+                >
+                    <ButtonGroupItem value={"all"} >
+                        View All
+                    </ButtonGroupItem>
+                    <ButtonGroupItem value={"30-days"}>
+                        30 Days
+                    </ButtonGroupItem>
+                    <ButtonGroupItem value={"90-days"}>
+                        90 Days
+                    </ButtonGroupItem>
+                </ButtonGroup>
+
                 {props.children}
 
                 <PaymentBulkActions selectedRows={selectedRows} />

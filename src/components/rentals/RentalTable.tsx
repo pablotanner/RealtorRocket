@@ -225,7 +225,8 @@ const columns: ColumnDef<Unit>[] = [
 const RentalTable = ({ units  }) => {
 
     return (
-        <DataTable data={units} columns={columns} />
+        <DataTable data={units} columns={columns} 
+        />
     )
 
 }

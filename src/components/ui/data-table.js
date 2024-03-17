@@ -22,6 +22,7 @@ import {Checkbox} from "./checkbox.tsx";
 import {isAfter, isBefore, isSameDay} from "date-fns";
 import {cn} from "../../utils.ts";
 import {Accordion, AccordionContent, AccordionItem, AccordionTrigger} from "./accordion.tsx";
+import {dateParser} from "../../utils/formatters.js";
 
 
 
@@ -172,6 +173,37 @@ const FilterContent = ({column, index, tempColumnFilters, handleSelectChange, ha
             />
         </>
     )
+    if (type === "date") {
+        content = (
+            <>
+                <select
+                    value={tempColumnFilters[column.id]?.type || ""}
+                    onChange={(e) => handleSelectChange(column.id, e.target.value)}
+                    className="rounded-md border border-input bg-background-light text-foreground text-sm capitalize font-500"
+                >
+                    <option value="">Select Filter</option>
+                    {filterOptions[index]?.map((option) => {
+                        return (
+                            <option key={option.value} value={option.value}>
+                                {option.label}
+                            </option>
+                        );
+                    })}
+                </select>
+                <input
+                    type="date"
+                    value={tempColumnFilters[column.id]?.value || ""}
+                    onChange={(e) => {
+                        setTempColumnFilters({
+                            ...tempColumnFilters,
+                            [column.id]: {type: tempColumnFilters[column.id]?.type, value: e.target.value}
+                        });
+                    }}
+                    className="rounded-md border border-input w-full h-8 bg-background-light text-foreground text-sm "
+                />
+            </>
+        )
+    }
     if (type === "enum") {
         const options = column?.columnDef?.meta?.options;
 
@@ -286,7 +318,7 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
     }, [tableColumns]);
 
 
-    const [sorting, setSorting] = useState([props.defaultSort || {}])
+    const [sorting, setSorting] = useState(props.defaultSort ? [props.defaultSort] : [])
 
     // Filters before being applied to the table
     const [tempColumnFilters, setTempColumnFilters] = useState([])
@@ -429,7 +461,7 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                     </p>
                 </div>
             </div>
-            <div className="flex flex-row gap-2 flex-wrap">
+            <div className="flex flex-row gap-2 flex-wrap items-center">
                 <div className="relative flex bg-background-light rounded-md items-center max-w-sm">
                     <FaMagnifyingGlass className="absolute top-3 left-3 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -437,14 +469,14 @@ export const DataTable = ({data: tableData, columns: tableColumns, ...props}) =>
                         onChange={(e) => {
                             table.setGlobalFilter(e.target.value)
                         }}
-                        className="pl-10 text-sm bg-inherit text-foreground rounded-md border-2 border-border"
+                        className="pl-10 text-sm bg-inherit text-foreground rounded-md border"
                     />
                 </div>
 
 
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="outline">
+                        <Button variant="outline" >
                             <ListFilter className="h-4 w-4" />
                         </Button>
                     </DropdownMenuTrigger>

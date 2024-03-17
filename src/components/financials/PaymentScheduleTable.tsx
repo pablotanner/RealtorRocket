@@ -8,7 +8,7 @@ import {CalendarClock, Check, Coins, Eye, MoreHorizontal, Pencil, Trash2} from "
 import ViewPayment from "../payments/ViewPayment.js";
 import {PaymentScheduleStatusBadge, PaymentStatusBadge} from "../../utils/statusBadges.js";
 import {LeaseStatus, PaymentScheduleStatus, PaymentStatus} from "../../utils/magicNumbers.js";
-import {useState} from "react";
+import {useMemo, useState} from "react";
 import {
     useDeletePaymentScheduleMutation,
     useUpdatePaymentScheduleMutation
@@ -37,6 +37,7 @@ import {
     useUpdatePaymentSchedulesMutation
 } from "../../services/api/bulkApi";
 import {Checkbox} from "../ui/checkbox.tsx";
+import {ButtonGroup, ButtonGroupItem} from "../ui/button-group.tsx";
 
 const PaymentScheduleActions = ({ paymentSchedule }) => {
     const [editModalOpen, setEditModalOpen] = useState(false)
@@ -394,8 +395,10 @@ const PaymentScheduleBulkActions = ({selectedRows}) => {
                 onConfirm={handleDelete}
             />
 
-            <DropdownMenuTrigger className="inline-flex items-center font-600 justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border-border border-2 text-foreground bg-transparent hover:border-gray-200 hover:text-accent-foreground h-10 rounded-md px-5 py-2">
-                <Pencil className="w-4 h-4 mr-2"/> {selectedRows?.length} Selected
+            <DropdownMenuTrigger asChild>
+                <Button variant="outline">
+                    <Pencil className="w-4 h-4 mr-2"/> {selectedRows?.length} Selected
+                </Button>
             </DropdownMenuTrigger>
 
             <DropdownMenuContent>
@@ -443,10 +446,25 @@ const PaymentScheduleTable = ({ paymentSchedules, ...props }) => {
 
     const [selectedRows, setSelectedRows] = useState([])
 
+    const [selectedFilter, setSelectedFilter] = useState("only-unpaid")
+
+    const filteredPaymentSchedules = useMemo(() => {
+        if (selectedFilter === "all") return paymentSchedules
+        if (selectedFilter === "only-unpaid") {
+            return paymentSchedules?.filter((payment: LeasePaymentSchedule) => payment.status !== "PAID" && payment.status !== "WAIVED")
+        }
+        if (selectedFilter === "only-overdue") {
+            return paymentSchedules?.filter((payment: LeasePaymentSchedule) => {
+                return payment.status === "OVERDUE"
+            })
+        }
+
+    }, [selectedFilter, paymentSchedules])
+
     return (
         <div className={"border-2 border-border p-4 rounded-lg"}>
             <DataTable
-                data={paymentSchedules}
+                data={filteredPaymentSchedules}
                 columns={columns}
                 defaultSort={{id: "dueDate", desc: false}}
                 title="Rent Schedule"
@@ -455,6 +473,21 @@ const PaymentScheduleTable = ({ paymentSchedules, ...props }) => {
                 onRowSelectionChange={(selectedRows: LeasePaymentSchedule[]) => setSelectedRows(selectedRows)}
                 {...props}
             >
+
+                <ButtonGroup
+                    value={selectedFilter}
+                    onValueChange={(value) => setSelectedFilter(value)}
+                >
+                    <ButtonGroupItem value={"all"} >
+                        View All
+                    </ButtonGroupItem>
+                    <ButtonGroupItem value={"only-unpaid"}>
+                        Unpaid
+                    </ButtonGroupItem>
+                    <ButtonGroupItem value={"only-overdue"}>
+                        Overdue
+                    </ButtonGroupItem>
+                </ButtonGroup>
 
                 <PaymentScheduleBulkActions selectedRows={selectedRows} />
             </DataTable>
