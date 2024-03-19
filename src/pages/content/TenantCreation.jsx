@@ -293,7 +293,7 @@ const TenantCreation = () => {
             <div
                 data-disabled={isDisabled}
                 data-selected={tab === index}
-                className="p-4 border-b-2 border-border select-none flex flex-col lg:flex-row gap-4 items-center justify-center lg:justify-start w-full hover:border-foreground cursor-pointer data-[selected='true']:border-foreground data-[disabled='true']:opacity-50 data-[disabled='true']:cursor-not-allowed data-[disabled='true']:hover:border-border"
+                className="p-4 border-b-2 border-border select-none flex flex-col lg:flex-row gap-4 items-center justify-center lg:justify-start w-full hover:border-primary cursor-pointer data-[selected='true']:border-primary data-[disabled='true']:opacity-50 data-[disabled='true']:cursor-not-allowed data-[disabled='true']:hover:border-secondary"
                 onClick={() => {
                     if (isDisabled) return
                     setTab(index);
@@ -304,11 +304,13 @@ const TenantCreation = () => {
                     data-complete={status==="complete"}
                     data-selected={tab === index}
                     data-previous={tab > index}
-                    className="p-2 md:p-4 flex w-8 h-8 md:w-14 md:h-14 items-center justify-center text-md md:text-xl border border-border text-gray-200 rounded-lg data-[previous='true']:bg-gray-900 data-[selected='true']:bg-black data-[selected='true']:text-white">
+                    className="p-2 md:p-4 flex w-8 h-8 md:w-14 md:h-14 items-center justify-center text-md md:text-xl border border-border text-gray-400 rounded-lg data-[previous='true']:bg-secondary data-[selected='true']:bg-primary data-[selected='true']:text-white">
                     {index}
                 </div>
 
-                <div className="text-foreground font-500 text-xs md:text-sm text-center">
+                <div
+                    data-selected={tab === index}
+                    className="text-foreground font-500 text-xs md:text-sm text-center data-[selected='true']:text-primary">
                     {title}
                 </div>
             </div>
