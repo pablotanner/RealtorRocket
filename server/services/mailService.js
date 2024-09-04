@@ -1,6 +1,8 @@
 import { Resend } from "resend";
 
-const resend = new Resend("re_82QrD6G8_6CDvpXikwdu1oyywxeUnSGL2");
+const API_KEY = 'XYZ'
+
+const resend = new Resend(API_KEY);
 
 resend.domains.create({
     name: "realtorrocket.app",
