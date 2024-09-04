@@ -5,7 +5,8 @@
 - Setup guide is provided further below if you would like to run it locally.
 - For any questions, feedback, or other inquiries, feel free to contact me at: [LinkedIn](https://www.linkedin.com/in/pablo-tanner-60977b3b/) or [Email](mailto:mail@pablotanner.com).
 # Features / Overview
-The app is designed to be user-friendly and intuitive, with a clean and modern design. It included a variety of features, including:
+The app is designed to be user-friendly and intuitive, with a clean and modern design. Additionally, it was built to be responsive and mobile-friendly.
+It included a variety of features, including:
 ## Home Page
 ![HomePage](/public/screenshots/home.png)
 
