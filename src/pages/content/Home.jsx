@@ -39,7 +39,7 @@ const Home = () => {
 
     const {data: payments} = useGetPaymentsQuery();
 
-    const name = user?.data?.name;
+    const name = user?.data?.firstName;
 
     const futureEvents = useSelector(state => selectFutureEvents(state))
 
